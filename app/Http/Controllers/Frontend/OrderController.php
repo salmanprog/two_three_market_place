@@ -143,8 +143,8 @@ class OrderController extends Controller
             $data['gateway_id'] = encrypt(4);
             $stripeController = new StripeController;
             $response = $stripeController->stripePost($request->all());
-            print_r($response);
-            die();
+            // print_r($response);
+            // die();
             if(gettype($response) == 'object'){
                 return redirect()->back();
             }

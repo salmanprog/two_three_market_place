@@ -45,15 +45,15 @@ class StripeController extends Controller
     public function stripePost($data)
     {
         try {
-            // Check subscription payment session
-            // if (!session()->has('subscription_payment')) {
-            //     Log::error('Subscription payment session not found');
-            //     return [
-            //         'status' => 'error',
-            //         'message' => 'Invalid payment session',
-            //         'redirect_url' => route('seller.dashboard')
-            //     ];
-            // }
+            //Check subscription payment session
+            if (!session()->has('subscription_payment')) {
+                Log::error('Subscription payment session not found');
+                return [
+                    'status' => 'error',
+                    'message' => 'Invalid payment session',
+                    'redirect_url' => route('seller.dashboard')
+                ];
+            }
 
             $currency_code = getCurrencyCode();
             $credential = $this->getCredential();
@@ -66,8 +66,10 @@ class StripeController extends Controller
             }
 
             // Validate required fields
+            // print_r($data);
+            // die();
             if (empty($data['stripeToken'])) {
-                throw new Exception('Stripe token is missing');
+                throw new Exception('Stripe token is missingssss');
             }
 
             if (empty($data['amount']) || $data['amount'] <= 0) {
