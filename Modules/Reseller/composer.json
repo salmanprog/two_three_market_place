@@ -1,0 +1,23 @@
+{
+    "name": "amazcart/reseller",
+    "description": "Reseller Module for AmazCart - Allows customers to resell products after admin approval",
+    "authors": [
+        {
+            "name": "AmazCart",
+            "email": "support@amazcart.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\Reseller\\Providers\\ResellerServiceProvider"
+            ]
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Reseller\\": ""
+        }
+    },
+    "require": {}
+} 

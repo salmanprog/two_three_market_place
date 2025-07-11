@@ -1,0 +1,13 @@
+{
+    "name": "Reseller",
+    "alias": "reseller",
+    "description": "Reseller Module for AmazCart - Allows customers to resell products after admin approval",
+    "keywords": ["reseller", "resale", "commission", "profit-split"],
+    "priority": 0,
+    "providers": [
+        "Modules\\Reseller\\Providers\\ResellerServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": ["product", "ordermanage"]
+} 
