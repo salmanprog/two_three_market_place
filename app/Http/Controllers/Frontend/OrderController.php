@@ -102,7 +102,7 @@ class OrderController extends Controller
                 }
             }
         }
-
+        
         try {
             DB::beginTransaction();
             $order = $this->orderService->orderStore($request->except('_token'));
@@ -116,7 +116,7 @@ class OrderController extends Controller
         } catch (Exception $e) {
             LogActivity::errorLog($e->getMessage());
             DB::rollback();
-            Toastr::error(__('order.order_submit_failed'));
+            Toastr::error(__($e->getMessage()));
             return back();
         }
     }

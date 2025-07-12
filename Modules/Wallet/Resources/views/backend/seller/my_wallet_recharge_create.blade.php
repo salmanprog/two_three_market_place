@@ -40,7 +40,7 @@
                                             <script
                                                 src="https://checkout.stripe.com/checkout.js"
                                                 class="stripe-button"
-                                                data-key="{{ @$stripe_credential->perameter_1 }}"
+                                                data-key="{{ env('STRIPE_KEY') }}"
                                                 data-name="Stripe Payment"
                                                 data-image="{{showImage(app('general_setting')->favicon)}}"
                                                 data-locale="auto"

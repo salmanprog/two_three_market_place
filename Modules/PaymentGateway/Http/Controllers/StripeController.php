@@ -46,14 +46,14 @@ class StripeController extends Controller
     {
         try {
             //Check subscription payment session
-            if (!session()->has('subscription_payment')) {
-                Log::error('Subscription payment session not found');
-                return [
-                    'status' => 'error',
-                    'message' => 'Invalid payment session',
-                    'redirect_url' => route('seller.dashboard')
-                ];
-            }
+            // if (!session()->has('subscription_payment')) {
+            //     Log::error('Subscription payment session not found');
+            //     return [
+            //         'status' => 'error',
+            //         'message' => 'Invalid payment session',
+            //         'redirect_url' => route('seller.dashboard')
+            //     ];
+            // }
 
             $currency_code = getCurrencyCode();
             $credential = $this->getCredential();
@@ -116,7 +116,7 @@ class StripeController extends Controller
             if ($stripe['status'] == "succeeded") {
                 $return_data = $stripe['id'];
 
-                //if (session()->has('subscription_payment')) {
+                if (session()->has('subscription_payment')) {
                     // Start database transaction
                     DB::beginTransaction();
                     try {
@@ -190,7 +190,9 @@ class StripeController extends Controller
                         ]);
                         throw new Exception('Error processing subscription: ' . $e->getMessage());
                     }
-                //}
+                }else{
+                    return $return_data;
+                }
             }
 
             throw new Exception('Payment was not successful. Status: ' . ($stripe['status'] ?? 'unknown'));

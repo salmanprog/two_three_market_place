@@ -54,7 +54,7 @@
                     @csrf
                     <input type="hidden" name="debug_field" value="debug_value">
                     <!-- Debug info -->
-                    <div style="margin-bottom: 15px; padding: 10px; border: 1px solid #ddd; background: #f9f9f9;">
+                    <!-- <div style="margin-bottom: 15px; padding: 10px; border: 1px solid #ddd; background: #f9f9f9;">
                         <strong>Debug Info:</strong><br>
                         Form Action: {{route('seller.subscription_payment')}}<br>
                         CSRF Token: <span id="csrf_token_display">{{ csrf_token() }}</span><br>
@@ -66,7 +66,7 @@
                                 });
                             }
                         </script>
-                    </div>
+                    </div> -->
                     <div class="row">
                         <div class="col-12 mb_10">
                             <h3 class="check_v3_title2">{{__('common.payment')}}</h3>
@@ -198,7 +198,7 @@
                                                         <div id="card-errors" role="alert" class="text-danger mt-2"></div>
                                                         
                                                         <!-- Debug bypass option -->
-                                                        <div style="margin-top: 20px; padding: 10px; border: 1px solid #ccc; background: #f9f9f9;">
+                                                        <!-- <div style="margin-top: 20px; padding: 10px; border: 1px solid #ccc; background: #f9f9f9;">
                                                             <h4>Debug Options (Network Issue Workaround)</h4>
                                                             <button type="button" id="bypassStripeBtn" class="btn btn-warning" style="margin-top: 10px;">
                                                                 Bypass Stripe (Use Test Token)
@@ -219,7 +219,7 @@
                                                                     this.className = 'btn btn-success';
                                                                 });
                                                             </script>
-                                                        </div>
+                                                        </div> -->
                                                     </div>
                                                     
                                                     

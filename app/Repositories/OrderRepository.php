@@ -151,7 +151,7 @@ class OrderRepository
         }
 
         $productList = $query;
-
+        
         if(isModuleActive('ClubPoint')){
             foreach ($productList as $key => $product_card) {
                 if(isModuleActive('MultiVendor')){
@@ -168,6 +168,7 @@ class OrderRepository
                 }
             }
         }
+        
         $billing_address = null;
         $shipping_address = null;
         if(auth()->check()){
@@ -188,6 +189,7 @@ class OrderRepository
         }else{
             $shipping_cost = $data['shipping_cost'];
         }
+        
         $delivery_type = 'home_delivery';
         $pickup_location = null;
         if(!isModuleActive('MultiVendor') && session()->has('delivery_info')){
@@ -202,7 +204,6 @@ class OrderRepository
         if(isModuleActive('ClubPoint')){
             $order->club_point = $club_point;
         }
-
         $orderDate = date("Ymd");
         $totalOrder =  Order::count() + 1;
         $nextOrder = str_pad( $totalOrder, 6, "0", STR_PAD_LEFT );
@@ -225,15 +226,15 @@ class OrderRepository
             $order->discount_total = $data['discount_total'];
         }
 
-        $order->shipping_total = $shipping_cost;
-        $order->number_of_package = $data['number_of_package'];
-        $order->number_of_item = $data['number_of_item'];
-        $order->order_status = 0;
-        $order->order_payment_id = ($data['order_payment_id'] != 0) ? $data['order_payment_id'] : null;
-        $order->tax_amount = $data['tax_total'];
-        $order->note = session()->has('order_note')?session()->get('order_note'):null;
-        $order->delivery_type = $delivery_type;
-        $order->pickup_location_id = $pickup_location?$pickup_location->id:null;
+         $order->shipping_total = $shipping_cost;
+         $order->number_of_package = $data['number_of_package'];
+         $order->number_of_item = $data['number_of_item'];
+         $order->order_status = 0;
+         $order->order_payment_id = ($data['order_payment_id'] != 0) ? $data['order_payment_id'] : null;
+         $order->tax_amount = $data['tax_total'];
+         $order->note = session()->has('order_note')?session()->get('order_note'):null;
+         $order->delivery_type = $delivery_type;
+         $order->pickup_location_id = $pickup_location?$pickup_location->id:null;
         $order->save();
         if (!auth()->check()) {
             $shipping_address = (object) session()->get('shipping_address');
