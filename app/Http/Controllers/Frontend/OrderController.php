@@ -78,10 +78,10 @@ class OrderController extends Controller
     }
 
     public function resellProduct($id){
-        $product = SellerProductSKU::findOrFail($id);
-        $user_id = auth()->user()->id; // Current User ID
-    
-        return view(theme('pages.profile.resell_product_form'), compact('product', 'user_id'));
+        // return 'hellow world';
+        // $product = SellerProductSKU::findOrFail($id);
+        // $user_id = auth()->user()->id; // Current User ID
+        return view(theme('pages.profile.resell_product_form'));
     }
 
     public function store(Request $request)

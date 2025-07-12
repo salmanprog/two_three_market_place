@@ -156,6 +156,7 @@
                                                             @if(@$package_product->seller_product_sku->sku->product->product_type == 2)
                                                             <p class="font_14 f_w_400 m-0 ">
                                                                 @php
+                                                                print_r($package_product->seller_product_sku->product_id);
                                                                 $countCombinatiion = count(@$package_product->seller_product_sku->product_variations);
                                                                 @endphp
                                                                 @foreach(@$package_product->seller_product_sku->product_variations as $key => $combination)
@@ -182,10 +183,11 @@
                                                     <h4 class="font_16 f_w_500 m-0 text-nowrap">{{ single_price($package_product->price) }}</h4>
                                                 </td>
                                                 <td>
-                                                    <form action="{{route('frontend.resell_product', $package_product->id)}}" method="GET">
-                                                        @csrf
-                                                        <button type="submit" class="amaz_primary_btn style2 text-nowrap ">resell product</button>
-                                                    </form>
+                                                    @if(@$package_product->seller_product_sku->sku->product->product_type == 2)
+                                                        <a href="{{route('frontend.resell_product', $package_product->seller_product_sku->product_id)}}" class="amaz_primary_btn style2 text-nowrap ">resell product</a>
+                                                    @else
+                                                        <a href="{{route('frontend.resell_product', $package_product->seller_product_sku->sku->product->id) }}" class="amaz_primary_btn style2 text-nowrap ">resell product</a>
+                                                    @endif
                                                 </td>
                                             </tr>
                                             @endif

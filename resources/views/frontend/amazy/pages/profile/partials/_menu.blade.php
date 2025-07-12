@@ -18,9 +18,9 @@
                     <a href="{{url('/profile')}}" class="amaz_primary_btn d-inline-flex align-items-center gap-2 ms-auto">{{__('common.edit')}}</a>
                 </div>
             </div>
-            @if (auth()->user()->role->type == 'customer' && isModuleActive('MultiVendor'))
+            <!-- @if (auth()->user()->role->type == 'customer' && isModuleActive('MultiVendor'))
                 <a href="{{route('frontend.merchant-register-step-first')}}" target="_blank" class="amaz_primary_btn bg-gray d-block text-center mb-4">{{ __('common.convert_as_seller') }}</a>
-            @endif
+            @endif -->
 
             @if(isModuleActive('Affiliate'))
                 @if(empty(auth()->user()->affiliate_request) )
