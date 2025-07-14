@@ -28,7 +28,6 @@ class ProductController extends Controller
 
     public function show($seller, $slug = null)
     {
-
         session()->forget('item_details');
         if ($slug) {
             $product =  $this->productService->getActiveSellerProductBySlug($slug, $seller);
