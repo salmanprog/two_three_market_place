@@ -387,13 +387,16 @@
                                             <span class="text-muted">{{__("product.purchase_price_description")}}</span>
                                 </div>
                                     </div> -->
-                                                            <div class="col-lg-6">
-                                <div class="primary_input mb-15">
+                                <div class="col-lg-6">
+                                    <div class="primary_input mb-15">
                                         <label class="primary_input_label d-flex align-items-center gap-2" for="old_price">{{__("Old Price")}} <span class="text-danger">*</span></label>
-                                        <input class="primary_input_field" id="old_price" name="old_price" placeholder="{{__("product.old_price")}}" type="number" min="0" step="{{step_decimal()}}" value="{{old('old_price', $product->selling_price ?? 0)}}" required>
-                                        <span class="text-muted">Product Price: {{$product->selling_price}}</span>
+                                        <input class="primary_input_field" id="old_price" name="old_price"
+                                            placeholder="{{__('product.old_price')}}"
+                                            type="number" min="0" step="{{step_decimal()}}"
+                                            value="{{ old('old_price', $product->selling_price ?? 0) }}" required>
+                                        <span class="text-muted">Product Price: {{ $product->selling_price }}</span>
                                     </div>
-                                        </div>
+                                </div>
                                 <div class="col-lg-6">
                                     <div class="primary_input mb-15">
                                         <label class="primary_input_label d-flex align-items-center gap-2" for="new_price">{{__("New Price")}} <span class="text-danger">*</span></label>
