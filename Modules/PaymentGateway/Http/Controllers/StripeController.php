@@ -45,7 +45,8 @@ class StripeController extends Controller
     public function stripePost($data)
     {
         try {
-            // Check subscription payment session
+            
+            //Check subscription payment session
             if (!session()->has('subscription_payment')) {
                 Log::error('Subscription payment session not found');
                 return [
@@ -57,7 +58,7 @@ class StripeController extends Controller
 
             $currency_code = getCurrencyCode();
             $credential = $this->getCredential();
-
+            
             if (!$credential) {
                 Log::error('Stripe credential not found', [
                     'seller_id' => getParentSellerId(),
@@ -81,7 +82,7 @@ class StripeController extends Controller
             }
 
             Stripe\Stripe::setApiKey($credential->perameter_3);
-
+            
             // Log the charge request data
             $charge_data = [
                 "amount" => round($data['amount'] * 100),
@@ -124,7 +125,6 @@ class StripeController extends Controller
                         if (!$defaultIncomeAccount) {
                             throw new Exception('Income account not configured');
                         }
-
                         // Get seller subscription
                         $seller_subscription = getParentSeller()->SellerSubscriptions;
                         if (!$seller_subscription) {
@@ -193,6 +193,102 @@ class StripeController extends Controller
             }
 
             throw new Exception('Payment was not successful. Status: ' . ($stripe['status'] ?? 'unknown'));
+
+        } catch (Exception $e) {
+            Log::error('Stripe Payment Error', [
+                'error' => $e->getMessage(),
+                'seller_id' => getParentSellerId() ?? 'unknown',
+                'data' => $data
+            ]);
+
+            if (session()->has('subscription_payment')) {
+                session()->forget('subscription_payment');
+            }
+
+            return [
+                'status' => 'error',
+                'message' => $e->getMessage(),
+                'redirect_url' => route('seller.dashboard')
+            ];
+        }
+    }
+
+
+
+    public function stripeWalletRecharge($data)
+    {
+        try {
+
+            $currency_code = getCurrencyCode();
+            $credential = $this->getCredential();
+            
+            if (!$credential) {
+                Log::error('Stripe credential not found', [
+                    'seller_id' => getParentSellerId(),
+                    'seller_wise_payment' => app('general_setting')->seller_wise_payment ?? false
+                ]);
+                throw new Exception('Payment gateway configuration not found');
+            }
+
+            // Validate required fields
+            if (empty($data['stripeToken'])) {
+                throw new Exception('Stripe token is missing');
+            }
+
+            if (empty($data['amount']) || $data['amount'] <= 0) {
+                throw new Exception('Invalid payment amount');
+            }
+
+            // Validate Stripe API key
+            if (empty($credential->perameter_3)) {
+                throw new Exception('Stripe secret key not configured');
+            }
+
+            Stripe\Stripe::setApiKey($credential->perameter_3);
+            
+            // Log the charge request data
+            $charge_data = [
+                "amount" => round($data['amount'] * 100),
+                "currency" => $currency_code,
+                "source" => $data['stripeToken'],
+                "description" => "Subscription Payment from " . url('/') . " - Seller ID: " . getParentSellerId(),
+                "metadata" => [
+                    "seller_id" => getParentSellerId(),
+                    "payment_type" => "subscription",
+                    "seller_email" => getParentSeller()->email ?? 'unknown'
+                ]
+            ];
+
+            Log::info('Stripe Charge Request Data', [
+                'charge_data' => $charge_data,
+                'seller_id' => getParentSellerId(),
+                'credential_id' => $credential->id ?? 'unknown'
+            ]);
+            // Create the charge
+            $stripe = Stripe\Charge::create($charge_data);
+
+            // Log successful charge
+            Log::info('Stripe Charge Created Successfully', [
+                'charge_id' => $stripe['id'],
+                'status' => $stripe['status'],
+                'amount' => $stripe['amount'],
+                'seller_id' => getParentSellerId()
+            ]);
+
+            if ($stripe['status'] == "succeeded") {
+                $transaction_id = $stripe['id'];
+                $amount = $stripe['amount'] / 100;
+                $method = 3;
+                $wallet_service = new WalletRepository;
+                $wallet_service->walletRecharge($amount, $method, $transaction_id);
+
+                 // Log success
+                 LogActivity::successLog('Wallet payment successful via Stripe.');
+
+                 // Return success response with redirect
+                 return back();
+            }
+
 
         } catch (Exception $e) {
             Log::error('Stripe Payment Error', [
