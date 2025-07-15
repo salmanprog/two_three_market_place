@@ -35,7 +35,7 @@
                                             </button>
                                             @csrf
                                             @php
-                                                $stripe_credential = getPaymentInfoViaSellerId(1, 4);
+                                                $stripe_credential = getPaymentInfoViaSellerId(1, 'stripe');
                                             @endphp
                                             <script
                                                 src="https://checkout.stripe.com/checkout.js"

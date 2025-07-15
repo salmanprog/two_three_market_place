@@ -50,6 +50,8 @@ use Modules\MultiVendor\Entities\SellerBusinessInformation;
 use Modules\MultiVendor\Events\SellerPickupLocationCreated;
 use Modules\GeneralSetting\Entities\UserNotificationSetting;
 use Modules\FormBuilder\Repositories\FormBuilderRepositories;
+use \Modules\PaymentGateway\Services\PaymentGatewayService;
+use Illuminate\Support\Facades\DB;
 
 class MerchantRegisterController extends Controller
 {
@@ -60,6 +62,7 @@ class MerchantRegisterController extends Controller
     protected $workingProcessService;
     protected $pricingService;
     protected $queryService;
+    protected $paymentGatewayService;
 
     public function __construct(
         MerchantContentService $merchantContentService,
@@ -67,7 +70,8 @@ class MerchantRegisterController extends Controller
         WorkingProcessService $workingProcessService,
         FaqService $faqService,
         PricingService $pricingService,
-        QueryService $queryService
+        QueryService $queryService,
+        PaymentGatewayService $paymentGatewayService
     ) {
         $this->middleware('maintenance_mode');
 
@@ -77,7 +81,7 @@ class MerchantRegisterController extends Controller
         $this->workingProcessService = $workingProcessService;
         $this->pricingService = $pricingService;
         $this->queryService = $queryService;
-
+        $this->paymentGatewayService = $paymentGatewayService;
     }
 
 
@@ -310,9 +314,20 @@ class MerchantRegisterController extends Controller
                 return back();
             }
         }
-
+        // modify work
+        $credential = getPaymentInfoViaSellerId(1, 'stripe');
         event(new Registered($user = $this->create($request)));
-
+        $configure_strip = [
+            'payment_method_id' => 4,
+            'perameter_1' => $credential->perameter_1,
+            'perameter_2' => $user->first_name,
+            'perameter_3' => $credential->perameter_3,
+            'user_id' => $user->id,
+            'status' => '1',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ];
+        DB::table('seller_wise_payment_gateways')->insert($configure_strip);
         if (auto_approve_seller()) {
             $this->guard()->login($user);
         } else {

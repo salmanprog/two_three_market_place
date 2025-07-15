@@ -33,7 +33,6 @@ class PaymentGatewayController extends Controller
             abort(404);
         }
         try {
-
             $this->paymentGatewayService->update_gateway_credentials($request->except("_token"));
             LogActivity::successLog('payment gateway credential update successful.');
             Toastr::success(__('common.updated_successfully'), __('common.success'));

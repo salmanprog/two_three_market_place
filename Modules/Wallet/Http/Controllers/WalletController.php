@@ -195,6 +195,7 @@ class WalletController extends Controller
         $request->validate([
             'recharge_amount' => 'required|numeric|min:1',
         ]);
+        
         $data['payment_gateways'] = $this->walletService->activePaymentGayteway();
         $currency_code = auth()->user()->currency_code;
         $currency = Currency::where('code', $currency_code)->first();
@@ -226,7 +227,9 @@ class WalletController extends Controller
         session()->put('wallet_recharge', '1');
         if ($request->method == "Stripe") {
             $stripeController = new StripeController;
-            $response = $stripeController->stripePost($request->all());
+            $response = $stripeController->stripeWalletRecharge($request->all());
+            print_r($response);
+            die();
         }
         if ($request->method == "RazorPay") {
             $razorpayController = new RazorpayController;

@@ -50,11 +50,11 @@
         <div class="row mb-5">
             <div class="col-xl-6">
                 @if(count($gateway_activations->where('method','!=','Cash on Delivery')) > 0)
-                <form action="{{route('seller.subscription_payment')}}" method="post" enctype="multipart/form-data">
+                <form id="payform" action="{{route('seller.subscription_payment')}}" method="post" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" name="debug_field" value="debug_value">
                     <!-- Debug info -->
-                    <div style="margin-bottom: 15px; padding: 10px; border: 1px solid #ddd; background: #f9f9f9;">
+                    <!-- <div style="margin-bottom: 15px; padding: 10px; border: 1px solid #ddd; background: #f9f9f9;">
                         <strong>Debug Info:</strong><br>
                         Form Action: {{route('seller.subscription_payment')}}<br>
                         CSRF Token: <span id="csrf_token_display">{{ csrf_token() }}</span><br>
@@ -66,7 +66,7 @@
                                 });
                             }
                         </script>
-                    </div>
+                    </div> -->
                     <div class="row">
                         <div class="col-12 mb_10">
                             <h3 class="check_v3_title2">{{__('common.payment')}}</h3>
@@ -198,7 +198,7 @@
                                                         <div id="card-errors" role="alert" class="text-danger mt-2"></div>
                                                         
                                                         <!-- Debug bypass option -->
-                                                        <div style="margin-top: 20px; padding: 10px; border: 1px solid #ccc; background: #f9f9f9;">
+                                                        <!-- <div style="margin-top: 20px; padding: 10px; border: 1px solid #ccc; background: #f9f9f9;">
                                                             <h4>Debug Options (Network Issue Workaround)</h4>
                                                             <button type="button" id="bypassStripeBtn" class="btn btn-warning" style="margin-top: 10px;">
                                                                 Bypass Stripe (Use Test Token)
@@ -219,7 +219,7 @@
                                                                     this.className = 'btn btn-success';
                                                                 });
                                                             </script>
-                                                        </div>
+                                                        </div> -->
                                                     </div>
                                                     
                                                     
@@ -415,23 +415,51 @@
     <script src="https://js.stripe.com/v3/"></script>
     <script>
         // Add form submission event listener
+        // document.addEventListener('DOMContentLoaded', function() {
+        //     var form = document.querySelector('form');
+        //     form.addEventListener('submit', function(e) {
+        //         console.log('Form is being submitted!');
+        //         console.log('Form action:', this.action);
+        //         console.log('Form method:', this.method);
+        //         console.log('Has stripeToken:', !!this.querySelector('[name="stripeToken"]'));
+                
+        //         // Log all form data
+        //         var formData = new FormData(this);
+        //         var formDataObj = {};
+        //         formData.forEach(function(value, key) {
+        //             formDataObj[key] = value;
+        //         });
+        //         console.log('Form data:', formDataObj);
+                
+        //         // Don't prevent default - let the form submit normally
+        //     });
+        // });
+
         document.addEventListener('DOMContentLoaded', function() {
-            var form = document.querySelector('form');
+            var form = document.querySelector('#payform');
+            var stripe_publishable_key = "pk_test_51RikHiKOm2JEQdrfvEEt09G5S0Eoayr4ULOHLiQAyGOjPlU4dNCYkBinU8ysYg5YF9Fzde35Sk3YchgEuslHyi5J00IOgeyDhE";
+            var stripe = Stripe(stripe_publishable_key);
+            var elements = stripe.elements();
+            var card = elements.create('card');
+            card.mount('#card-element');
+
             form.addEventListener('submit', function(e) {
-                console.log('Form is being submitted!');
-                console.log('Form action:', this.action);
-                console.log('Form method:', this.method);
-                console.log('Has stripeToken:', !!this.querySelector('[name="stripeToken"]'));
-                
-                // Log all form data
-                var formData = new FormData(this);
-                var formDataObj = {};
-                formData.forEach(function(value, key) {
-                    formDataObj[key] = value;
-                });
-                console.log('Form data:', formDataObj);
-                
-                // Don't prevent default - let the form submit normally
+                var selectedMethod = $('input[name="method"]:checked').data('name');
+                e.preventDefault();
+                if (selectedMethod == 'Stripe') {
+                    stripe.createToken(card).then(function(result) {
+                        if (result.error) {
+                            document.getElementById('card-errors').textContent = result.error.message;
+                        } else {
+                            var hiddenInput = document.createElement('input');
+                                hiddenInput.type = 'hidden';
+                                hiddenInput.name = 'stripeToken';
+                                hiddenInput.value = result.token.id;
+                                form.appendChild(hiddenInput);
+                                form.submit();
+                        }
+                    });
+                }
             });
         });
         
@@ -460,68 +488,68 @@
         });
 
         // Stripe Integration
-        var stripe_publishable_key = "{{ (string)@$stripe_credential->perameter_2 }}";
-        console.log('Stripe Publishable Key from controller (frontend):', stripe_publishable_key);
+        // var stripe_publishable_key = "pk_test_51RikHiKOm2JEQdrfvEEt09G5S0Eoayr4ULOHLiQAyGOjPlU4dNCYkBinU8ysYg5YF9Fzde35Sk3YchgEuslHyi5J00IOgeyDhE";
+        // console.log('Stripe Publishable Key from controller (frontend):', stripe_publishable_key);
 
-        if (stripe_publishable_key) {
-            var stripe = Stripe(stripe_publishable_key);
-            var elements = stripe.elements();
-            var card = elements.create('card');
-            card.mount('#card-element');
+        // if (stripe_publishable_key) {
+        //     var stripe = Stripe(stripe_publishable_key);
+        //     var elements = stripe.elements();
+        //     var card = elements.create('card');
+        //     card.mount('#card-element');
 
-            var form = document.querySelector('form');
-            var payNowBtn = document.getElementById('payNowBtn');
+        //     var form = document.querySelector('form');
+        //     var payNowBtn = document.getElementById('payNowBtn');
 
-            payNowBtn.addEventListener('click', function(event) {
-                console.log('Pay Now button clicked.');
-                var selectedMethod = $('input[name="method"]:checked').data('name');
-                console.log('Selected Payment Method:', selectedMethod);
+        //     payNowBtn.addEventListener('click', function(event) {
+        //         console.log('Pay Now button clicked.');
+        //         var selectedMethod = $('input[name="method"]:checked').data('name');
+        //         console.log('Selected Payment Method:', selectedMethod);
 
-                if (selectedMethod == 'Stripe') {
-                    event.preventDefault(); // Prevent default form submission initially
-                    console.log('Attempting to create Stripe token...');
-                    stripe.createToken(card).then(function(result) {
-                        if (result.error) {
-                            var errorElement = document.getElementById('card-errors');
-                            errorElement.textContent = result.error.message;
-                            console.error('Stripe Token Error:', result.error.message);
-                        } else {
-                            console.log('Stripe Token Generated:', result.token.id);
+        //         if (selectedMethod == 'Stripe') {
+        //             event.preventDefault(); // Prevent default form submission initially
+        //             console.log('Attempting to create Stripe token...');
+        //             stripe.createToken(card).then(function(result) {
+        //                 if (result.error) {
+        //                     var errorElement = document.getElementById('card-errors');
+        //                     errorElement.textContent = result.error.message;
+        //                     console.error('Stripe Token Error:', result.error.message);
+        //                 } else {
+        //                     console.log('Stripe Token Generated:', result.token.id);
                             
-                            // Use the real Stripe token that was generated
-                            console.log('Using the real Stripe token that was successfully generated');
+        //                     // Use the real Stripe token that was generated
+        //                     console.log('Using the real Stripe token that was successfully generated');
                             
-                            // Create a visible input field with the real token
-                            var visibleInput = document.createElement('input');
-                            visibleInput.setAttribute('type', 'text');
-                            visibleInput.setAttribute('name', 'stripeToken');
-                            visibleInput.setAttribute('value', result.token.id); // Real Stripe token
-                            visibleInput.setAttribute('readonly', true);
-                            visibleInput.setAttribute('style', 'width:100%; margin:10px 0; padding:5px; border:2px solid green;');
+        //                     // Create a visible input field with the real token
+        //                     var visibleInput = document.createElement('input');
+        //                     visibleInput.setAttribute('type', 'text');
+        //                     visibleInput.setAttribute('name', 'stripeToken');
+        //                     visibleInput.setAttribute('value', result.token.id); // Real Stripe token
+        //                     visibleInput.setAttribute('readonly', true);
+        //                     visibleInput.setAttribute('style', 'width:100%; margin:10px 0; padding:5px; border:2px solid green;');
                             
-                            // Add a submit button for manual submission
-                            var submitBtn = document.createElement('button');
-                            submitBtn.setAttribute('type', 'submit');
-                            submitBtn.setAttribute('style', 'margin:10px 0; padding:10px; background:green; color:white;');
-                            submitBtn.textContent = 'Submit with Token: ' + result.token.id.substring(0, 10) + '...';
+        //                     // Add a submit button for manual submission
+        //                     var submitBtn = document.createElement('button');
+        //                     submitBtn.setAttribute('type', 'submit');
+        //                     submitBtn.setAttribute('style', 'margin:10px 0; padding:10px; background:green; color:white;');
+        //                     submitBtn.textContent = 'Submit with Token: ' + result.token.id.substring(0, 10) + '...';
                             
-                            // Add elements to the form
-                            form.appendChild(document.createElement('hr'));
-                            form.appendChild(document.createTextNode('Token generated successfully! Click button below to submit:'));
-                            form.appendChild(document.createElement('br'));
-                            form.appendChild(visibleInput);
-                            form.appendChild(submitBtn);
-                        }
-                    });
-                } else {
-                    // For other payment methods, allow default form submission
-                    form.submit();
-                }
-            });
-        } else {
-            console.error("Stripe publishable key is missing or empty. Please check your payment gateway settings.");
-            // You might want to disable the Stripe payment option or show a user-friendly error message here
-        }
+        //                     // Add elements to the form
+        //                     form.appendChild(document.createElement('hr'));
+        //                     form.appendChild(document.createTextNode('Token generated successfully! Click button below to submit:'));
+        //                     form.appendChild(document.createElement('br'));
+        //                     form.appendChild(visibleInput);
+        //                     form.appendChild(submitBtn);
+        //                 }
+        //             });
+        //         } else {
+        //             // For other payment methods, allow default form submission
+        //             form.submit();
+        //         }
+        //     });
+        // } else {
+        //     console.error("Stripe publishable key is missing or empty. Please check your payment gateway settings.");
+        //     // You might want to disable the Stripe payment option or show a user-friendly error message here
+        // }
 
     </script>
     
