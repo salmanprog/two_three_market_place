@@ -602,7 +602,7 @@ class OrderRepository
             $user_type = (auth()->check()) ? "registered" : "guest";
             $customer_id = ($order->customer_id) ? $order->customer_id : $order->guest_info->id;
             $wallet_service = new WalletRepository;
-            $seller_id = 0;
+            $seller_id = '0';
             foreach ($productList as $key => $products) {
                 $seller_id = $key;
             }
