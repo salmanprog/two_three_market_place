@@ -598,6 +598,23 @@ class OrderRepository
             $ga_transaction_id = $order_payment->id;
         }
 
+        if ($data['payment_method'] == 4) {
+            $user_type = (auth()->check()) ? "registered" : "guest";
+            $customer_id = ($order->customer_id) ? $order->customer_id : $order->guest_info->id;
+            $wallet_service = new WalletRepository;
+            $seller_id = '0';
+            foreach ($productList as $key => $products) {
+                $seller_id = $key;
+            }
+            $wallet_service->cartPaymentData($order->id, $data['grand_total'], "Cart Payment", $seller_id, $user_type);
+            $order_payment = $this->orderPaymentDone($data['grand_total'], 2, "none", (auth()->check()) ? auth()->user() : null);
+            $order->update([
+                'order_payment_id' => $order_payment->id
+            ]);
+            // ga4
+            $ga_transaction_id = $order_payment->id;
+        }
+
 
         if ($data['payment_method'] == 7) {
             $bank_details = BankPayment::find(session()->get("bank_detail_id"));
