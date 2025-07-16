@@ -39,20 +39,27 @@ use Modules\Setup\Entities\State;
 use Modules\PaymentGateway\Http\Controllers\TabbyPaymentController;
 use Modules\Seller\Entities\SellerProduct;
 use Modules\Seller\Entities\SellerProductSKU;
-
+use Modules\Seller\Services\ProductService;
 use Modules\Setup\Entities\OneClickorderReceiveStatus;
 
 use Modules\UserActivityLog\Traits\LogActivity;
 use Modules\Wallet\Repositories\WalletRepository;
+use Modules\Seller\Services\ProductService as SellerProductService;
+use Modules\Product\Services\ProductService as mainProductService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 
 class OrderController extends Controller
 {
 
     use OrderPdf, SendMail, Otp, SerializesModels;
     protected $orderService;
-    public function __construct(OrderService $orderService)
+    protected $productService;
+    
+    public function __construct(OrderService $orderService, SellerProductService $productService)
     {
         $this->orderService = $orderService;
+        $this->productService = $productService;
         $this->middleware('maintenance_mode');
     }
 
@@ -78,10 +85,42 @@ class OrderController extends Controller
     }
 
     public function resellProduct($id){
-        $product = SellerProductSKU::findOrFail($id);
-        $user_id = auth()->user()->id; // Current User ID
-    
-        return view(theme('pages.profile.resell_product_form'), compact('product', 'user_id'));
+        try {
+            $data['product'] = $this->productService->findBySellerProductId($id);
+            $data['skus'] = $this->productService->getThisSKUProduct($id);
+            $totalWholesalePrice = '';
+            
+            // Get the purchase price from customer's order history
+            $purchasePrice = null;
+            $customerId = auth()->user()->id;
+            
+            // Find the most recent order for this customer that contains this product
+            $orderProduct = \App\Models\OrderProductDetail::whereHas('package.order', function($query) use ($customerId) {
+                $query->where('customer_id', $customerId);
+            })->where('product_sku_id', $id)->latest()->first();
+            
+            if ($orderProduct) {
+                $purchasePrice = $orderProduct->price;
+            }
+            
+            $data['purchasePrice'] = $purchasePrice;
+            
+            if(isModuleActive('WholeSale') && class_exists('Modules\WholeSale\Entities\WholesalePrice')){
+                if (@$data['product']->product->product_type == 1){
+                    $totalWholesalePrice = \Modules\WholeSale\Entities\WholesalePrice::where('product_id', $id)->get();
+                }
+            }
+            $data['totalWholesalePrice'] = $totalWholesalePrice;
+            return view(theme('pages.profile.resell_product_form'), $data);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            LogActivity::errorLog('Product not found with ID: ' . $id);
+            Toastr::error('Product not found or does not exist.', __('common.error'));
+            return redirect()->route('frontend.resell_product_list');
+        } catch (Exception $e) {
+            LogActivity::errorLog($e->getMessage());
+            Toastr::error(__('common.error_message'), __('common.error'));
+            return back();
+        }
     }
 
     public function store(Request $request)
