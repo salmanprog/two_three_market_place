@@ -11,6 +11,55 @@
             padding: 10px
         }
     }
+    
+    .resell_product_card {
+        border: 1px solid #e4e6ea;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+    }
+    
+    .resell_product_card:hover {
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+    }
+    
+    .product_image {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+    
+    .resell_price {
+        color: #28a745;
+        font-weight: 600;
+        font-size: 16px;
+    }
+    
+    .status_badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+        text-transform: uppercase;
+        background: #d1ecf1;
+        color: #0c5460;
+    }
+    
+    .empty_state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #666;
+    }
+    
+    .empty_state i {
+        font-size: 48px;
+        color: #ddd;
+        margin-bottom: 20px;
+    }
 </style>
 
 @section('content')
@@ -22,100 +71,59 @@
                 </div>
                 <div class="col-xl-9 col-lg-8">
                     <div class="dashboard_white_box_header d-flex align-items-center gap_20  mb_20">
-                        <h3 class="font_20 f_w_700 mb-0 ">{{__('amazy.Purchase History')}}</h3>
-                        <select class="amaz_select3" id="filter_order">
-                            <option value="all" @if(!session()->has('purchase_history_filter') || session()->get('purchase_history_filter') == 'all') selected @endif>{{__('amazy.All History')}}</option>
-                            <option value="pending" @if(session()->has('purchase_history_filter') && session()->get('purchase_history_filter') == 'pending') selected @endif>{{__('order.pending_orders')}}</option>
-                            <option value="confirm" @if(session()->has('purchase_history_filter') && session()->get('purchase_history_filter') == 'confirm') selected @endif>{{__('order.confirmed_orders')}}</option>
-                            <option value="complete" @if(session()->has('purchase_history_filter') && session()->get('purchase_history_filter') == 'complete') selected @endif>{{__('order.completed_orders')}}</option>
-                            <option value="cancel" @if(session()->has('purchase_history_filter') && session()->get('purchase_history_filter') == 'cancel') selected @endif>{{__('order.cancelled_orders')}}</option>
-                        </select>
+                        <h3 class="font_20 f_w_700 mb-0 ">{{__('My Resell Products')}}</h3>
                     </div>
                     <div class="dashboard_white_box bg-white mb_25 pt-0 ">
                         <div class="dashboard_white_box_body">
-                            <div class="table-responsive mb_30">
-                                <table class="table amazy_table2 mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th class="font_14 f_w_700" scope="col">{{__('common.details')}}</th>
-                                            <th class="font_14 f_w_700 border-start-0 border-end-0" scope="col">{{__('common.amount')}}</th>
-                                            <th class="font_14 f_w_700 border-start-0 border-end-0" scope="col">{{__('order.delivery_status')}}</th>
-                                            <th class="font_14 f_w_700 border-start-0 border-end-0" scope="col">{{__('order.payment_status')}}</th>
-                                            <th class="font_14 f_w_700 border-start-0 border-end-0" scope="col">{{__('common.action')}}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($orders as $key => $order)
-                                            <tr>
-                                                <td>
-                                                    <div class="d-flex flex-column">
-                                                        <p class="font_14 f_w_700 mb-0 lh-base">{{__('common.order')}}: {{getNumberTranslate(@$order->order->order_number)}}</p>
-                                                        @if(isModuleActive('MultiVendor'))
-                                                            <p class="font_14 f_w_600 lh-base mb-1">{{__('common.package')}}: {{getNumberTranslate(@$order->package_code)}}</p>
-                                                        @endif
-                                                        <p class="font_14 f_w_500 mb-0 lh-1">{{dateConvert($order->created_at)}}</p>
+                            @if(isset($resellProducts) && $resellProducts->count() > 0)
+                                <div class="row">
+                                    @foreach($resellProducts as $product)
+                                        <div class="col-lg-12">
+                                            <div class="resell_product_card">
+                                                <div class="row align-items-center">
+                                                    <div class="col-md-2">
+                                                        <img src="{{ asset($product->thumbnail_image_source) }}" alt="{{ $product->product_name }}" class="product_image">
                                                     </div>
-
-                                                </td>
-                                                <td>
-                                                    @php
-                                                        $total_price = $order->products->sum('total_price') + $order->shipping_cost + $order->tax_amount;
-                                                    @endphp
-                                                    <h4 class="font_16 f_w_500 m-0 text-nowrap">{{single_price($total_price)}}</h4>
-                                                </td>
-                                                <td>
-
-                                                    @if($order->is_cancelled)
-                                                        <a class="table_badge_btn style_5 text-nowrap">{{__('common.cancelled')}}</a>
-                                                    @elseif($order->delivery_status == 1)
-                                                        <a class="table_badge_btn style3 text-nowrap">{{__('common.pending')}}</a>
-                                                    @elseif($order->delivery_status == 2)
-                                                        <a class="table_badge_btn text-nowrap">{{__('defaultTheme.processing')}}</a>
-                                                    @elseif($order->delivery_status == 3)
-                                                        <a class="table_badge_btn text-nowrap">{{__('common.shipped')}}</a>
-                                                    @elseif($order->delivery_status == 4)
-                                                        <a class="table_badge_btn text-nowrap">{{__('amazy.Received')}}</a>
-                                                    @elseif($order->delivery_status >= 5)
-                                                        <a class="table_badge_btn style4 text-nowrap">{{$order->delivery_process->name}}</a>
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @if($order->is_paid || $order->delivery_status >= 5)
-                                                        <a class="table_badge_btn style4 text-nowrap">{{__('common.paid')}}</a>
-                                                    @else
-                                                        <a class="table_badge_btn style3 text-nowrap">{{__('common.pending')}}</a>
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    <div class="amazy_status_btns d-flex gap_5 align-items-center">
-                                                        <button class="amazy_status_btn purchase_show" data-id="{{$order->id}}">
-                                                            <svg   width="16" height="11.5" viewBox="0 0 16 11.5">
-                                                                <path  data-name="Path 4189" d="M15.333,124.168H.667a.755.755,0,0,1,0-1.5H15.333a.755.755,0,0,1,0,1.5Zm0,0" transform="translate(0 -117.668)" fill="#fd4949"/>
-                                                                <path  data-name="Path 4190" d="M15.333,1.5H.667A.712.712,0,0,1,0,.75.712.712,0,0,1,.667,0H15.333A.712.712,0,0,1,16,.75.712.712,0,0,1,15.333,1.5Zm0,0" fill="#fd4949"/>
-                                                                <path  data-name="Path 4191" d="M15.333,246.832H.667a.755.755,0,0,1,0-1.5H15.333a.755.755,0,0,1,0,1.5Zm0,0" transform="translate(0 -235.332)" fill="#fd4949"/>
-                                                            </svg>
-                                                        </button>
-                                                        <a download="" href="{{ route('frontend.my_purchase_order_pdf', encrypt($order->order->id)) }}" target="_blank" class="amazy_status_btn">
-                                                            <svg  width="9.333" height="14" viewBox="0 0 9.333 14">
-                                                                <g  data-name="download (1)" transform="translate(-85.334 0)">
-                                                                    <g  data-name="Group 3491" transform="translate(85.334 0)">
-                                                                    <g  data-name="Group 3490">
-                                                                        <path  data-name="Path 4187" d="M89.588,11.493h0c.013.013.028.026.042.038l.021.016.025.018.025.015.023.014.027.013.025.012.026.01.028.01.026.007.029.007.031,0,.026,0a.587.587,0,0,0,.115,0l.026,0,.031,0,.029-.007.026-.007.028-.01.026-.01.025-.012.027-.013.023-.014.025-.015.025-.018.021-.016q.022-.018.042-.038h0L94.5,7.41a.583.583,0,0,0-.825-.825L90.584,9.672V.583a.583.583,0,0,0-1.167,0V9.672L86.33,6.586a.583.583,0,0,0-.825.825Z" transform="translate(-85.334)" fill="#fd4949"/>
-                                                                        <path  data-name="Path 4188" d="M94.084,469.333H85.917a.584.584,0,0,0,0,1.168h8.167a.584.584,0,0,0,0-1.168Z" transform="translate(-85.334 -456.501)" fill="#fd4949"/>
-                                                                    </g>
-                                                                    </g>
-                                                                </g>
-                                                            </svg>
-                                                        </a>
+                                                    <div class="col-md-7">
+                                                        <div class="product_info">
+                                                            <h4 class="font_16 f_w_600 mb-2">{{ $product->product_name }}</h4>
+                                                            <p class="font_14 f_w_500 mb-1"><strong>Brand:</strong> {{ $product->brand->name ?? 'N/A' }}</p>
+                                                            <p class="font_14 f_w_500 mb-1"><strong>Category:</strong> 
+                                                                @if($product->categories->count() > 0)
+                                                                    {{ $product->categories->first()->name }}
+                                                                @else
+                                                                    N/A
+                                                                @endif
+                                                            </p>
+                                                            <p class="font_14 f_w_500 mb-0"><strong>Status:</strong> 
+                                                                <span class="status_badge">Active</span>
+                                                            </p>
+                                                        </div>
                                                     </div>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                            @if($orders->lastPage() > 1)
-                                <x-pagination-component :items="$orders" type=""/>
+                                                    <div class="col-md-3">
+                                                        <div class="text-end">
+                                                            <p class="resell_price mb-1">{{ single_price($product->resell_price) }}</p>
+                                                            <p class="font_14 f_w_500 text-muted">Resell Price</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                                
+                                @if($resellProducts->lastPage() > 1)
+                                    <x-pagination-component :items="$resellProducts" type=""/>
+                                @endif
+                            @else
+                                <div class="empty_state">
+                                    <i class="ti-package"></i>
+                                    <h4>No Resell Products Found</h4>
+                                    <p>You haven't submitted any products for resale yet.</p>
+                                    <a href="{{ route('frontend.my_purchase_order_index') }}" class="btn btn-primary">
+                                        <i class="ti-plus"></i> Browse My Purchases
+                                    </a>
+                                </div>
                             @endif
                         </div>
                     </div>
@@ -123,43 +131,4 @@
             </div>
         </div>
     </div>
-    <div id="modal_div"></div>
 @endsection
-
-@push('scripts')
-    <script>
-        (function($){
-            "use strict";
-            $(document).ready(function(){
-                $(document).on('change', '#filter_order', function(){
-                    let fil_value = $(this).val();
-                    let url = "{{url()->current()}}" + '?filter='+fil_value;
-                    $('#pre-loader').show();
-                    location.replace(url)
-                });
-                $(document).on('click', '.page_link', function(event){
-                    event.preventDefault();
-                    let current_page = $(this).attr('href');
-                    let fil_value = $('#filter_order').val();
-                    let url = current_page + '&filter='+fil_value;
-                    $('#pre-loader').show();
-                    location.replace(url)
-                });
-
-                $(document).on('click', '.purchase_show', function(event){
-                    let id = $(this).data('id');
-                    let data = {
-                        _token: "{{csrf_token()}}",
-                        order_id: id
-                    }
-                    $('#pre-loader').show();
-                    $.post("{{route('frontend.my_purchase_history_modal')}}",data, function(response){
-                        $('#modal_div').html(response);
-                        $('#purchase_history_modal').modal('show');
-                        $('#pre-loader').hide();
-                    });
-                });
-            });
-        })(jQuery);
-    </script>
-@endpush

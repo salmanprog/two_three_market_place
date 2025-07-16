@@ -84,44 +84,7 @@ class OrderController extends Controller
         }
     }
 
-    public function resellProduct($id){
-        try {
-            $data['product'] = $this->productService->findBySellerProductId($id);
-            $data['skus'] = $this->productService->getThisSKUProduct($id);
-            $totalWholesalePrice = '';
-            
-            // Get the purchase price from customer's order history
-            $purchasePrice = null;
-            $customerId = auth()->user()->id;
-            
-            // Find the most recent order for this customer that contains this product
-            $orderProduct = \App\Models\OrderProductDetail::whereHas('package.order', function($query) use ($customerId) {
-                $query->where('customer_id', $customerId);
-            })->where('product_sku_id', $id)->latest()->first();
-            
-            if ($orderProduct) {
-                $purchasePrice = $orderProduct->price;
-            }
-            
-            $data['purchasePrice'] = $purchasePrice;
-            
-            if(isModuleActive('WholeSale') && class_exists('Modules\WholeSale\Entities\WholesalePrice')){
-                if (@$data['product']->product->product_type == 1){
-                    $totalWholesalePrice = \Modules\WholeSale\Entities\WholesalePrice::where('product_id', $id)->get();
-                }
-            }
-            $data['totalWholesalePrice'] = $totalWholesalePrice;
-            return view(theme('pages.profile.resell_product_form'), $data);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            LogActivity::errorLog('Product not found with ID: ' . $id);
-            Toastr::error('Product not found or does not exist.', __('common.error'));
-            return redirect()->route('frontend.resell_product_list');
-        } catch (Exception $e) {
-            LogActivity::errorLog($e->getMessage());
-            Toastr::error(__('common.error_message'), __('common.error'));
-            return back();
-        }
-    }
+
 
     public function store(Request $request)
     {

@@ -22,7 +22,6 @@ class SellerController extends Controller
 
     public function index($seller_slug)
     {
-
         if (session()->has('filterDataFromCat')) {
             session()->forget('filterDataFromCat');
         }

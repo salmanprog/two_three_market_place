@@ -320,9 +320,15 @@
             <div class="col-xl-9 col-lg-8">
                 <div class="admin-visitor-area">
                     <div class="white_box">
-                        <form action="{{route('seller.product.update',$product->id)}}" method="POST" enctype="multipart/form-data">
+                        <form action="{{route('frontend.add_resell_product')}}" method="POST" enctype="multipart/form-data">
                             @csrf
                             @method('POST')
+                            
+                            <!-- Hidden product ID -->
+                            <input type="hidden" name="product_id" value="{{ $product->product->id ?? $product->id }}">
+                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                            <!-- Hidden seller product SKU ID -->
+                            <input type="hidden" name="seller_product_sku_id" value="{{ $skus->first()->id ?? '' }}">
 
                             <div class="row justify-content-center">
                                 <div class="col-12">
@@ -371,30 +377,20 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
-                                    <!-- Display Name -->
                                     <div class="primary_input  mb-15">
                                         <label class="primary_input_label d-flex align-items-center gap-2" for="product_name">{{__("product.display_name")}} <span class="text-danger">*</span></label>
-                                        <input class="primary_input_field" id="product_name" name="product_name" placeholder="{{__("product.display_name")}}" type="text" value="{{old('product_name')?old('product_name'):$product->product_name}}" required>
+                                        <input class="primary_input_field" id="product_name" name="product_name" placeholder="{{__("product.display_name")}}" type="text" value="{{old('product_name')?old('product_name'):$product->product_name}}" readonly>
                                         <span class="text-danger">{{$errors->first('product_name')}}</span>
                                     </div>
                                 </div>
-
-                                <!-- Purchase Price and New Price Fields -->
-                                <!-- <div class="col-lg-6">
-                                <div class="primary_input mb-15">
-                                            <label class="primary_input_label" for="purchase_price">{{__("product.purchase_price")}}</label>
-                                            <input class="primary_input_field" id="purchase_price" name="purchase_price" placeholder="{{__("product.purchase_price")}}" type="text" value="{{$purchasePrice ? single_price($purchasePrice) : 'N/A'}}" readonly>
-                                            <span class="text-muted">{{__("product.purchase_price_description")}}</span>
-                                </div>
-                                    </div> -->
                                 <div class="col-lg-6">
                                     <div class="primary_input mb-15">
                                         <label class="primary_input_label d-flex align-items-center gap-2" for="old_price">{{__("Old Price")}} <span class="text-danger">*</span></label>
                                         <input class="primary_input_field" id="old_price" name="old_price"
                                             placeholder="{{__('product.old_price')}}"
-                                            type="number" min="0" step="{{step_decimal()}}"
-                                            value="{{ old('old_price', $product->selling_price ?? 0) }}" required>
-                                        <span class="text-muted">Product Price: {{ $product->selling_price }}</span>
+                                            type="number" min="0"
+                                            value="{{ old('min_sell_price', $product->min_sell_price ?? 0) }}" readonly>
+                                        <span class="text-muted">{{ $errors->first('old_price') }}</span>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
@@ -402,6 +398,24 @@
                                         <label class="primary_input_label d-flex align-items-center gap-2" for="new_price">{{__("New Price")}} <span class="text-danger">*</span></label>
                                         <input class="primary_input_field" id="new_price" name="new_price" placeholder="{{__("product.new_price")}}" type="number" min="0" step="{{step_decimal()}}" value="{{old('new_price')}}" required>
                                         <span class="text-danger">{{$errors->first('new_price')}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="primary_input mb-15">
+                                        <label class="primary_input_label d-flex align-items-center gap-2" for="product_condition">{{__("Product Condition")}} <span class="text-danger">*</span></label>
+                                        <select class="primary_select" id="product_condition" name="product_condition" required>
+                                            <option value="">{{__("Select Condition")}}</option>
+                                            <option value="new" {{ old('product_condition') == 'new' ? 'selected' : '' }}>{{__("New")}}</option>
+                                            <option value="used" {{ old('product_condition') == 'used' ? 'selected' : '' }}>{{__("Used")}}</option>
+                                        </select>
+                                        <span class="text-danger">{{$errors->first('product_condition')}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="primary_input mb-15">
+                                        <label class="primary_input_label d-flex align-items-center gap-2" for="customer_note">{{__("Additional Notes (Optional)")}}</label>
+                                        <textarea class="primary_input_field" id="customer_note" name="customer_note" placeholder="{{__("Add any additional notes about the product condition...")}}" rows="3">{{old('customer_note')}}</textarea>
+                                        <span class="text-danger">{{$errors->first('customer_note')}}</span>
                                     </div>
                                 </div>
                             </div>

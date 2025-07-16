@@ -63,6 +63,7 @@ class SellerProduct extends Model
         'rating' => 'integer',
         'hasDiscount' => 'string',
         'ProductType' => 'string',
+        'resell_product',
     ];
     protected $with = ['flashDeal'];
     protected $appends = ['variantDetails', 'MaxSellingPrice', 'hasDeal', 'rating', 'hasDiscount', 'ProductType'];
