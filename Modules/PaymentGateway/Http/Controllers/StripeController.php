@@ -251,7 +251,7 @@ class StripeController extends Controller
                 "amount" => round($data['amount'] * 100),
                 "currency" => $currency_code,
                 "source" => $data['stripeToken'],
-                "description" => "Subscription Payment from " . url('/') . " - Seller ID: " . getParentSellerId(),
+                "description" => "Wallet Payment from " . url('/') . " - Seller ID: " . getParentSellerId(),
                 "metadata" => [
                     "seller_id" => getParentSellerId(),
                     "payment_type" => "subscription",
@@ -287,6 +287,93 @@ class StripeController extends Controller
 
                  // Return success response with redirect
                  return back();
+            }
+
+
+        } catch (Exception $e) {
+            Log::error('Stripe Payment Error', [
+                'error' => $e->getMessage(),
+                'seller_id' => getParentSellerId() ?? 'unknown',
+                'data' => $data
+            ]);
+
+            if (session()->has('subscription_payment')) {
+                session()->forget('subscription_payment');
+            }
+
+            return [
+                'status' => 'error',
+                'message' => $e->getMessage(),
+                'redirect_url' => route('seller.dashboard')
+            ];
+        }
+    }
+
+    public function stripePlaceOrder($data)
+    {
+        try {
+
+            $currency_code = getCurrencyCode();
+            $credential = $this->getCredential();
+            
+            if (!$credential) {
+                Log::error('Stripe credential not found', [
+                    'seller_id' => getParentSellerId(),
+                    'seller_wise_payment' => app('general_setting')->seller_wise_payment ?? false
+                ]);
+                throw new Exception('Payment gateway configuration not found');
+            }
+
+            // Validate required fields
+            if (empty($data['stripeToken'])) {
+                throw new Exception('Stripe token is missing');
+            }
+
+            if (empty($data['amount']) || $data['amount'] <= 0) {
+                throw new Exception('Invalid payment amount');
+            }
+
+            // Validate Stripe API key
+            if (empty($credential->perameter_3)) {
+                throw new Exception('Stripe secret key not configured');
+            }
+
+            Stripe\Stripe::setApiKey($credential->perameter_3);
+            
+            // Log the charge request data
+            $charge_data = [
+                "amount" => round($data['amount'] * 100),
+                "currency" => $currency_code,
+                "source" => $data['stripeToken'],
+                "description" => "New Order Payment",
+                "metadata" => [
+                    "seller_id" => getParentSellerId(),
+                    "payment_type" => "order",
+                    "seller_email" => getParentSeller()->email ?? 'unknown'
+                ]
+            ];
+
+            Log::info('Stripe Charge Request Data', [
+                'charge_data' => $charge_data,
+                'seller_id' => getParentSellerId(),
+                'credential_id' => $credential->id ?? 'unknown'
+            ]);
+            // Create the charge
+            $stripe = Stripe\Charge::create($charge_data);
+
+            // Log successful charge
+            Log::info('Stripe Charge Created Successfully', [
+                'charge_id' => $stripe['id'],
+                'status' => $stripe['status'],
+                'amount' => $stripe['amount'],
+                'seller_id' => getParentSellerId()
+            ]);
+
+            if ($stripe['status'] == "succeeded") {
+                $transaction_id = $stripe['id'];
+
+                 // Return success response with redirect
+                 return $transaction_id;
             }
 
 

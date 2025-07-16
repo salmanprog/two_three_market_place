@@ -149,7 +149,7 @@ class OrderController extends Controller
         if ($request->method == "Stripe") {
             $data['gateway_id'] = encrypt(4);
             $stripeController = new StripeController;
-            $response = $stripeController->stripePost($request->all());
+            $response = $stripeController->stripePlaceOrder($request->all());
             if(gettype($response) == 'object'){
                 return redirect()->back();
             }
