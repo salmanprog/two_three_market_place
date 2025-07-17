@@ -93,6 +93,11 @@ class ProductService
     public function findBySellerProductId($id){
         return $this->productRepository->findBySellerProductId($id);
     }
+
+    public function findByResellProductId($id){
+        return $this->productRepository->findByResellProductId($id);
+    }
+
     public function findProductSkuById($id)
     {
         return $this->productRepository->findProductSkuById($id);
