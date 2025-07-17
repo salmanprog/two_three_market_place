@@ -74,6 +74,8 @@ class ResellProduct extends Controller
     public function resellProduct($id){
         try {
             $data = [];
+            $data['product'] = $this->productService->findByResellProductId($id);
+            
             $data['skus'] = $this->productService->getThisSKUProduct($id);
             $sellerProduct = $this->productService->findBySellerProductId($id);
             $totalWholesalePrice = '';

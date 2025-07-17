@@ -256,6 +256,10 @@ class ProductRepository {
         
     }
 
+    public function findByResellProductId($id){
+        return $this->product::with('skus')->where('product_id',$id)->firstOrFail();
+    }
+
     public function deleteById($id){
 
         $product =  $this->product->findOrFail($id);
