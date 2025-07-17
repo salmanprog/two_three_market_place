@@ -252,6 +252,8 @@ class ProductRepository {
 
     public function findBySellerProductId($id){
         return SellerProduct::with('skus')->findOrFail($id);
+        
+        
     }
 
     public function deleteById($id){
