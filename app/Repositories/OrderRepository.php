@@ -606,7 +606,7 @@ class OrderRepository
             foreach ($productList as $key => $products) {
                 $seller_id = $key;
             }
-            $wallet_service->cartPaymentData($order->id, $data['grand_total'], "Cart Payment", $seller_id, $user_type);
+            //$wallet_service->cartPaymentData($order->id, $data['grand_total'], "Cart Payment", $seller_id, $user_type);
             $order_payment = $this->orderPaymentDone($data['grand_total'], 2, "none", (auth()->check()) ? auth()->user() : null);
             $order->update([
                 'order_payment_id' => $order_payment->id
