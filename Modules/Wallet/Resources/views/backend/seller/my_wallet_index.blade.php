@@ -89,11 +89,11 @@
                     <div class="box_header common_table_header">
                         <div class="main-title d-md-flex">
                             <h3 class="mb-0 mr-30 mb_xs_15px mb_sm_20px">{{ __('wallet.transaction_list') }}</h3>
-                            <ul class="d-flex">
+                            <!-- <ul class="d-flex">
                                 @if(permissionCheck('my-wallet.withdraw_request_sent'))
                                     <li><a data-toggle="modal" data-target="#Recharge_Modal" class="primary-btn radius_30px mr-10 fix-gr-bg" href="#"><i class="ti-plus"></i>{{ __('wallet.recharge_now') }}</a></li>
                                 @endif
-                            </ul>
+                            </ul> -->
                         </div>
                     </div>
                     <div class="QA_section QA_section_heading_custom check_box_table">
