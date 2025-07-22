@@ -72,14 +72,20 @@ class ResellProduct extends Controller
     }
 
     public function resellProduct($id){
-       
         try {
             $data = [];
             $data['product'] = $this->productService->findByResellProductId($id);
             
             $data['skus'] = $this->productService->getThisSKUProduct($id);
+            $sellerProduct = $this->productService->findBySellerProductId($id);
             $totalWholesalePrice = '';
-            
+            if (!$sellerProduct) {
+                // If not found in seller_products, check if it's a products ID
+                $sellerProduct = SellerProduct::where('product_id', $id)->first();
+                if (!$sellerProduct) {
+                    throw new \Illuminate\Database\Eloquent\ModelNotFoundException('Product not found with ID: ' . $id);
+                }
+            }
             // Get the purchase price from customer's order history
             $purchasePrice = null;
             $customerId = auth()->user()->id;
@@ -95,11 +101,11 @@ class ResellProduct extends Controller
             
             $data['purchasePrice'] = $purchasePrice;
             
-            if(isModuleActive('WholeSale') && class_exists('Modules\WholeSale\Entities\WholesalePrice')){
-                if (@$data['product']->product->product_type == 1){
-                    $totalWholesalePrice = \Modules\WholeSale\Entities\WholesalePrice::where('product_id', $id)->get();
-                }
-            }
+            // if(isModuleActive('WholeSale') && class_exists('Modules\WholeSale\Entities\WholesalePrice')){
+            //     if (@$data['product']->product->product_type == 1){
+            //         $totalWholesalePrice = \Modules\WholeSale\Entities\WholesalePrice::where('product_id', $id)->get();
+            //     }
+            // }
             $data['totalWholesalePrice'] = $totalWholesalePrice;
             return view(theme('pages.profile.resell_product_form'), $data);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
