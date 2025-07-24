@@ -228,8 +228,8 @@ class WalletController extends Controller
         if ($request->method == "Stripe") {
             $stripeController = new StripeController;
             $response = $stripeController->stripeWalletRecharge($request->all());
-            print_r($response);
-            die();
+            //print_r($response);
+            //die();
         }
         if ($request->method == "RazorPay") {
             $razorpayController = new RazorpayController;

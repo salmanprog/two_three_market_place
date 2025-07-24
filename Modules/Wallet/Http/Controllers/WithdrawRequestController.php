@@ -98,7 +98,12 @@ class WithdrawRequestController extends Controller
         try {
             Toastr::success(__('wallet.withdraw_request_has_been_sent_successfully'), __('common.success'));
             LogActivity::successLog('Withdraw Request has been sent Successfully.');
-            return redirect()->route('my-wallet.withdraw_index');
+            $get_auth = auth()->user();
+            if($get_auth->role_id == 4){
+                return redirect(url('wallet/customer/my-wallet-index'));
+            }else{
+                return redirect()->route('my-wallet.withdraw_index');
+            }
         } catch (\Exception $e) {
             Toastr::error(__('common.error_message'), __('common.error'));
             LogActivity::errorLog($e->getMessage());
