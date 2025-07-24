@@ -17,7 +17,7 @@
                 </div>
             @endif
             <br>
-            @if (app('general_setting')->google_status)
+            {{-- @if (app('general_setting')->google_status)
             <a href="{{url('/login/google')}}" class="google_logIn d-flex align-items-center justify-content-center">
                 <img src="{{url('/')}}/public/frontend/amazy/img/svg/google_icon.svg" alt="{{__('auth.Sign in with Google')}}" title="{{__('auth.Sign in with Google')}}">
                 <h5 class="m-0 font_16 f_w_500">{{__('auth.Sign in with Google')}}</h5>
@@ -28,7 +28,10 @@
                 <img src="{{url('/')}}/public/frontend/amazy/img/svg/facebook_icon.svg" alt="{{__('auth.Sign in with Facebook')}}" title="{{__('auth.Sign in with Facebook')}}">
                 <h5 class="m-0 font_16 f_w_500">{{__('auth.Sign in with Facebook')}}</h5>
             </a>
-            @endif
+            @endif --}}
+                        <a href="./merchant" class="g-recaptcha amaz_primary_btn style2 radius_5px  w-100 text-uppercase  text-center mb_25">{{__('sign up as a free Artist')}}</a>
+                        <a href="./merchant-register-step-2/subscription" class="g-recaptcha amaz_primary_btn style2 radius_5px  w-100 text-uppercase  text-center mb_25">{{__('sign up as a premium Artist')}}</a>
+            
             @if (app('general_setting')->twitter_status)
             <a href="{{url('/login/twitter')}}" class="google_logIn d-flex align-items-center justify-content-center">
                 <img src="{{url('/')}}/public/frontend/amazy/img/svg/twitter_icon.svg" alt="{{__('auth.Sign up with Twitter')}}" title="{{__('auth.Sign up with Twitter')}}">

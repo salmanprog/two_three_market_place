@@ -324,12 +324,12 @@
                             @csrf
                             @method('POST')
                             
-                            <!-- Hidden product ID -->
+                            <!-- Hidden product ID - Use the main product ID for the addResellProduct method -->
                             <input type="hidden" name="product_id" value="{{ $product->product->id ?? $product->id }}">
-                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                            <!-- Hidden seller product ID for reference -->
+                            <input type="hidden" name="seller_product_id" value="{{ $product->id }}">
                             <!-- Hidden seller product SKU ID -->
                             <input type="hidden" name="seller_product_sku_id" value="{{ $skus->first()->id ?? '' }}">
-
                             <div class="row justify-content-center">
                                 <div class="col-12">
                                     <div class="box_header common_table_header">
@@ -347,32 +347,44 @@
                                                 </div>
                                             </div> -->
 
-                                <!-- Stock Management Toggle -->
-                                <div class="col-lg-6">
-                                    <div class="primary_input mb-15">
-                                        <label class="primary_input_label" for="stock_manage">{{__("product.i_want_to_manage_stock_for_this_product")}}</label>
-                                        <label class="switch_toggle" for="checkbox1">
-                                            <input type="checkbox" id="checkbox1" name="stock_manage" @if ($product->stock_manage == 1) checked @endif value="1">
-                                            <div class="slider round"></div>
-                                        </label>
+                                <!-- Product Information Header -->
+                                <div class="col-lg-12 mb-3">
+                                    <div class="alert alert-info">
+                                        <i class="fas fa-info-circle"></i>
+                                        <strong>{{__("Resell Product Information")}}</strong><br>
+                                        <small>{{__("Set your resell price for this product. The product details below are from the original listing.")}}</small>
                                     </div>
                                 </div>
-                                <!-- Thumbnail Image -->
-                                <div class="col-lg-6">
-                                    <div class="single_p col-xl-12 upload_photo_div">
-                                        <div id="sliderImgFileDiv">
-                                            <div class="primary_input mb-25">
-                                                <div class="primary_file_uploader" data-toggle="amazuploader" data-multiple="false" data-type="image" data-name="slider_image_media">
-                                                    <input class="primary-input file_amount" type="text" id="image" placeholder="{{__('common.browse_image_file')}}" readonly="">
-                                                    <button class="" type="button">
-                                                        <label class="primary-btn small fix-gr-bg" for="image">{{__("common.image")}} </label>
-                                                        <input type="hidden" class="selected_files" value="">
-                                                    </button>
+                                <!-- Product Image Display -->
+                                <div class="col-lg-12">
+                                    <div class="primary_input mb-15">
+                                        <label class="primary_input_label">{{__("Product Image")}}</label>
+                                        <div class="product_image_display text-center p-4" style="border: 2px dashed #ddd; border-radius: 8px; background-color: #f9f9f9;">
+                                            @if($product->product && $product->product->thumbnail_image_source)
+                                                <img src="{{ showImage($product->product->thumbnail_image_source) }}"
+                                                     alt="{{ $product->product_name }}"
+                                                     class="img-fluid rounded shadow-sm"
+                                                     style="max-height: 250px; max-width: 300px; object-fit: cover; border: 3px solid #fff;">
+                                                <p class="mt-3 mb-0 text-muted">{{ $product->product_name }}</p>
+                                            @elseif($product->thumbnail_image_source)
+                                                <img src="{{ showImage($product->thumbnail_image_source) }}"
+                                                     alt="{{ $product->product_name }}"
+                                                     class="img-fluid rounded shadow-sm"
+                                                     style="max-height: 250px; max-width: 300px; object-fit: cover; border: 3px solid #fff;">
+                                                <p class="mt-3 mb-0 text-muted">{{ $product->product_name }}</p>
+                                            @else
+                                                <div class="text-center py-5">
+                                                    <i class="fas fa-image fa-4x text-muted mb-3"></i>
+                                                    <p class="text-muted h5">{{__("No image available")}}</p>
+                                                    <small class="text-muted">{{__("This product doesn't have an image")}}</small>
                                                 </div>
-                                                <div class="product_image_all_div">
-                                                </div>
-                                            </div>
-                                            <span class="text-danger" id="error_image"> </span>
+                                            @endif
+                                        </div>
+                                        <div class="text-center mt-2">
+                                            <small class="text-muted">
+                                                <i class="fas fa-info-circle"></i>
+                                                {{__("This image will be used for your resell product listing")}}
+                                            </small>
                                         </div>
                                     </div>
                                 </div>
@@ -380,51 +392,84 @@
                                     <div class="primary_input  mb-15">
                                         <label class="primary_input_label d-flex align-items-center gap-2" for="product_name">{{__("product.display_name")}} <span class="text-danger">*</span></label>
                                         <input class="primary_input_field" id="product_name" name="product_name" placeholder="{{__("product.display_name")}}" type="text" value="{{old('product_name')?old('product_name'):$product->product_name}}" readonly>
-                                        <span class="text-danger">{{$errors->first('product_name')}}</span>
+                                        <span class="text-danger">{{$errors->first('product_name')}}</span> 
                                     </div>
                                 </div>
+                                <!-- Pricing Section -->
+                                <div class="col-lg-12 mb-3">
+                                    <h5 class="mb-3">
+                                        <i class="fas fa-dollar-sign"></i> {{__("Pricing Information")}}
+                                    </h5>
+                                </div>
+
                                 <div class="col-lg-6">
                                     <div class="primary_input mb-15">
-                                        <label class="primary_input_label d-flex align-items-center gap-2" for="old_price">{{__("Old Price")}} <span class="text-danger">*</span></label>
-                                        <input class="primary_input_field" id="old_price" name="old_price"
-                                            placeholder="{{__('product.old_price')}}"
-                                            type="number" min="0"
-                                            value="{{ old('min_sell_price', $product->min_sell_price ?? 0) }}" readonly>
-                                        <span class="text-muted">{{ $errors->first('old_price') }}</span>
+                                        <label class="primary_input_label d-flex align-items-center gap-2" for="old_price">
+                                            <i class="fas fa-tag"></i> {{__("Original Price")}}
+                                        </label>
+                                        <div class="input-group input-with-tag position-relative">
+                                            <div class="input-group-prepend position-absolute" style="right:0; top:0;">
+                                                <span class="input-group-text py-8 px-15">{{ getCurrency() }}</span>
+                                            </div>
+                                            <input class="primary_input_field" id="old_price" name="old_price"
+                                                placeholder="{{__('Original selling price')}}"
+                                                type="text"
+                                                value="{{ single_price($product->min_sell_price ?? 0) }}" readonly>
+                                        </div>
+                                        <small class="text-muted">{{__("This is the original selling price of the product")}}</small>
                                     </div>
                                 </div>
+
                                 <div class="col-lg-6">
                                     <div class="primary_input mb-15">
-                                        <label class="primary_input_label d-flex align-items-center gap-2" for="new_price">{{__("New Price")}} <span class="text-danger">*</span></label>
-                                        <input class="primary_input_field" id="new_price" name="new_price" placeholder="{{__("product.new_price")}}" type="number" min="0" step="{{step_decimal()}}" value="{{old('new_price')}}" required>
+                                        <label class="primary_input_label d-flex align-items-center gap-2" for="new_price">
+                                            <i class="fas fa-money-bill-wave"></i> {{__("Your Resell Price")}} <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="input-group input-with-tag position-relative">
+                                            <div class="input-group-prepend position-absolute" style="right:0; top:0;">
+                                                <span class="input-group-text py-8 px-15">{{ getCurrency() }}</span>
+                                            </div>
+                                            <input class="primary_input_field" id="new_price" name="new_price"
+                                                placeholder="{{__('Enter your resell price')}}"
+                                                type="number" min="0.01" step="{{step_decimal()}}"
+                                                value="{{old('new_price')}}" required>
+                                        </div>
+                                        <small class="text-muted">{{__("Set the price you want to sell this product for")}}</small>
                                         <span class="text-danger">{{$errors->first('new_price')}}</span>
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
-                                    <div class="primary_input mb-15">
-                                        <label class="primary_input_label d-flex align-items-center gap-2" for="product_condition">{{__("Product Condition")}} <span class="text-danger">*</span></label>
-                                        <select class="primary_select" id="product_condition" name="product_condition" required>
-                                            <option value="">{{__("Select Condition")}}</option>
-                                            <option value="new" {{ old('product_condition') == 'new' ? 'selected' : '' }}>{{__("New")}}</option>
-                                            <option value="used" {{ old('product_condition') == 'used' ? 'selected' : '' }}>{{__("Used")}}</option>
-                                        </select>
-                                        <span class="text-danger">{{$errors->first('product_condition')}}</span>
-                                    </div>
+
+                                <!-- Additional Information Section -->
+                                <div class="col-lg-12 mb-3 mt-4">
+                                    <h5 class="mb-3">
+                                        <i class="fas fa-sticky-note"></i> {{__("Additional Information")}}
+                                    </h5>
                                 </div>
+
                                 <div class="col-lg-12">
                                     <div class="primary_input mb-15">
-                                        <label class="primary_input_label d-flex align-items-center gap-2" for="customer_note">{{__("Additional Notes (Optional)")}}</label>
-                                        <textarea class="primary_input_field" id="customer_note" name="customer_note" placeholder="{{__("Add any additional notes about the product condition...")}}" rows="3">{{old('customer_note')}}</textarea>
+                                        <label class="primary_input_label d-flex align-items-center gap-2" for="customer_note">
+                                            <i class="fas fa-comment-alt"></i> {{__("Product Description (Optional)")}}
+                                        </label>
+                                        <textarea class="primary_input_field" id="customer_note" name="customer_note"
+                                            placeholder="{{__('Add any additional notes about the product condition, features, or selling points...')}}"
+                                            rows="4">{{old('customer_note')}}</textarea>
+                                        <small class="text-muted">{{__("This description will help buyers understand your product better")}}</small>
                                         <span class="text-danger">{{$errors->first('customer_note')}}</span>
                                     </div>
                                 </div>
                             </div>
-                            <!-- Update Button -->
+                            <!-- Submit Button -->
                             <div class="row">
-                                <div class="col-12 text-center">
-                                    <button class="primary_btn_2 mt-5 text-center" type="submit">
-                                        <i class="ti-check"></i>{{ __('common.update') }}
-                                    </button>
+                                <div class="col-12 text-center mt-4">
+                                    <div class="d-flex justify-content-center gap-3 mb-20">
+                                        <button class="btn btn-md text-white px-20 py-10" type="submit" style="background-color: #000;">
+                                            <i class="fas fa-plus-circle"></i> {{ __('Add to Resell List') }}
+                                        </button>
+                                    </div>
+                                    <small class="text-muted mt-2 d-block">
+                                        {{__("By submitting, you agree to list this product for resale at your specified price")}}
+                                    </small>
                                 </div>
                             </div>
                         </form>

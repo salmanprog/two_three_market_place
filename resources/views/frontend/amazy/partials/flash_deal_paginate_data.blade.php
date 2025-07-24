@@ -28,12 +28,12 @@
                         $price_qty = getProductDiscountedPrice(@$product->product);
                         $showData = [
                             'name' => @$product->product->product_name,
-                            'url' => singleProductURL(@$product->product->seller->slug, @$product->product->slug),
+                            'url' => singleProductURL(@$product->product->seller->slug ?: 'default', @$product->product->slug ?: 'default'),
                             'price' => $price_qty,
                             'thumbnail' => $thumbnail
                         ];
                     @endphp
-                    <a href="{{singleProductURL(@$product->product->seller->slug, @$product->product->slug)}}" class="thumb">
+                    <a href="{{singleProductURL(@$product->product->seller->slug ?: 'default', @$product->product->slug ?: 'default')}}" class="thumb">
                         <img src="{{$thumbnail}}" alt="{{@$product->product->product_name}}" title="{{@$product->product->product_name}}" class="lazyload">
                     </a>
 

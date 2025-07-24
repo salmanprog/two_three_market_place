@@ -55,85 +55,126 @@
                                 @foreach($cartData as $admin_id => $items)
                                     @foreach($items as $key => $cart)
                                         @if($cart->product_type == 'product')
+                                            @php
+                                                // Check if this is a reseller product
+                                                $isResellerProduct = false;
+                                                $resellProduct = null;
+                                                if (!$cart->product) {
+                                                    $resellProduct = \Modules\Product\Entities\Product::where('id', $cart->product_id)
+                                                        ->where('resell_product', 1)
+                                                        ->where('status', 1)
+                                                        ->first();
+                                                    $isResellerProduct = $resellProduct ? true : false;
+                                                }
+                                            @endphp
+
                                             @if($cart->is_select == 1)
                                                 @php
                                                     $pro_price = 0;
-                                                    if (isModuleActive('WholeSale')){
-                                                        $w_main_price = 0;
-                                                        $wholeSalePrices = $cart->product->wholeSalePrices;
-                                                        if($wholeSalePrices->count()){
-                                                            foreach ($wholeSalePrices as $w_p){
-                                                                if ( ($w_p->min_qty<=$cart->qty) && ($w_p->max_qty >=$cart->qty) ){
-                                                                    $w_main_price = $w_p->sell_price;
-                                                                }
-                                                                elseif($w_p->max_qty < $cart->qty){
-                                                                    $w_main_price = $w_p->sell_price;
+                                                    if ($isResellerProduct) {
+                                                        // Handle reseller product pricing
+                                                        $subtotal += $resellProduct->resell_price * $cart->qty;
+                                                        $pro_price = $resellProduct->resell_price;
+                                                    } else {
+                                                        // Handle regular product pricing
+                                                        if (isModuleActive('WholeSale')){
+                                                            $w_main_price = 0;
+                                                            $wholeSalePrices = $cart->product->wholeSalePrices;
+                                                            if($wholeSalePrices->count()){
+                                                                foreach ($wholeSalePrices as $w_p){
+                                                                    if ( ($w_p->min_qty<=$cart->qty) && ($w_p->max_qty >=$cart->qty) ){
+                                                                        $w_main_price = $w_p->sell_price;
+                                                                    }
+                                                                    elseif($w_p->max_qty < $cart->qty){
+                                                                        $w_main_price = $w_p->sell_price;
+                                                                    }
                                                                 }
                                                             }
-                                                        }
 
-                                                        if ($w_main_price!=0){
-                                                            $subtotal += $w_main_price * $cart->qty;
-                                                            $pro_price = $w_main_price;
+                                                            if ($w_main_price!=0){
+                                                                $subtotal += $w_main_price * $cart->qty;
+                                                                $pro_price = $w_main_price;
+                                                            }else{
+                                                                $subtotal += $cart->product->sell_price * $cart->qty;
+                                                                $pro_price = $cart->product->sell_price;
+                                                            }
                                                         }else{
                                                             $subtotal += $cart->product->sell_price * $cart->qty;
                                                             $pro_price = $cart->product->sell_price;
                                                         }
-                                                    }else{
-                                                        $subtotal += $cart->product->sell_price * $cart->qty;
-                                                        $pro_price = $cart->product->sell_price;
                                                     }
-
                                                 @endphp
                                             @endif
                                             <li class="list-group-item px-0 px-lg-3 mb_10">
                                                 <div class="row gutters-5 align-items-center m-0">
                                                     <div class="col-lg-5 d-flex p-0">
-                                                        <a href="{{singleProductURL(@$cart->seller->slug, @$cart->product->product->slug)}}" class="d-flex align-items-center gap_20 cart_thumb_div">
-                                                            <div class="thumb">
-                                                                <img src="
-                                                                @if(@$cart->product->product->product->product_type == 1)
-                                                                {{showImage(@$cart->product->product->product->thumbnail_image_source)}}
-                                                                @else
-                                                                {{showImage(@$cart->product->sku->variant_image?@$cart->product->sku->variant_image:@$cart->product->product->product->thumbnail_image_source)}}
-                                                                @endif
-                                                                " alt="{{ textLimit(@$cart->product->product->product_name, 30) }}" title="{{ textLimit(@$cart->product->product->product_name, 30) }}">
-                                                            </div>
-                                                            <div class="summery_pro_content">
-                                                                <h4 class="font_16 f_w_700 m-0 theme_hover">{{ textLimit(@$cart->product->product->product_name, 30) }}</h4>
-                                                                <p class="font_14 f_w_400 m-0 ">
-                                                                    @if(@$cart->product->product->product->product_type == 2)
-                                                                        @foreach(@$cart->product->product_variations as $key => $combination)
-                                                                            @if(@$combination->attribute->id == 1)
-                                                                                {{@$combination->attribute->name}}: {{@$combination->attribute_value->color->name}}
-                                                                            @else
-                                                                                {{@$combination->attribute->name}}: {{@$combination->attribute_value->value}}
-                                                                            @endif
-                                                                            @if($key < count(@$cart->product->product_variations)-1),@endif
-
-                                                                        @endforeach
+                                                        @if($isResellerProduct)
+                                                            <a href="{{singleProductURL(@$resellProduct->reseller->slug ?: 'default', @$resellProduct->slug ?: 'default')}}" class="d-flex align-items-center gap_20 cart_thumb_div">
+                                                                <div class="thumb">
+                                                                    <img src="{{showImage($resellProduct->thumbnail_image_source)}}" alt="{{ textLimit($resellProduct->product_name, 30) }}" title="{{ textLimit($resellProduct->product_name, 30) }}">
+                                                                </div>
+                                                                <div class="summery_pro_content">
+                                                                    <h4 class="font_16 f_w_700 m-0 theme_hover">{{ textLimit($resellProduct->product_name, 30) }}</h4>
+                                                                    <p class="font_14 f_w_400 m-0 text-muted">
+                                                                        <small>Reseller Product</small>
+                                                                    </p>
+                                                        @else
+                                                            <a href="{{singleProductURL(@$cart->seller->slug ?: 'default', @$cart->product->product->slug ?: 'default')}}" class="d-flex align-items-center gap_20 cart_thumb_div">
+                                                                <div class="thumb">
+                                                                    <img src="
+                                                                    @if(@$cart->product->product->product->product_type == 1)
+                                                                    {{showImage(@$cart->product->product->product->thumbnail_image_source)}}
+                                                                    @else
+                                                                    {{showImage(@$cart->product->sku->variant_image?@$cart->product->sku->variant_image:@$cart->product->product->product->thumbnail_image_source)}}
                                                                     @endif
-                                                                </p>
+                                                                    " alt="{{ textLimit(@$cart->product->product->product_name, 30) }}" title="{{ textLimit(@$cart->product->product->product_name, 30) }}">
+                                                                </div>
+                                                                <div class="summery_pro_content">
+                                                                    <h4 class="font_16 f_w_700 m-0 theme_hover">{{ textLimit(@$cart->product->product->product_name, 30) }}</h4>
+                                                                    <p class="font_14 f_w_400 m-0 ">
+                                                                        @if(@$cart->product->product->product->product_type == 2)
+                                                                            @foreach(@$cart->product->product_variations as $key => $combination)
+                                                                                @if(@$combination->attribute->id == 1)
+                                                                                    {{@$combination->attribute->name}}: {{@$combination->attribute_value->color->name}}
+                                                                                @else
+                                                                                    {{@$combination->attribute->name}}: {{@$combination->attribute_value->value}}
+                                                                                @endif
+                                                                                @if($key < count(@$cart->product->product_variations)-1),@endif
+
+                                                                            @endforeach
+                                                                        @endif
+                                                                    </p>
+                                                        @endif
 
                                                                 <div class="d-flex flex-wrap align-items-center gap-10 mt-3">
                                                                     <div class="d-block d-lg-none">
-                                                                        <div class="product_number_count style_4" data-target="amount-3">
-                                                                            <button class="count_single_item inumber_decrement change_qty" data-qty_id="#qty_{{$cart->id}}" data-change_amount="1" data-maximum_qty="#maximum_qty_{{$cart->id}}"
-                                                                                data-minimum_qty="#minimum_qty_{{$cart->id}}" data-product_stock="{{@$cart->product->product_stock}}" data-stock_manage="{{@$cart->product->product->stock_manage}}" data-wholesale="#getWholesalePrice_{{$cart->id}}" data-cart_id="{{$cart->id}}" type="button" value="-"> <i class="ti-minus"></i></button>
-                                                                            <input name="qty[]" id="qty_{{$cart->id}}" maxlength="12" data-value="{{$cart->qty}}" value="{{getNumberTranslate($cart->qty)}}" class="count_single_item input-number qty" type="text" data-qty_id="#qty_{{$cart->id}}" data-change_amount="1" data-maximum_qty="#maximum_qty_{{$cart->id}}"
-                                                                            data-minimum_qty="#minimum_qty_{{$cart->id}}" data-product_stock="{{@$cart->product->product_stock}}" data-stock_manage="{{@$cart->product->product->stock_manage}}" data-wholesale="#getWholesalePrice_{{$cart->id}}" data-cart_id="{{$cart->id}}">
-                                                                            <input type="hidden" value="{{$cart->id}}" name="cart_id[]">
-                                                                            <input type="hidden" id="maximum_qty_{{$cart->id}}" value="{{@$cart->product->product->product->max_order_qty}}">
-                                                                            <input type="hidden" id="minimum_qty_{{$cart->id}}" value="{{@$cart->product->product->product->minimum_order_qty}}">
-                                                                            <button class="count_single_item number_increment change_qty" data-qty_id="#qty_{{$cart->id}}" data-change_amount="1" data-maximum_qty="#maximum_qty_{{$cart->id}}"
-                                                                                data-minimum_qty="#minimum_qty_{{$cart->id}}" data-product_stock="{{@$cart->product->product_stock}}" data-stock_manage="{{@$cart->product->product->stock_manage}}" data-wholesale="#getWholesalePrice_{{$cart->id}}" data-cart_id="{{$cart->id}}" type="button" value="+"> <i class="ti-plus"></i></button>
+                                                                        @if($isResellerProduct)
+                                                                            {{-- Reseller products have fixed quantity of 1 --}}
+                                                                            <div class="product_number_count style_4" data-target="amount-3">
+                                                                                <input name="qty[]" id="qty_{{$cart->id}}" value="1" class="count_single_item input-number qty" type="text" readonly>
+                                                                                <input type="hidden" value="{{$cart->id}}" name="cart_id[]">
+                                                                                <input type="hidden" id="maximum_qty_{{$cart->id}}" value="1">
+                                                                                <input type="hidden" id="minimum_qty_{{$cart->id}}" value="1">
+                                                                            </div>
+                                                                        @else
+                                                                            {{-- Regular products with quantity controls --}}
+                                                                            <div class="product_number_count style_4" data-target="amount-3">
+                                                                                <button class="count_single_item inumber_decrement change_qty" data-qty_id="#qty_{{$cart->id}}" data-change_amount="1" data-maximum_qty="#maximum_qty_{{$cart->id}}"
+                                                                                    data-minimum_qty="#minimum_qty_{{$cart->id}}" data-product_stock="{{@$cart->product->product_stock}}" data-stock_manage="{{@$cart->product->product->stock_manage}}" data-wholesale="#getWholesalePrice_{{$cart->id}}" data-cart_id="{{$cart->id}}" type="button" value="-"> <i class="ti-minus"></i></button>
+                                                                                <input name="qty[]" id="qty_{{$cart->id}}" maxlength="12" data-value="{{$cart->qty}}" value="{{getNumberTranslate($cart->qty)}}" class="count_single_item input-number qty" type="text" data-qty_id="#qty_{{$cart->id}}" data-change_amount="1" data-maximum_qty="#maximum_qty_{{$cart->id}}"
+                                                                                data-minimum_qty="#minimum_qty_{{$cart->id}}" data-product_stock="{{@$cart->product->product_stock}}" data-stock_manage="{{@$cart->product->product->stock_manage}}" data-wholesale="#getWholesalePrice_{{$cart->id}}" data-cart_id="{{$cart->id}}">
+                                                                                <input type="hidden" value="{{$cart->id}}" name="cart_id[]">
+                                                                                <input type="hidden" id="maximum_qty_{{$cart->id}}" value="{{@$cart->product->product->product->max_order_qty}}">
+                                                                                <input type="hidden" id="minimum_qty_{{$cart->id}}" value="{{@$cart->product->product->product->minimum_order_qty}}">
+                                                                                <button class="count_single_item number_increment change_qty" data-qty_id="#qty_{{$cart->id}}" data-change_amount="1" data-maximum_qty="#maximum_qty_{{$cart->id}}"
+                                                                                    data-minimum_qty="#minimum_qty_{{$cart->id}}" data-product_stock="{{@$cart->product->product_stock}}" data-stock_manage="{{@$cart->product->product->stock_manage}}" data-wholesale="#getWholesalePrice_{{$cart->id}}" data-cart_id="{{$cart->id}}" type="button" value="+"> <i class="ti-plus"></i></button>
 
-                                                                            <!-- for wholesale module -->
-                                                                            @if(isModuleActive('WholeSale'))
-                                                                                <input type="hidden" id="getWholesalePrice_{{$cart->id}}" value="@if(@$cart->product->wholeSalePrices->count()){{ json_encode(@$cart->product->wholeSalePrices) }} @else 0 @endif">
-                                                                            @endif
-
-                                                                        </div>
+                                                                                <!-- for wholesale module -->
+                                                                                @if(isModuleActive('WholeSale'))
+                                                                                    <input type="hidden" id="getWholesalePrice_{{$cart->id}}" value="@if(@$cart->product->wholeSalePrices->count()){{ json_encode(@$cart->product->wholeSalePrices) }} @else 0 @endif">
+                                                                                @endif
+                                                                            </div>
+                                                                        @endif
                                                                     </div>
 
                                                                     <div class="d-inline">
@@ -148,25 +189,32 @@
                                                     </div>
                                                     <div class="col-lg col-4 order-1 order-lg-0 my-3 my-lg-0 d-none d-lg-block">
                                                         <span class="opacity-60 font_12 d-block d-lg-none">{{__('common.price')}}</span>
-                                                        @if($cart->product->product->hasDeal)
-                                                            @if($cart->product->product->hasDeal->discount > 0)
-                                                                @if($cart->product->product->hasDeal->discount_type == 0)
-                                                                    <span class="green_badge text-nowrap">-{{getNumberTranslate($cart->product->product->hasDeal->discount)}}%</span>
-                                                                @else
-                                                                    <span class="green_badge text-nowrap">-{{single_price($cart->product->product->hasDeal->discount)}}</span>
-                                                                @endif
-                                                            @endif
+                                                        @if($isResellerProduct)
+                                                            {{-- Reseller products don't have deals or discounts --}}
+                                                            <h4 class="font_16 f_w_700 m-0 text-nowrap set_base_price{{$cart->id}}">{{single_price($resellProduct->resell_price)}}</h4>
+                                                            <input type="hidden" class="get_base_price{{$cart->id}}" value="{{single_price($resellProduct->resell_price)}}">
                                                         @else
-                                                            @if(@$cart->product->product->hasDiscount == 'yes')
-                                                                @if($cart->product->product->discount_type == 0)
-                                                                    <span class="green_badge text-nowrap">-{{getNumberTranslate($cart->product->product->discount)}}%</span>
-                                                                @else
-                                                                    <span class="green_badge text-nowrap">-{{single_price($cart->product->product->discount)}}</span>
+                                                            {{-- Regular products with deals and discounts --}}
+                                                            @if($cart->product->product->hasDeal)
+                                                                @if($cart->product->product->hasDeal->discount > 0)
+                                                                    @if($cart->product->product->hasDeal->discount_type == 0)
+                                                                        <span class="green_badge text-nowrap">-{{getNumberTranslate($cart->product->product->hasDeal->discount)}}%</span>
+                                                                    @else
+                                                                        <span class="green_badge text-nowrap">-{{single_price($cart->product->product->hasDeal->discount)}}</span>
+                                                                    @endif
+                                                                @endif
+                                                            @else
+                                                                @if(@$cart->product->product->hasDiscount == 'yes')
+                                                                    @if($cart->product->product->discount_type == 0)
+                                                                        <span class="green_badge text-nowrap">-{{getNumberTranslate($cart->product->product->discount)}}%</span>
+                                                                    @else
+                                                                        <span class="green_badge text-nowrap">-{{single_price($cart->product->product->discount)}}</span>
+                                                                    @endif
                                                                 @endif
                                                             @endif
+                                                            <h4 class="font_16 f_w_700 m-0 text-nowrap set_base_price{{$cart->id}}">{{single_price(isset($pro_price)?$pro_price:@$cart->product->sell_price)}}</h4>
+                                                            <input type="hidden" class="get_base_price{{$cart->id}}" value="{{single_price(isset($pro_price)?$pro_price:@$cart->product->sell_price)}}">
                                                         @endif
-                                                        <h4 class="font_16 f_w_700 m-0 text-nowrap set_base_price{{$cart->id}}">{{single_price(isset($pro_price)?$pro_price:@$cart->product->sell_price)}}</h4>
-                                                        <input type="hidden" class="get_base_price{{$cart->id}}" value="{{single_price(isset($pro_price)?$pro_price:@$cart->product->sell_price)}}">
                                                     </div>
                                                     <div class="col-lg col-6 order-4 order-lg-0 d-none d-lg-block">
                                                         <div class="product_number_count style_4" data-target="amount-3">

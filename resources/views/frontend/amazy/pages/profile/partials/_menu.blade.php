@@ -36,7 +36,7 @@
                 @endif
             @endif
 
-            <div class="customer-blance d-flex align-items-end justify-content-between rounded-3 flex-wrap gap-2 border-1">
+            {{-- <div class="customer-blance d-flex align-items-end justify-content-between rounded-3 flex-wrap gap-2 border-1">
                 <div  class="flex-grow-1">
                     <div class="w-100 text-center">
                         <span>{{__('common.total_balance')}}</span>
@@ -52,13 +52,13 @@
                     </a>
                 </div>
                 @endif
-            </div>
+            </div> --}}
             @if(auth()->user()->LastRehcarge)
                 <div class="customer-transaction">
-                    <div class="head d-flex align-items-center justify-content-between mb-3">
+                    {{-- <div class="head d-flex align-items-center justify-content-between mb-3">
                         <p>{{__('wallet.last_transaction')}}</p>
                         <a href="{{route('my-wallet.index', 'customer')}}">{{__('common.view_all')}}</a>
-                    </div>
+                    </div> --}}
                     <div class="customer-transaction-card">
                         @foreach(auth()->user()->LastRehcarge as $lastrehcarge)
                         <div class="d-flex align-items-center justify-content-between list">

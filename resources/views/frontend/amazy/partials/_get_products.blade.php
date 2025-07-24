@@ -11,12 +11,12 @@
             $price_qty = getProductDiscountedPrice(@$product);
             $showData = [
                 'name' => @$product->product_name,
-                'url' => singleProductURL(@$product->seller->slug, @$product->slug),
+                'url' => singleProductURL(@$product->seller->slug ?: 'default', @$product->slug ?: 'default'),
                 'price' => $price_qty,
                 'thumbnail' => $thumbnail,
             ];
         @endphp
-        <a href="{{ singleProductURL($product->seller->slug, $product->slug) }}"
+        <a href="{{ singleProductURL($product->seller->slug ?: 'default', $product->slug ?: 'default') }}"
             class="thumb">
             @if(app('general_setting')->lazyload == 1)
                 <img data-src="{{ $thumbnail }}" src="{{ showImage(themeDefaultImg()) }}"

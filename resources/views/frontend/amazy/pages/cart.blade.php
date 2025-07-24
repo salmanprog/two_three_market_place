@@ -2,7 +2,6 @@
 @section('title')
     {{ __('common.cart') }}
 @endsection
-
 @section('content')
 <!-- checkout_v3_area::start  -->
 <div id="cart_details_div">

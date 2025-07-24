@@ -130,7 +130,7 @@
                                         @endif
                                         ">
                                 <input type="hidden" value="{{textLimit($product->product_name, 28)}}" id="product_name_modal">
-                                <input type="hidden" value="{{singleProductURL(@$product->seller->slug, @$product->slug)}}" id="product_url_modal">
+                                <input type="hidden" value="{{singleProductURL(@$product->seller->slug ?: 'default', @$product->slug ?: 'default')}}" id="product_url_modal">
                                 <input type="hidden" name="thumb_image" id="thumb_image_modal" value="@if ($product->thum_img != null) {{showImage($product->thum_img)}} @else {{showImage($product->product->thumbnail_image_source)}} @endif">
                             <div class="product_info">
 

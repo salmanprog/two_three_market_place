@@ -131,6 +131,7 @@ Route::group(['middleware' => ['auth', 'customer']], function () {
     Route::get('/resell-product', [ResellProduct::class, 'resellProductList'])->name('frontend.resell_product_list');
     Route::get('/resell-product/{id}', [ResellProduct::class, 'resellProduct'])->name('frontend.resell_product');
     Route::post('/add-resell-product', [ResellProduct::class, 'addResellProduct'])->name('frontend.add_resell_product');
+    Route::post('/resell-product/update-price/{id}', [ResellProduct::class, 'updateResellPrice'])->name('frontend.update_resell_price');
     Route::post('/my-purchase-histories/modal', [OrderController::class, 'myPurchaseHistoryModal'])->name('frontend.my_purchase_history_modal');
 });
 Route::get('/my-purchase-order-pdf/{id}', [OrderController::class, 'my_purchase_order_pdf'])->name('frontend.my_purchase_order_pdf');

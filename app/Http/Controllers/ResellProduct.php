@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Modules\Reseller\Entities\ResellRequest;
 
+
 class ResellProduct extends Controller
 {   
     protected $orderService;
@@ -51,13 +52,13 @@ class ResellProduct extends Controller
     public function resellProductList(Request $request)
     {
         try {
-            // Get resell requests for current user
-            $resellRequests = ResellRequest::where('customer_id', auth()->user()->id)
-                ->with(['product', 'sellerProductSku'])
+            // Get resell products created by current user (duplicated products marked for resale)
+            $resellProducts = \Modules\Product\Entities\Product::where('reseller_id', auth()->user()->id)
+                ->where('resell_product', 1)
                 ->latest()
                 ->paginate(10);
 
-            $data['resellRequests'] = $resellRequests;
+            $data['resellProducts'] = $resellProducts;
 
             if (auth()->user()->role->type != 'customer') {
                 return view('backEnd.pages.customer_data.resell_products', $data);
@@ -74,33 +75,41 @@ class ResellProduct extends Controller
     public function resellProduct($id){
         try {
             $data = [];
+
+            // Now that the repository method is fixed, we can use it directly
             $data['product'] = $this->productService->findByResellProductId($id);
-            
             $data['skus'] = $this->productService->getThisSKUProduct($id);
-            $sellerProduct = $this->productService->findBySellerProductId($id);
             $totalWholesalePrice = '';
-            if (!$sellerProduct) {
-                // If not found in seller_products, check if it's a products ID
-                $sellerProduct = SellerProduct::where('product_id', $id)->first();
-                if (!$sellerProduct) {
-                    throw new \Illuminate\Database\Eloquent\ModelNotFoundException('Product not found with ID: ' . $id);
-                }
-            }
+
             // Get the purchase price from customer's order history
             $purchasePrice = null;
             $customerId = auth()->user()->id;
-            
+
             // Find the most recent order for this customer that contains this product
+            // We need to check both seller_product_sku ID and product_sku_id depending on the product type
             $orderProduct = \App\Models\OrderProductDetail::whereHas('package.order', function($query) use ($customerId) {
                 $query->where('customer_id', $customerId);
-            })->where('product_sku_id', $id)->latest()->first();
-            
+            })->where(function($query) use ($id, $data) {
+                // For single products, check by seller_product_sku id
+                // For variant products, check by product_sku_id
+                if ($data['product']->product->product_type == 1) {
+                    // Single product - find seller_product_sku for this seller_product
+                    $sellerProductSku = \Modules\Seller\Entities\SellerProductSKU::where('product_id', $id)->first();
+                    if ($sellerProductSku) {
+                        $query->where('product_sku_id', $sellerProductSku->id);
+                    }
+                } else {
+                    // Variant product - use the ID as is (it should be seller_product_sku id)
+                    $query->where('product_sku_id', $id);
+                }
+            })->latest()->first();
+
             if ($orderProduct) {
                 $purchasePrice = $orderProduct->price;
             }
-            
+
             $data['purchasePrice'] = $purchasePrice;
-            
+
             // if(isModuleActive('WholeSale') && class_exists('Modules\WholeSale\Entities\WholesalePrice')){
             //     if (@$data['product']->product->product_type == 1){
             //         $totalWholesalePrice = \Modules\WholeSale\Entities\WholesalePrice::where('product_id', $id)->get();
@@ -124,31 +133,34 @@ class ResellProduct extends Controller
         $request->validate([
             'product_id' => 'required|exists:products,id',
             'new_price' => 'required|numeric|min:0',
+            'customer_note' => 'nullable|string|max:1000',
         ]);
 
         try {
             DB::beginTransaction();
-            
+
             // Get the original product
             $originalProduct = \Modules\Product\Entities\Product::findOrFail($request->product_id);
-            
+
             // Check if this product is already marked for resale by this user
             $existingResell = \Modules\Product\Entities\Product::where('reseller_id', auth()->user()->id)
                 ->where('resell_product', 1)
                 ->where('product_name', $originalProduct->product_name . ' (Resell)')
                 ->first();
-                
+
             if ($existingResell) {
                 Toastr::error('This product is already marked for resale.', __('common.error'));
                 return back()->withInput();
             }
-            
+
             // Create a duplicate product for resale
             $resellProduct = $originalProduct->replicate();
             $resellProduct->product_name = $originalProduct->product_name . ' (Resell)';
             $resellProduct->slug = $originalProduct->slug . '-resell-' . time(); // Make slug unique
             $resellProduct->resell_product = 1;
             $resellProduct->resell_price = $request->new_price;
+            $resellProduct->resell_condition = 'new'; // Default condition
+            $resellProduct->resell_description = $request->customer_note;
             $reseller_id = auth()->user()->id;
             $resellProduct->reseller_id = $reseller_id;
             $resellProduct->created_by = $reseller_id; // Set the reseller as creator
@@ -157,14 +169,14 @@ class ResellProduct extends Controller
             $resellProduct->save();
 
             // Also add to resell table for tracking
-            \DB::table('resell')->insert([
+            DB::table('resell')->insert([
                 'user_id' => auth()->user()->id,
                 'product_id' => $resellProduct->id, // Use the new product ID
                 'price' => $request->new_price,
                 'quantity' => 1, // Default quantity
                 'status' => '1', // Active
                 'product_condition' => 'new', // Default condition
-                'description' => 'Product marked for resale',
+                'description' => $request->customer_note ?? 'Product marked for resale',
                 'images' => $originalProduct->thumbnail_image_source,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -187,6 +199,69 @@ class ResellProduct extends Controller
     
     
 
+    public function updateResellPrice(Request $request, $id)
+    {
+        try {
+            $request->validate([
+                'new_price' => 'required|numeric|min:0.01',
+            ]);
+
+            DB::beginTransaction();
+
+            // Find the resell product
+            $resellProduct = \Modules\Product\Entities\Product::where('id', $id)
+                ->where('reseller_id', auth()->user()->id)
+                ->where('resell_product', 1)
+                ->firstOrFail();
+
+            // Update the resell price
+            $resellProduct->resell_price = $request->new_price;
+            $resellProduct->save();
+
+            // Also update in resell table if exists
+            DB::table('resell')
+                ->where('product_id', $id)
+                ->where('user_id', auth()->user()->id)
+                ->update([
+                    'price' => $request->new_price,
+                    'updated_at' => now(),
+                ]);
+
+            DB::commit();
+
+            LogActivity::successLog('Resell product price updated successfully for product ID: ' . $id);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Price updated successfully!',
+                'formatted_price' => single_price($request->new_price),
+                'new_price' => $request->new_price
+            ]);
+
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            DB::rollback();
+            LogActivity::errorLog('Resell product not found or unauthorized access for ID: ' . $id);
+            return response()->json([
+                'success' => false,
+                'message' => 'Product not found or you do not have permission to edit this product.'
+            ], 404);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            DB::rollback();
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid price. Please enter a valid amount greater than 0.',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (Exception $e) {
+            DB::rollback();
+            LogActivity::errorLog('Error updating resell price: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while updating the price. Please try again.'
+            ], 500);
+        }
+    }
+
     public function myPurchaseHistories(Request $request)
     {
         // Get resell requests for the current user
@@ -194,7 +269,7 @@ class ResellProduct extends Controller
             ->with(['product', 'sellerProductSku'])
             ->latest()
             ->paginate(10);
-            
+
         return view(theme('pages.profile.purchase_histories'), compact('resellRequests'));
     }
 }

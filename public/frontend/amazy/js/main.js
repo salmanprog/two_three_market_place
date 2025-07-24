@@ -903,7 +903,7 @@ function formatMoney(amount, decimalCount = 2, decimal = ".", thousands = ",") {
         let j = (i.length > 3) ? i.length % 3 : 0;
 
         let number = negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");
-        return numbertrans(number);
+        return (typeof numbertrans === 'function') ? numbertrans(number) : number;
     } catch (e) {
         console.log(e)
     }

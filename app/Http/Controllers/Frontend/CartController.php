@@ -82,22 +82,70 @@ class CartController extends Controller
             }else{
                 $carts = collect();
                 if(auth()->check()){
-                    $carts = \App\Models\Cart::with('product.product.product','giftCard','product.product_variations.attribute', 'product.product_variations.attribute_value.color')->where('user_id',auth()->user()->id)->where('product_type', 'product')->whereHas('product',function($query){
-                        return $query->where('status', 1)->whereHas('product', function($q){
-                            return $q->activeSeller();
+                    // Get regular products
+                    $regularProducts = \App\Models\Cart::with('product.product.product','giftCard','product.product_variations.attribute', 'product.product_variations.attribute_value.color')
+                        ->where('user_id',auth()->user()->id)
+                        ->where('product_type', 'product')
+                        ->whereHas('product',function($query){
+                            return $query->where('status', 1)->whereHas('product', function($q){
+                                return $q->activeSeller();
+                            });
                         });
-                    })->orWhere('product_type', 'gift_card')->where('user_id',auth()->user()->id)->whereHas('giftCard', function($query){
-                        return $query->where('status', 1);
-                    })->get();
+
+                    // Get reseller products
+                    $resellerProducts = \App\Models\Cart::where('user_id',auth()->user()->id)
+                        ->where('product_type', 'product')
+                        ->whereExists(function($query) {
+                            $query->select(\Illuminate\Support\Facades\DB::raw(1))
+                                  ->from('products')
+                                  ->whereColumn('products.id', 'carts.product_id')
+                                  ->where('products.resell_product', 1)
+                                  ->where('products.status', 1);
+                        });
+
+                    // Get gift cards
+                    $giftCards = \App\Models\Cart::with('giftCard')
+                        ->where('user_id',auth()->user()->id)
+                        ->where('product_type', 'gift_card')
+                        ->whereHas('giftCard', function($query){
+                            return $query->where('status', 1);
+                        });
+
+                    // Combine all cart items
+                    $carts = $regularProducts->union($resellerProducts)->union($giftCards)->get();
 
                 }else {
-                    $carts = \App\Models\Cart::with('product.product.product','giftCard','product.product_variations.attribute', 'product.product_variations.attribute_value.color')->where('session_id',session()->getId())->where('product_type', 'product')->whereHas('product',function($query){
-                        return $query->where('status', 1)->whereHas('product', function($q){
-                            return $q->activeSeller();
+                    // Get regular products
+                    $regularProducts = \App\Models\Cart::with('product.product.product','giftCard','product.product_variations.attribute', 'product.product_variations.attribute_value.color')
+                        ->where('session_id',session()->getId())
+                        ->where('product_type', 'product')
+                        ->whereHas('product',function($query){
+                            return $query->where('status', 1)->whereHas('product', function($q){
+                                return $q->activeSeller();
+                            });
                         });
-                    })->orWhere('product_type', 'gift_card')->where('session_id', session()->getId())->whereHas('giftCard', function($query){
-                        return $query->where('status', 1);
-                    })->get();
+
+                    // Get reseller products
+                    $resellerProducts = \App\Models\Cart::where('session_id',session()->getId())
+                        ->where('product_type', 'product')
+                        ->whereExists(function($query) {
+                            $query->select(\Illuminate\Support\Facades\DB::raw(1))
+                                  ->from('products')
+                                  ->whereColumn('products.id', 'carts.product_id')
+                                  ->where('products.resell_product', 1)
+                                  ->where('products.status', 1);
+                        });
+
+                    // Get gift cards
+                    $giftCards = \App\Models\Cart::with('giftCard')
+                        ->where('session_id', session()->getId())
+                        ->where('product_type', 'gift_card')
+                        ->whereHas('giftCard', function($query){
+                            return $query->where('status', 1);
+                        });
+
+                    // Combine all cart items
+                    $carts = $regularProducts->union($resellerProducts)->union($giftCards)->get();
                 }
                 $items = 0;
                 foreach($carts as $cart){
@@ -181,21 +229,69 @@ class CartController extends Controller
         $shipping_costs = $Data['shipping_charge'];
         $carts = collect();
         if(auth()->check()){
-            $carts = \App\Models\Cart::with('product.product.product','giftCard','product.product_variations.attribute', 'product.product_variations.attribute_value.color')->where('user_id',auth()->user()->id)->where('product_type', 'product')->whereHas('product',function($query){
-                return $query->where('status', 1)->whereHas('product', function($q){
-                    return $q->activeSeller();
+            // Get regular products
+            $regularProducts = \App\Models\Cart::with('product.product.product','giftCard','product.product_variations.attribute', 'product.product_variations.attribute_value.color')
+                ->where('user_id',auth()->user()->id)
+                ->where('product_type', 'product')
+                ->whereHas('product',function($query){
+                    return $query->where('status', 1)->whereHas('product', function($q){
+                        return $q->activeSeller();
+                    });
                 });
-            })->orWhere('product_type', 'gift_card')->where('user_id',auth()->user()->id)->whereHas('giftCard', function($query){
-                return $query->where('status', 1);
-            })->get();
+
+            // Get reseller products
+            $resellerProducts = \App\Models\Cart::where('user_id',auth()->user()->id)
+                ->where('product_type', 'product')
+                ->whereExists(function($query) {
+                    $query->select(\Illuminate\Support\Facades\DB::raw(1))
+                          ->from('products')
+                          ->whereColumn('products.id', 'carts.product_id')
+                          ->where('products.resell_product', 1)
+                          ->where('products.status', 1);
+                });
+
+            // Get gift cards
+            $giftCards = \App\Models\Cart::with('giftCard')
+                ->where('user_id',auth()->user()->id)
+                ->where('product_type', 'gift_card')
+                ->whereHas('giftCard', function($query){
+                    return $query->where('status', 1);
+                });
+
+            // Combine all cart items
+            $carts = $regularProducts->union($resellerProducts)->union($giftCards)->get();
         }else {
-            $carts = \App\Models\Cart::with('product.product.product','giftCard','product.product_variations.attribute', 'product.product_variations.attribute_value.color')->where('session_id',session()->getId())->where('product_type', 'product')->whereHas('product',function($query){
-                return $query->where('status', 1)->whereHas('product', function($q){
-                    return $q->activeSeller();
+            // Get regular products
+            $regularProducts = \App\Models\Cart::with('product.product.product','giftCard','product.product_variations.attribute', 'product.product_variations.attribute_value.color')
+                ->where('session_id',session()->getId())
+                ->where('product_type', 'product')
+                ->whereHas('product',function($query){
+                    return $query->where('status', 1)->whereHas('product', function($q){
+                        return $q->activeSeller();
+                    });
                 });
-            })->orWhere('product_type', 'gift_card')->where('session_id', session()->getId())->whereHas('giftCard', function($query){
-                return $query->where('status', 1);
-            })->get();
+
+            // Get reseller products
+            $resellerProducts = \App\Models\Cart::where('session_id',session()->getId())
+                ->where('product_type', 'product')
+                ->whereExists(function($query) {
+                    $query->select(\Illuminate\Support\Facades\DB::raw(1))
+                          ->from('products')
+                          ->whereColumn('products.id', 'carts.product_id')
+                          ->where('products.resell_product', 1)
+                          ->where('products.status', 1);
+                });
+
+            // Get gift cards
+            $giftCards = \App\Models\Cart::with('giftCard')
+                ->where('session_id', session()->getId())
+                ->where('product_type', 'gift_card')
+                ->whereHas('giftCard', function($query){
+                    return $query->where('status', 1);
+                });
+
+            // Combine all cart items
+            $carts = $regularProducts->union($resellerProducts)->union($giftCards)->get();
         }
         $items = 0;
         foreach($carts as $cart){

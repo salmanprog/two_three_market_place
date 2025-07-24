@@ -29,13 +29,63 @@ class ProductController extends Controller
     public function show($seller, $slug = null)
     {
         session()->forget('item_details');
-        if ($slug) {
-            $product =  $this->productService->getActiveSellerProductBySlug($slug, $seller);
-        } else {
-            $product =  $this->productService->getActiveSellerProductBySlug($seller);
-        }
-        if ($product->status == 0 || $product->product->status == 0) {
-            return abort(404);
+
+        try {
+            if ($slug) {
+                $product =  $this->productService->getActiveSellerProductBySlug($slug, $seller);
+            } else {
+                $product =  $this->productService->getActiveSellerProductBySlug($seller);
+            }
+
+            if ($product->status == 0 || $product->product->status == 0) {
+                return abort(404);
+            }
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // If seller product not found, check if it's a resell product
+            $resellProduct = \Modules\Product\Entities\Product::where('slug', $slug ?: $seller)
+                ->where('resell_product', 1)
+                ->where('status', 1)
+                ->first();
+
+            if ($resellProduct) {
+                // Transform resell product to look like a seller product for the view
+                $product = new \stdClass();
+                $product->id = $resellProduct->id;
+                $product->product_id = $resellProduct->id;
+                $product->product_name = $resellProduct->product_name;
+                $product->slug = $resellProduct->slug;
+                $product->selling_price = $resellProduct->resell_price;
+                $product->discount = 0;
+                $product->discount_type = 0;
+                $product->status = 1;
+                $product->thumbnail_image_source = $resellProduct->thumbnail_image_source;
+                $product->description = $resellProduct->description;
+                $product->specification = $resellProduct->specification;
+
+                // Create a mock product relationship
+                $product->product = $resellProduct;
+
+                // Create mock seller for resell products
+                $product->seller = (object) [
+                    'id' => $resellProduct->reseller_id,
+                    'slug' => 'reseller-' . $resellProduct->reseller_id,
+                    'first_name' => 'Reseller',
+                    'last_name' => 'User'
+                ];
+
+                // Create mock skus
+                $product->skus = collect([(object) [
+                    'id' => $resellProduct->id,
+                    'selling_price' => $resellProduct->resell_price,
+                    'sku' => $resellProduct->slug,
+                    'product_stock' => 1
+                ]]);
+
+                // Create mock reviews collection
+                $product->reviews = collect([]);
+            } else {
+                return abort(404);
+            }
         }
         if (auth()->check()) {
             $this->productService->recentViewStore($product->id);

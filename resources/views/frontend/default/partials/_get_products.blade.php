@@ -3,7 +3,7 @@
     <div class="col-6 col-xl-2 col-lg-3 col-sm-6 col-md-4 single_product_item">
         <div class="single_product_list product_tricker">
             <div class="product_img">
-                <a href="{{singleProductURL(@$product->seller->slug, $product->slug)}}" class="product_img_iner">
+                <a href="{{singleProductURL(@$product->seller->slug ?: 'default', $product->slug ?: 'default')}}" class="product_img_iner">
                     <img @if ($product->thum_img != null) data-src="{{showImage($product->thum_img)}}" @else data-src="{{showImage(@$product->product->thumbnail_image_source)}}" @endif alt="{{@$product->product->product_name}}" src="{{showImage(themeDefaultImg())}}" class="img-fluid lazyload" />
                 </a>
                 <div class="socal_icon">
