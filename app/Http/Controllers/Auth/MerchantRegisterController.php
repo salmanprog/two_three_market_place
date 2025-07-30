@@ -314,7 +314,7 @@ class MerchantRegisterController extends Controller
                 return back();
             }
         }
-        // modify work
+        // modify works
         $credential = getPaymentInfoViaSellerId(1, 'stripe');
         event(new Registered($user = $this->create($request)));
         $configure_strip = [

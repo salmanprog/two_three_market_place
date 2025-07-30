@@ -940,7 +940,7 @@ class CheckoutRepository{
             if(session()->has('buy_it_now') && session()->get('buy_it_now') == 'yes'){
                 $carts = Cart::with(['product.product.product.skus'])->where('is_buy_now', 1)->where('user_id',auth()->user()->id)->where('is_select',1)->where('product_type', 'product')->whereHas('product', function($query){
                     return $query->where('status', 1)->whereHas('product', function($q){
-                        return $q->where('status', 1)->activeSeller();
+                        return $q->where('status', 1);
                     });
                 })->orWhere('product_type', 'gift_card')->where('is_buy_now', 1)->where('user_id',auth()->user()->id)->where('is_select',1)->whereHas('giftCard', function($query){
                     return $query->where('status', 1);
@@ -949,7 +949,7 @@ class CheckoutRepository{
                 if(session()->has('seller_for_checkout')){
                     $carts = Cart::with(['product.product.product.skus'])->where('user_id',auth()->user()->id)->where('seller_id', session()->get('seller_for_checkout'))->where('is_select',1)->where('product_type', 'product')->whereHas('product', function($query){
                         return $query->where('status', 1)->whereHas('product', function($q){
-                            return $q->where('status', 1)->activeSeller();
+                            return $q->where('status', 1);
                         });
                     })->orWhere('product_type', 'gift_card')->where('user_id',auth()->user()->id)->where('seller_id', session()->get('seller_for_checkout'))->where('is_select',1)->whereHas('giftCard', function($query){
                         return $query->where('status', 1);
@@ -957,7 +957,7 @@ class CheckoutRepository{
                 }else{
                     $carts = Cart::with(['product.product.product.skus'])->where('user_id',auth()->user()->id)->where('is_select',1)->where('product_type', 'product')->whereHas('product', function($query){
                         return $query->where('status', 1)->whereHas('product', function($q){
-                            return $q->where('status', 1)->activeSeller();
+                            return $q->where('status', 1);
                         });
                     })->orWhere('product_type', 'gift_card')->where('user_id',auth()->user()->id)->where('is_select',1)->whereHas('giftCard', function($query){
                         return $query->where('status', 1);
@@ -968,7 +968,7 @@ class CheckoutRepository{
             if(session()->has('buy_it_now') && session()->get('buy_it_now') == 'yes'){
                 $carts = Cart::where('session_id',session()->getId())->where('is_select',1)->where('is_buy_now', 1)->where('product_type', 'product')->whereHas('product', function($query){
                     return $query->where('status', 1)->whereHas('product', function($q){
-                        return $q->where('status', 1)->activeSeller();
+                        return $q->where('status', 1);
                     });
                 })->orWhere('product_type', 'gift_card')->where('session_id',session()->getId())->where('is_buy_now', 1)->where('is_select',1)->whereHas('giftCard', function($query){
                     return $query->where('status', 1);
@@ -977,7 +977,7 @@ class CheckoutRepository{
                 if(session()->has('seller_for_checkout')){
                     $carts = Cart::where('session_id',session()->getId())->where('is_select',1)->where('seller_id', session()->get('seller_for_checkout'))->where('product_type', 'product')->whereHas('product', function($query){
                         return $query->where('status', 1)->whereHas('product', function($q){
-                            return $q->where('status', 1)->activeSeller();
+                            return $q->where('status', 1);
                         });
                     })->orWhere('product_type', 'gift_card')->where('session_id',session()->getId())->where('is_select',1)->where('seller_id', session()->get('seller_for_checkout'))->whereHas('giftCard', function($query){
                         return $query->where('status', 1);
@@ -985,7 +985,7 @@ class CheckoutRepository{
                 }else{
                     $carts = Cart::where('session_id',session()->getId())->where('is_select',1)->where('product_type', 'product')->whereHas('product', function($query){
                         return $query->where('status', 1)->whereHas('product', function($q){
-                            return $q->where('status', 1)->activeSeller();
+                            return $q->where('status', 1);
                         });
                     })->orWhere('product_type', 'gift_card')->where('session_id',session()->getId())->where('is_select',1)->whereHas('giftCard', function($query){
                         return $query->where('status', 1);

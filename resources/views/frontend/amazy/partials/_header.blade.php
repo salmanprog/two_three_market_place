@@ -136,7 +136,7 @@
                                 </g>
                             </svg>
                 </div>
-                <span>{{__('common.cart')}} (<span class="cart_count_bottom">{{getNumberTranslate($items)}}</span>)</span>
+                <span>{{__('common.cart')}} (<span class="cart_count_bottom aaa">{{getNumberTranslate($items)}}</span>)</span>
             </a>
         </li>
         <li>

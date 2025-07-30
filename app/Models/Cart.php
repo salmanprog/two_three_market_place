@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use Modules\Seller\Entities\SellerProductSKU;
 use Modules\Shipping\Entities\ShippingMethod;
 use Modules\GiftCard\Entities\GiftCard;
+use Modules\Product\Entities\Product;
+use Modules\Product\Entities\ProductSku;
+
 use Carbon\Carbon;
 
 class Cart extends Model
@@ -19,6 +22,11 @@ class Cart extends Model
     public function product()
     {
         return $this->belongsTo(SellerProductSKU::class,'product_id','id');
+    }
+
+    public function resellProduct()
+    {
+        return $this->belongsTo(ProductSku::class,'product_id','product_id');
     }
     public function shippingMethod()
     {

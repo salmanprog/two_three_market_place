@@ -49,7 +49,7 @@ class ShopController extends Controller
         // ]);
         $category_id = 0;
         $sort_by = null;
-        $paginate = 9;
+        $paginate = 180;
         $data = [];
         
         if ($request->has('sort_by')) {
@@ -277,11 +277,102 @@ class ShopController extends Controller
             $data['max_price_highest'] = $max_price;
             $products = $products->merge($giftCards);
             // $products = $products->merge($digitalgiftCards);
+
+            $mainResellProducts = Product::query()->where('resell_product',1)->where('status','1'); 
+            $main_resell_product_ids = $mainResellProducts->pluck('id')->toArray();
+
+            $resellproducts = SellerProduct::select('seller_products.*')
+            ->join('products', function ($q) use ($main_resell_product_ids) {
+                $q->on('seller_products.product_id', '=', 'products.id');
+            })
+            ->whereIn('seller_products.product_id', $main_resell_product_ids)
+            ->take(100)
+            ->get()
+            ->map(function ($sellerProduct) {
+                $resellProduct = Product::where('id', $sellerProduct->product_id)
+                    ->where('status', 1)
+                    ->first();
+                $seller = User::where('id', $sellerProduct->user_id)->first();    
+        
+                if ($resellProduct) {
+                    $sellerProduct->setRelation('product', $resellProduct);
+                }
+
+                if ($seller) {
+                    $sellerProduct->setRelation('seller', $seller);
+                }
+        
+                return $sellerProduct;
+            });
+            // print_r($resellproducts->toArray());
+            // die();
+            // $resellProducts = 
+                
+            $products = $products->merge($resellproducts);
+            // print_r($products->toArray());
+            // die();
+
+            // Add resell products to the main shop page
+            // $resellProducts = \Modules\Product\Entities\Product::where('resell_product', 1)
+            //     ->where('status', 1)
+            //     ->get()
+            //     ->map(function ($product) {
+            //         // Create a new SellerProduct-like object for compatibility
+            //         $sellerProduct = new \Modules\Seller\Entities\SellerProduct();
+            //         $sellerProduct->id = $product->id;
+            //         $sellerProduct->product_id = $product->id;
+            //         $sellerProduct->selling_price = $product->resell_price;
+            //         $sellerProduct->product_name = $product->product_name;
+            //         $sellerProduct->slug = $product->slug;
+            //         $sellerProduct->thumbnail_image_source = $product->thumbnail_image_source;
+            //         $sellerProduct->discount = 0;
+            //         $sellerProduct->discount_type = 0;
+            //         $sellerProduct->status = 1;
+            //         $sellerProduct->user_id = $product->reseller_id;
+            //         $sellerProduct->hasDiscount = 'no';
+
+            //         // Set the product relationship
+            //         $sellerProduct->setRelation('product', $product);
+
+            //         // Create mock seller for URL generation
+            //         $mockSeller = new \App\Models\User();
+            //         $mockSeller->id = $product->reseller_id ?: 1;
+            //         $mockSeller->slug = 'reseller-' . ($product->reseller_id ?: 1);
+            //         $mockSeller->first_name = 'Reseller';
+            //         $mockSeller->last_name = 'User';
+            //         $sellerProduct->setRelation('seller', $mockSeller);
+
+            //         // Create mock skus with all required properties
+            //         $mockSku = new \Modules\Seller\Entities\SellerProductSKU();
+            //         $mockSku->id = $product->id;
+            //         $mockSku->product_id = $product->id;
+            //         $mockSku->product_sku_id = $product->id;
+            //         $mockSku->selling_price = $product->resell_price;
+            //         $mockSku->sell_price = $product->resell_price;
+            //         $mockSku->sku = $product->slug;
+            //         $mockSku->product_stock = 1;
+            //         $mockSku->stock_manage = 0; // No stock management for resell products
+            //         $mockSku->min_sell_price = $product->resell_price;
+            //         $mockSku->max_sell_price = $product->resell_price;
+            //         $mockSku->status = 1;
+            //         $mockSku->user_id = $product->reseller_id ?: 1;
+
+            //         // Set the product relationship for the SKU
+            //         $mockSku->setRelation('product', $sellerProduct);
+            //         $sellerProduct->setRelation('skus', collect([$mockSku]));
+
+            //         // Set empty reviews
+            //         $sellerProduct->setRelation('reviews', collect([]));
+
+            //         return $sellerProduct;
+            //     });
+                
+            // $products = $products->merge($resellProducts);    
             $data['keyword'] = $slug;
             $data['products'] = $this->filterService->sortAndPaginate($products, $sort_by, $paginate);
         }
 
-        
+
         $data['seller'] = User::where('role_id', 5)
         
         ->where('is_active', 1)
@@ -296,9 +387,10 @@ class ShopController extends Controller
             if (session()->has('filterDataFromCat')) {
                 session()->forget('filterDataFromCat');
             }
-
+            
             return view(theme('pages.shop'), $data);
         } else {
+           
             return view(theme('pages.shop'), $data);
         }
     }
@@ -327,16 +419,114 @@ class ShopController extends Controller
             })
             ->distinct('seller_products.id');
 
-        // Use FilterRepository for consistent sorting and pagination
-        $products = $this->filterRepo->sortAndPaginate($products, $sort_by, $paginate);
+        // Add resell products to the main products query
+        // $resellProducts = \Modules\Product\Entities\Product::where('resell_product', 1)
+        //     ->where('status', 1)
+        //     ->with(['skus', 'reviews'])
+        //     ->select('products.*')
+        //     ->get()
+        //     ->map(function ($product) {
+        //         // Create a new SellerProduct-like object for compatibility
+        //         $sellerProduct = new \Modules\Seller\Entities\SellerProduct();
+        //         $sellerProduct->id = $product->id;
+        //         $sellerProduct->product_id = $product->id;
+        //         $sellerProduct->selling_price = $product->resell_price;
+        //         $sellerProduct->product_name = $product->product_name;
+        //         $sellerProduct->slug = $product->slug;
+        //         $sellerProduct->thumbnail_image_source = $product->thumbnail_image_source;
+        //         $sellerProduct->discount = 0; // Resell products don't have additional discounts
+        //         $sellerProduct->discount_type = 0;
+        //         $sellerProduct->status = 1;
+        //         $sellerProduct->user_id = $product->reseller_id;
+        //         $sellerProduct->hasDiscount = 'no'; // No discount for resell products
+
+        //         // Set the product relationship
+        //         $sellerProduct->setRelation('product', $product);
+
+        //         // Create mock seller for URL generation
+        //         $mockSeller = new \App\Models\User();
+        //         $mockSeller->id = $product->reseller_id ?: 1;
+        //         $mockSeller->slug = 'reseller-' . ($product->reseller_id ?: 1);
+        //         $mockSeller->first_name = 'Reseller';
+        //         $mockSeller->last_name = 'User';
+        //         $sellerProduct->setRelation('seller', $mockSeller);
+
+        //         // Create mock skus
+        //         $mockSku = new \Modules\Seller\Entities\SellerProductSKU();
+        //         $mockSku->id = $product->id;
+        //         $mockSku->selling_price = $product->resell_price;
+        //         $mockSku->sell_price = $product->resell_price;
+        //         $mockSku->sku = $product->slug;
+        //         $mockSku->product_stock = 1;
+        //         $sellerProduct->setRelation('skus', collect([$mockSku]));
+
+        //         // Set empty reviews
+        //         $sellerProduct->setRelation('reviews', collect([]));
+
+        //         return $sellerProduct;
+        //     });
+
+        // // Get regular seller products
+        // $regularProducts = $products->get();
+
+        // // Combine both collections
+        // $allProducts = $regularProducts->concat($resellProducts);
+
+        // Convert to paginated collection
+        $currentPage = \Illuminate\Pagination\Paginator::resolveCurrentPage();
+        $perPage = $paginate;
+        $currentItems = $allProducts->slice(($currentPage - 1) * $perPage, $perPage);
+        $paginatedProducts = new \Illuminate\Pagination\LengthAwarePaginator(
+            $currentItems,
+            $allProducts->count(),
+            $perPage,
+            $currentPage,
+            ['path' => request()->url(), 'pageName' => 'page']
+        );
+
+        // Apply sorting to the combined collection
+        if ($sort_by) {
+            $sortedItems = $this->applySorting($allProducts, $sort_by);
+            $currentItems = $sortedItems->slice(($currentPage - 1) * $perPage, $perPage);
+            $paginatedProducts = new \Illuminate\Pagination\LengthAwarePaginator(
+                $currentItems,
+                $sortedItems->count(),
+                $perPage,
+                $currentPage,
+                ['path' => request()->url(), 'pageName' => 'page']
+            );
+        }
 
         $data = [
-            'products' => $products,
+            'products' => $paginatedProducts,
             'sort_by' => $sort_by,
             'paginate' => $paginate
         ];
 
         return view(theme('partials.shop_paginate_data'), $data);
+    }
+
+    /**
+     * Apply sorting to a collection of products
+     */
+    private function applySorting($products, $sort_by)
+    {
+        switch ($sort_by) {
+            case 'new':
+                return $products->sortByDesc('created_at');
+            case 'old':
+                return $products->sortBy('created_at');
+            case 'alpha_asc':
+                return $products->sortBy('product_name');
+            case 'alpha_desc':
+                return $products->sortByDesc('product_name');
+            case 'low_to_high':
+                return $products->sortBy('selling_price');
+            case 'high_to_low':
+                return $products->sortByDesc('selling_price');
+            default:
+                return $products->sortByDesc('created_at');
+        }
     }
 
     public function filter(Request $request)
@@ -417,11 +607,97 @@ class ShopController extends Controller
             $sort_by = $request->sort_by ?? 'new';
             $paginate_by = $request->paginate ?? 12;
 
-            $products = $this->filterRepo->sortAndPaginate($products, $sort_by, $paginate_by);
+            // Add resell products to filter results
+            $resellProducts = \Modules\Product\Entities\Product::where('resell_product', 1)
+                ->where('status', 1)
+                ->with(['skus', 'reviews'])
+                ->select('products.*')
+                ->get()
+                ->map(function ($product) {
+                    // Create a new SellerProduct-like object for compatibility
+                    $sellerProduct = new \Modules\Seller\Entities\SellerProduct();
+                    $sellerProduct->id = $product->id;
+                    $sellerProduct->product_id = $product->id;
+                    $sellerProduct->selling_price = $product->resell_price;
+                    $sellerProduct->product_name = $product->product_name;
+                    $sellerProduct->slug = $product->slug;
+                    $sellerProduct->thumbnail_image_source = $product->thumbnail_image_source;
+                    $sellerProduct->discount = 0;
+                    $sellerProduct->discount_type = 0;
+                    $sellerProduct->status = 1;
+                    $sellerProduct->user_id = $product->reseller_id;
+                    $sellerProduct->hasDiscount = 'no';
+
+                    // Set the product relationship
+                    $sellerProduct->setRelation('product', $product);
+
+                    // Create mock seller for URL generation
+                    $mockSeller = new \App\Models\User();
+                    $mockSeller->id = $product->reseller_id ?: 1;
+                    $mockSeller->slug = 'reseller-' . ($product->reseller_id ?: 1);
+                    $mockSeller->first_name = 'Reseller';
+                    $mockSeller->last_name = 'User';
+                    $sellerProduct->setRelation('seller', $mockSeller);
+
+                    // Create mock skus with all required properties
+                    $mockSku = new \Modules\Seller\Entities\SellerProductSKU();
+                    $mockSku->id = $product->id;
+                    $mockSku->product_id = $product->id;
+                    $mockSku->product_sku_id = $product->id;
+                    $mockSku->selling_price = $product->resell_price;
+                    $mockSku->sell_price = $product->resell_price;
+                    $mockSku->sku = $product->slug;
+                    $mockSku->product_stock = 1;
+                    $mockSku->stock_manage = 0; // No stock management for resell products
+                    $mockSku->min_sell_price = $product->resell_price;
+                    $mockSku->max_sell_price = $product->resell_price;
+                    $mockSku->status = 1;
+                    $mockSku->user_id = $product->reseller_id ?: 1;
+
+                    // Set the product relationship for the SKU
+                    $mockSku->setRelation('product', $sellerProduct);
+                    $sellerProduct->setRelation('skus', collect([$mockSku]));
+
+                    // Set empty reviews
+                    $sellerProduct->setRelation('reviews', collect([]));
+
+                    return $sellerProduct;
+                });
+
+            // Get regular seller products
+            $regularProducts = $products->get();
+
+            // Combine both collections
+            $allProducts = $regularProducts->concat($resellProducts);
+
+            // Convert to paginated collection
+            $currentPage = \Illuminate\Pagination\Paginator::resolveCurrentPage();
+            $perPage = $paginate_by;
+            $currentItems = $allProducts->slice(($currentPage - 1) * $perPage, $perPage);
+            $paginatedProducts = new \Illuminate\Pagination\LengthAwarePaginator(
+                $currentItems,
+                $allProducts->count(),
+                $perPage,
+                $currentPage,
+                ['path' => request()->url(), 'pageName' => 'page']
+            );
+
+            // Apply sorting to the combined collection
+            if ($sort_by) {
+                $sortedItems = $this->applySorting($allProducts, $sort_by);
+                $currentItems = $sortedItems->slice(($currentPage - 1) * $perPage, $perPage);
+                $paginatedProducts = new \Illuminate\Pagination\LengthAwarePaginator(
+                    $currentItems,
+                    $sortedItems->count(),
+                    $perPage,
+                    $currentPage,
+                    ['path' => request()->url(), 'pageName' => 'page']
+                );
+            }
 
             // Pass additional data for the view
             $data = [
-                'products' => $products,
+                'products' => $paginatedProducts,
                 'sort_by' => $sort_by,
                 'paginate' => $paginate_by
             ];

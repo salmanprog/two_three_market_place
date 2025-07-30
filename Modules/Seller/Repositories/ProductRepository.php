@@ -122,7 +122,7 @@ class ProductRepository {
     }
 
     public function getProduct($id){
-
+        
         $seller_id = getParentSellerId();
         $is_exsists = SellerProduct::where('user_id', $seller_id)->where('product_id', $id)->first();
         if($is_exsists){
@@ -257,7 +257,11 @@ class ProductRepository {
     }
 
     public function findByResellProductId($id){
-        return $this->product::with('skus')->where('product_id',$id)->firstOrFail();
+        // This method should find seller_product by its ID, not by product_id
+        // The name is misleading but we'll keep it for compatibility
+       
+       return $this->product::with('skus')->findOrFail($id);
+        //return $this->product::with('skus')->where('product_id',$id)->firstOrFail();
     }
 
     public function deleteById($id){
@@ -478,7 +482,6 @@ class ProductRepository {
     public function getThisSKUProduct($id){
         $sellerProduct = SellerProduct::findOrFail($id);
         $skunotin = SellerProductSKU::where('product_id',$id)->pluck('product_sku_id');
-
         return ProductSku::where('product_id',$sellerProduct->product->id)->where('status', 1)->whereNotIn('id',$skunotin)->get();
     }
 

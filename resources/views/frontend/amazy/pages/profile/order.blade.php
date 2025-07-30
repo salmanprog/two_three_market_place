@@ -28,10 +28,10 @@
             <div class="col-xl-8 col-lg-8">
                 <div class="order_tab_box d-flex justify-content-between gap-2 flex-wrap mb_20">
                     <ul class="nav amazy_order_tabs d-inline-flex" id="myTab" role="tablist">
-                        <li class="nav-item" role="presentation">
+                        {{-- <li class="nav-item" role="presentation">
                             <button class="nav-link @if (Request::get('myPurchaseOrderList') != null || (Request::get('myPurchaseOrderListNotPaid') == null && Request::get('toShipped') == null && Request::get('toRecievedList') == null)) active @endif" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">{{__('common.all')}}</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
+                        </li> --}}
+                        {{-- <li class="nav-item" role="presentation">
                             <button class="nav-link @if (Request::get('myPurchaseOrderListNotPaid') != null) active @endif" id="Pay-tab" data-bs-toggle="tab" data-bs-target="#Pay" type="button" role="tab" aria-controls="Pay" aria-selected="false">{{__('defaultTheme.to_pay')}}</button>
                         </li>
                         <li class="nav-item" role="presentation">
@@ -39,7 +39,7 @@
                         </li>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link @if (Request::get('toRecievedList') != null) active @endif" id="Receive-tab" data-bs-toggle="tab" data-bs-target="#Receive" type="button" role="tab" aria-controls="Receive" aria-selected="false">{{__('defaultTheme.to_recieve')}}</button>
-                        </li>
+                        </li> --}}
                     </ul>
                     <form class="p-0" action="{{ route('frontend.my_purchase_order_list') }}" method="get" id="rnForm">
                         <div class="d-flex align-items-center">
@@ -143,7 +143,7 @@
                                             @else
                                             <tr>
                                                 <td>
-                                                    <a href="{{singleProductURL(@$package_product->seller_product_sku->product->seller->slug, @$package_product->seller_product_sku->product->slug)}}" class="d-flex align-items-center gap_20 cart_thumb_div">
+                                                    <a href="{{singleProductURL(@$package_product->seller_product_sku->product->seller->slug ?: 'default', @$package_product->seller_product_sku->product->slug ?: 'default')}}" class="d-flex align-items-center gap_20 cart_thumb_div">
                                                         <div class="thumb">
                                                             @if (@$package_product->seller_product_sku->sku->product->product_type == 1)
                                                             <img src="{{showImage(@$package_product->seller_product_sku->product->thum_img??@$package_product->seller_product_sku->sku->product->thumbnail_image_source)}}" alt="@if (@$package_product->seller_product_sku->product->product_name) {{textLimit(@$package_product->seller_product_sku->product->product_name,22)}} @else {{textLimit(@$package_product->seller_product_sku->sku->product->product_name,22)}} @endif" title="@if (@$package_product->seller_product_sku->product->product_name) {{textLimit(@$package_product->seller_product_sku->product->product_name,22)}} @else {{textLimit(@$package_product->seller_product_sku->sku->product->product_name,22)}} @endif">
@@ -183,15 +183,16 @@
                                                     <h4 class="font_16 f_w_500 m-0 text-nowrap">{{ single_price($package_product->price) }}</h4>
                                                 </td>
                                                 <td>
-                                                    @if(@$package_product->seller_product_sku->sku->product->product_type == 2)
+                                                    {{-- Only show resell button if package is delivered (delivery_status >= 5) and product data exists --}}
+                                                    @if($package->delivery_status >= 5 && $package_product->seller_product_sku && $package_product->seller_product_sku->product_id)
                                                         <a href="{{route('frontend.resell_product', $package_product->seller_product_sku->product_id)}}" class="amaz_primary_btn style2 text-nowrap ">resell product</a>
                                                     @else
-                                                        <a href="{{route('frontend.resell_product', $package_product->seller_product_sku->sku->product->id) }}" class="amaz_primary_btn style2 text-nowrap ">resell product</a>
+                                                        <span class="text-muted font_12">Resell Available after delivery</span>
                                                     @endif
                                                 </td>
                                             </tr>
                                             @endif
-                                            @endforeach
+                                            @endforeach 
                                             @endforeach
                                         </tbody>
                                     </table>
@@ -303,13 +304,18 @@
                                                     <h4 class="font_16 f_w_500 m-0 ">{{ single_price($package_product->price) }}</h4>
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-primary">resell product</button>
+                                                    {{-- Only show resell button if package is delivered (delivery_status >= 5) and product data exists --}}
+                                                    @if($package->delivery_status >= 5 && $package_product->seller_product_sku && $package_product->seller_product_sku->product_id)
+                                                        <a href="{{route('frontend.resell_product', $package_product->seller_product_sku->product_id)}}" class="amaz_primary_btn style2 text-nowrap ">resell product</a>
+                                                    @else
+                                                        <span class="text-muted font_12">Available after delivery</span>
+                                                    @endif
                                                 </td>
                                             </tr>
                                             @else
                                             <tr>
                                                 <td>
-                                                    <a href="{{singleProductURL(@$package_product->seller_product_sku->product->seller->slug, @$package_product->seller_product_sku->product->slug)}}" class="d-flex align-items-center gap_20 cart_thumb_div">
+                                                    <a href="{{singleProductURL(@$package_product->seller_product_sku->product->seller->slug ?: 'default', @$package_product->seller_product_sku->product->slug ?: 'default')}}" class="d-flex align-items-center gap_20 cart_thumb_div">
                                                         <div class="thumb">
                                                             @if (@$package_product->seller_product_sku->sku->product->product_type == 1)
                                                             <img src="{{showImage(@$package_product->seller_product_sku->product->thum_img??@$package_product->seller_product_sku->sku->product->thumbnail_image_source)}}" alt="{{ @$package_product->seller_product_sku->product->product_name?textLimit(@$package_product->seller_product_sku->product->product_name,22):textLimit(@$package_product->seller_product_sku->sku->product->product_name,22) }}" title="{{ @$package_product->seller_product_sku->product->product_name?textLimit(@$package_product->seller_product_sku->product->product_name,22):textLimit(@$package_product->seller_product_sku->sku->product->product_name,22) }}">
@@ -351,7 +357,12 @@
                                                     <h4 class="font_16 f_w_500 m-0 ">{{ single_price($package_product->price) }}</h4>
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-primary">resell product</button>
+                                                    {{-- Only show resell button if package is delivered (delivery_status >= 5) and product data exists --}}
+                                                    @if($package->delivery_status >= 5 && $package_product->seller_product_sku && $package_product->seller_product_sku->product_id)
+                                                        <a href="{{route('frontend.resell_product', $package_product->seller_product_sku->product_id)}}" class="amaz_primary_btn style2 text-nowrap ">resell product</a>
+                                                    @else
+                                                        <span class="text-muted font_12">Available after delivery</span>
+                                                    @endif
                                                 </td>
                                             </tr>
                                             @endif
@@ -451,7 +462,12 @@
                                                     <h4 class="font_16 f_w_500 m-0 "> {{ single_price($package_product->price) }}</h4>
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-primary">resell product</button>
+                                                    {{-- Only show resell button if package is delivered (delivery_status >= 5) and product data exists --}}
+                                                    @if($package->delivery_status >= 5 && $package_product->seller_product_sku && $package_product->seller_product_sku->product_id)
+                                                        <a href="{{route('frontend.resell_product', $package_product->seller_product_sku->product_id)}}" class="amaz_primary_btn style2 text-nowrap ">resell product</a>
+                                                    @else
+                                                        <span class="text-muted font_12">Available after delivery</span>
+                                                    @endif
                                                 </td>
                                             </tr>
                                             @else
@@ -497,7 +513,12 @@
                                                     <h4 class="font_16 f_w_500 m-0 ">{{ single_price($package_product->price) }}</h4>
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-primary">resell product</button>
+                                                    {{-- Only show resell button if package is delivered (delivery_status >= 5) and product data exists --}}
+                                                    @if($package->delivery_status >= 5 && $package_product->seller_product_sku && $package_product->seller_product_sku->product_id)
+                                                        <a href="{{route('frontend.resell_product', $package_product->seller_product_sku->product_id)}}" class="amaz_primary_btn style2 text-nowrap ">resell product</a>
+                                                    @else
+                                                        <span class="text-muted font_12">Available after delivery</span>
+                                                    @endif
                                                 </td>
                                             </tr>
                                             @endif
@@ -598,7 +619,12 @@
                                                     <h4 class="font_16 f_w_500 m-0 ">{{ single_price($package_product->price) }}</h4>
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-primary">resell product</button>
+                                                    {{-- Only show resell button if package is delivered (delivery_status >= 5) and product data exists --}}
+                                                    @if($package->delivery_status >= 5 && $package_product->seller_product_sku && $package_product->seller_product_sku->product_id)
+                                                        <a href="{{route('frontend.resell_product', $package_product->seller_product_sku->product_id)}}" class="amaz_primary_btn style2 text-nowrap ">resell product</a>
+                                                    @else
+                                                        <span class="text-muted font_12">Available after delivery</span>
+                                                    @endif
                                                 </td>
                                             </tr>
                                             @else
@@ -643,7 +669,12 @@
                                                     <h4 class="font_16 f_w_500 m-0 ">{{ single_price($package_product->price) }}</h4>
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-primary">resell product</button>
+                                                    {{-- Only show resell button if package is delivered (delivery_status >= 5) and product data exists --}}
+                                                    @if($package->delivery_status >= 5 && $package_product->seller_product_sku && $package_product->seller_product_sku->product_id)
+                                                        <a href="{{route('frontend.resell_product', $package_product->seller_product_sku->product_id)}}" class="amaz_primary_btn style2 text-nowrap ">resell product</a>
+                                                    @else
+                                                        <span class="text-muted font_12">Available after delivery</span>
+                                                    @endif
                                                 </td>
                                             </tr>
                                             @endif

@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('product', function (Blueprint $table) {
-            $table->boolean('resell_product')->default(0);
+        Schema::table('products', function (Blueprint $table) {
+            if (!Schema::hasColumn('products', 'resell_product')) {
+                $table->boolean('resell_product')->default(0);
+            }
         });
     }
 
@@ -21,8 +23,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('product', function (Blueprint $table) {
-            $table->dropColumn('resell_product');
+        Schema::table('products', function (Blueprint $table) {
+            if (Schema::hasColumn('products', 'resell_product')) {
+                $table->dropColumn('resell_product');
+            }
         });
     }
 };

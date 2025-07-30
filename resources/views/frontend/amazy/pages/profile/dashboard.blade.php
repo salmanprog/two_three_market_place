@@ -174,8 +174,8 @@
                                     <div class="dash_product_lists">
 
                                         @foreach ($wishlists as $key => $product)
-                                            @if($product->type == 'product')
-                                                <a href="{{singleProductURL(@$product->product->seller->slug, @$product->product->slug)}}" class="dashboard_order_list d-flex align-items-center flex-wrap  gap_20">
+                                            @if($product->type == 'product' && $product->product)
+                                                <a href="{{singleProductURL(@$product->product->seller->slug ?: 'default', @$product->product->slug ?: 'default')}}" class="dashboard_order_list d-flex align-items-center flex-wrap  gap_20">
                                                     <div class="thumb">
                                                         <img class="img-fluid" src="@if(@$product->product->thum_img != null) {{showImage(@$product->product->thum_img)}} @else {{showImage(@$product->product->product->thumbnail_image_source)}} @endif" alt="@if (@$product->product->product_name) {{ \Illuminate\Support\Str::limit(@$product->product->product_name, 28, $end='...') }}  @else {{ \Illuminate\Support\Str::limit(@$product->product->product->product_name, 28, $end='...') }} @endif" title="@if (@$product->product->product_name) {{ \Illuminate\Support\Str::limit(@$product->product->product_name, 28, $end='...') }}  @else {{ \Illuminate\Support\Str::limit(@$product->product->product->product_name, 28, $end='...') }} @endif">
                                                     </div>
@@ -189,7 +189,7 @@
                                                         </p>
                                                     </div>
                                                 </a>
-                                            @else
+                                            @elseif($product->type != 'product')
                                                 <a href="{{route('frontend.gift-card.show',@$product->product->seller->slug, @$product->product->slug)}}" class="dashboard_order_list d-flex align-items-center flex-wrap  gap_20">
                                                     <div class="thumb">
                                                         <img class="img-fluid" src="{{showImage(@$product->giftcard->thumbnail_image)}}" alt="{{ \Illuminate\Support\Str::limit(@$product->giftcard->name, 28, $end='...') }}" title="{{ \Illuminate\Support\Str::limit(@$product->giftcard->name, 28, $end='...') }}">
@@ -200,7 +200,7 @@
                                                             @if(getGiftcardwithoutDiscountPrice(@$product->giftcard) != single_price(0))
                                                                 <span class="discount_prise text-decoration-line-through">{{getGiftcardwithoutDiscountPrice(@$product->giftcard)}}</span>
                                                             @endif
-                                                            <span class="secondary_text">{{getProductDiscountedPrice(@$product->product)}}</span>
+                                                            <span class="secondary_text">{{getGiftcardDiscountedPrice(@$product->giftcard)}}</span>
                                                         </p>
                                                     </div>
                                                 </a>
@@ -224,8 +224,8 @@
                                 <div class="dashboard_white_box_body">
                                     <div class="dash_product_lists">
                                         @foreach($recent_order_products as $key => $product)
-                                            @if($product->type == 'product')
-                                                <a href="{{singleProductURL(@$product->seller_product_sku->product->seller->slug, @$product->seller_product_sku->product->slug)}}" class="dashboard_order_list d-flex align-items-center flex-wrap  gap_20">
+                                            @if($product->type == 'product' && $product->seller_product_sku && $product->seller_product_sku->product)
+                                                <a href="{{singleProductURL(@$product->seller_product_sku->product->seller->slug ?: 'default', @$product->seller_product_sku->product->slug ?: 'default')}}" class="dashboard_order_list d-flex align-items-center flex-wrap  gap_20">
                                                     <div class="thumb">
                                                         <img class="img-fluid" src="
                                                         @if(@$product->seller_product_sku->product->product->product_type == 1)
@@ -244,7 +244,7 @@
                                                             <span class="secondary_text">{{getProductDiscountedPrice(@$product->seller_product_sku->product)}}</span>  </p>
                                                     </div>
                                                 </a>
-                                            @else
+                                            @elseif($product->type != 'product')
                                             @if($product->giftcard->sku)
                                                 <a href="{{route('frontend.gift-card.show',@$product->giftcard->sku)}}" class="dashboard_order_list d-flex align-items-center flex-wrap  gap_20">
                                                     <div class="thumb">
@@ -276,8 +276,8 @@
                                 <div class="dashboard_white_box_body">
                                     <div class="dash_product_lists">
                                         @foreach($carts as $key => $cart)
-                                            @if($cart->product_type == 'product')
-                                                <a href="{{singleProductURL($cart->seller->slug, $cart->product->product->slug)}}" class="dashboard_order_list d-flex align-items-center flex-wrap  gap_20">
+                                            @if($cart->product_type == 'product' && $cart->product && $cart->product->product)
+                                                <a href="{{singleProductURL($cart->seller->slug ?: 'default', $cart->product->product->slug ?: 'default')}}" class="dashboard_order_list d-flex align-items-center flex-wrap  gap_20">
                                                     <div class="thumb">
                                                         <img class="img-fluid" src="
                                                         @if(@$cart->product->product->product->product_type == 1)
@@ -296,7 +296,7 @@
                                                             <span class="secondary_text">{{single_price($cart->price)}}</span>  </p>
                                                     </div>
                                                 </a>
-                                            @else
+                                            @elseif($cart->product_type != 'product')
                                              @if($cart->giftCard->sku)
                                                 <a href="{{route('frontend.gift-card.show',$cart->giftCard->sku)}}" class="dashboard_order_list d-flex align-items-center flex-wrap  gap_20">
                                                     <div class="thumb">

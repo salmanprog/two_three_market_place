@@ -23,6 +23,7 @@ class CartRepository{
         }else{
             $is_buy_now = 0;
         }
+        
         if(auth()->check()){
             $product = $this->cart::where('user_id',auth()->id())->where('product_id',$data['product_id'])->where('seller_id', $data['seller_id'])->where('product_type',$data['type'])->first();
         }else{
@@ -30,9 +31,10 @@ class CartRepository{
         }
         $price = 0;
         if($data['type'] == 'product'){
+            // First try to find regular seller product SKU
             if (isModuleActive('WholeSale')){
                 $sku = SellerProductSKU::with('product', 'wholeSalePrices')->where('user_id',$data['seller_id'])->where('id',$data['product_id'])->first();
-                if ($sku['wholeSalePrices']){
+                if ($sku && $sku['wholeSalePrices']){
                     foreach ($sku['wholeSalePrices'] as $w_sale_p){
                         if ( ($w_sale_p->min_qty<=$data['qty']) && ($w_sale_p->max_qty>=$data['qty']) ){
                             $sku->selling_price = $w_sale_p->sell_price;
@@ -45,16 +47,44 @@ class CartRepository{
             }else{
                 $sku = SellerProductSKU::with('product')->where('user_id',$data['seller_id'])->where('id',$data['product_id'])->first();
             }
+
+            // If no regular SKU found, check if it's a resell product
+            // if (!$sku) {
+            //     $resellProduct = \Modules\Product\Entities\Product::where('id', $data['product_id'])
+            //         ->where('resell_product', 1)
+            //         ->where('status', 1)
+            //         ->first();
+
+            //     if ($resellProduct) {
+            //         // Create a mock SKU object for resell products
+            //         $sku = new \stdClass();
+            //         $sku->id = $resellProduct->id;
+            //         $sku->selling_price = $resellProduct->resell_price ?? 0;
+            //         $sku->sell_price = $resellProduct->resell_price ?? 0;
+            //         $sku->product_stock = 1; // Resell products have stock of 1
+            //         $sku->user_id = $resellProduct->reseller_id;
+
+            //         // Create mock product relationship
+            //         $sku->product = new \stdClass();
+            //         $sku->product->stock_manage = 0; // No stock management for resell products
+            //         $sku->product->product = $resellProduct;
+            //         $sku->product->hasDeal = null; // No deals for resell products
+            //         $sku->product->hasDiscount = 'no'; // No discounts for resell products
+            //         $sku->product->discount_type = 0;
+            //         $sku->product->discount = 0;
+            //         $sku->product->minimum_order_qty = 1;
+            //     }
+            // }
             if(isModuleActive('AuctionProducts') && $data['auction_type']=='auction'){
                 $price = $data['price']/$data['qty'];
             }
-            elseif($sku->product->hasDeal){
+            elseif(isset($sku->product->hasDeal) && $sku->product->hasDeal){
                 $price = selling_price(@$sku->sell_price,@$sku->product->hasDeal->discount_type,@$sku->product->hasDeal->discount);
             }else{
-                if($sku->product->hasDiscount == 'yes'){
+                if(isset($sku->product->hasDiscount) && $sku->product->hasDiscount == 'yes'){
                     $price = selling_price(@$sku->sell_price,@$sku->product->discount_type,@$sku->product->discount);
                 }else{
-                    $price = @$sku->sell_price;
+                    $price = @$sku->sell_price ?? 0;
                 }
             }
         }elseif($data['type'] == 'gift_card'){
@@ -76,6 +106,8 @@ class CartRepository{
                 $is_out_of_stock = 1;
             }
         }
+        // print_r($data);
+        // die();
         if($is_out_of_stock == 0 && $sku){
             if($product){
                 if($is_buy_now){
@@ -230,21 +262,65 @@ class CartRepository{
     public function getCartData(){
         $cart_ids =[];
         if(auth()->check()){
-            $cart_ids = $this->cart::where('user_id',auth()->user()->id)->where('product_type', 'product')->whereHas('product', function($query){
-                return $query->where('status', 1)->whereHas('product', function($q){
-                    return $q->where('status', 1)->activeSeller();
-                });
-            })->orWhere('user_id',auth()->user()->id)->where('product_type', 'gift_card')->whereHas('giftCard', function($query){
-                return $query->where('status', 1);
-            })->pluck('id')->toArray();
+            // Get regular products
+            $regularProductIds = $this->cart::where('user_id',auth()->user()->id)
+                ->where('product_type', 'product')
+                ->whereHas('product', function($query){
+                    return $query->where('status', 1)->whereHas('product', function($q){
+                        return $q->where('status', 1);
+                    });
+                })->pluck('id')->toArray();
+
+            // Get reseller products
+            // $resellerProductIds = $this->cart::where('user_id',auth()->user()->id)
+            //     ->where('product_type', 'product')
+            //     ->whereExists(function($query) {
+            //         $query->select(\Illuminate\Support\Facades\DB::raw(1))
+            //               ->from('products')
+            //               ->whereColumn('products.id', 'carts.product_id')
+            //               ->where('products.resell_product', 1)
+            //               ->where('products.status', 1);
+            //     })->pluck('id')->toArray();
+
+            // Get gift cards
+            $giftCardIds = $this->cart::where('user_id',auth()->user()->id)
+                ->where('product_type', 'gift_card')
+                ->whereHas('giftCard', function($query){
+                    return $query->where('status', 1);
+                })->pluck('id')->toArray();
+
+            // Combine all cart IDs
+            $cart_ids = array_merge($regularProductIds, $giftCardIds);
         }else{
-            $cart_ids = $this->cart::where('session_id',session()->getId())->where('product_type', 'product')->whereHas('product', function($query){
-                return $query->where('status', 1)->whereHas('product', function($q){
-                    return $q->where('status', 1)->activeSeller();
-                });
-            })->orWhere('session_id',session()->getId())->where('product_type', 'gift_card')->whereHas('giftCard', function($query){
-                return $query->where('status', 1);
-            })->pluck('id')->toArray();
+            // Get regular products
+            $regularProductIds = $this->cart::where('session_id',session()->getId())
+                ->where('product_type', 'product')
+                ->whereHas('product', function($query){
+                    return $query->where('status', 1)->whereHas('product', function($q){
+                        return $q->where('status', 1);
+                    });
+                })->pluck('id')->toArray();
+
+            // Get reseller products
+            // $resellerProductIds = $this->cart::where('session_id',session()->getId())
+            //     ->where('product_type', 'product')
+            //     ->whereExists(function($query) {
+            //         $query->select(\Illuminate\Support\Facades\DB::raw(1))
+            //               ->from('products')
+            //               ->whereColumn('products.id', 'carts.product_id')
+            //               ->where('products.resell_product', 1)
+            //               ->where('products.status', 1);
+            //     })->pluck('id')->toArray();
+
+            // Get gift cards
+            $giftCardIds = $this->cart::where('session_id',session()->getId())
+                ->where('product_type', 'gift_card')
+                ->whereHas('giftCard', function($query){
+                    return $query->where('status', 1);
+                })->pluck('id')->toArray();
+
+            // Combine all cart IDs
+            $cart_ids = array_merge($regularProductIds, $giftCardIds);
         }
         $query = $this->cart::with('product.product')->whereIn('id',$cart_ids)->where('is_select', 1)->get();
         $cartData = $query->groupBy('seller_id');

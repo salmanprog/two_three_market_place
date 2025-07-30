@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\User;
+use Illuminate\Support\Str;
 use App\Repositories\AuthRepository;
 use App\Rules\RealEmail;
 use App\Traits\ImageStore;
 use App\Traits\Notification;
+use App\Traits\GenerateSlug;
 use App\Traits\Otp;
 use App\Traits\SendMail;
 use Brian2694\Toastr\Facades\Toastr;
@@ -33,9 +35,10 @@ use Exception;
 use Modules\FrontendCMS\Entities\LoginPage;
 use Modules\GeneralSetting\Entities\NotificationSetting;
 use App\Rules\RealEmaill;
+use Illuminate\Support\Facades\DB;
 class RegisterController extends Controller
 {
-    use Notification, Otp, SendMail, RegistersUsers;
+    use Notification, Otp, SendMail, RegistersUsers, GenerateSlug;
 
     protected function redirectTo()
     {
@@ -110,10 +113,12 @@ class RegisterController extends Controller
         }elseif (preg_match("/^\\+?\\d{1,4}?[-.\\s]?\\(?\\d{1,3}?\\)?[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,9}$/", $field)) {
             $phone= $field;
         }
-
+        // modify works
+        $credential = getPaymentInfoViaSellerId(1, 'stripe');
         $user =  User::create([
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
+            'slug' => Str::slug(Str::random(12)),
             'username' => isset($phone) ? $phone : NULL,
             'email' => isset($email) ? $email : NULL,
             'verify_code' => sha1(time()),
@@ -127,6 +132,17 @@ class RegisterController extends Controller
             "is_active" => manualActivation() == true ? 0:1
         ]);
 
+        $configure_strip = [
+            'payment_method_id' => 4,
+            'perameter_1' => $credential->perameter_1,
+            'perameter_2' => $user->first_name,
+            'perameter_3' => $credential->perameter_3,
+            'user_id' => $user->id,
+            'status' => '1',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ];
+        DB::table('seller_wise_payment_gateways')->insert($configure_strip);
         //affiliate user
         if(isModuleActive('Affiliate')){
             $affiliateRepo = new AffiliateRepository();
