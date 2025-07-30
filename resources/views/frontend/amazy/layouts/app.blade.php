@@ -23,21 +23,21 @@
     if(auth()->check()){
         $carts = \App\Models\Cart::with('product.product.product','giftCard','product.product_variations.attribute', 'product.product_variations.attribute_value.color')->where('user_id',auth()->user()->id)->where('product_type', 'product')->whereHas('product',function($query){
             return $query->where('status', 1)->whereHas('product', function($q){
-                return $q->activeSeller();
+                return $q;
             });
         })->orWhere('product_type', 'gift_card')->where('user_id',auth()->user()->id)->whereHas('giftCard', function($query){
             return $query->where('status', 1);
         })->get();
         $compares = count(\App\Models\Compare::with('sellerProductSKU.product')->where('customer_id', auth()->user()->id)->whereHas('sellerProductSKU', function($query){
             return $query->where('status',1)->whereHas('product', function($q){
-                return $q->activeSeller();
+                return $q;
             });
         })->pluck('id'));
         $wishlists = count(\App\Models\Wishlist::where('user_id', auth()->user()->id)->pluck('id'));
     }else {
         $carts = \App\Models\Cart::with('product.product.product','giftCard','product.product_variations.attribute', 'product.product_variations.attribute_value.color')->where('session_id',session()->getId())->where('product_type', 'product')->whereHas('product',function($query){
             return $query->where('status', 1)->whereHas('product', function($q){
-                return $q->activeSeller();
+                return $q;
             });
         })->orWhere('product_type', 'gift_card')->where('session_id', session()->getId())->whereHas('giftCard', function($query){
             return $query->where('status', 1);
@@ -51,7 +51,7 @@
             $products = [];
             foreach($collcets as $collcet){
                 $product_com = \Modules\Seller\Entities\SellerProductSKU::with('product')->where('id',$collcet['product_sku_id'])->whereHas('product', function($query){
-                    return $query->activeSeller();
+                    return $query;
                 })->pluck('id');
                 if($product_com){
                     $products[] = $product_com;
