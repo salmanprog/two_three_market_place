@@ -151,7 +151,7 @@
                     </svg>
                      {{__('amazy.Resell Product')}}</a>
                 </li>
-                <li>
+                <!-- <li>
                     <a class="position-relative d-flex align-items-center" href="{{route('frontend.my_purchase_histories')}}">
                     <svg  width="16.326" height="18" viewBox="0 0 16.326 18">
                     <g  transform="translate(-2.25 -1.25)">
@@ -162,6 +162,18 @@
                     </g>
                     </svg>
                      {{__('amazy.Purchase History')}}</a>
+                </li> -->
+                <li>
+                    <a class="position-relative d-flex align-items-center" href="{{route('frontend.my_resell_purchase_order')}}">
+                    <svg  width="16.326" height="18" viewBox="0 0 16.326 18">
+                    <g  transform="translate(-2.25 -1.25)">
+                        <path  data-name="Path 4129" d="M13.762,19.25h-6.7c-3.056,0-4.814-1.758-4.814-4.814V6.064c0-3.056,1.758-4.814,4.814-4.814h6.7c3.056,0,4.814,1.758,4.814,4.814v8.372C18.576,17.492,16.817,19.25,13.762,19.25ZM7.064,2.506c-2.394,0-3.558,1.164-3.558,3.558v8.372c0,2.394,1.164,3.558,3.558,3.558h6.7c2.394,0,3.558-1.164,3.558-3.558V6.064c0-2.394-1.164-3.558-3.558-3.558Z" transform="translate(0 0)" fill="#00124e"/>
+                        <path  data-name="Path 4130" d="M8.8,9.515A1.037,1.037,0,0,1,7.75,8.476v-6.6a.633.633,0,0,1,.629-.629h5.868a.633.633,0,0,1,.629.629V8.467a1.025,1.025,0,0,1-.629.956,1.046,1.046,0,0,1-1.132-.193l-1.8-1.651-1.8,1.66A1.044,1.044,0,0,1,8.8,9.515Zm2.515-3.269a1.06,1.06,0,0,1,.713.277l1.593,1.467V2.507H9.007V7.989L10.6,6.523A1.06,1.06,0,0,1,11.313,6.246Z" transform="translate(-0.9)" fill="#00124e"/>
+                        <path  data-name="Path 4131" d="M16.691,14.507H13.129a.629.629,0,0,1,0-1.257h3.563a.629.629,0,1,1,0,1.257Z" transform="translate(-1.673 -1.954)" fill="#00124e"/>
+                        <path  data-name="Path 4132" d="M16,18.507H8.879a.629.629,0,0,1,0-1.257H16a.629.629,0,1,1,0,1.257Z" transform="translate(-0.983 -2.606)" fill="#00124e"/>
+                    </g>
+                    </svg>
+                     {{__('Resell Orders')}}</a>
                 </li>
                 <li>
                     <a class="position-relative d-flex align-items-center" href="{{route('frontend.my-wishlist')}}">

@@ -17,6 +17,11 @@ class OrderManageService
         return $this->ordermanageRepository->myConfirmedSalesList();
     }
 
+    public function myConfirmedReSalesList($id)
+    {
+        return $this->ordermanageRepository->myConfirmedReSalesList($id);
+    }
+
     public function myCompletedSalesList()
     {
         return $this->ordermanageRepository->myCompletedSalesList();

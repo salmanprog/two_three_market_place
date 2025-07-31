@@ -12,6 +12,7 @@ use App\Http\Controllers\UploadFileController;
 use App\Http\Controllers\MediaManagerController;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\OrderController;
+use App\Http\Controllers\Frontend\ResellOrderController;
 use Modules\GeneralSetting\Entities\EmailTemplate;
 use App\Http\Controllers\Frontend\CouponController;
 use App\Http\Controllers\Frontend\SellerController;
@@ -133,6 +134,8 @@ Route::group(['middleware' => ['auth', 'customer']], function () {
     Route::post('/add-resell-product', [ResellProduct::class, 'addResellProduct'])->name('frontend.add_resell_product');
     Route::post('/resell-product/update-price/{id}', [ResellProduct::class, 'updateResellPrice'])->name('frontend.update_resell_price');
     Route::post('/my-purchase-histories/modal', [OrderController::class, 'myPurchaseHistoryModal'])->name('frontend.my_purchase_history_modal');
+    //Resell Orders
+    Route::get('/my-resell-order', [ResellOrderController::class, 'my_resell_purchase_order_index'])->name('frontend.my_resell_purchase_order');
 });
 Route::get('/my-purchase-order-pdf/{id}', [OrderController::class, 'my_purchase_order_pdf'])->name('frontend.my_purchase_order_pdf');
 Route::get('/my-purchase-order-details/{id}', [OrderController::class, 'my_purchase_order_detail'])->name('frontend.my_purchase_order_detail');
