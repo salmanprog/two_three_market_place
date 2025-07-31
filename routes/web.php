@@ -133,12 +133,14 @@ Route::group(['middleware' => ['auth', 'customer']], function () {
     Route::get('/resell-product/{id}', [ResellProduct::class, 'resellProduct'])->name('frontend.resell_product');
     Route::post('/add-resell-product', [ResellProduct::class, 'addResellProduct'])->name('frontend.add_resell_product');
     Route::post('/resell-product/update-price/{id}', [ResellProduct::class, 'updateResellPrice'])->name('frontend.update_resell_price');
+    Route::post('/customer-info-update-delivery/{id}', [OrderManageController::class,'update_delivery'])->name('order_manage.update_customer_delivery_status');
     Route::post('/my-purchase-histories/modal', [OrderController::class, 'myPurchaseHistoryModal'])->name('frontend.my_purchase_history_modal');
     //Resell Orders
     Route::get('/my-resell-order', [ResellOrderController::class, 'my_resell_purchase_order_index'])->name('frontend.my_resell_purchase_order');
 });
 Route::get('/my-purchase-order-pdf/{id}', [OrderController::class, 'my_purchase_order_pdf'])->name('frontend.my_purchase_order_pdf');
 Route::get('/my-purchase-order-details/{id}', [OrderController::class, 'my_purchase_order_detail'])->name('frontend.my_purchase_order_detail');
+Route::get('/resell-purchase-order-details/{id}', [OrderController::class, 'resell_purchase_order_detail'])->name('frontend.resell_order_detail');
 Route::get('/track-order', [OrderController::class, 'track_order'])->name('frontend.order.track');
 Route::post('/order/store', [OrderController::class, 'store'])->name('frontend.order.store');
 Route::get('/order/summary/{id}', [OrderController::class, 'order_summary'])->name('frontend.order.summary_after_checkout');

@@ -38,7 +38,7 @@ class OrderManageRepository
     {
         $seller_id = $id;
         return OrderPackageDetail::whereHas('order', function ($q) {
-            $q->where('orders.is_cancelled', 0)->where('is_confirmed', 1)->where('is_completed', 0);
+            //$q->where('orders.is_cancelled', 0)->where('is_confirmed', 1)->where('is_completed', 0);
         })->where('order_package_details.is_cancelled', 0)->with('order', 'seller', 'order.customer')->where('seller_id', $seller_id)->select('order_package_details.*')->get();
     }
 
@@ -269,6 +269,23 @@ class OrderManageRepository
         return true;
     }
 
+    public function get_customer_commission_rate($seller_id, $package)
+    {
+        $merchantRepo = new MerchantRepository();
+        $seller = $merchantRepo->findUserByID($package->seller_id);
+        if ($seller) {
+            $total_amount_of_package = $package->products->sum('total_price');
+            $commission_rate = 40;
+            $final_commission = ($commission_rate * $total_amount_of_package) / 100;
+            $seller_rcv_money = $total_amount_of_package - $final_commission;
+            
+            $data['seller_rcv_money'] = $seller_rcv_money;
+            $data['claim_gst'] = 0;
+            $data['final_commission'] = $final_commission;
+            return $data;
+        }
+    }
+
     public function get_commission_rate($seller_id, $package)
     {
         $merchantRepo = new MerchantRepository();
@@ -355,6 +372,7 @@ class OrderManageRepository
 
     public function updateDeliveryStatus($data, $id)
     {
+       
         $order_package = $this->findOrderPackageByID($id);
         $order = $this->findOrderByID($order_package->order_id);
 
@@ -375,7 +393,8 @@ class OrderManageRepository
                 'order_package_id' => $order_package->id,
                 'delivery_status' => $data['delivery_status'],
                 'note' => $data['note'],
-                'created_by' => getParentSellerId(),
+                //'created_by' => getParentSellerId(),
+                'created_by' => auth()->id(),
                 'date' => Carbon::now()->format('Y-m-d')
             ]);
 
@@ -404,7 +423,11 @@ class OrderManageRepository
             $seller_commision = 0;
 
             if ($order_package->seller->role->type != "superadmin") {
-                $amount = $this->get_commission_rate($order_package->seller_id, $order_package);
+                if($order_package->seller->role->type == 'customer'){
+                    $amount = $this->get_customer_commission_rate($order_package->seller_id, $order_package);
+                }else{
+                    $amount = $this->get_commission_rate($order_package->seller_id, $order_package);
+                }
                 $seller_amount = $amount['seller_rcv_money'] + $order_package->tax_amount;
                 $seller_commision = $amount['final_commission'];
                 if ($amount['claim_gst'] == 0) {

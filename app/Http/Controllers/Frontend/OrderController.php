@@ -377,6 +377,39 @@ class OrderController extends Controller
             return back();
         }
     }
+    
+
+    public function resell_purchase_order_detail($id)
+    {
+        try {
+            $data['order_status'] = [];
+            $data['order'] = $this->orderService->orderFindByID(decrypt($id));
+            $orderSyncWithCarrierController = new OrderSyncWithCarrierController();
+
+            foreach ($data['order']->packages as $package){
+                $status = $orderSyncWithCarrierController->orderTracking($package->carrier_order_id);
+                $data['order_status'][$package->id] = $status;
+            }
+
+            $data['oneClickOrderComplete'] = OneClickorderReceiveStatus::first();
+            $orderDeliveryRepo = new DeliveryProcessRepository;
+            $data['processes'] = $orderDeliveryRepo->getAll();
+            $cancelReasonRepo = new CancelReasonRepository;
+            $data['cancel_reasons'] = $cancelReasonRepo->getAll();
+            if (auth()->check() && auth()->user()->role->type != 'customer') {
+                return view('backEnd.pages.customer_data.order_details',$data);
+            }else {
+                if (auth()->check() && $data['order']->customer_id != null) {
+                    return view(theme('pages.profile.resell_order_details'), $data);
+                } else {
+                    return view(theme('pages.profile.resell_order_details_for_guest'), $data);
+                }
+            }
+        } catch (Exception $e) {
+            LogActivity::errorLog($e->getMessage());
+            return back();
+        }
+    }
 
     public function changeReceiveStatusByCustomer(Request $request)
     {

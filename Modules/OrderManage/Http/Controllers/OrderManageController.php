@@ -219,7 +219,7 @@ class OrderManageController extends Controller
             return back();
         } catch (\Exception $e) {
             LogActivity::errorLog($e->getMessage());
-            Toastr::error(__('common.error_message'));
+            Toastr::error(__($e->getMessage()));
             DB::rollBack();
             return back();
         }

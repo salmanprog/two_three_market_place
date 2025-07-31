@@ -48,7 +48,7 @@ padding: 10px
                                                     <td>{{$order->order->customer_email}}</td>
                                                     <td>{{$order->deliveryStateName}}</td>
                                                     <td>$ {{$order->order->grand_total}}</td>
-                                                    <td><a href="{{ route('frontend.my_purchase_order_detail', encrypt($order->id)) }}" class="amaz_primary_btn style2 text-nowrap">{{__('defaultTheme.order_details')}}</a></td>
+                                                    <td><a href="{{ route('frontend.resell_order_detail', encrypt($order->id)) }}" class="amaz_primary_btn style2 text-nowrap">{{__('defaultTheme.order_details')}}</a></td>
                                                 </tr>
                                             @endforeach;
                                         </tbody>
