@@ -54,7 +54,7 @@
                 @endif
             </div> --}}
             @if(auth()->user()->LastRehcarge)
-                <div class="customer-transaction">
+                <!-- <div class="customer-transaction">
                     {{-- <div class="head d-flex align-items-center justify-content-between mb-3">
                         <p>{{__('wallet.last_transaction')}}</p>
                         <a href="{{route('my-wallet.index', 'customer')}}">{{__('common.view_all')}}</a>
@@ -116,7 +116,7 @@
                         </div>
                         @endforeach
                     </div>
-                </div> --}}
+                </div> -->
             @endif
         </div>
     </div>

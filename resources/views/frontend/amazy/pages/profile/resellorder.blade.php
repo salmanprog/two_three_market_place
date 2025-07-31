@@ -50,7 +50,7 @@ padding: 10px
                                                     <td>$ {{$order->order->grand_total}}</td>
                                                     <td><a href="{{ route('frontend.resell_order_detail', encrypt($order->id)) }}" class="amaz_primary_btn style2 text-nowrap">{{__('defaultTheme.order_details')}}</a></td>
                                                 </tr>
-                                            @endforeach;
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
