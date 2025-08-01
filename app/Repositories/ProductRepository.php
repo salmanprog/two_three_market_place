@@ -51,9 +51,9 @@ class ProductRepository
         if(isModuleActive('MultiVendor')){
             return $this->product::where('slug', $slug)->with('product.tags','related_sales.related_seller_products.seller','cross_sales.cross_seller_products.seller','up_sales.up_seller_products.seller', 'skus','seller')->whereHas('seller', function($q) use ($seller_slug){
                 return $q->where('slug', $seller_slug);
-            })->activeSeller()->firstOrFail();
+            })->firstOrFail();
         }
-        return $this->product::where('slug', $slug)->with('product.tags','related_sales.related_seller_products.seller','cross_sales.cross_seller_products.seller','up_sales.up_seller_products.seller', 'skus','seller')->activeSeller()->firstOrFail();
+        return $this->product::where('slug', $slug)->with('product.tags','related_sales.related_seller_products.seller','cross_sales.cross_seller_products.seller','up_sales.up_seller_products.seller', 'skus','seller')->firstOrFail();
     }
 
     public function recentViewIncrease($id)

@@ -11,11 +11,10 @@
                     <div class="dashboard_white_box_header d-flex align-items-center">
                         <h4 class="font_24 f_w_700 mb_20">{{ __('wallet.my_wallet') }}</h4>
                     </div>
-
                     <div class="dashboard_wallet_boxes mb_40">
                         <div class="singl_dashboard_wallet green_box d-flex align-items-center justify-content-center flex-column">
                             <h4 class="font_16 f_w_400 lh-1">{{ __('wallet.running_balance') }}</h4>
-                            <h3 class="f_w_700 m-0 lh-1">{{ auth()->check()?single_price(auth()->user()->CustomerCurrentWalletAmounts):single_price(0.00) }}</h3>
+                            <h3 class="f_w_700 m-0 lh-1">{{ auth()->check()?single_price(auth()->user()->SellerCurrentWalletAmounts):single_price(0.00) }}</h3>
                         </div>
                         <div class="singl_dashboard_wallet pink_box d-flex align-items-center justify-content-center flex-column">
                             <h4 class="font_16 f_w_400 lh-1">{{ __('wallet.withdraw_balance') }}</h4>

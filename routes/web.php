@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\BankController;
 use Modules\FrontendCMS\Entities\DynamicPage;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\UploadFileController;
@@ -119,6 +120,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/checkout/coupon-apply', [CheckoutController::class, 'couponApply'])->name('frontend.checkout.coupon-apply');
     Route::get('/checkout/coupon-delete', [CheckoutController::class, 'couponDelete'])->name('frontend.checkout.coupon-delete');
 });
+//Bank
+Route::group(['middleware' => ['auth']], function () {
+    Route::get('/bank/detail', [BankController::class, 'index'])->name('frontend.bank');
+    Route::post('/bank/store', [BankController::class, 'store'])->name('frontend.bank.store');
+});
+
 Route::post('/change-shipping-method', [CheckoutController::class, 'changeShippingMethod'])->name('frontend.change_shipping_method');
 Route::get('/get-state', [CountryController::class, 'get_states'])->name('profile.get-state');
 Route::get('/get-city', [CountryController::class, 'get_cities'])->name('profile.get-city');

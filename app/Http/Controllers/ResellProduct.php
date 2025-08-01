@@ -140,6 +140,7 @@ class ResellProduct extends Controller
             DB::beginTransaction();
 
             // Get the original product
+            $old_price = floatval(str_replace(['$', ' '], '', $request->old_price));
             $originalProduct = \Modules\Product\Entities\Product::findOrFail($request->product_id);
             $product_sku = DB::table('product_sku')->where('product_id',$originalProduct->id)->first();
             
@@ -199,7 +200,7 @@ class ResellProduct extends Controller
              $sku_id = DB::table('product_sku')->insertGetId([
                 'product_id' => $resellProduct->id,
                 'sku' => $product_sku->sku,
-                'purchase_price' => 0,
+                'purchase_price' => $old_price,
                 'selling_price' => $resellProduct->resell_price,
                 'additional_shipping' => $product_sku->additional_shipping,
                 'variant_image' => NULL,
@@ -219,7 +220,7 @@ class ResellProduct extends Controller
                 'product_id' => $seller_products->id,
                 'product_sku_id' => $sku_id,
                 'product_stock' => '100',
-                'purchase_price' => $seller_products->max_sell_price,
+                'purchase_price' => $old_price,
                 'selling_price' => $resellProduct->resell_price,
                 'status' => '1',
                 'created_at' => now(),

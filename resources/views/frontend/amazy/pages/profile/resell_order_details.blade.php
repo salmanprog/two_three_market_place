@@ -603,7 +603,7 @@
                             <div class="dashboard_white_box style3 rounded-0 bg-white mb_20">
                                 <div class="dashboard_white_box_body">
                                 <h4 class="font_20 f_w_700 mb-2">Delivery Status</h4>
-                                @if($order->order_status == 5)
+                                @if($order->order_status == 6)
                                     <div class="col-lg-12">
                                         <div class="primary_input">
                                             <label class="primary_selectlabel alert alert-warning">

@@ -29,14 +29,14 @@ class ProductController extends Controller
     public function show($seller, $slug = null)
     {
         session()->forget('item_details');
-
+        
         try {
             if ($slug) {
                 $product =  $this->productService->getActiveSellerProductBySlug($slug, $seller);
             } else {
                 $product =  $this->productService->getActiveSellerProductBySlug($seller);
             }
-
+            
             if ($product->status == 0 || $product->product->status == 0) {
                 return abort(404);
             }

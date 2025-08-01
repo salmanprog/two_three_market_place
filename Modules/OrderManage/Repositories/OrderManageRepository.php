@@ -273,12 +273,14 @@ class OrderManageRepository
     {
         $merchantRepo = new MerchantRepository();
         $seller = $merchantRepo->findUserByID($package->seller_id);
+        $order_products = OrderProductDetail::with('seller_product_sku', 'seller_product_sku.sku', 'seller_product_sku.sku.product', 'seller_product_sku.sku.product.categories')->where('package_id', $package->id)->get()->toArray();
         if ($seller) {
+            $purchasing_amount = $order_products[0]['seller_product_sku']['purchase_price'];
             $total_amount_of_package = $package->products->sum('total_price');
-            $commission_rate = 40;
-            $final_commission = ($commission_rate * $total_amount_of_package) / 100;
-            $seller_rcv_money = $total_amount_of_package - $final_commission;
-            
+            $actual_amount = $total_amount_of_package - $purchasing_amount;
+            $commission_rate = 50;
+            $final_commission = ($commission_rate * $actual_amount) / 100;
+            $seller_rcv_money = ($actual_amount - $final_commission) + $purchasing_amount;
             $data['seller_rcv_money'] = $seller_rcv_money;
             $data['claim_gst'] = 0;
             $data['final_commission'] = $final_commission;
@@ -448,6 +450,7 @@ class OrderManageRepository
                         'package_id' => $order_package->id
                     ]);
                     $wallet_service = new WalletRepository;
+                    $wallet_type = ($order_package->seller->role->type == 'customer') ? "Deposite" : "Sale Payment";
                     $wallet_service->walletSalePaymentAdd($order->id, $current_seller_amount, "Sale Payment", $order_package->seller_id);
                 }
                 elseif(app('general_setting')->seller_wise_payment && !in_array($order->order_payment->payment_method, [1,2])){
