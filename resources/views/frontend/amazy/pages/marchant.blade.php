@@ -1,302 +1,234 @@
 @extends('frontend.amazy.layouts.app')
-@section('title')
-    {{ $content->mainTitle }}
-@endsection
+
 @push('styles')
-    <link rel="stylesheet" href="{{ asset(asset_path('frontend/amazy/css/page_css/marchant.css')) }}" />
     <style>
-        .change-height {
-            max-height: max-content !important;
+        .cursor_pointer {
+            cursor: pointer !important;
         }
-        .acc-active{ background-color: var(--background_color) !important;
+
+        .amaz_primary_btn.secondary {
+            background: var(--text_color);
+            border-color: var(--text_color);
+        }
+
+        .amaz_primary_btn.secondary:hover {
+            background: var(--base_color);
+            border-color: var(--base_color);
+        }
+
+        .package-list-wrapper {
+            padding: 0px 0px 20px 50px !important;
+
+        }
+
+        .package-list-wrapper li {
+            position: relative;
+            text-align: left;
+        }
+
+        .package-list-wrapper li::before {
+            content: '\f00c';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            background-color: #000;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            left: -14px;
+            top: 14px;
+            transform: translateY(-50%) translateX(-100%);
+            color: #fff;
+            font-size: 12px;
+        }
+
+        .package-image {
+            max-height: 270px;
+            width: 100%;
+            object-fit: cover;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+        .choose-plan-btn {
+            padding: 16px 46px !important;
         }
     </style>
 @endpush
-@section('content')
-    <!-- marcent top content -->
-    <!-- <section class="marcent_content section_padding bg-white pb-0">
-        <div class="container">
-            <div class="row justify-content-center text-center">
-                <div class="col-lg-9">
-                    <div class="marcent_content_iner">
-                        <h5>{{ $content->subTitle }}</h5>
-                        @php echo $content->Maindescription; @endphp
-                        @if(app('general_setting')->disable_seller_plan==0)
-                        <a href="#register"
-                            class="amaz_primary_btn style3 text-nowrap mt_40">{{ __('defaultTheme.become a merchant') }}</a>
-                        <span class="mt_20">{{ $content->pricing }}</span>
-                        @endif
 
-                        @if(app('general_setting')->disable_seller_plan==1)
-                        <a href="{{url('/merchant-register-step-2/none')}}"
-                        class="amaz_primary_btn style3 text-nowrap mt_40">{{ __('defaultTheme.become a merchant') }}</a>
-                        @endif
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section> -->
-    <!-- marcent top content end -->
-    <!-- Benefits part -->
-    <!-- <section class="benefits_content section_padding bg-white">
+@section('content')
+    <section class="pricing_part section_padding bg-white">
         <div class="container">
             <div class="row justify-content-center text-center">
-                <div class="col-lg-6 col-md-10">
-                    <div class="section_tittle">
-                        <h2 class="mb_25">{{ $content->benifitTitle }}</h2>
-                        @php echo $content->benifitDescription; @endphp
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                @foreach ($benefitList as $key => $item)
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single_benefits_content">
-                            <div class="benefit_img_div">
-                                <img src="{{ showImage($item->image) }}" alt="{{ $item->title }}" title="{{ $item->title }}">
-                            </div>
-                            <h4 class="f_w_700 font_16">{{ $item->title }}</h4>
-                            <p>{{ $item->description }}</p>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    </section> -->
-    <!-- Benefits part end -->
-    <!-- work process part here -->
-    <!-- <section class="work_process section_padding bg-white">
-        <div class="container">
-            <div class="row justify-content-center text-center">
-                <div class="col-lg-6 col-md-10">
-                    <div class="section_tittle">
-                        <h2>{{ $content->howitworkTitle }}</h2>
-                        @php echo $content->howitworkDescription; @endphp
+                <div class="col-lg-6 col-md-10 mb_50">
+                    <div class="section__title">
+                        <h3 class="mb_40">Artist Packages</h3>
+                        {{-- @php echo$content->pricingDescription; @endphp --}}
                     </div>
                 </div>
             </div>
             <div class="row justify-content-center">
-                <div class="col-lg-10">
-                    <div id="timeline">
-                        @foreach ($workProcessList as $key => $item)
-                            <div class="timeline-item">
-                                <div
-                                    class="timeline-content work_process_single {{ $item->position == 1 ? 'left_float' : 'right_float' }}">
-                                    <div class="work_img_div">
-                                        <img src="{{ showImage($item->image) }}" alt="{{ $item->title }}" title="{{ $item->title }}">
-                                    </div>
-                                    <h4 class="f_w_700 font_16">{{ $item->title }}</h4>
-                                    @php echo $item->description; @endphp
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
+                {{-- <div class="col-lg-12 d-none">
+                <div class="price_truggle d-flex">
+                    <p>{{__('defaultTheme.monthly')}}</p>
+                    <label class="switch-toggle outer">
+                        <input id="pricingToggle" type="checkbox" />
+                        <div></div>
+                    </label>
+                    <p class="pl-18">{{__('defaultTheme.yearly')}}</p>
                 </div>
-            </div>
-        </div>
-    </section> -->
-    <!-- work process part end -->
-    <!-- Benefits part -->
-    @if(app('general_setting')->disable_seller_plan==0)
-    <section class="pricing_part section_padding bg-white" id="register">
-        <div class="container">
-            <div class="row justify-content-center text-center">
-                <div class="col-lg-6 col-md-10">
-                    <div class="section_tittle">
-                        <h2>{{ $content->sellerRegistrationTitle }}</h2>
-                        @php echo $content->sellerRegistrationDescription; @endphp
-                    </div>
-                </div>
-            </div>
-            <div class="row justify-content-center">
-                @php
-                    $total_commission = $commissions->where('status', 1)->count();
-                    if($total_commission == 1){
-                        $column = 'col-lg-4 offset-lg-4 col-md-6 offset-md-3';
-                    }elseif($total_commission == 2){
-                        $column = 'col-lg-4 offset-lg-1 col-md-6';
-                    }else {
-                        $column = 'col-lg-4 col-md-6';
-                    }
-                @endphp
-                @foreach ($commissions->where('status', 1)->where('slug','!=','none') as $key => $commission)
-                    <div class="{{$column}}">
-                        <div class="single_pricing_part @if ($commission->id == 1) product_tricker @endif">
-                            @if ($commission->id == 1)
-                                <span class="product_tricker_text">{{__('defaultTheme.best value')}}</span>
-                            @endif
-                            <div class="pricing_header">
-                                <h5>{{ $commission->name }}</h5>
-                                <h2>
-                                    @if ($commission->id == 1)
-                                        {{ $commission->rate }} %
-                                    @endif
-                                </h2>
-                                <p>{{ $commission->description }}</p>
-                            </div>
-                            <a href="{{ route('frontend.merchant-register', $commission->slug) }}"
-                                class="amaz_primary_btn3 mb_20  w-100 text-center justify-content-center">{{ __('defaultTheme.choose_plan') }}</a>
+            </div> --}}
+                <div class="col-lg-4">
+                    <div class="single_pricing_part h-100">
+                        <div class="price_icon">
+                            <svg width="56" height="53" viewBox="0 0 56 53" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M26.0979 1.8541C26.6966 0.0114833 29.3034 0.0114799 29.9021 1.8541L34.9599 17.4205C35.2277 18.2445 35.9956 18.8024 36.862 18.8024H53.2295C55.1669 18.8024 55.9725 21.2817 54.4051 22.4205L41.1635 32.041C40.4625 32.5503 40.1692 33.453 40.437 34.2771L45.4948 49.8435C46.0935 51.6861 43.9845 53.2183 42.4171 52.0795L29.1756 42.459C28.4746 41.9497 27.5254 41.9497 26.8244 42.459L13.5829 52.0795C12.0155 53.2183 9.9065 51.6861 10.5052 49.8435L15.563 34.2771C15.8308 33.453 15.5375 32.5503 14.8365 32.041L1.59493 22.4205C0.0275064 21.2817 0.833055 18.8024 2.7705 18.8024H19.138C20.0044 18.8024 20.7723 18.2445 21.0401 17.4205L26.0979 1.8541Z"
+                                    fill="currentColor" />
+                            </svg>
                         </div>
+                        <div class="pricing_header pb-0">
+                            <h5>Standard Plan / Free</h5>
+                            {{-- <p>For a limited time</p> --}}
+                        </div>
+                        <div class="w-100">
+                            <img src="{{ asset('public/images/packages-03-img.jpg') }}" class="img-fluid package-image mb-0"
+                                alt="package image">
+                        </div>
+                        <div class="monthly_price_div mb-40">
+                            <h2>Free</h2>
+                        </div>
+                        <ul class="mb-5 package-list-wrapper">
+                            <li>Your will get: 40% commission rate</li>
+                        </ul>
+                        {{-- <a class="amaz_primary_btn py-2 rounded-pill mb_20 text-center justify-content-center cursor_pointer select_btn_price"
+                        data-id='{{ $item->id }}'>{{ __('defaultTheme.choose plan') }}</a> --}}
+                        <a href="merchant-register-step-3?id=0&type="
+                            class="amaz_primary_btn choose-plan-btn rounded-pill mb_20 text-center justify-content-center cursor_pointer select_btn_price">
+                            Choose Plan
+                        </a>
+
                     </div>
-                @endforeach
+                </div>
+                <div class="col-lg-4">
+                    <div class="single_pricing_part h-100">
+                        <div class="price_icon">
+                            <svg width="56" height="53" viewBox="0 0 56 53" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M26.0979 1.8541C26.6966 0.0114833 29.3034 0.0114799 29.9021 1.8541L34.9599 17.4205C35.2277 18.2445 35.9956 18.8024 36.862 18.8024H53.2295C55.1669 18.8024 55.9725 21.2817 54.4051 22.4205L41.1635 32.041C40.4625 32.5503 40.1692 33.453 40.437 34.2771L45.4948 49.8435C46.0935 51.6861 43.9845 53.2183 42.4171 52.0795L29.1756 42.459C28.4746 41.9497 27.5254 41.9497 26.8244 42.459L13.5829 52.0795C12.0155 53.2183 9.9065 51.6861 10.5052 49.8435L15.563 34.2771C15.8308 33.453 15.5375 32.5503 14.8365 32.041L1.59493 22.4205C0.0275064 21.2817 0.833055 18.8024 2.7705 18.8024H19.138C20.0044 18.8024 20.7723 18.2445 21.0401 17.4205L26.0979 1.8541Z"
+                                    fill="currentColor" />
+                            </svg>
+                        </div>
+                        <div class="pricing_header pb-0">
+                            <h5>Premium Plan / monthly</h5>
+                            {{-- <p>For a limited time</p> --}}
+                        </div>
+                        <div class="w-100">
+                            <img src="{{ asset('public/images/packages-02-img.jpg') }}" class="img-fluid package-image mb-0"
+                                alt="package image">
+                        </div>
+                        <div class="monthly_price_div mb-40">
+                            <h2>$ 25.00</h2>
+                        </div>
+                        <ul class="mb-5 package-list-wrapper">
+                            <li>Your will get: 80% commission rate</li>
+                            <li>Featured posts</li>
+                            <li>Prioritized listings</li>
+                            <li>Streamlined profile setup</li>
+                            <li>Similar format across all artists profiles</li>
+                            <li>Location/Geography display</li>
+                            <li>Available inventory/Gallery</li>
+                            <li>Ability to list services (Art commissions, Murals, Art classes/workshops, live
+                                paintings)</li>
+                        </ul>
+                        {{-- <a class="amaz_primary_btn py-2 rounded-pill mb_20 text-center justify-content-center cursor_pointer select_btn_price"
+                            data-id='{{ $item->id }}'>{{ __('defaultTheme.choose plan') }}</a> --}}
+                        <a href="merchant-register-step-3?id=1&type="
+                            class="amaz_primary_btn choose-plan-btn rounded-pill mb_20 text-center justify-content-center cursor_pointer select_btn_price">
+                            Choose Plan
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="single_pricing_part h-100">
+                        <div class="price_icon">
+                            <svg width="56" height="53" viewBox="0 0 56 53" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M26.0979 1.8541C26.6966 0.0114833 29.3034 0.0114799 29.9021 1.8541L34.9599 17.4205C35.2277 18.2445 35.9956 18.8024 36.862 18.8024H53.2295C55.1669 18.8024 55.9725 21.2817 54.4051 22.4205L41.1635 32.041C40.4625 32.5503 40.1692 33.453 40.437 34.2771L45.4948 49.8435C46.0935 51.6861 43.9845 53.2183 42.4171 52.0795L29.1756 42.459C28.4746 41.9497 27.5254 41.9497 26.8244 42.459L13.5829 52.0795C12.0155 53.2183 9.9065 51.6861 10.5052 49.8435L15.563 34.2771C15.8308 33.453 15.5375 32.5503 14.8365 32.041L1.59493 22.4205C0.0275064 21.2817 0.833055 18.8024 2.7705 18.8024H19.138C20.0044 18.8024 20.7723 18.2445 21.0401 17.4205L26.0979 1.8541Z"
+                                    fill="currentColor" />
+                            </svg>
+                        </div>
+                        <div class="pricing_header pb-0">
+                            <h5>Premium Plan / yearly</h5>
+                            {{-- <p>For a limited time</p> --}}
+                        </div>
+                        <div class="w-100">
+                            <img src="{{ asset('public/images/packages-02-img.webp') }}"
+                                class="img-fluid package-image mb-0" alt="package image">
+                        </div>
+                        <div class="monthly_price_div mb-40">
+                            <h2>$ 240.00</h2>
+                        </div>
+                        <ul class="mb-5 package-list-wrapper">
+                            <li>Your will get: 80% commission rate</li>
+                            <li>Featured posts</li>
+                            <li>Prioritized listings</li>
+                            <li>Streamlined profile setup</li>
+                            <li>Similar format across all artists profiles</li>
+                            <li>Location/Geography display</li>
+                            <li>Available inventory/Gallery</li>
+                            <li>Ability to list services (Art commissions, Murals, Art classes/workshops, live paintings)
+                            </li>
+                        </ul>
+                        {{-- <a class="amaz_primary_btn py-2 rounded-pill mb_20 text-center justify-content-center cursor_pointer select_btn_price"
+                            data-id='{{ $item->id }}'>{{ __('defaultTheme.choose plan') }}</a> --}}
+                        <a href="merchant-register-step-3?id=2&type="
+                            class="amaz_primary_btn rounded-pill choose-plan-btn mb_20 text-center justify-content-center cursor_pointer select_btn_price">
+                            Choose Plan
+                        </a>
+
+                    </div>
+                </div>
+                <form class="price_subscription_add d-none"
+                    action="{{ route('frontend.merchant-register-subscription-type') }}" method="get">
+
+                    <input type="hidden" id="id" name="id" value="">
+                    <input type="hidden" id="type" name="type" value="">
+                </form>
             </div>
         </div>
     </section>
-    @endif
-    <!-- Benefits part end -->
-    <!-- accordion part here -->
-    <!-- <section class="ferquently_question_part section_padding">
-        <div class="container">
-            <div class="row justify-content-center text-center">
-                <div class="col-lg-6 col-md-10">
-                    <div class="section_tittle">
-                        <h2>{{ $content->faqTitle }}</h2>
-                        @php echo $content->faqDescription; @endphp
-                    </div>
-                </div>
-            </div>
-            <div class="row justify-content-center">
-                <div class="col-lg-10 col-xl-6">
-                    <div class="ferquently_question_iner">
-                        @foreach ($faqList as $key => $item)
-                            <div class="single_ferquently_question">
-                                <button class="accordion show-accordion" data-id='#{{ $key."id" }}'>{{ $item->title }}</button>
-                                <div id="{{ $key."id" }}" class="panel">
-                                    <p>{{ $item->description }}</p>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section> -->
-    <!-- accordion part end -->
-    <!-- send query part here -->
-    <!-- <section class="send_query section_padding">
-        <div class="container">
-            <div class="row justify-content-center text-center">
-                <div class="col-lg-6">
-                    <div class="section_tittle">
-                        <h2>{{ $content->queryTitle }}</h2>
-                        @php echo $content->queryDescription @endphp
-                    </div>
-                </div>
-            </div>
-            <div class="row justify-content-center">
-                <div class="col-lg-10 col-xl-8">
-                    <form action="#" id="contactForm" name="#" class="send_query_form">
-                        <div class="row">
-                            <div class="col-xl-12">
-                                <input name="name" id="name" placeholder="{{ __('defaultTheme.enter_name') }}" onfocus="this.placeholder = ''" onblur="this.placeholder = '{{ __('defaultTheme.enter_name') }}'"
-                                    class="primary_line_input style4 mb_10" type="text">
-                                <span class="text-danger" id="error_name"></span>
-                            </div>
-                            <div class="col-xl-12">
-                                <input type="email" id="email" name="email" placeholder="{{ __('defaultTheme.enter_email_address') }}" onfocus="this.placeholder = ''" onblur="this.placeholder = '{{ __('defaultTheme.enter_email_address') }}'"
-                                    class="primary_line_input style4 mb_10">
-                                    <span class="text-danger" id="error_email"></span>
-                            </div>
-                            <div class="col-xl-12">
-                                <select class="amaz_select2 style2 wide mb_30" name="query_type" id="query_type">
-                                    <option value="" selected disable>{{ __('defaultTheme.inquery_type') }}</option>
-                                    @foreach ($QueryList as $key => $item)
-                                        <option  value="{{ $item->id }}">{{ $item->name }}</option>
-                                    @endforeach
-                                </select>
-                                <span class="text-danger" id="error_query_type"></span>
-                            </div>
-                            <div class="col-xl-12">
-                                <textarea class="primary_line_textarea style4 mb_40" name="message" id="message" placeholder="{{ __('defaultTheme.write_messages') }}" onfocus="this.placeholder = ''"
-                                    onblur="this.placeholder = '{{ __('defaultTheme.write_messages') }}'"></textarea>
-                                    <span class="text-danger" id="error_message"></span>
-                            </div>
-                        </div>
-                        <div class="send_query_btn">
-                            <button id="contactBtn" type="submit"
-                                class="amaz_primary_btn style3 text-nowrap">{{ __('defaultTheme.send_message') }}</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section> -->
-    <!-- send query part end -->
 @endsection
+
 @push('scripts')
-<script>
-    (function($) {
-        "use strict";
-        $(document).ready(function() {
-            $('#contactForm').on('submit', function(event) {
-                event.preventDefault();
-                $("#contactBtn").prop('disabled', true);
-                $('#contactBtn').text('{{ __('common.submitting') }}');
-                var formElement = $(this).serializeArray()
-                var formData = new FormData();
-                formElement.forEach(element => {
-                    formData.append(element.name, element.value);
-                });
-                formData.append('_token', "{{ csrf_token() }}");
-                $.ajax({
-                    url: "{{ route('contact.store') }}",
-                    type: "POST",
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    data: formData,
-                    success: function(response) {
-                        toastr.success(
-                            "{{ __('defaultTheme.message_sent_successfully') }}",
-                            "{{ __('common.success') }}");
-                        $("#contactBtn").prop('disabled', false);
-                        $('#contactBtn').text(
-                            "{{ __('defaultTheme.send_message') }}");
-                        resetErrorData();
-                    },
-                    error: function(response) {
-                        $("#contactBtn").prop('disabled', false);
-                        $('#contactBtn').text(
-                            "{{ __('defaultTheme.send_message') }}");
-                        showErrorData(response.responseJSON.errors)
+    <script>
+        (function($) {
+            "use strict";
+            $(document).ready(function() {
+                $('#pricingToggle').on('change', function() {
+                    this.value = this.checked ? 1 : 0;
+                    if (this.value == 1) {
+                        $('#type').val('yearly');
+                        $('.monthly_price_div').addClass('d-none');
+                        $('.yearly_price_div').removeClass('d-none');
+                    }
+                    if (this.value == 0) {
+                        $('#type').val('monthly');
+                        $('.yearly_price_div').addClass('d-none');
+                        $('.monthly_price_div').removeClass('d-none');
                     }
                 });
+                $(document).on('click', '.select_btn_price', function() {
+                    event.preventDefault();
+                    $('#id').val($(this).attr("data-id"));
+                    $('.price_subscription_add').submit();
+                });
             });
-            $('#pricingToggle').on('change', function() {
-                this.value = this.checked ? 1 : 0;
-                if (this.value == 1) {
-                    $('.monthly_price_div').addClass('d-none');
-                    $('.yearly_price_div').removeClass('d-none');
-                }
-                if (this.value == 0) {
-                    $('.yearly_price_div').addClass('d-none');
-                    $('.monthly_price_div').removeClass('d-none');
-                }
-            });
-            function showErrorData(errors) {
-                $('#contactForm #error_name').text(errors.name)
-                $('#contactForm #error_email').text(errors.email)
-                $('#contactForm #error_query_type').text(errors.query_type)
-                $('#contactForm #error_message').text(errors.message)
-            }
-            function resetErrorData() {
-                $('#contactForm')[0].reset();
-                $('#contactForm #error_name').text('')
-                $('#contactForm #error_email').text('')
-                $('#contactForm #error_query_type').text('')
-                $('#contactForm #error_message').text('')
-            }
-
-            $(document).on('click','.show-accordion',function(){
-               let id = $(this).attr('data-id');
-               $(id).toggleClass('change-height');
-               $(this).toggleClass('acc-active');
-
-            });
-
-
-
-        });
-    })(jQuery);
-</script>
+        })(jQuery);
+    </script>
 @endpush

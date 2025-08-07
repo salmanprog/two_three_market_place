@@ -77,7 +77,7 @@
     </div>
     <div class="amazy_login_area_right d-flex align-items-center justify-content-center">
         <div class="amazy_login_area_right_inner d-flex align-items-center justify-content-center flex-column">
-            <div class="thumb">
+            <div class="thumb w-100">
                 <img class="img-fluid" src="{{ showImage($loginPageInfo->cover_img) }}" alt="">
             </div>
             <div class="login_text d-flex align-items-center justify-content-center flex-column text-center">

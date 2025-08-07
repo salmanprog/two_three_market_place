@@ -29,8 +29,8 @@
                 <h5 class="m-0 font_16 f_w_500">{{__('auth.Sign in with Facebook')}}</h5>
             </a>
             @endif --}}
-                        <a href="./merchant" class="g-recaptcha amaz_primary_btn style2 radius_5px  w-100 text-uppercase  text-center mb_25">{{__('sign up as a free Artist')}}</a>
-                        <a href="./merchant-register-step-2/subscription" class="g-recaptcha amaz_primary_btn style2 radius_5px  w-100 text-uppercase  text-center mb_25">{{__('sign up as a premium Artist')}}</a>
+                        {{-- <a href="./merchant" class="g-recaptcha amaz_primary_btn style2 radius_5px  w-100 text-uppercase  text-center mb_25">{{__('sign up as a Artist')}}</a> --}}
+                        {{-- <a href="./merchant-register-step-2/subscription" class="g-recaptcha amaz_primary_btn style2 radius_5px  w-100 text-uppercase  text-center mb_25">{{__('sign up as a premium Artist')}}</a> --}}
             
             @if (app('general_setting')->twitter_status)
             <a href="{{url('/login/twitter')}}" class="google_logIn d-flex align-items-center justify-content-center">
@@ -102,7 +102,7 @@
     </div>
     <div class="amazy_login_area_right d-flex align-items-center justify-content-center">
         <div class="amazy_login_area_right_inner d-flex align-items-center justify-content-center flex-column">
-            <div class="thumb">
+            <div class="thumb w-100 d-flex justify-content-center">
                 <img class="img-fluid" src="{{showImage($loginPageInfo->cover_img)}}" alt="{{ isset($loginPageInfo->title)? $loginPageInfo->title:'' }}" title="{{ isset($loginPageInfo->title)? $loginPageInfo->title:'' }}">
             </div>
             <div class="login_text d-flex align-items-center justify-content-center flex-column text-center">

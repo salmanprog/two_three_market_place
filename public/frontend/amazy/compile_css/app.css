@@ -6807,7 +6807,7 @@ header.amazcartui_header .header_area .header_top_area .header__wrapper .header_
 }
 header.amazcartui_header .header_area .header_top_area .header__wrapper .header_middle {
   flex: 1 1 auto;
-  margin: 0 auto 0 100px;
+  justify-content: center;
 }
 @media (max-width: 991.98px) {
   header.amazcartui_header .header_area .header_top_area .header__wrapper .header_middle {
