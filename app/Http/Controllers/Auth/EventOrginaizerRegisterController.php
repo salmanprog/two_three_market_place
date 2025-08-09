@@ -53,7 +53,7 @@ use Modules\FormBuilder\Repositories\FormBuilderRepositories;
 use \Modules\PaymentGateway\Services\PaymentGatewayService;
 use Illuminate\Support\Facades\DB;
 
-class MerchantRegisterController extends Controller
+class EventOrginaizerRegisterController extends Controller
 {
     use RegistersUsers, TraitsNotification, SendMail, Otp, GenerateSlug;
     protected $merchantContentService;
@@ -91,47 +91,12 @@ class MerchantRegisterController extends Controller
             return redirect('/user-email-verify');
         }
         if(session()->has('pricing_id')){
-            return  redirect('/seller/seller-subscription-payment-select/'.encrypt(session()->get('seller_pricing')));
+            return  redirect('/event/event-subscription-payment-select/'.encrypt(session()->get('seller_pricing')));
         }
-        return redirect('/seller/dashboard');
+        return redirect('/event/dashboard');
     }
 
-
-    public function showRegisterFormStepFirst()
-    {
-        if (app('business_settings')->where('category_type', 'vendor_configuration')->where('type', 'Multi-Vendor System Activate')->first()->status) {
-            if (auth()->check() && auth()->user()->role->type == 'customer') {
-                $commisionRepo = new CommisionRepository();
-                $data['commissions'] = $commisionRepo->getAllActive();
-                $data['content'] = MerchantContent::firstOrFail();
-                $data['benefitList'] = $this->benefitService->getAllActive();
-                $data['faqList'] = $this->faqService->getAllActive();
-                $data['content'] = $this->merchantContentService->getAll();
-                $data['pricingList'] = $this->pricingService->getAllActive();
-                $data['workProcessList'] = $this->workingProcessService->getAllActive();
-                $data['QueryList'] = $this->queryService->getAllActive();
-                return view(theme('pages.marchant'), $data);
-            } elseif (!auth()->check()) {
-                $commisionRepo = new CommisionRepository();
-                $data['commissions'] = $commisionRepo->getAllActive();
-                $data['content'] = MerchantContent::firstOrFail();
-                $data['benefitList'] = $this->benefitService->getAllActive();
-                $data['faqList'] = $this->faqService->getAllActive();
-                $data['content'] = $this->merchantContentService->getAll();
-                $data['pricingList'] = $this->pricingService->getAllActive();
-                $data['workProcessList'] = $this->workingProcessService->getAllActive();
-                $data['QueryList'] = $this->queryService->getAllActive();
-                return view(theme('pages.marchant'), $data);
-            } else {
-                return abort(404);
-            }
-        } else {
-            Toastr::error(__('auth.multi_vendor_system_is_temporary_disabled'));
-            return back();
-        }
-    }
-
-    public function showRegisterForm(Request $request, $id)
+    public function showRegisterSubscription(Request $request, $id)
     {
 
         if(config('app')['sync'] && auth()->check()){
@@ -152,7 +117,7 @@ class MerchantRegisterController extends Controller
                 session()->put('commission_id', $commission->id);
                 session()->put('commission_rate', $commission->rate);
                 if ($commission->id == 3) {
-                    $data['pricing_plans'] = Pricing::where('best_for', 'Artist')->where('status', 1)->get();
+                    $data['pricing_plans'] = Pricing::where('best_for', 'Event')->where('status', 1)->get();
                     $data['content'] = MerchantContent::firstOrFail();
                     return view(theme('pages.merchant_create_by_subscription'), $data);
                 } else {
@@ -186,9 +151,9 @@ class MerchantRegisterController extends Controller
                     }
                 }
                 if ($commission->id == 3) {
-                    $data['pricing_plans'] = Pricing::where('best_for', 'Artist')->where('status', 1)->get();
+                    $data['pricing_plans'] = Pricing::where('best_for', 'Event')->where('status', 1)->get();
                     $data['content'] = MerchantContent::firstOrFail();
-                    return view(theme('pages.merchant_create_by_subscription'), $data);
+                    return view(theme('pages.eventorganiser_create_by_subscription'), $data);
                 } else {
                     session()->forget('pricing_id');
                 }
@@ -202,7 +167,7 @@ class MerchantRegisterController extends Controller
         }
     }
 
-    public function showRegisterForm2(Request $request)
+    public function showRegisterForm(Request $request)
     {
 
         if (app('business_settings')->where('category_type', 'vendor_configuration')->where('type', 'Multi-Vendor System Activate')->first()->status) {
@@ -213,7 +178,7 @@ class MerchantRegisterController extends Controller
                 }
                 session()->put('pricing_id', $request->id);
                 session()->put('pricing_type', $request->type);
-                $data['pricing_plans'] = Pricing::where('best_for', 'Artist')->where('status', 1)->get(['name', 'id']);
+                $data['pricing_plans'] = Pricing::where('best_for', 'Event')->where('status', 1)->get(['name', 'id']);
                 $registerRepo = new MerchantRepository();
                 $registerRepo->customerToSellerConvert([
                     'commission_id' => session()->get('commission_id'),
@@ -241,8 +206,8 @@ class MerchantRegisterController extends Controller
                         }
                     }
                 }
-                $data['pricing_plans'] = Pricing::where('best_for', 'Artist')->where('status', 1)->get(['name', 'id']);
-                return view(theme('pages.merchant_create_step_two'), $data);
+                $data['pricing_plans'] = Pricing::where('best_for', 'Event')->where('status', 1)->get(['name', 'id']);
+                return view(theme('pages.event_orginiser_create_step_one'), $data);
             } else {
                 return abort(404);
             }
@@ -367,7 +332,7 @@ class MerchantRegisterController extends Controller
                 }
             }
         }
-        $role = Role::where('type', 'seller')->first();
+        $role = Role::where('type', 'staff')->first();
         $user =  User::create([
             'first_name' => $data['name'],
             'email' => $data['email'],

@@ -50,9 +50,13 @@
         <div class="row mb-5">
             <div class="col-xl-6">
                 @if(count($gateway_activations->where('method','!=','Cash on Delivery')) > 0)
-                <form id="payform" action="{{route('seller.subscription_payment')}}" method="post" enctype="multipart/form-data">
+                <form id="payform" action="{{route('event.event_organisers_subscription_payment')}}" method="post" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" name="debug_field" value="debug_value">
+                    <input type="hidden" name="plane_name" value="{{$seller_subscription->pricing->name}}">
+                    <input type="hidden" name="plan_price" value="{{$seller_subscription->pricing->plan_price}}">
+                    
+                    
                     <!-- Debug info -->
                     <!-- <div style="margin-bottom: 15px; padding: 10px; border: 1px solid #ddd; background: #f9f9f9;">
                         <strong>Debug Info:</strong><br>

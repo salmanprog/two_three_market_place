@@ -78,7 +78,7 @@ class PaymentGatewayTest extends DuskTestCase
             $browser->click('#main-content > div.row > div.col-md-8 > section > div > div > div.col-md-12.mb-20 > div > div > ul > li:nth-child(2) > a')
                 ->pause(1)
                 ->assertSee('Stripe Configuration')
-                ->type('#stripeTab > form > div > div:nth-child(1) > div > input.primary_input_field', 'pk_test_51HUWfSGRvmmDdlLV4SicdCgwHvugSZJIWnq3JAVRdJFwzkNS94SafaOSsg9qgUdQkO0yyWARKyWSXOjjBXFrvwDD00kYOLnaBQ')
+                ->type('#stripeTab > form > div > div:nth-child(1) > div > input.primary_input_field', 'pk_test_51RikHx4CJ9suiAoOvUmv0hDbR3SDomvIwcuFzi6TVsvcf2a5iBc5zu1PtEMwC3RjZZkOksiQayvKdCjHpjJpqvUS00cjN0biY6')
                 ->type('#stripeTab > form > div > div:nth-child(2) > div > input.primary_input_field', 'demo@strip.com')
                 ->type('#stripeTab > form > div > div:nth-child(4) > div > input.primary_input_field', 'sk_test_51HUWfSGRvmmDdlLV87aRqJ8CVka2HtjB1SQvBzfbWzr7F9KaK5txg23eASkhitYJVz0IgovdnOOi7t6ab3xqGB4D00oAGvGCxq')
                 ->attach('#logoStripe', __DIR__.'/files/payment_gateway/stripe.png')

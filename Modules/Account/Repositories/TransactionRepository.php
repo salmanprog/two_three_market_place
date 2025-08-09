@@ -185,8 +185,8 @@ class TransactionRepository
             ]);
         } else {
             $chart_account = ChartOfAccount::where('id', $chart_account_id)->first();
-
             if ($chart_account) {
+                
                 if ($id) {
                     return Transaction::whereHasMorph('morphable', get_class($class), function ($query) use ($id) {
                         $query->where('id', $id);
@@ -194,6 +194,7 @@ class TransactionRepository
                         'amount' => $amount,
                     ]);
                 } else {
+                    
                     return $this->transaction->create([
                         'chart_of_account_id' => $chart_account->id,
                         'title' => $title,
@@ -201,8 +202,8 @@ class TransactionRepository
                         'payment_method' => $method,
                         'come_from' => $default_for,
                         'description' => $description,
-                        'morphable_id' => $class->id,
-                        'morphable_type' => $title == 'Invoice' ? Invoice::class : get_class($class),
+                        'morphable_id' => NULL,
+                        'morphable_type' => NULL,
                         'amount' => $amount,
                         'transaction_date' => $date,
                         'created_by' => $creator,

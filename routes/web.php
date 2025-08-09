@@ -35,6 +35,7 @@ use App\Http\Controllers\Frontend\FlashDealController;
 use Modules\GeneralSetting\Entities\EmailTemplateType;
 use App\Http\Controllers\Frontend\NewUserZoneController;
 use App\Http\Controllers\Auth\MerchantRegisterController;
+use App\Http\Controllers\Auth\EventOrginaizerRegisterController;
 use App\Http\Controllers\DemoController;
 use App\Http\Controllers\Frontend\NotificationController;
 use App\Http\Controllers\Frontend\ProductReviewController;
@@ -189,6 +190,10 @@ Route::post('/merchant-register', [MerchantRegisterController::class, 'register'
 Route::get('/user-email-verify', [WelcomeController::class, 'emailVerify'])->name('frontend.mail-verify');
 Route::get('/verify', [\App\Http\Controllers\Auth\EmailVerificationController::class, 'emailVerify'])->name('frontend.mail-verify-link');
 Route::post('/resend-link', [\App\Http\Controllers\Auth\EmailVerificationController::class, 'resendMail'])->name('frontend.resend-link');
+//event organiser register
+Route::get('event-organiser-register/{id}', [EventOrginaizerRegisterController::class, 'showRegisterSubscription'])->name('frontend.event-organiser-register');
+Route::get('/event-organiser-register-step-1', [EventOrginaizerRegisterController::class, 'showRegisterForm'])->name('frontend.event-organiser-subscription-type');
+Route::post('/event-organiser-register', [EventOrginaizerRegisterController::class, 'register'])->name('frontend.event.organiser.store');
 //flash deal
 Route::get('/flash-deal/{slug}', [FlashDealController::class, 'show'])->name('frontend.flash-deal');
 Route::get('/flash-deal/{slug}/fetch-data', [FlashDealController::class, 'fetchData'])->name('frontend.flash-deal.fetch-data');

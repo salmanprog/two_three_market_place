@@ -213,6 +213,170 @@ class StripeController extends Controller
         }
     }
 
+    public function stripeOrganisersPayment($data)
+    {
+        try {
+            
+            //Check subscription payment session
+            if (!session()->has('subscription_payment')) {
+                Log::error('Subscription payment session not found');
+                return [
+                    'status' => 'error',
+                    'message' => 'Invalid payment session',
+                    'redirect_url' => route('seller.dashboard')
+                ];
+            }
+
+            $currency_code = getCurrencyCode();
+            $credential = $this->getCredential();
+
+            if (!$credential) {
+                Log::error('Stripe credential not found', [
+                    'seller_id' => auth()->user()->id,
+                    'seller_wise_payment' => app('general_setting')->seller_wise_payment ?? false
+                ]);
+                throw new Exception('Payment gateway configuration not found');
+            }
+
+            // Validate required fields
+            if (empty($data['stripeToken'])) {
+                throw new Exception('Stripe token is missing');
+            }
+
+            if (empty($data['amount']) || $data['amount'] <= 0) {
+                throw new Exception('Invalid payment amount');
+            }
+
+            // Validate Stripe API key
+            if (empty($credential->perameter_3)) {
+                throw new Exception('Stripe secret key not configured');
+            }
+
+            Stripe\Stripe::setApiKey($credential->perameter_3);
+            
+           
+            // Log the charge request data
+            $charge_data = [
+                "amount" => round($data['amount'] * 100),
+                "currency" => $currency_code,
+                "source" => $data['stripeToken'],
+                "description" => "Subscription Payment from " . url('/') . " - Event Organiser ID: " . auth()->user()->id,
+                "metadata" => [
+                    "seller_id" => auth()->user()->id,
+                    "payment_type" => "subscription",
+                    "seller_email" => auth()->user()->email ?? 'unknown'
+                ]
+            ];
+
+            Log::info('Stripe Charge Request Data', [
+                'charge_data' => $charge_data,
+                'seller_id' => auth()->user()->id,
+                'credential_id' => $credential->id ?? 'unknown'
+            ]);
+
+            // Create the charge
+            $stripe = Stripe\Charge::create($charge_data);
+
+            // Log successful charge
+            Log::info('Stripe Charge Created Successfully', [
+                'charge_id' => $stripe['id'],
+                'status' => $stripe['status'],
+                'amount' => $stripe['amount'],
+                'seller_id' => auth()->user()->id
+            ]);
+
+            if ($stripe['status'] == "succeeded") {
+                $return_data = $stripe['id'];
+                
+                if (session()->has('subscription_payment')) {
+                    
+                    // Start database transaction
+                    DB::beginTransaction();
+                    try {
+                        // Create transaction record
+                        $transactionRepo = new TransactionRepository(new Transaction);
+                        
+                        $transaction = $transactionRepo->makeTransaction(
+                            auth()->user()->first_name . " - Subscription Payment",
+                            "in",
+                            "Stripe",
+                            "subscription_payment",
+                            "1",
+                            "Subscription Payment",
+                            "seller_subscription",
+                            $data['amount'],
+                            Carbon::now()->format('Y-m-d'),
+                            auth()->user()->id,
+                            null,
+                            null
+                        );
+                        
+                        // Update subscription
+                        // $seller_subscription->update([
+                        //     'last_payment_date' => Carbon::now()->format('Y-m-d')
+                        // ]);
+
+                        
+                        // Create payment info
+                        SubsciptionPaymentInfo::create([
+                            'transaction_id' => $transaction->id,
+                            'txn_id' => $return_data,
+                            'seller_id' => auth()->user()->id,
+                            'subscription_type' => 'yearly',
+                            'commission_type' => $data['plane_name']
+                        ]);
+                        
+                        // Commit transaction
+                        DB::commit();
+
+                        // Log success
+                        LogActivity::successLog('Subscription payment successful via Stripe.');
+
+                        // Clear session
+                        session()->forget('subscription_payment');
+
+                        // Return success response with redirect
+                        return [
+                            'status' => 'success',
+                            'message' => 'Subscription payment completed successfully!',
+                            'redirect_url' => route('event.dashboard'),
+                            'transaction_id' => $return_data
+                        ];
+
+                    } catch (Exception $e) {
+                        // Rollback transaction on error
+                        DB::rollBack();
+                        Log::error('Subscription Processing Error', [
+                            'error' => $e->getMessage(),
+                            'seller_id' => auth()->user()->id,
+                            'charge_id' => $return_data ?? 'unknown'
+                        ]);
+                        throw new Exception('Error processing subscription: ' . $e->getMessage());
+                    }
+                }
+            }
+
+            throw new Exception('Payment was not successful. Status: ' . ($stripe['status'] ?? 'unknown'));
+
+        } catch (Exception $e) {
+            Log::error('Stripe Payment Error', [
+                'error' => $e->getMessage(),
+                'seller_id' => auth()->user()->id ?? 'unknown',
+                'data' => $data
+            ]);
+
+            if (session()->has('subscription_payment')) {
+                session()->forget('subscription_payment');
+            }
+
+            return [
+                'status' => 'error',
+                'message' => $e->getMessage(),
+                'redirect_url' => route('event.dashboard')
+            ];
+        }
+    }
+
 
 
     public function stripeWalletRecharge($data)
