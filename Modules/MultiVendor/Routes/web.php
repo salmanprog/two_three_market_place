@@ -9,6 +9,11 @@ Route::post('/seller/login', [LoginController::class, 'sellerLogin'])->name('sel
 Route::get('/seller', function(){
     return redirect(url('/seller/login'));
 });
+Route::get('/event/login', [LoginController::class, 'showOrganiserLoginForm'])->name('event.login');
+Route::post('/event/login', [LoginController::class, 'organiserLogin'])->name('event.login_submit');
+Route::get('/event', function(){
+    return redirect(url('/event/login'));
+});
 Route::middleware(['auth','admin'])->prefix('admin')->group(function() {
     Route::get('/merchants', 'MerchantController@index')->name('admin.merchants_list');
     Route::get('/inactive-merchants', 'MerchantController@inactiveMerchants')->name('admin.inactiveMerchants');

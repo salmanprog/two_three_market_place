@@ -87,6 +87,56 @@ class LoginController extends Controller
         return view(theme('auth.login'), compact('seller_email', 'customer_email', 'loginPageInfo'));
     }
 
+    // start for Event Organiser login
+    public function showOrganiserLoginForm()
+    {
+        $event_organiser = User::whereHas('role', function($q){
+            return $q->where('type', 'staff');
+        })->first();
+
+       
+
+        $event_organiser_email = null;
+        if($event_organiser){
+            $event_organiser_email = $event_organiser->email;
+        }
+
+        $loginPageInfo = LoginPage::findOrFail(3);
+        return view(theme('auth.event_organiser_login'), compact('event_organiser', 'loginPageInfo'));
+    }
+
+    public function organiserLogin(Request $request){
+       
+        if (env('NOCAPTCHA_FOR_LOGIN') == "true" && app('theme')->folder_path == 'amazy') {
+            $request->validate([
+                'g-recaptcha-response' => 'required',
+            ],[
+                'g-recaptcha-response.required' => 'The google recaptcha field is required.',
+            ]);
+        }
+        $user = null;
+        $user = User::where('email', $request->login)->where('is_active', 1)->whereHas('role', function($query){
+            return $query->where('type', 'staff');
+        })->first();
+        if(!$user){
+            $user = User::where('username', $request->login)->where('is_active', 1)->whereHas('role', function($query){
+                return $query->where('type', 'staff');
+            })->first();
+        }
+        if($user){
+            if (config('app.sync') && $request->auto_login == "true"){
+                return $this->loginDone($request, $user);
+            }else{
+                return $this->sendOtpAndCheck($request, null);
+            }
+        }else{
+            throw ValidationException::withMessages([
+                "email" => __('auth.failed')
+            ]);
+        }
+    }
+    // end Event Organiser login
+
     // start for admin login
     public function showAdminLoginForm(){
         $admin_email = User::whereHas('role', function($q){
@@ -295,6 +345,9 @@ class LoginController extends Controller
                 Session::flush();
                 Toastr::error(__('common.you_have_been_disabled'), __('common.error'));
                 return redirect()->route('login');
+            }
+            if (auth()->user()->role->type == 'staff') {
+                return redirect()->route('event.dashboard');
             }
             if(auth()->user()->role->type != 'superadmin' && auth()->user()->role->type != 'admin' && auth()->user()->role->type != 'staff' || isModuleActive('MultiVendor')){
                 $this->dataUpdateWhenLogin($prev_session_id, $buy_it_now);

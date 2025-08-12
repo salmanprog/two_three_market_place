@@ -53,6 +53,7 @@ Route::post('/admin/login', [LoginController::class, 'adminLogin'])->name('admin
 Route::get('/admin', function () {
     return redirect(url('/admin/login'));
 });
+
 Route::get('/dashboards', function () {
     return redirect(url('/admin-dashboard'));
 })->name('dashboard');

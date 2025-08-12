@@ -107,6 +107,7 @@
                         {{-- <a class="amaz_primary_btn py-2 rounded-pill mb_20 text-center justify-content-center cursor_pointer select_btn_price"
                         data-id='{{ $item->id }}'>{{ __('defaultTheme.choose plan') }}</a> --}}
                         <a href="merchant-register-step-3?id=0&type="
+                        data-id="0"
                             class="amaz_primary_btn choose-plan-btn rounded-pill mb_20 text-center justify-content-center cursor_pointer select_btn_price">
                             Choose Plan
                         </a>
@@ -147,7 +148,8 @@
                         </ul>
                         {{-- <a class="amaz_primary_btn py-2 rounded-pill mb_20 text-center justify-content-center cursor_pointer select_btn_price"
                             data-id='{{ $item->id }}'>{{ __('defaultTheme.choose plan') }}</a> --}}
-                        <a href="merchant-register-step-3?id=1&type="
+                        <a href="merchant-register-step-3?id=2&type="
+                            data-id="2"
                             class="amaz_primary_btn choose-plan-btn rounded-pill mb_20 text-center justify-content-center cursor_pointer select_btn_price">
                             Choose Plan
                         </a>
@@ -188,6 +190,7 @@
                         {{-- <a class="amaz_primary_btn py-2 rounded-pill mb_20 text-center justify-content-center cursor_pointer select_btn_price"
                             data-id='{{ $item->id }}'>{{ __('defaultTheme.choose plan') }}</a> --}}
                         <a href="merchant-register-step-3?id=2&type="
+                        data-id="3"
                             class="amaz_primary_btn rounded-pill choose-plan-btn mb_20 text-center justify-content-center cursor_pointer select_btn_price">
                             Choose Plan
                         </a>
