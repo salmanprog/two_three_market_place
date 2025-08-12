@@ -200,7 +200,6 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $user = null;
-
         $check_user = User::where('email', $request->login)->where('is_active', 1)->whereHas('role', function($q){
             return $q->where('type', 'customer');
         })->first();
