@@ -19,6 +19,16 @@ class EventRepository implements EventRepositoryInterface
     use ImageStore;
     public function all()
     {
+        if(auth()->user()->role->type != 'superadmin'){
+            return Event::latest()->where('created_by',auth()->user()->id)->get();
+        }else{
+            return Event::latest()->get();
+        }
+        
+    }
+
+    public function list()
+    {
         return Event::latest()->get();
     }
 
@@ -32,6 +42,7 @@ class EventRepository implements EventRepositoryInterface
         $event->for_whom = $data['for_whom'];
         $event->location = $data['location'];
         $event->description = $data['description'];
+        $event->created_by = $data['created_by'];
         $event->from_date = date('Y-m-d',strtotime($data['from_date']));
         $event->to_date = date('Y-m-d',strtotime($data['to_date']));
         $event->save();

@@ -63,9 +63,34 @@
         <div class="container">
             <div class="row justify-content-center text-center">
                 <div class="col-lg-6 col-md-10 mb_50">
+                    @if (count($events) > 0)
+                        @foreach($events as $key => $event)
+                            <div class="col-xl-4 col-md-6 col-sm-6 col-6 d-flex">
+                                <div class="product_widget5 mb_30 style5 w-100">
+                                    <div class="product_thumb_upper">
+                                        <a href="#" class="thumb">
+                                            <img data-src="http://localhost/tow-three-ld/public/frontend/amazy/img/6438ce493d38b.svg" src="http://localhost/tow-three-ld/public/frontend/amazy/img/6438ce493d38b.svg" alt="newpremiumartist product" title="newpremiumartist product" class="lazyload">
+                                        </a>
+                                        <div class="product__meta text-center">
+                                            <span class="product_banding "> </span>
+                                                <a href="#">
+                                                <h4>{{$event->title}}</h4>
+                                                </a>
+                                                <div class="product_price d-flex align-items-center justify-content-between flex-wrap">
+                                                    <a class="amaz_primary_btn addToCartFromThumnail" href="#" >
+                                                    View Event
+                                                    </a>
+                                                </div>    
+                                        </div>    
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    @else
                     <div class="section__title">
-                        <h3 class="mb_40" style="color: #000; font-size: 40px;">Coming Soon</h3>
+                        <h3 class="mb_40" style="color: #000; font-size: 40px;">Coming Soons</h3>
                     </div>
+                    @endif
                 </div>
             </div>
         </div>

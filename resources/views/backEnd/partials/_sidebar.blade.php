@@ -5,11 +5,21 @@
 </a>
 @endif
 <nav id="sidebar" class="sidebar">
+    @php
+        $dashboard_url = '';
+        if (auth()->user()->role->type == 'staff') {
+            $dashboard_url = route('event.dashboard');
+        } elseif (auth()->user()->role->type == 'seller') {
+            $dashboard_url = route('seller.dashboard');
+        } else {
+            $dashboard_url = route('admin.dashboard');
+        }
+    @endphp
     <div class="sidebar-header update_sidebar">
-        <a class="large_logo" href="{{ auth()->user()->role->type == 'seller' ? route('seller.dashboard') : route('admin.dashboard') }}">
+        <a class="large_logo" href="{{$dashboard_url}}">
             <img src="{{showImage(app('general_setting')->logo)}}" alt="{{app('general_setting')->company_name}}" title="{{app('general_setting')->company_name}}">
         </a>
-        <a class="mini_logo" href="{{ auth()->user()->role->type == 'seller' ? route('seller.dashboard') : route('admin.dashboard') }}">
+        <a class="mini_logo" href="{{$dashboard_url}}">
             <img src="{{showImage(app('general_setting')->favicon)}}" alt="{{app('general_setting')->company_name}}" title="{{app('general_setting')->company_name}}">
         </a>
         <a id="close_sidebar" class="d-lg-none">
@@ -56,9 +66,17 @@
             @foreach($sidebars as $key => $section)
 
                 @if($section->children->count() > 0)
+                    @if(auth()->user()->role->type == 'staff')
+                        @if(__(@$section->backendMenu->name) == 'Human Resource')
+                           <span class="menu_seperator">
+                                {{__(@$section->backendMenu->name)}}
+                            </span>
+                        @endif
+                    @else
                     <span class="menu_seperator">
                         {{__(@$section->backendMenu->name)}}
                     </span>
+                    @endif
                 @endif
 
 
@@ -82,7 +100,15 @@
                                                     {{route(@$menu->backendMenu->route, 'admin')}}
                                                 @endif
                                             @else
-                                                {{route(@$menu->backendMenu->route)}}
+                                                @if(auth()->user()->role->type == 'staff')
+                                                    @if(@$menu->backendMenu->route == 'admin.dashboard')
+                                                        {{route('event.dashboard')}}
+                                                    @else
+                                                        {{route(@$menu->backendMenu->route)}}    
+                                                    @endif    
+                                                @else
+                                                    {{route(@$menu->backendMenu->route)}}
+                                                @endif    
                                             @endif
                                          @else
                                             javascript:void(0)
@@ -91,7 +117,15 @@
                                             <span class="{{@$menu->backendMenu->icon?@$menu->backendMenu->icon:'fas fa-users'}}"></span>
                                         </div>
                                         <div class="nav_title">
-                                            <span>{{__($menu->backendMenu->name)}}</span>
+                                            @if(auth()->user()->role->type == 'staff')
+                                                @if($section->backendMenu?->name == 'common.user_manages')
+                                                    <span class="abc">Event Managment</span>
+                                                @else    
+                                                    <span class="xyz">{{__($menu->backendMenu->name)}}</span>
+                                                @endif
+                                            @else
+                                                    <span class="jhs">{{__($menu->backendMenu->name)}}</span>
+                                            @endif
                                             @php
                                                 $exp = explode('.',$menu->backendMenu->name)
 

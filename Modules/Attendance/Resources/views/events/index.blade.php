@@ -39,6 +39,7 @@
                                     {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'events.store','method' => 'POST', 'enctype' => 'multipart/form-data']) }}
                                 @endif
                             @endif
+                            <input name="created_by" id="created_by" value="{{auth()->user()->id}}" type="hidden">
                             <div class="white-box">
                                 <div class="add-visitor">
                                     <div class="row">
