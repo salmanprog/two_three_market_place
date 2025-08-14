@@ -30,4 +30,10 @@ class EventsController extends Controller
         $data['events'] = Event::latest()->get();
         return view(theme('pages.events'), $data);
     }
+
+    public function show($id)
+    {
+        $data['events'] = Event::where('id',$id)->first();
+        return view(theme('pages.event_detail'), $data);
+    }
 }

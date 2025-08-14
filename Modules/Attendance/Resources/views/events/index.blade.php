@@ -138,6 +138,28 @@
                                                 <span class="text-danger">{{$errors->first('to_date')}}</span>
                                             </div>
                                         </div>
+                                         <div class="col-lg-12">
+                                            <div class="primary_input mb-25">
+                                                <label class="primary_input_label" for="">Price
+                                                    <span class="text-danger">*</span></label>
+                                                <input name="price" id="price"
+                                                       class="primary_input_field"
+                                                       value="{{isset($editData) ? $editData->price : old('price') }}"
+                                                       placeholder="Price" type="text">
+                                                <span class="text-danger">{{$errors->first('price')}}</span>
+                                            </div>
+                                        </div>
+                                         <div class="col-lg-12">
+                                            <div class="primary_input mb-25">
+                                                <label class="primary_input_label" for="">Total Ticket
+                                                    <span class="text-danger">*</span></label>
+                                                <input name="total_ticket" id="total_ticket"
+                                                       class="primary_input_field"
+                                                       value="{{isset($editData) ? $editData->total_ticket : old('total_ticket') }}"
+                                                       placeholder="Total Ticket" type="text">
+                                                <span class="text-danger">{{$errors->first('total_ticket')}}</span>
+                                            </div>
+                                        </div>
                                         <div class="col-lg-12">
                                             <div class="primary_input mb-25">
                                                 <label class="primary_input_label"
@@ -230,10 +252,10 @@
                                                 <thead>
                                                 <tr>
                                                     <th>@lang('common.title')</th>
-                                                    <th>@lang('hr.for_whom')</th>
+                                                    <th>@lang('common.price')</th>
                                                     <th>@lang('common.start_date')</th>
-                                                    <th>@lang('common.to_date')</th>
-                                                    <th>@lang('common.location')</th>
+                                                    <th>@lang('total ticket')</th>
+                                                    <th>@lang('sold ticket')</th>
                                                     <th>@lang('common.action')</th>
                                                 </tr>
                                                 </thead>
@@ -244,14 +266,14 @@
                                                         <tr>
 
                                                             <td>{{ @$event->title}}</td>
-                                                            <td>{{ @$event->for_whom}}</td>
+                                                            <td>{{ @$event->price}}</td>
 
                                                             <td>{{ dateConvert($event->from_date) }}</td>
 
 
-                                                            <td>{{dateConvert($event->to_date)}}</td>
+                                                            <td>{{$event->total_ticket}}</td>
 
-                                                            <td>{{ @$event->location}}</td>
+                                                            <td>{{ @$event->sold_ticket}}</td>
 
                                                             <td>
                                                                 <div class="dropdown CRM_dropdown">

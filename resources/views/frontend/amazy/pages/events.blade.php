@@ -68,16 +68,16 @@
                             <div class="col-xl-4 col-md-6 col-sm-6 col-6 d-flex">
                                 <div class="product_widget5 mb_30 style5 w-100">
                                     <div class="product_thumb_upper">
-                                        <a href="#" class="thumb">
+                                        <a href="{{route('frontend.organiser-events-show',$event->id)}}" class="thumb">
                                             <img data-src="http://localhost/tow-three-ld/public/frontend/amazy/img/6438ce493d38b.svg" src="http://localhost/tow-three-ld/public/frontend/amazy/img/6438ce493d38b.svg" alt="newpremiumartist product" title="newpremiumartist product" class="lazyload">
                                         </a>
                                         <div class="product__meta text-center">
                                             <span class="product_banding "> </span>
-                                                <a href="#">
+                                                <a href="{{route('frontend.organiser-events-show',$event->id)}}">
                                                 <h4>{{$event->title}}</h4>
                                                 </a>
                                                 <div class="product_price d-flex align-items-center justify-content-between flex-wrap">
-                                                    <a class="amaz_primary_btn addToCartFromThumnail" href="#" >
+                                                    <a class="amaz_primary_btn addToCartFromThumnail" href="{{route('frontend.organiser-events-show',$event->id)}}" >
                                                     View Event
                                                     </a>
                                                 </div>    

@@ -42,6 +42,9 @@ class EventRepository implements EventRepositoryInterface
         $event->for_whom = $data['for_whom'];
         $event->location = $data['location'];
         $event->description = $data['description'];
+        $event->price = $data['price'];
+        $event->total_ticket = $data['total_ticket'];
+        $event->remaining_ticket = $data['total_ticket'];
         $event->created_by = $data['created_by'];
         $event->from_date = date('Y-m-d',strtotime($data['from_date']));
         $event->to_date = date('Y-m-d',strtotime($data['to_date']));
@@ -65,10 +68,17 @@ class EventRepository implements EventRepositoryInterface
             $event->image = isset($data['image']) ? $this->saveImage($data['image'],1920,500) : $event->image;
         }
 
+        
+        $total_ticket = $data['total_ticket'];
+        $sold_ticket = $event->sold_ticket;
+        $remaining_ticket = $total_ticket - $sold_ticket;
         $event->title = $data['title'];
         $event->for_whom = $data['for_whom'];
         $event->location = $data['location'];
         $event->description = $data['description'];
+        $event->price = $data['price'];
+        $event->total_ticket = $data['total_ticket'];
+        $event->remaining_ticket = $remaining_ticket;
         $event->from_date = date('Y-m-d',strtotime($data['from_date']));
         $event->to_date = date('Y-m-d',strtotime($data['to_date']));
         $event->save();

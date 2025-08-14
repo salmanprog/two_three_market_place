@@ -197,6 +197,7 @@ Route::get('event-organiser-register/{id}', [EventOrginaizerRegisterController::
 Route::get('/event-organiser-register-step-1', [EventOrginaizerRegisterController::class, 'showRegisterForm'])->name('frontend.event-organiser-subscription-type');
 Route::post('/event-organiser-register', [EventOrginaizerRegisterController::class, 'register'])->name('frontend.event.organiser.store');
 Route::get('/organiser-events', [EventsController::class, 'index'])->name('frontend.organiser-events');
+Route::get('/organiser-events/{id}', [EventsController::class, 'show'])->name('frontend.organiser-events-show');
 //flash deal
 Route::get('/flash-deal/{slug}', [FlashDealController::class, 'show'])->name('frontend.flash-deal');
 Route::get('/flash-deal/{slug}/fetch-data', [FlashDealController::class, 'fetchData'])->name('frontend.flash-deal.fetch-data');

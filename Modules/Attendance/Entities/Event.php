@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 class Event extends Model
 {
-    protected $fillable = ['title','for_whom','location','description','from_date','to_date','image','status','created_by','updated_by'];
+    protected $fillable = ['title','for_whom','location','description','from_date','to_date','image','price','total_ticket','sold_ticket','remaining_ticket','status','created_by','updated_by'];
 
     public function scopeActive($query)
     {
