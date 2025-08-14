@@ -62,6 +62,17 @@
 <div class="product_details_wrapper">
     <div class="container">
         <div class="row">
+            <form method="post" action="{{route('frontend.event.book')}}" class="form-horizontal">
+            @csrf
+            <input type="hidden" name="stock_manage_status" id="stock_manage_status" value="1">
+            <input type="hidden" name="available_stock" id="available_stock" value="{{$events->remaining_ticket}}">
+            <input type="hidden" id="maximum_order_qty" value="{{$events->remaining_ticket}}">
+            <input type="hidden" id="minimum_order_qty" value="1">
+            <input type="hidden" name="event_id" id="event_id" value="{{$events->id}}">
+            <input type="hidden" name="user_id" id="user_id" value="{{!auth()->check() ? 0 : auth()->user()->id}}">
+            <input type="hidden" name="no_of_ticket" id="no_of_ticket" value="1">
+            <input type="hidden" name="is_paid" id="is_paid" value="0">
+            <input type="hidden" name="purchase_date" id="purchase_date" value="{{date('Y-m-d')}}">
             <div class="col-xl-9">
                 <div class="row">
                     <!-- image show -->
@@ -122,9 +133,13 @@
                                     </div>
                                 </div>
                                 <div class="row mt_30 " id="add_to_cart_div">
-                                    @if ($events->remaining_ticket > 0)
+                                    @if (!auth()->check())
                                         <div class="col-6">
-                                            <button type="button" id="butItNow" class="amaz_primary_btn3 mb_20  w-100 text-center justify-content-center text-uppercase buy_now_btn" data-id="{{$events->id}}" data-type="product">{{__('common.buy_now')}}</button>
+                                            <button type="button" disabled class="amaz_primary_btn style2 mb_20  add_to_cart text-uppercase flex-fill text-center w-100">{{__('Login')}}</button>
+                                        </div>
+                                    @elseif ($events->remaining_ticket > 0)
+                                        <div class="col-6">
+                                            <button type="submit" id="butItNow" class="amaz_primary_btn3 mb_20  w-100 text-center justify-content-center text-uppercase buy_now_btn" data-id="{{$events->id}}" data-type="product">{{__('common.buy_now')}}</button>
                                         </div>
                                     @else
                                         <div class="col-6">
@@ -136,10 +151,6 @@
                         </div>
                     </div>   
                     <!-- Event Detail show End --> 
-                    <input type="hidden" name="stock_manage_status" id="stock_manage_status" value="1">
-                    <input type="hidden" name="available_stock" id="available_stock" value="{{$events->remaining_ticket}}">
-                    <input type="hidden" id="maximum_order_qty" value="{{$events->remaining_ticket}}">
-                    <input type="hidden" id="minimum_order_qty" value="1">
                 </div>
             </div>
             <div class="col-12">
@@ -161,6 +172,7 @@
                     </div>
                 </div>
             </div>
+            </form>
         </div>
     </div>
 </div>    
@@ -188,6 +200,7 @@
                             let qty1 = parseInt(++qty);
                             $('#qty').val(numbertrans(qty1));
                             $('#qty').data('value',qty1);
+                            $('#no_of_ticket').val(numbertrans(qty1));
                             }else{
                                 toastr.warning('{{__("defaultTheme.maximum_quantity_limit_is")}}'+maximum_order_qty+'.', '{{__("common.warning")}}');
                             }
@@ -195,6 +208,7 @@
                             let qty1 = parseInt(++qty);
                             $('#qty').val(numbertrans(qty1));
                             $('#qty').data('value',qty1);
+                            $('#no_of_ticket').val(numbertrans(qty1));
                         }
                     }else{
                         toastr.error("{{__('defaultTheme.no_more_stock')}}", "{{__('common.error')}}");
@@ -208,6 +222,7 @@
                                     let qty1 = parseInt(--qty)
                                     $('#qty').val(numbertrans(qty1));
                                     $('#qty').data('value',qty1);
+                                    $('#no_of_ticket').val(numbertrans(qty1));
                                     $('.cart-qty-minus').prop('disabled',false);
                                 }else{
                                     $('.cart-qty-minus').prop('disabled',true);
@@ -220,6 +235,7 @@
                                 let qty1 = parseInt(--qty)
                                 $('#qty').val(numbertrans(qty1));
                                 $('#qty').data('value',qty1);
+                                $('#no_of_ticket').val(numbertrans(qty1));
                                 $('.cart-qty-minus').prop('disabled',false);
                             }else{
                                 $('.cart-qty-minus').prop('disabled',true);
