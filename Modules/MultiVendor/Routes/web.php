@@ -54,8 +54,9 @@ Route::prefix('event')->as('event.')->group(function() {
     Route::get('/event-subscription-payment-select/{id}', 'EventController@subscriptionPaymentPage')->name('subscription_payment_select');
     Route::get('/event-subscription-payment-select/{id}', 'EventController@subscriptionPaymentPageDetails')->name('subscription_payment_select');
     Route::get('subscription/payment/{id}','EventController@subscriptionPaymentPage')->name('subscriptionPaymentGateway');
-
     Route::post('/event-organisers-subscription-payment', 'EventController@subscriptionPayment')->name('event_organisers_subscription_payment');
+    Route::get('booking/payment/{id}/{userid}','EventController@eventBookingPaymentPage')->name('eventBookingPaymentPage');
+    Route::post('/event-booking-payment', 'EventController@eventBookingPayment')->name('event_booking_payment');
 });
 
 Route::prefix('seller')->as('seller.')->group(function() {

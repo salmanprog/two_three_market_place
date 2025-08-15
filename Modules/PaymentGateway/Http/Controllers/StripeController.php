@@ -26,6 +26,8 @@ use Modules\MercadoPago\Http\Controllers\MercadoPagoController;
 use App\Models\State;
 use App\Models\City;
 use App\Models\Country;
+use Modules\Attendance\Entities\Event;
+use Modules\Attendance\Entities\EventBooking;
 use Illuminate\Support\Facades\DB;
 
 class StripeController extends Controller
@@ -451,6 +453,112 @@ class StripeController extends Controller
 
                  // Return success response with redirect
                  return back();
+            }
+
+
+        } catch (Exception $e) {
+            Log::error('Stripe Payment Error', [
+                'error' => $e->getMessage(),
+                'seller_id' => getParentSellerId() ?? 'unknown',
+                'data' => $data
+            ]);
+
+            if (session()->has('subscription_payment')) {
+                session()->forget('subscription_payment');
+            }
+
+            return [
+                'status' => 'error',
+                'message' => $e->getMessage(),
+                'redirect_url' => route('seller.dashboard')
+            ];
+        }
+    }
+
+    public function stripeEventBookingOrder($data)
+    {
+        try {
+
+            $currency_code = getCurrencyCode();
+            $credential = $this->getCredential();
+            
+            if (!$credential) {
+                Log::error('Stripe credential not found', [
+                    'seller_id' => auth()->user()->id,
+                    'seller_wise_payment' => app('general_setting')->seller_wise_payment ?? false
+                ]);
+                throw new Exception('Payment gateway configuration not found');
+            }
+
+            // Validate required fields
+            if (empty($data['stripeToken'])) {
+                throw new Exception('Stripe token is missing');
+            }
+
+            if (empty($data['amount']) || $data['amount'] <= 0) {
+                throw new Exception('Invalid payment amount');
+            }
+
+            // Validate Stripe API key
+            if (empty($credential->perameter_3)) {
+                throw new Exception('Stripe secret key not configured');
+            }
+
+            Stripe\Stripe::setApiKey($credential->perameter_3);
+            
+            // Log the charge request data
+            $charge_data = [
+                "amount" => round($data['amount'] * 100),
+                "currency" => $currency_code,
+                "source" => $data['stripeToken'],
+                "description" => "New Event Booking Order Payment",
+                "metadata" => [
+                    "user_id" => auth()->user()->id,
+                    "payment_type" => "order",
+                    "user_email" => auth()->user()->email ?? 'unknown'
+                ]
+            ];
+
+            Log::info('Stripe Charge Request Data', [
+                'charge_data' => $charge_data,
+                'user_id' => auth()->user()->id,
+                'credential_id' => $credential->id ?? 'unknown'
+            ]);
+
+            // Create the charge
+            $stripe = Stripe\Charge::create($charge_data);
+
+            // Log successful charge
+            Log::info('Stripe Charge Created Successfully', [
+                'charge_id' => $stripe['id'],
+                'status' => $stripe['status'],
+                'amount' => $stripe['amount'],
+                'user_id' => auth()->user()->id
+            ]);
+
+            if ($stripe['status'] == "succeeded") {
+                $transaction_id = $stripe['id'];
+
+                $get_booking = EventBooking::find($data['plane_booking_id']);
+                $get_booking->tx_id = $transaction_id;
+                $get_booking->is_paid = '1';
+                $get_booking->save();
+                
+                $event = Event::find($data['plane_id']);
+                $total_ticket = $event->total_ticket;
+                $sold_ticket = $event->sold_ticket + $data['quantity'];
+                $remaining_ticket = $total_ticket - $sold_ticket;
+                $event->sold_ticket = $sold_ticket;
+                $event->remaining_ticket = $remaining_ticket;
+                $event->save();
+
+                 // Return success response with redirect
+                 return [
+                            'status' => 'success',
+                            'message' => 'Event payment completed successfully!',
+                            'redirect_url' => route('frontend.organiser-events'),
+                            'transaction_id' => $transaction_id
+                        ];
             }
 
 

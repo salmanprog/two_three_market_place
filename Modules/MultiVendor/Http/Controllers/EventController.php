@@ -54,6 +54,8 @@ use Modules\SslCommerz\Library\SslCommerz\SslCommerzNotification;
 use Modules\PaymentGateway\Http\Controllers\BankPaymentController;
 use Modules\PaymentGateway\Http\Controllers\FlutterwaveController;
 use Modules\PaymentGateway\Http\Controllers\TabbyPaymentController;
+use Modules\Attendance\Entities\Event;
+use Modules\Attendance\Entities\EventBooking;
 
 class EventController extends Controller
 {
@@ -151,6 +153,265 @@ class EventController extends Controller
         $data['stripe_credential'] = getPaymentInfoViaSellerId(1, 'stripe');
 
         return view('multivendor::event_organisers_payment.payment_gateway', $data);
+    }
+
+    public function eventBookingPaymentPage($id,$userid, PaymentGatewayService $paymentGatewayService)
+    {
+        $data['events'] = Event::where('id',$id)->first();
+        $data['bookingevents'] = EventBooking::where('event_id',$id)->where('user_id',$userid)->orderBy('id', 'desc')->first();
+        $walletRepo = new WalletRepository;
+        $gateway = $walletRepo->activePaymentGayteway();
+        $gateway = $gateway->where('slug','!=','wallet');
+
+        $data['gateway_activations'] = $gateway->where('method','!=','Cash On Delivery');
+        
+        // Explicitly get Stripe credentials
+        $data['stripe_credential'] = getPaymentInfoViaSellerId(1, 'stripe');
+
+        return view('multivendor::event_booking_payment.payment_gateway', $data);
+    }
+
+    public function eventBookingPayment(Request $request)
+    {
+        if($request->method == 'Bank Payment'){
+            $request->validate([
+                "bank_name" => "required",
+                "branch_name" => "required",
+                "account_number" => "required",
+                "account_holder" => "required",
+                "image" => "nullable",
+            ]);
+        }
+
+        try {
+            session()->forget('coupon_discount');
+            session()->forget('coupon_id');
+            session()->forget('coupon_type');
+            session()->forget('coupon_amount');
+            session()->put('subscription_payment', '1');
+            if(empty($request->method) || $request->method  == ''){
+                Toastr::error('Payment method is not selected');
+                return back();
+            }
+
+
+
+            DB::beginTransaction();
+            if ($request->method == "Stripe") {
+                $stripeController = new StripeController;
+                $response = $stripeController->stripeEventBookingOrder($request->all());
+                
+                // Handle Stripe response properly
+                if (is_array($response)) {
+                    if ($response['status'] === 'success') {
+                        // Payment successful, redirect to dashboard
+                        DB::commit();
+                        Toastr::success($response['message'], __('common.success'));
+                        LogActivity::successLog('Subscription payment successful via Stripe.');
+                        return redirect($response['redirect_url']);
+                    } else {
+                        // Payment failed
+                        DB::rollBack();
+                        Toastr::error($response['message'], __('common.error'));
+                        return redirect($response['redirect_url']);
+                    }
+                } elseif (gettype($response) == 'object') {
+                    // Handle redirect response
+                    return $response;
+                } else {
+                    // Legacy handling - if response is true, continue with normal flow
+                    if ($response === true) {
+                        // Payment was processed successfully, continue to normal flow
+                        // The transaction was already committed in StripeController
+                        DB::rollBack(); // Rollback this transaction since Stripe already committed
+                        Toastr::success(__('common.payment_successfully'), __('common.success'));
+                        LogActivity::successLog('Subscription payment successful via Stripe.');
+                        return redirect()->route('seller.dashboard');
+                    } else {
+                        DB::rollBack();
+                        Toastr::error(__('common.operation_failed'), __('common.error'));
+                        return redirect()->back();
+                    }
+                }
+            }
+            if ($request->method == "RazorPay") {
+                $razorpayController = new RazorpayController;
+                $response = $razorpayController->payment($request->all());
+            }
+            if ($request->method == "Paypal") {
+                $paypalController = new PayPalController;
+                $response = $paypalController->payment($request->all());
+            }
+            if ($request->method == "Paystack") {
+                $paystackController = new PaystackController;
+                return $paystackController->redirectToGateway();
+            }
+            if ($request->method == "Bank Payment") {
+
+                $bankController = new BankPaymentController;
+                $response = $bankController->store($request->all());
+            }
+            if ($request->method == "PayTm") {
+                $paytm = new PaytmController;
+                return $paytm->payment($request->all());
+            }
+            if ($request->method == "Instamojo") {
+                $instamojo = new InstamojoController;
+                return $instamojo->paymentProcess($request->all());
+            }
+            if ($request->method == "Midtrans") {
+                $midtrans = new MidtransController;
+                return $midtrans->paymentProcess($request->all());
+            }
+            if ($request->method == "Tabby") {
+                $tabbyPaymentController = new TabbyPaymentController;
+                return $tabbyPaymentController->paymentProcess($request->all());
+            }
+            if ($request->method == "PayUMoney") {
+                $PayUMoney = new PayUmoneyController;
+                $data = $request->all();
+                $data['amount'] = $request->pay_amount;
+                return $PayUMoney->payment($data);
+            }
+            if ($request->method == "JazzCash") {
+                $JazzCash = new JazzCashController;
+                return $JazzCash->paymentProcess($request->all());
+            }
+            if ($request->method == "flutterwave") {
+                $flutterWaveController = new FlutterwaveController;
+                return $flutterWaveController->payment($request->all());
+            }
+            if ($request->method == "Bkash") {
+                $data['gateway_id'] = encrypt(15);
+                $bkashController = new BkashController();
+                $response = $bkashController->bkashSuccess($request->all());
+            }
+
+            if($request->method == 'Clickpay')
+            {
+                $data = $request->all();
+                $customer['name'] = $request->customer_name;
+                $customer['amount'] = round($request->amount,2);
+                $customer['email'] = $request->customer_email;
+                $customer['phone'] = $request->customer_phone;
+                $customer['zip'] = $request->customer_postal_code;
+                $customer['description'] = "Products Checkout";
+                $customer['callback'] = route('clickpay.callback');
+                $customer['return'] = route('clickpay.return');
+                $customer['address'] = $request->customer_address;
+                $state = State::find($request->customer_state);
+                $customer['state'] = !empty($state) ?$state->name:'Riyad';
+                $city = City::find($request->customer_city);
+                $customer['city'] = !empty($city) ? $city->name:'Ar-Riyad';
+                $country = Country::find($request->customer_country);
+                $customer['country'] = !empty($country) ? $country->code:'SA';
+                $customer['payment_for'] = 'subscription-payment';
+                $customer['entry_payment_id'] = auth()->id();
+                $clickpay = new ClickpayController();
+                $response = $clickpay->payment($customer);
+
+                if($response != false){
+                    session()->forget('coupon_discount');
+                    session()->forget('coupon_id');
+                    session()->forget('coupon_type');
+                    return redirect()->to($response)->send();
+                }else{
+                    Toastr::error(trans('common.Something Went Wrong'),trans('common.error'));
+                    return back();
+                }
+            }
+
+            if ($request->method == "SslCommerz") {
+                $post_data = array();
+                $post_data['total_amount'] = $request->amount; # You cant not pay less than 10
+                $post_data['currency'] = "BDT";
+                $post_data['tran_id'] = uniqid(); // tran_id must be unique
+
+                # CUSTOMER INFORMATION
+                $post_data['cus_name'] = 'Customer Name';
+                $post_data['cus_email'] = 'customer@mail.com';
+                $post_data['cus_add1'] = 'Customer Address';
+                $post_data['cus_add2'] = "";
+                $post_data['cus_city'] = "";
+                $post_data['cus_state'] = "";
+                $post_data['cus_postcode'] = "";
+                $post_data['cus_country'] = "Bangladesh";
+                $post_data['cus_phone'] = '8801XXXXXXXXX';
+                $post_data['cus_fax'] = "";
+
+                # SHIPMENT INFORMATION
+                $post_data['ship_name'] = "Store Test";
+                $post_data['ship_add1'] = "Dhaka";
+                $post_data['ship_add2'] = "Dhaka";
+                $post_data['ship_city'] = "Dhaka";
+                $post_data['ship_state'] = "Dhaka";
+                $post_data['ship_postcode'] = "1000";
+                $post_data['ship_phone'] = "";
+                $post_data['ship_country'] = "Bangladesh";
+
+                $post_data['shipping_method'] = "NO";
+                $post_data['product_name'] = "Computer";
+                $post_data['product_category'] = "Goods";
+                $post_data['product_profile'] = "physical-goods";
+
+                # OPTIONAL PARAMETERS
+                $post_data['value_a'] = "ref001";
+                $post_data['value_b'] = "ref002";
+                $post_data['value_c'] = "ref003";
+                $post_data['value_d'] = "ref004";
+
+                session(['ssl_payment_type' => $request->type]);
+                $sslc = new SslCommerzNotification();
+                $payment_options = $sslc->makePayment($post_data);
+                $payment_options = \GuzzleHttp\json_decode($payment_options);
+                if ($payment_options->status == "success") {
+                    return Redirect::to($payment_options->data);
+                } else {
+                    return redirect('/seller/dashboard');
+                }
+            }
+            if ($request->method == "MercadoPago") {
+                $mercadoPagoController = new MercadoPagoController();
+                $response = $mercadoPagoController->payment($request->all());
+
+                // send notification
+                $notificationUrl = route('admin.subscription_payment_list');
+                $notificationUrl = str_replace(url('/'),'',$notificationUrl);
+                $this->notificationUrl = $notificationUrl;
+                $this->adminNotificationUrl = '/admin/subscription-payment-list';
+                $this->routeCheck = 'admin.subscription_payment_list';
+                $this->typeId = EmailTemplateType::where('type', 'subscription_payment_email_template')->first()->id;
+                $notification = NotificationSetting::where('slug','seller-payout')->first();
+                if ($notification) {
+                    $this->notificationSend($notification->id, auth()->id());
+                }
+                DB::commit();
+                Toastr::success(__('common.successful'), __('common.success'));
+                LogActivity::successLog('Subscription payment successful.');
+                return response()->json(['target_url'=>route('seller.dashboard')]);
+            }
+            // send notification
+            $notificationUrl = route('admin.subscription_payment_list');
+            $notificationUrl = str_replace(url('/'),'',$notificationUrl);
+            $this->notificationUrl = $notificationUrl;
+            $this->adminNotificationUrl = '/admin/subscription-payment-list';
+            $this->routeCheck = 'admin.subscription_payment_list';
+            $this->typeId = EmailTemplateType::where('type', 'subscription_payment_email_template')->first()->id;
+            $notification = NotificationSetting::where('slug','seller-payout')->first();
+            if ($notification) {
+                $this->notificationSend($notification->id, auth()->id());
+            }
+            DB::commit();
+            $this->setupSidebar(auth()->user());
+            Toastr::success(__('common.successful'), __('common.success'));
+            LogActivity::successLog('Subscription payment successful.');
+            return redirect()->route('frontend.organiser-events');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            LogActivity::errorLog($e->getMessage());
+            Toastr::error(__('common.operation_failed'));
+            return back();
+        }
     }
 
     public function subscriptionPayment(Request $request)

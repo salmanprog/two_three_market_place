@@ -72,7 +72,6 @@
             <input type="hidden" name="user_id" id="user_id" value="{{!auth()->check() ? 0 : auth()->user()->id}}">
             <input type="hidden" name="no_of_ticket" id="no_of_ticket" value="1">
             <input type="hidden" name="is_paid" id="is_paid" value="0">
-            <input type="hidden" name="purchase_date" id="purchase_date" value="{{date('Y-m-d')}}">
             <div class="col-xl-9">
                 <div class="row">
                     <!-- image show -->
@@ -124,6 +123,15 @@
                                 </h2>
                             </div>
                             <div class="product_info">
+                                <div class="single_pro_varient">
+                                    <h5 class="font_14 f_w_500 theme_text3 " >{{__('Purchase Date')}}:</h5>
+                                    <div class="product_number_count mr_5" data-target="amount-1">
+                                        <input name="purchase_date" id="date" class="primary_input_field primary-input date form-control" type="text" autocomplete="off">
+                                        <button class="btn-date" data-id="#date" type="button">
+                                                            <i class="ti-calendar" id="start-date-icon"></i>
+                                                        </button>
+                                    </div>
+                                </div>
                                 <div class="single_pro_varient">
                                     <h5 class="font_14 f_w_500 theme_text3 " >{{__('common.quantity')}}:</h5>
                                     <div class="product_number_count mr_5" data-target="amount-1">
@@ -267,6 +275,12 @@
                     event.preventDefault();
                     $('#id').val($(this).attr("data-id"));
                     $('.price_subscription_add').submit();
+                });
+
+                $('#date').datepicker({
+                    dateFormat: 'yy-mm-dd',
+                    minDate: "{{$events->from_date}}", // e.g. 2025-08-20
+                    maxDate: "{{$events->to_date}}",     // e.g. 2025-08-25
                 });
             });
         })(jQuery);

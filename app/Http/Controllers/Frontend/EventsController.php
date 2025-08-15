@@ -50,10 +50,12 @@ class EventsController extends Controller
         ]);
 
         try {
-            EventBooking::create($request->except('_token'));
+            $data['booking_event'] = EventBooking::create($request->except('_token'));
             Toastr::success(__('common.created_successfully'), __('common.success'));
             LogActivity::successLog('Event Book Successfully.');
-            return redirect()->route('frontend.event.book.show',['id'=>$request->event_id,'userid'=>$request->user_id]);
+            //return redirect()->route('frontend.event.book.show',['id'=>$request->event_id,'userid'=>$request->user_id]);
+            
+            return redirect()->to('event/booking/payment/'.$request->event_id.'/'.auth()->user()->id);
         } catch (\Exception $e) {
             Toastr::error(__($e->getMessage()), __('common.error'));
             LogActivity::errorLog($e->getMessage());
