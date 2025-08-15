@@ -147,7 +147,7 @@ class SellerController extends Controller
 
         $data['gateway_activations'] = $gateway->where('method','!=','Cash On Delivery');
         
-        // Explicitly get Stripe credentials
+        // Explicitly get Stripe credentialss
         $data['stripe_credential'] = getPaymentInfoViaSellerId(1, 'stripe');
 
         return view('multivendor::seller_payment.payment_gateway', $data);
@@ -182,7 +182,6 @@ class SellerController extends Controller
             if ($request->method == "Stripe") {
                 $stripeController = new StripeController;
                 $response = $stripeController->stripePost($request->all());
-
                 // Handle Stripe response properly
                 if (is_array($response)) {
                     if ($response['status'] === 'success') {

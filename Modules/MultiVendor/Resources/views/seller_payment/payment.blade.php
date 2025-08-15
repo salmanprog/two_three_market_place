@@ -60,7 +60,7 @@
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            <a href="{{ route('event.subscriptionPaymentGateway',$seller_subscription->id) }}" class="amaz_primary_btn style2  min_200 text-center text-uppercase">
+                            <a href="{{ route('seller.subscriptionPaymentGateway',$seller_subscription->id) }}" class="amaz_primary_btn style2  min_200 text-center text-uppercase">
                                 {{ __("common.continue_payment") }}
                             </a>
                         </div>

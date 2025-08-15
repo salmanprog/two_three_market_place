@@ -47,7 +47,7 @@ Route::middleware(['auth','admin'])->prefix('admin')->group(function() {
     Route::get('/seller-commisions/{id}/edit', 'CommisionController@edit')->name('admin.seller_commission_edit')->middleware(['permission']);
     Route::post('/seller-commisions/{id}/update', 'CommisionController@update')->name('admin.seller_commission_update')->middleware('prohibited_demo_mode');
 });
-// Temporarily removing middleware for debugging
+// Temporarily removing middleware for debuggings
 
 Route::prefix('event')->as('event.')->group(function() {
     Route::get('/dashboard', 'EventController@index')->name('dashboard');
