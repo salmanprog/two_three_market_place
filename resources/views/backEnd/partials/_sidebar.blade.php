@@ -157,6 +157,10 @@
                                                 @if(!@$submenu->backendMenu->module or isModuleActive(@$submenu->backendMenu->module))
                                                     @if(permissionCheck($submenu->backendMenu->route))
                                                         <li>
+                                                            @if(auth()->user()->role->type == 'staff' && $submenu->backendMenu->id == 12 && $submenu->backendMenu->name == 'hr.holiday_setup' && $submenu->backendMenu->route == 'holidays.index' )
+                                                            <a href="{{route('booking.events')}}"
+                                                                class="{{spn_active_link(['booking.events'], 'active')}} @if(@$submenu->children->count()) has-arrow @endif">{{__('Event Bookings')}}</a>
+                                                            @else
                                                             <a href="
                                                                 @if(\Illuminate\Support\Facades\Route::has($submenu->backendMenu->route) && !$submenu->children->count())
                                                                     @if(@$submenu->backendMenu->route == 'my-wallet.index')
@@ -171,7 +175,8 @@
                                                                 @else
                                                                     javascript:void(0)
                                                                 @endif"
-                                                                class="{{spn_active_link(childrenRoute($submenu), 'active')}} @if(@$submenu->children->count()) has-arrow @endif">{{__(@$submenu->backendMenu->name)}} </a>
+                                                                class="{{spn_active_link(childrenRoute($submenu), 'active')}} @if(@$submenu->children->count()) has-arrow @endif">{{__(@$submenu->backendMenu->name)}}</a>
+                                                            @endif    
                                                             @if(@$submenu->children->count())
                                                                 <ul class="metis_submenu">
                                                                     @foreach($submenu->children as $subsubmenu)

@@ -121,4 +121,30 @@ class EventController extends Controller
             return back();
         }
     }
+
+    public function bookingIndex()
+    {
+        try {
+            $events = $this->eventRepository->getbookingsall();
+            $roles = $this->roleRepository->normalRoles();
+            return view('attendance::events.booking', compact('events','roles'));
+        } catch (\Exception $e) {
+            Toastr::error(__('common.error_message'), __('common.error'));
+            LogActivity::errorLog($e->getMessage());
+            return back();
+        }
+    }
+
+    public function viewBooking($id)
+    {
+        try {
+            $events = $this->eventRepository->getbooking($id);
+            $roles = $this->roleRepository->normalRoles();
+            return view('attendance::events.viewbooking', compact('events','roles'));
+        } catch (\Exception $e) {
+            Toastr::error(__('common.error_message'), __('common.error'));
+            LogActivity::errorLog($e->getMessage());
+            return back();
+        }
+    }
 }

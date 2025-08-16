@@ -4,6 +4,8 @@ namespace Modules\Attendance\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Modules\Attendance\Entities\Event;
+use App\Models\User;
 
 class EventBooking extends Model
 {
@@ -12,6 +14,15 @@ class EventBooking extends Model
     public function scopeActive($query)
     {
         return $query->where('status',1);
+    }
+
+    public function event()
+    {
+        return $this->belongsTo(Event::class);
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class);
     }
 
     public static function boot()

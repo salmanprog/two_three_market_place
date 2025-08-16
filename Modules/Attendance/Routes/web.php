@@ -45,4 +45,8 @@ Route::prefix('attendance')->middleware(['auth','admin'])->group(function () {
     });
 });
 Route::resource('events','EventController')->middleware(['admin','auth','permission']);
+Route::prefix('booking')->name('booking.')->group(function () {
+        Route::get('/events', 'EventController@bookingIndex')->name('events');
+        Route::get('/events/view/{id}', 'EventController@viewBooking')->name('events_view');
+    });
 Route::get('events-delete/{id}','EventController@destroy')->name('events.delete')->middleware(['admin','auth','permission']);

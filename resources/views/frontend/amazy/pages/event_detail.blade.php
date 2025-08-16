@@ -69,6 +69,7 @@
             <input type="hidden" id="maximum_order_qty" value="{{$events->remaining_ticket}}">
             <input type="hidden" id="minimum_order_qty" value="1">
             <input type="hidden" name="event_id" id="event_id" value="{{$events->id}}">
+            <input type="hidden" name="created_by" id="created_by" value="{{$events->created_by}}">
             <input type="hidden" name="user_id" id="user_id" value="{{!auth()->check() ? 0 : auth()->user()->id}}">
             <input type="hidden" name="no_of_ticket" id="no_of_ticket" value="1">
             <input type="hidden" name="is_paid" id="is_paid" value="0">

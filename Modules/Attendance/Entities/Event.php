@@ -4,6 +4,7 @@ namespace Modules\Attendance\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Modules\Attendance\Entities\EventBooking;
 
 class Event extends Model
 {

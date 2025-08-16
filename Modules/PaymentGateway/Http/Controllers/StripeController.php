@@ -538,6 +538,8 @@ class StripeController extends Controller
 
             if ($stripe['status'] == "succeeded") {
                 $transaction_id = $stripe['id'];
+                $amount = $stripe['amount'] / 100;
+                $method = 3;
 
                 $get_booking = EventBooking::find($data['plane_booking_id']);
                 $get_booking->tx_id = $transaction_id;
@@ -551,6 +553,27 @@ class StripeController extends Controller
                 $event->sold_ticket = $sold_ticket;
                 $event->remaining_ticket = $remaining_ticket;
                 $event->save();
+
+                $wallet_service = new WalletRepository;
+                $wallet_service->walletSalePaymentAdd($get_booking->id, $amount, 'Deposite', $event->created_by);
+
+                 // Create transaction record
+                $transactionRepo = new TransactionRepository(new Transaction);
+                
+                $transaction = $transactionRepo->makeTransaction(
+                    auth()->user()->first_name . " - Event Booking Payment",
+                    "in",
+                    "Stripe",
+                    "event_booking_payment",
+                    "1",
+                    "Event Booking Payment",
+                    "event_organiser_subscription",
+                    $amount,
+                    Carbon::now()->format('Y-m-d'),
+                    auth()->user()->id,
+                    null,
+                    null
+                );
 
                  // Return success response with redirect
                  return [

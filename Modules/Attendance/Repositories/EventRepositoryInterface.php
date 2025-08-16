@@ -16,4 +16,6 @@ interface EventRepositoryInterface
 
     public function roleWiseEvents();
 
+    public function getbookingsall();
+
 }

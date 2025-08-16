@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Modules\Attendance\Entities\Attendance;
 use Carbon\Carbon;
 use Modules\Attendance\Entities\Event;
+use Modules\Attendance\Entities\EventBooking;
 use Modules\Attendance\Entities\Holiday;
 use Modules\RolePermission\Repositories\RoleRepository;
 
@@ -97,5 +98,15 @@ class EventRepository implements EventRepositoryInterface
     public function roleWiseEvents()
     {
         return Event::where('for_whom','all')->orWhere('for_whom',Auth::user()->role->name)->get();
+    }
+
+    public function getbookingsall()
+    {
+        return EventBooking::latest()->with('event')->with('user')->where('is_paid','1')->where('created_by',auth()->user()->id)->get();
+    }
+
+    public function getbooking($id)
+    {
+        return EventBooking::latest()->with('event')->with('user')->where('is_paid','1')->where('id',$id)->first();
     }
 }
