@@ -104,6 +104,7 @@ class StripeController extends Controller
                 'credential_id' => $credential->id ?? 'unknown'
             ]);
 
+            
             // Create the charge
             $stripe = Stripe\Charge::create($charge_data);
 
@@ -154,7 +155,7 @@ class StripeController extends Controller
                         $seller_subscription->update([
                             'last_payment_date' => Carbon::now()->format('Y-m-d')
                         ]);
-
+                        
                         // Create payment info
                         SubsciptionPaymentInfo::create([
                             'transaction_id' => $transaction->id,

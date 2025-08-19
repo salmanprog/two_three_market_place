@@ -194,20 +194,35 @@ class TransactionRepository
                         'amount' => $amount,
                     ]);
                 } else {
-                    
-                    return $this->transaction->create([
-                        'chart_of_account_id' => $chart_account->id,
-                        'title' => $title,
-                        'type' => $type,
-                        'payment_method' => $method,
-                        'come_from' => $default_for,
-                        'description' => $description,
-                        'morphable_id' => NULL,
-                        'morphable_type' => NULL,
-                        'amount' => $amount,
-                        'transaction_date' => $date,
-                        'created_by' => $creator,
-                    ]);
+                    if(isset($class->id)){
+                        return $this->transaction->create([
+                            'chart_of_account_id' => $chart_account->id,
+                            'title' => $title,
+                            'type' => $type,
+                            'payment_method' => $method,
+                            'come_from' => $default_for,
+                            'description' => $description,
+                            'morphable_id' => $class->id,
+                            'morphable_type' => $title == 'Invoice' ? Invoice::class : get_class($class),
+                            'amount' => $amount,
+                            'transaction_date' => $date,
+                            'created_by' => $creator,
+                        ]);
+                    }else{
+                        return $this->transaction->create([
+                            'chart_of_account_id' => $chart_account->id,
+                            'title' => $title,
+                            'type' => $type,
+                            'payment_method' => $method,
+                            'come_from' => $default_for,
+                            'description' => $description,
+                            'morphable_id' => NULL,
+                            'morphable_type' => NULL,
+                            'amount' => $amount,
+                            'transaction_date' => $date,
+                            'created_by' => $creator,
+                        ]);
+                    }
                 }
             } else
                 return false;

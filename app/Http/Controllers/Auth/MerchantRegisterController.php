@@ -131,8 +131,80 @@ class MerchantRegisterController extends Controller
         }
     }
 
+    // public function showRegisterForm(Request $request, $id)
+    // {
+
+    //     if(config('app')['sync'] && auth()->check()){
+    //         if ($request->ajax()) {
+    //             return response()->json(['error' => __('common.restricted_in_demo_mode')], 422);
+    //         }
+    //         Toastr::error(__('common.restricted_in_demo_mode'));
+    //         return back();
+    //     }
+    //     if (app('business_settings')->where('category_type', 'vendor_configuration')->where('type', 'Multi-Vendor System Activate')->first()->status) {
+    //         if (auth()->check() && auth()->user()->role->type == 'customer') {
+    //             $commisionRepo = new CommisionRepository();
+    //             $commission = $commisionRepo->findBySlug($id);
+    //             if (session()->has('commission_id')) {
+    //                 session()->forget('commission_id');
+    //                 session()->forget('commission_rate');
+    //             }
+    //             session()->put('commission_id', $commission->id);
+    //             session()->put('commission_rate', $commission->rate);
+    //             if ($commission->id == 3) {
+    //                 $data['pricing_plans'] = Pricing::where('best_for', 'Artist')->where('status', 1)->get();
+    //                 $data['content'] = MerchantContent::firstOrFail();
+    //                 return view(theme('pages.merchant_create_by_subscription'), $data);
+    //             } else {
+    //                 session()->forget('pricing_id');
+    //             }
+    //             $registerRepo = new MerchantRepository();
+    //             $registerRepo->customerToSellerConvert([
+    //                 'commission_id' => session()->get('commission_id'),
+    //                 'commission_rate' => session()->get('commission_rate'),
+    //             ]);
+    //             return redirect()->route('seller.dashboard');
+    //         } elseif (!auth()->check()) {
+    //             $commisionRepo = new CommisionRepository();
+    //             $commission = $commisionRepo->findBySlug($id);
+    //             if (session()->has('commission_id')) {
+    //                 session()->forget('commission_id');
+    //                 session()->forget('commission_rate');
+    //             }
+    //             session()->put('commission_id', $commission->id);
+    //             session()->put('commission_rate', $commission->rate);
+
+    //             $data['row'] = '';
+    //             $data['form_data'] = '';
+    //             if(Module::has('FormBuilder')){
+    //                 if(Schema::hasTable('custom_forms')){
+    //                     $formBuilderRepo = new FormBuilderRepositories();
+    //                     $data['row'] = $formBuilderRepo->find(3);
+    //                     if($data['row']->form_data){
+    //                         $data['form_data'] = json_decode($data['row']->form_data);
+    //                     }
+    //                 }
+    //             }
+    //             if ($commission->id == 3) {
+    //                 $data['pricing_plans'] = Pricing::where('best_for', 'Artist')->where('status', 1)->get();
+    //                 $data['content'] = MerchantContent::firstOrFail();
+    //                 return view(theme('pages.merchant_create_by_subscription'), $data);
+    //             } else {
+    //                 session()->forget('pricing_id');
+    //             }
+    //             return view(theme('pages.merchant_create_step_two'), $data);
+    //         } else {
+    //             return abort(404);
+    //         }
+    //     } else {
+    //         Toastr::error(__('auth.multi_vendor_system_is_temporary_disabled'));
+    //         return back();
+    //     }
+    // }
+
     public function showRegisterForm(Request $request, $id)
     {
+        
 
         if(config('app')['sync'] && auth()->check()){
             if ($request->ajax()) {

@@ -461,6 +461,8 @@ class SellerController extends Controller
             $subscription_payment = SubsciptionPaymentInfo::findOrFail($request->id);
             $this->expiry_date_set($request->id);
             if ($subscription_payment) {
+                // print_r($subscription_payment);
+                // die();
                 $subscription_payment->transaction->morphable->update(['is_paid' => 1]);
                 $subscription_payment->update(['is_approved' => $request->status]);
                 LogActivity::successLog('Subscription payment approve successful.');
