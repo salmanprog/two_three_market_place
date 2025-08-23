@@ -188,6 +188,18 @@
                      {{__('Resell Orders')}}</a>
                 </li>
                 <li>
+                    <a class="position-relative d-flex align-items-center" href="{{route('frontend.user.book.event')}}">
+                    <svg  width="16.326" height="18" viewBox="0 0 16.326 18">
+                    <g  transform="translate(-2.25 -1.25)">
+                        <path  data-name="Path 4129" d="M13.762,19.25h-6.7c-3.056,0-4.814-1.758-4.814-4.814V6.064c0-3.056,1.758-4.814,4.814-4.814h6.7c3.056,0,4.814,1.758,4.814,4.814v8.372C18.576,17.492,16.817,19.25,13.762,19.25ZM7.064,2.506c-2.394,0-3.558,1.164-3.558,3.558v8.372c0,2.394,1.164,3.558,3.558,3.558h6.7c2.394,0,3.558-1.164,3.558-3.558V6.064c0-2.394-1.164-3.558-3.558-3.558Z" transform="translate(0 0)" fill="#00124e"/>
+                        <path  data-name="Path 4130" d="M8.8,9.515A1.037,1.037,0,0,1,7.75,8.476v-6.6a.633.633,0,0,1,.629-.629h5.868a.633.633,0,0,1,.629.629V8.467a1.025,1.025,0,0,1-.629.956,1.046,1.046,0,0,1-1.132-.193l-1.8-1.651-1.8,1.66A1.044,1.044,0,0,1,8.8,9.515Zm2.515-3.269a1.06,1.06,0,0,1,.713.277l1.593,1.467V2.507H9.007V7.989L10.6,6.523A1.06,1.06,0,0,1,11.313,6.246Z" transform="translate(-0.9)" fill="#00124e"/>
+                        <path  data-name="Path 4131" d="M16.691,14.507H13.129a.629.629,0,0,1,0-1.257h3.563a.629.629,0,1,1,0,1.257Z" transform="translate(-1.673 -1.954)" fill="#00124e"/>
+                        <path  data-name="Path 4132" d="M16,18.507H8.879a.629.629,0,0,1,0-1.257H16a.629.629,0,1,1,0,1.257Z" transform="translate(-0.983 -2.606)" fill="#00124e"/>
+                    </g>
+                    </svg>
+                     {{__('Events Bookings')}}</a>
+                </li>
+                <li>
                     <a class="position-relative d-flex align-items-center" href="{{route('frontend.my-wishlist')}}">
                     <svg  width="16.326" height="18" viewBox="0 0 16.326 18">
                     <g  transform="translate(-2.25 -1.25)">
@@ -206,7 +218,7 @@
                     </svg>
                     {{__('order.my_order')}}</a>
                 </li>
-                <li>
+                <!-- <li>
                     <a class="position-relative d-flex align-items-center" href="{{ route('frontend.purchased-gift-card') }}">
                     <svg  width="18" height="17.998" viewBox="0 0 18 17.998">
                     <g id="bag" transform="translate(-1.25 -1.254)">
@@ -219,7 +231,7 @@
                     </g>
                     </svg>
                     {{__('marketing.giftcard')}}</a>
-                </li>
+                </li> -->
                 <li>
                     <a class="position-relative d-flex align-items-center {{ request()->is('wallet/*') ?'active' : '' }}" href="{{route('my-wallet.index', 'customer')}}">
                     <svg  width="18" height="18.002" viewBox="0 0 18 18.002">
@@ -241,7 +253,7 @@
                     {{__('common.earning_points')}}</a>
                 </li>
                 @endif
-                <li>
+                <!-- <li>
                     <a class="position-relative d-flex align-items-center" href="{{url('/profile/coupons')}}">
                     <svg  width="17.167" height="18.001" viewBox="0 0 17.167 18.001">
                     <g id="gift" transform="translate(-1.75 -1.254)">
@@ -253,8 +265,8 @@
                     </g>
                     </svg>
                     {{__('customer_panel.my_coupons')}}</a>
-                </li>
-                <li>
+                </li> -->
+                <!-- <li>
                     <a class="position-relative d-flex align-items-center" href="{{route('refund.frontend.index')}}">
                         <svg  width="18" height="18.002" viewBox="0 0 18 18.002">
                         <g  transform="translate(-1.25 -1.254)">
@@ -264,7 +276,7 @@
                         </g>
                         </svg>
                         {{__('customer_panel.refund_dispute')}}</a>
-                </li>
+                </li> -->
                 <li>
                     <a class="position-relative d-flex align-items-center" href="{{url('/profile')}}">
                     <svg  width="18.005" height="18" viewBox="0 0 18.005 18">
@@ -276,7 +288,7 @@
                     </svg>
                     {{__('customer_panel.my_account')}}</a>
                 </li>
-                <li>
+                <!-- <li>
                     <a class="position-relative d-flex align-items-center" href="{{ route('frontend.digital_product') }}">
                     <svg  width="17.607" height="17.999" viewBox="0 0 17.607 17.999">
                     <g id="wallet-minus" transform="translate(-1.488 -1.25)">
@@ -289,8 +301,8 @@
                     </g>
                     </svg>
                     {{__('customer_panel.digital_products')}}</a>
-                </li>
-                <li>
+                </li> -->
+                <!-- <li>
                     <a class="position-relative d-flex align-items-center" href="{{url('/profile/referral')}}">
                     <svg  width="17.431" height="18" viewBox="0 0 17.431 18">
                     <g id="profile-2user" transform="translate(-1.602 -1.25)">
@@ -301,8 +313,8 @@
                     </g>
                     </svg>
                         {{__('common.referral')}}</a>
-                </li>
-                <li>
+                </li> -->
+                <!-- <li>
                     <a class="position-relative d-flex align-items-center {{ request()->is('support-ticket/*') ?'active' : '' }}" href="{{url('/support-ticket')}}">
                         <svg width="21px" height="21px" viewBox="0 0 21 21" >
                             <g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="8"/><circle cx="10.5" cy="10.5" r="4"/><path d="m13.5 7.5 2.5-2.5"/>
@@ -311,20 +323,20 @@
                             </g>
                         </svg>
                     {{__('ticket.support_ticket')}}</a>
-                </li>
+                </li> -->
                 @if(isModuleActive('MultiVendor'))
-                    <li>
+                    <!-- <li>
                         <a class="position-relative d-flex align-items-center" href="{{route('frontend.profile.follow-customer')}}">
                             <svg width="24px" height="24px" viewBox="0 0 24 24" >
                                 <path d="M19.2928932,19 L17.1464466,16.8535534 C16.9511845,16.6582912 16.9511845,16.3417088 17.1464466,16.1464466 C17.3417088,15.9511845 17.6582912,15.9511845 17.8535534,16.1464466 L20.8535534,19.1464466 C21.0488155,19.3417088 21.0488155,19.6582912 20.8535534,19.8535534 L17.8535534,22.8535534 C17.6582912,23.0488155 17.3417088,23.0488155 17.1464466,22.8535534 C16.9511845,22.6582912 16.9511845,22.3417088 17.1464466,22.1464466 L19.2928932,20 L14.5,20 C14.2238576,20 14,19.7761424 14,19.5 C14,19.2238576 14.2238576,19 14.5,19 L19.2928932,19 L19.2928932,19 Z M14.0425135,13.5651442 C13.4188979,13.8445863 12.7275984,14 12,14 C11.2738711,14 10.5838946,13.8452135 9.96126583,13.5668358 L5.87929558,15.4222768 C5.34380416,15.665682 5,16.1996113 5,16.7878265 L5,17.5 C5,18.3284271 5.67157288,19 6.5,19 L11.5,19 C11.7761424,19 12,19.2238576 12,19.5 C12,19.7761424 11.7761424,20 11.5,20 L6.5,20 C5.11928813,20 4,18.8807119 4,17.5 L4,16.7878265 C4,15.8074678 4.57300693,14.9175857 5.46549264,14.5119103 L8.92215823,12.9406987 C7.75209123,12.0255364 7,10.6005984 7,9 C7,6.23857625 9.23857625,4 12,4 C14.7614237,4 17,6.23857625 17,9 C17,10.5929224 16.2551051,12.0118652 15.0946468,12.927497 L17.6966094,14.0402775 C17.9505071,14.1488619 18.0683068,14.4427117 17.9597225,14.6966094 C17.8511381,14.9505071 17.5572883,15.0683068 17.3033906,14.9597225 L14.0425135,13.5651442 L14.0425135,13.5651442 Z M12,13 C14.209139,13 16,11.209139 16,9 C16,6.790861 14.209139,5 12,5 C9.790861,5 8,6.790861 8,9 C8,11.209139 9.790861,13 12,13 Z"/>
                               </svg>
                         {{__('common.follow')}}</a>
-                    </li>
+                    </li> -->
                 @endif
                 <li>
                     <span class="amazy_bb2 d-block"></span>
                 </li>
-                <li>
+                <!-- <li>
                     <a class="position-relative d-flex align-items-center" href="{{route('frontend.notifications')}}">
                     <svg  width="14.593" height="18" viewBox="0 0 14.593 18">
                     <g id="notification" transform="translate(-3.227 -1.18)">
@@ -334,7 +346,7 @@
                     </g>
                     </svg>
                     {{__('common.notification')}}</a>
-                </li>
+                </li> -->
                 <li>
                     <a class="position-relative d-flex align-items-center log_out" href="{{ route('logout') }}">
                     <svg  width="16.472" height="18" viewBox="0 0 16.472 18">

@@ -70,34 +70,10 @@ class EventController extends Controller
 
     public function index()
     {
-        $data['total_products'] = SellerProduct::TotalProducts();
-        $data['total_orders'] = OrderPackageDetail::TotalOrders('today');
-        $data['total_delivered_orders'] = OrderPackageDetail::TotalDeliveredOrders('today', 'delivered');
-        $data['total_not_delivered_orders'] = OrderPackageDetail::TotalDeliveredOrders('today', 'not-delivered');
-        $data['total_others_income'] = OrderPackageDetail::TotalOtherIncome('today')['total'];
-        $data['total_net_product_sale'] = OrderPackageDetail::NetTotalProductSaleAmount('today');
-        $data['total_sale'] = $data['total_others_income'] + $data['total_net_product_sale'];
-        $data['shop_review'] = SellerReview::TotalReview('today');
-        $data['total_commision'] = PackageWiseSellerCommision::TotalCommision('today');
-        $data['total_refund'] = RefundRequestDetail::TotalRefund('today');
-        $data['top_sale_products'] = SellerProduct::TopSaleProducts();
-        $data['latest_uploaded_products'] = SellerProduct::LatestUploadedProducts();
-        $data['latest_orders'] = OrderPackageDetail::LatestOrder();
-        $data['latest_refund_requests'] = RefundRequestDetail::LatestRequest();
-        $data['graph_total_orders'] = OrderPackageDetail::TotalOrders(null);
-        $data['graph_total_delivered_orders'] = OrderPackageDetail::TotalDeliveredOrders(null, 'delivered');
-        $data['graph_total_not_delivered_orders'] = OrderPackageDetail::TotalDeliveredOrders(null, 'not-delivered');
-        $data['graph_total_shipping'] = OrderPackageDetail::TotalOtherIncome(null)['shipping_cost'];
-        $data['graph_total_tax'] = OrderPackageDetail::TotalOtherIncome(null)['tax_amount'];
-        $data['graph_total_net_sale'] = OrderPackageDetail::NetTotalProductSaleAmount(null);
-        $data['graph_total_sale'] = OrderPackageDetail::TotalOtherIncome(null)['total'] + $data['graph_total_net_sale'];
-        $data['graph_total_refund'] = RefundRequestDetail::TotalRefund(null);
-        $data['subscription'] = SellerSubcription::with('pricing')->where('seller_id', getParentSellerId())->latest()->first();
-        $data['sellerAccount'] = getParentSeller()->SellerAccount;
-        $data['order_commission_for_admin'] = $this->sellerService->orderCommissionForAdmin('today');
-        if ($data['subscription']) {
-            $data['subscription_payment'] = Transaction::where('morphable_type', 'Modules\MultiVendor\Entities\SellerSubcription')->where('morphable_id', $data['subscription']->id)->latest()->take(10)->get();
-        }
+        $data['total_event'] = Event::scopeTotalEvents();
+        $data['total_activeevent'] = Event::scopeTotalActiveEvents();
+        $data['total_expireevent'] = Event::scopeTotalExpireEvents();
+       
 
         return view('multivendor::event_organiser_dashboard.index', $data);
     }

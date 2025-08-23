@@ -99,6 +99,10 @@
                                                 @else
                                                     {{route(@$menu->backendMenu->route, 'admin')}}
                                                 @endif
+                                            @elseif(@$menu->backendMenu->route == 'seller.sub_seller.index')
+                                                @if(auth()->user()->role->type == 'seller')
+                                                {{route('frontend.seller.book.event')}}
+                                                @endif
                                             @else
                                                 @if(auth()->user()->role->type == 'staff')
                                                     @if(@$menu->backendMenu->route == 'admin.dashboard')
@@ -124,7 +128,13 @@
                                                     <span class="xyz">{{__($menu->backendMenu->name)}}</span>
                                                 @endif
                                             @else
-                                                    <span class="jhs">{{__($menu->backendMenu->name)}}</span>
+                                            @if(auth()->user()->role->type == 'seller')
+                                                @if($section->backendMenu?->name == 'common.user_manages')
+                                                    <span class="jhs">{{__('Event Booknigs')}}</span>
+                                                @else                        
+                                                    <span class="jhs">{{__($menu->backendMenu->name)}} </span>                            
+                                                @endif    
+                                            @endif                                                    
                                             @endif
                                             @php
                                                 $exp = explode('.',$menu->backendMenu->name)

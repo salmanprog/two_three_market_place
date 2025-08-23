@@ -200,6 +200,10 @@ Route::get('/organiser-events', [EventsController::class, 'index'])->name('front
 Route::get('/organiser-events/{id}', [EventsController::class, 'show'])->name('frontend.organiser-events-show');
 Route::post('/event/book', [EventsController::class, 'createBooking'])->name('frontend.event.book');
 Route::get('/event/book/{id}/{userid}', [EventsController::class, 'bookingEventShow'])->name('frontend.event.book.show');
+Route::get('/user/book/events', [EventsController::class, 'userBookingEvent'])->name('frontend.user.book.event');
+Route::get('/user/events/details/{id}', [EventsController::class, 'userBookingEventDetail'])->name('frontend.user.book.event.show');
+Route::get('/seller/book/events', [EventsController::class, 'sellerBookingEvent'])->name('frontend.seller.book.event');
+Route::get('/seller/events/details/{id}', [EventsController::class, 'sellerBookingEventDetail'])->name('frontend.seller.book.event.show');
 //flash deal
 Route::get('/flash-deal/{slug}', [FlashDealController::class, 'show'])->name('frontend.flash-deal');
 Route::get('/flash-deal/{slug}/fetch-data', [FlashDealController::class, 'fetchData'])->name('frontend.flash-deal.fetch-data');

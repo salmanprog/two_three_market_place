@@ -26,4 +26,22 @@ class Event extends Model
             $model->updated_by = Auth::id() ?? null;
         });
     }
+
+    public static function scopeTotalEvents()
+    {
+        $auth_id = auth()->user()->id;
+        return Event::query()->where('created_by', $auth_id)->get()->count();
+    }
+
+    public static function scopeTotalActiveEvents()
+    {
+        $auth_id = auth()->user()->id;
+        return Event::query()->where('created_by', $auth_id)->where('to_date','>', date('Y-m-d'))->get()->count();
+    }
+
+    public static function scopeTotalExpireEvents()
+    {
+        $auth_id = auth()->user()->id;
+        return Event::query()->where('created_by', $auth_id)->where('to_date','<', date('Y-m-d'))->get()->count();
+    }
 }

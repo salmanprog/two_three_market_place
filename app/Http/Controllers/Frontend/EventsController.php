@@ -71,4 +71,28 @@ class EventsController extends Controller
         return view(theme('pages.event_booking'), $data);
     }
 
+    public function userBookingEvent()
+    {
+        $data['bookingevents'] = EventBooking::with('event')->with('user')->where('user_id',auth()->user()->id)->where('is_paid','1')->orderBy('id', 'desc')->get();
+        return view(theme('pages.user_event_booking'), $data);
+    }
+
+    public function userBookingEventDetail($id)
+    {
+        $data['bookingevents'] = EventBooking::with('event')->with('user')->where('id',$id)->where('is_paid','1')->first();
+        return view(theme('pages.user_event_booking_detail'), $data);
+    }
+
+    public function sellerBookingEvent()
+    {
+        $data['bookingevents'] = EventBooking::with('event')->with('user')->where('user_id',auth()->user()->id)->where('is_paid','1')->orderBy('id', 'desc')->get();
+        return view(theme('pages.seller_event_booking'), $data);
+    }
+
+    public function sellerBookingEventDetail($id)
+    {
+        $data['bookingevents'] = EventBooking::with('event')->with('user')->where('id',$id)->where('is_paid','1')->first();
+        return view(theme('pages.seller_event_booking_detail'), $data);
+    }
+
 }
