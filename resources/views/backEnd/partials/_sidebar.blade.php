@@ -124,17 +124,17 @@
                                             @if(auth()->user()->role->type == 'staff')
                                                 @if($section->backendMenu?->name == 'common.user_manages')
                                                     <span class="abc">Event Managment</span>
-                                                @else    
-                                                    <span class="xyz">{{__($menu->backendMenu->name)}}</span>
+                                                @else
+                                                    <span class="jhs">{{__($menu->backendMenu->name)}} </span>    
                                                 @endif
-                                            @else
-                                            @if(auth()->user()->role->type == 'seller')
+                                            @elseif(auth()->user()->role->type == 'seller')
                                                 @if($section->backendMenu?->name == 'common.user_manages')
                                                     <span class="jhs">{{__('Event Booknigs')}}</span>
-                                                @else                        
-                                                    <span class="jhs">{{__($menu->backendMenu->name)}} </span>                            
-                                                @endif    
-                                            @endif                                                    
+                                                @else
+                                                    <span class="jhs">{{__($menu->backendMenu->name)}} </span>    
+                                                @endif       
+                                            @else
+                                            <span class="jhs">{{__($menu->backendMenu->name)}} </span>                                                                                
                                             @endif
                                             @php
                                                 $exp = explode('.',$menu->backendMenu->name)

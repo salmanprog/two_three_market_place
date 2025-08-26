@@ -18,7 +18,8 @@
                 </div>
             @endif
             <div class="row">
-                <div class="col-lg-3">
+                <div class="@if (auth()->user()->role->type != 'superadmin') col-lg-3 @else col-lg-12 @endif">
+                    @if (auth()->user()->role->type != 'superadmin')
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="main-title">
@@ -221,8 +222,8 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="col-lg-9">
+                    @endif
+                    <div class="@if (auth()->user()->role->type != 'superadmin') col-lg-9 @else col-lg-12 @endif">
                         @if(session()->has('message-success-delete'))
                             <div class="alert alert-success">
                                 {{ session()->get('message-success-delete') }}
@@ -285,11 +286,15 @@
                                                                         {{__('common.select')}}
                                                                     </button>
                                                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
+                                                                        @if (auth()->user()->role->type != 'superadmin')
                                                                         @if (permissionCheck('events.update'))
                                                                             <a class="dropdown-item" href="{{route('events.edit',$event->id)}}">@lang('common.edit')</a>
                                                                         @endif
                                                                         @if (permissionCheck('events.delete'))
                                                                             <a data-value="{{route('events.delete', $event->id)}}" class="dropdown-item delete_event">{{__('common.delete')}}</a>
+                                                                        @endif
+                                                                        @else
+                                                                            <a target="_blank" class="dropdown-item" href="{{route('frontend.organiser-events-show',$event->id)}}">@lang('common.view')</a>
                                                                         @endif
                                                                     </div>
                                                                 </div>

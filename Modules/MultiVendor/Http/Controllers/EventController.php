@@ -752,7 +752,7 @@ class EventController extends Controller
 
         $data = $this->sellerService->orderCommissionForAdminViaFilter(isset($request->filter)?$request->filter:'today');
         return DataTables::of($data)
-            ->addIndexColumn()
+            ->addIndexColumn()  
             ->addColumn('payout_date', function ($data) {
                 return dateConvert($data->created_at);
             })
