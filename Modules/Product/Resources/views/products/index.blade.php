@@ -33,7 +33,7 @@
                                             aria-selected="true">{{__('product.out_of_stock_list')}}</a>
                                     </li>
                                 @endif
-                                    <li class="nav-item">
+                                    <!-- <li class="nav-item">
                                         <a class="nav-link" href="#product_disabled_data" role="tab" data-toggle="tab" id="product_disabled_id"
                                             aria-selected="true">{{__('product.disabled_product_list')}}</a>
                                     </li>
@@ -41,7 +41,7 @@
                                     <li class="nav-item">
                                         <a class="nav-link" href="#drafted_products_data" role="tab" data-toggle="tab" id="drafted_products"
                                             aria-selected="true">{{__('product.drafted_list')}}</a>
-                                    </li>
+                                    </li> -->
 
                                 @if (permissionCheck('product.get-data-sku'))
                                     <li class="nav-item">
@@ -50,10 +50,10 @@
                                     </li>
                                 @endif
 
-                                    <li class="nav-item">
+                                    <!-- <li class="nav-item">
                                         <a class="nav-link" href="#reported_product_data" role="tab" data-toggle="tab" id="reported_products"
                                             aria-selected="true">{{__('product.reported_products')}}</a>
-                                    </li>
+                                    </li> -->
                             </ul>
                         </div>
                     </div>

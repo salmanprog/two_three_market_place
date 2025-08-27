@@ -27,7 +27,8 @@ class StaffController extends Controller
     public function index(Request $request)
     {
         try {
-            $staffs = $this->userRepository->all(['user.role','department']);
+            //$staffs = $this->userRepository->all(['user.role','department']);
+            $staffs = $this->userRepository->all();
             return view('backEnd.staffs.index', [
                 "staffs" => $staffs,
             ]);
@@ -77,11 +78,11 @@ class StaffController extends Controller
     public function show(Request $request)
     {
         try {
-            $staffDetails = $this->userRepository->find($request->id);
-            $staffDocuments = $this->userRepository->findDocument($request->id);
+            $staffDetails = $this->userRepository->findUser($request->id);
+            //$staffDocuments = $this->userRepository->findDocument($request->id);
             return view('backEnd.staffs.viewStaff', [
                 "staffDetails" => $staffDetails,
-                "staffDocuments" => $staffDocuments
+                //"staffDocuments" => $staffDocuments
             ]);
         } catch (\Exception $e) {
             LogActivity::errorLog($e->getMessage());
@@ -92,7 +93,7 @@ class StaffController extends Controller
     public function edit($id)
     {
         try {
-            $staff = $this->userRepository->find($id);
+            $staff = $this->userRepository->findUser($id);
             $roles = Role::where('id', '>', 1)->where('type','admin')->orWhere('type','staff')->get();
             $departments = Department::where('status', 1)->get();
             return view('backEnd.staffs.edit', [
@@ -225,6 +226,7 @@ class StaffController extends Controller
     }
     public function profile_update(Request $request, $id)
     {
+        
         $request->validate([
             'name' => 'required',
             'email' => 'required|unique:users,email,'.Auth::id(),
@@ -252,6 +254,27 @@ class StaffController extends Controller
             Toastr::error(__('common.error_message'), __('common.error'));
             return back();
         }
+    }
+
+    public function update_organiser(Request $request, $id)
+    {
+        $request->validate([
+            'first_name' => 'required',
+            //'email' => 'required|unique:users,email,'.Auth::id(),
+            //'username' => 'required|unique:users,username,'.Auth::id(),
+            //'phone' => 'required|unique:users,phone,'.Auth::user()->id,
+        ]);
+        try {
+            $this->userRepository->updateOrganiser($request->except("_token"), $id);
+            LogActivity::successLog('Profile has been updated.');
+            Toastr::success(__('common.updated_successfully'), __('common.success'));
+            return back();
+        } catch (\Exception $e) {
+            LogActivity::errorLog($e->getMessage());
+            Toastr::error(__('common.error_message'), __('common.error'));
+            return back();
+        }
+
     }
     public function profileImgDelete (Request $request){
        return $this->userRepository->staffImgDelete($request->id);

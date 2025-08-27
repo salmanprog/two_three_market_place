@@ -68,7 +68,7 @@
                     </div>
                     @else
                     <div class="col-12">
-                        <p class="sign_up_text">{{__('amazy.Don’t have an Account?')}} <a href="{{url('/merchant-register-step-1')}}">{{__('amazy.Sign Up')}}</a></p>
+                        <p class="sign_up_text">{{__('amazy.Don’t have an Account?')}} <a href="{{url('/merchant-register-step-2/subscription')}}">{{__('amazy.Sign Up')}}</a></p>
                     </div>
                     @endif
                 </div>

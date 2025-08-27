@@ -80,7 +80,7 @@
                             <div class="slider-container slick_custom_container mb_30" id="myTabContent">
                                 <div class="slider-for gallery_large">
                                     <div class="item-slick slick-current slick-active" id="thumb_5">
-                                        <img class="varintImg zoom_01" src="http://localhost/tow-three-ld/public/frontend/amazy/img/6438ce493d38b.svg">
+                                        <img class="varintImg zoom_01" src="{{isset($events->image)?showImage($events->image):showImage('frontend/amazy/img/6438ce493d38b.svg')}}">
                                     </div>
                                 </div>
                             </div>
@@ -144,7 +144,7 @@
                                 <div class="row mt_30 " id="add_to_cart_div">
                                     @if (!auth()->check())
                                         <div class="col-6">
-                                            <button type="button" disabled class="amaz_primary_btn style2 mb_20  add_to_cart text-uppercase flex-fill text-center w-100">{{__('Login')}}</button>
+                                            <a href="{{url('/login')}}" class="amaz_primary_btn style2 mb_20  add_to_cart text-uppercase flex-fill text-center w-100">{{__('Login')}}</a>
                                         </div>
                                     @elseif ($events->remaining_ticket > 0)
                                         <div class="col-6">

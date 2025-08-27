@@ -44,4 +44,22 @@ class Event extends Model
         $auth_id = auth()->user()->id;
         return Event::query()->where('created_by', $auth_id)->where('to_date','<', date('Y-m-d'))->get()->count();
     }
+
+    public static function scopeAdminTotalEvents()
+    {
+        $auth_id = auth()->user()->id;
+        return Event::query()->get()->count();
+    }
+
+    public static function scopeAdminTotalActiveEvents()
+    {
+        $auth_id = auth()->user()->id;
+        return Event::query()->where('to_date','>', date('Y-m-d'))->get()->count();
+    }
+
+    public static function scopeAdminTotalExpireEvents()
+    {
+        $auth_id = auth()->user()->id;
+        return Event::query()->where('to_date','<', date('Y-m-d'))->get()->count();
+    }
 }

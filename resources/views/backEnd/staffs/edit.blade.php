@@ -13,16 +13,15 @@
             <div class="col-12">
                 <div class="box_header">
                     <div class="main-title d-flex">
-                        <h3 class="mb-0 mr-30">{{ __('hr.edit_staff_info') }}</h3>
+                        <h3 class="mb-0 mr-30">{{ __('Organiser Info') }}</h3>
                     </div>
                 </div>
             </div>
             <div class="col-12">
                 <div class="white_box_50px box_shadow_white">
-                    <form action="{{ route('staffs.update', $staff->user->id) }}" method="POST"
+                    <form action="{{ route('organiser.update', $staff->id) }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
-                        @method('PATCH')
                         <input type="hidden" name="user_id" value="{{$staff->user_id}}">
                         <div class="row">
                             <div class="col-xl-12">
@@ -32,24 +31,13 @@
                             </div>
                             <hr>
 
-                            <div class="col-xl-4 employee_id_div">
-                                <div class="primary_input mb-25">
-                                    <label class="primary_input_label" for="">{{ __('hr.staff_id') }} <span
-                                            class="text-danger">*</span></label>
-                                    <input name="employee_id" id="employee_id" class="primary_input_field name"
-                                        placeholder="{{ __('hr.staff_id') }}" value="{{ $staff->employee_id }}"
-                                        type="text" readonly>
-                                    <span class="text-danger">{{$errors->first('employee_id')}}</span>
-                                </div>
-                            </div>
-
                             <div class="col-xl-4">
                                 <div class="primary_input mb-25">
                                     <label class="primary_input_label" for="">{{ __('common.first_name') }} <span
                                             class="text-danger">*</span></label>
                                     <input name="first_name" class="primary_input_field name"
                                         placeholder="{{ __('common.first_name') }}"
-                                        value="{{ old('first_name')?old('first_name'):@$staff->user->first_name }}"
+                                        value="{{ old('first_name')?old('first_name'):@$staff->first_name }}"
                                         type="text">
                                     <span class="text-danger">{{$errors->first('first_name')}}</span>
                                 </div>
@@ -60,7 +48,7 @@
                                     <label class="primary_input_label" for="">{{ __('common.last_name') }}</label>
                                     <input name="last_name" class="primary_input_field name"
                                         placeholder="{{ __('common.last_name') }}"
-                                        value="{{ old('last_name')?old('last_name'):@$staff->user->last_name }}"
+                                        value="{{ old('last_name')?old('last_name'):@$staff->last_name }}"
                                         type="text">
                                     <span class="text-danger">{{$errors->first('last_name')}}</span>
                                 </div>
@@ -72,7 +60,7 @@
                                         }}({{__('common.use_as_username')}})<span class="text-danger">*</span></label>
                                     <input name="email" class="primary_input_field name"
                                         placeholder="{{ __('common.email') }}"
-                                        value="{{ old('email')?old('email'):@$staff->user->email }}" type="email">
+                                        value="{{ old('email')?old('email'):@$staff->email }}" type="email">
                                     <span class="text-danger">{{$errors->first('email')}}</span>
                                 </div>
                             </div>
@@ -98,119 +86,17 @@
                             </div>
 
 
-                            <div class="col-xl-4">
-                                <div class="primary_input mb-25">
-                                    <label class="primary_input_label" for="">{{ __('hr.department') }} <span
-                                            class="text-danger">*</span></label>
-                                    <select class="primary_select mb-25" name="department_id" id="department_id">
-                                        @foreach ($departments as $key => $department)
-                                        <option value="{{ $department->id }}" @if ($department->id ==
-                                            $staff->department_id) selected @endif>{{ $department->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    <span class="text-danger">{{$errors->first('department_id')}}</span>
-                                </div>
-                            </div>
+                            
 
 
 
-                            <div class="col-xl-4">
-                                <div class="primary_input mb-25">
-                                    <label class="primary_input_label" for="">{{ __('hr.role') }} <span
-                                            class="text-danger">*</span></label>
-                                    <select class="primary_select mb-25" name="role_id" id="role_id" required>
-                                        @foreach ($roles as $key => $role)
-                                        <option value="{{ $role->id }}-{{ $role->type }}" @if ($role->id ==
-                                            $staff->user->role_id) selected @endif>{{ $role->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    <span class="text-danger">{{$errors->first('role_id')}}</span>
-                                </div>
-                            </div>
+                           
 
-                            <div class="col-xl-4 current_address_div">
-                                <div class="primary_input mb-25">
-                                    <label class="primary_input_label" for="">{{ __('common.address') }}</label>
-                                    <input name="address" id="address" class="primary_input_field name"
-                                        placeholder="{{ __('common.address') }}"
-                                        value="{{ old('address')?old('address'):$staff->address }}" type="text">
-                                    <span class="text-danger">{{$errors->first('address')}}</span>
-                                </div>
-                            </div>
+                           
 
-                            <div class="col-xl-4 date_of_birth_div">
-                                <div class="primary_input mb-15">
-                                    <label class="primary_input_label" for="">{{ __('common.date_of_birth') }} <span
-                                            class="text-danger">*</span></label>
-                                    <div class="primary_datepicker_input">
-                                        <div class="no-gutters input-right-icon">
-                                            <div class="col">
-                                                <div class="">
-                                                    <input placeholder="{{ __('common.date') }}"
-                                                        class="primary_input_field primary-input date form-control"
-                                                        id="date_of_birth" type="text" name="date_of_birth"
-                                                        value="{{ old('date_of_birth')?old('date_of_birth'):date('m/d/Y', strtotime($staff->date_of_birth)) }}"
-                                                        autocomplete="off">
-                                                </div>
-                                            </div>
-                                            <button class="btn-date" data-id="#date_of_birth" type="button">
-                                                <i class="ti-calendar" id="start-date-icon"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <span class="text-danger">{{$errors->first('date_of_birth')}}</span>
-                                </div>
-                            </div>
+                           
 
-                            <div class="col-xl-4">
-                                <div class="primary_input mb-15">
-                                    <label class="primary_input_label" for="">{{ __('hr.date_of_joining') }} <span
-                                            class="text-danger">*</span></label>
-                                    <div class="primary_datepicker_input">
-                                        <div class="no-gutters input-right-icon">
-                                            <div class="col">
-                                                <div class="">
-                                                    <input placeholder="{{ __('common.date') }}"
-                                                        class="primary_input_field primary-input date form-control"
-                                                        id="date_joining"
-                                                        type="text" name="date_of_joining"
-                                                        value="{{old('date_of_joining')?old('date_of_joining'):date('m/d/Y', strtotime($staff->date_of_joining))}}"
-                                                        autocomplete="off">
-                                                </div>
-                                            </div>
-                                            <button class="btn-date" data-id="#date_joining" type="button">
-                                                <i class="ti-calendar" id="start-date-icon"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <span class="text-danger">{{$errors->first('date_of_joining')}}</span>
-                                </div>
-                            </div>
-
-                            <div class="col-xl-4">
-                                <div class="primary_input mb-15">
-                                    <label class="primary_input_label" for="">{{ __('hr.applicable_for_leave') }} <span
-                                            class="text-danger">*</span></label>
-                                    <div class="primary_datepicker_input">
-                                        <div class="no-gutters input-right-icon">
-                                            <div class="col">
-                                                <div class="">
-                                                    <input placeholder="{{ __('common.date') }}"
-                                                        class="primary_input_field primary-input date form-control"
-                                                        id="leave_date"
-                                                        type="text" name="leave_applicable_date"
-                                                        value="{{old('leave_applicable_date')?old('leave_applicable_date'):date('m/d/Y', strtotime($staff->leave_applicable_date))}}"
-                                                        autocomplete="off">
-                                                </div>
-                                            </div>
-                                            <button class="btn-date" data-id="#leave_date" type="button">
-                                                <i class="ti-calendar" id="start-date-icon"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <span class="text-danger">{{$errors->first('leave_applicable_date')}}</span>
-                                </div>
-                            </div>
+                          
 
 
                             <div class="col-lg-4">
@@ -238,20 +124,20 @@
 
                             <div class="col-lg-4">
                                 <div id="businessImgDiv" class="logo_img">
-                                    @if ($staff->user->avatar)
+                                    @if ($staff->avatar)
                                     <p id="documentCross" aria-disabled="true"><i class="fas fa-times img_cross"
-                                            data-id="{{$staff->user->id}}"></i></p>
+                                            data-id="{{$staff->id}}"></i></p>
                                     @endif
                                     <div class="avatar_div">
                                         <img id="StaffImgShow"
-                                            src="{{ showImage($staff->user->avatar?$staff->user->avatar:'backend/img/default.png') }}"
+                                            src="{{ showImage($staff->avatar?$staff->user->avatar:'backend/img/default.png') }}"
                                             alt="">
                                     </div>
 
                                 </div>
                             </div>
 
-                            <div class="col-xl-12 mt-5 bank_info_div">
+                            <!-- <div class="col-xl-12 mt-5 bank_info_div">
                                 <div class="main-title d-flex">
                                     <h3 class="mb-0 mr-30">{{ __('hr.bank_info') }}</h3>
                                 </div>
@@ -300,7 +186,7 @@
                                         type="text">
                                     <span class="text-danger">{{$errors->first('bank_account_number')}}</span>
                                 </div>
-                            </div>
+                            </div> -->
 
 
                             <div class="col-lg-12 text-center">

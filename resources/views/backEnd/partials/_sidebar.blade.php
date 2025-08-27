@@ -74,7 +74,7 @@
                         @endif
                     @else
                     <span class="menu_seperator">
-                        {{__(@$section->backendMenu->name)}}
+                        {{__(@$section->backendMenu->name)}} 
                     </span>
                     @endif
                 @endif
@@ -132,7 +132,17 @@
                                                     <span class="jhs">{{__('Event Booknigs')}}</span>
                                                 @else
                                                     <span class="jhs">{{__($menu->backendMenu->name)}} </span>    
-                                                @endif       
+                                                @endif
+                                            @elseif(auth()->user()->role->type == 'admin')
+                                                @if($menu->backendMenu->name == 'common.customer')
+                                                    <span class="admin">{{__('Manage Customer')}}</span>
+                                                @elseif($menu->backendMenu->name == 'hr.human_resource')
+                                                    <span class="admin">{{__('Manage Organiser')}}</span>
+                                                @elseif($menu->backendMenu->name == 'seller.manage_seller')
+                                                    <span class="admin">{{__('Manage Artist')}}</span>    
+                                                @else
+                                                    <span class="admin">{{__($menu->backendMenu->name)}} </span>  
+                                                @endif  
                                             @else
                                             <span class="jhs">{{__($menu->backendMenu->name)}} </span>                                                                                
                                             @endif
@@ -170,6 +180,38 @@
                                                             @if(auth()->user()->role->type == 'staff' && $submenu->backendMenu->id == 12 && $submenu->backendMenu->name == 'hr.holiday_setup' && $submenu->backendMenu->route == 'holidays.index' )
                                                             <a href="{{route('booking.events')}}"
                                                                 class="{{spn_active_link(['booking.events'], 'active')}} @if(@$submenu->children->count()) has-arrow @endif">{{__('Event Bookings')}}</a>
+                                                            @elseif(auth()->user()->role->type == 'admin'  && $submenu->backendMenu->name == 'hr.staff')
+                                                                                                                                                                                 <a href="
+                                                                @if(\Illuminate\Support\Facades\Route::has($submenu->backendMenu->route) && !$submenu->children->count())
+                                                                    @if(@$submenu->backendMenu->route == 'my-wallet.index')
+                                                                        @if(auth()->user()->role->type == 'seller')
+                                                                            {{route(@$submenu->backendMenu->route, 'seller')}}
+                                                                        @else
+                                                                            {{route(@$submenu->backendMenu->route, 'admin')}}
+                                                                        @endif
+                                                                    @else
+                                                                        {{route(@$submenu->backendMenu->route)}}
+                                                                    @endif
+                                                                @else
+                                                                    javascript:void(0)
+                                                                @endif"
+                                                                class="{{spn_active_link(childrenRoute($submenu), 'active')}} @if(@$submenu->children->count()) has-arrow @endif">{{__('All Organiser')}}</a>
+                                                            @elseif(auth()->user()->role->type == 'admin'  && $submenu->backendMenu->name == 'seller.seller_list')
+                                                                                                                                                                                 <a href="
+                                                                @if(\Illuminate\Support\Facades\Route::has($submenu->backendMenu->route) && !$submenu->children->count())
+                                                                    @if(@$submenu->backendMenu->route == 'my-wallet.index')
+                                                                        @if(auth()->user()->role->type == 'seller')
+                                                                            {{route(@$submenu->backendMenu->route, 'seller')}}
+                                                                        @else
+                                                                            {{route(@$submenu->backendMenu->route, 'admin')}}
+                                                                        @endif
+                                                                    @else
+                                                                        {{route(@$submenu->backendMenu->route)}}
+                                                                    @endif
+                                                                @else
+                                                                    javascript:void(0)
+                                                                @endif"
+                                                                class="{{spn_active_link(childrenRoute($submenu), 'active')}} @if(@$submenu->children->count()) has-arrow @endif">{{__('All Artist')}}</a>        
                                                             @else
                                                             <a href="
                                                                 @if(\Illuminate\Support\Facades\Route::has($submenu->backendMenu->route) && !$submenu->children->count())
@@ -185,7 +227,7 @@
                                                                 @else
                                                                     javascript:void(0)
                                                                 @endif"
-                                                                class="{{spn_active_link(childrenRoute($submenu), 'active')}} @if(@$submenu->children->count()) has-arrow @endif">{{__(@$submenu->backendMenu->name)}}</a>
+                                                                class="{{spn_active_link(childrenRoute($submenu), 'active')}} @if(@$submenu->children->count()) has-arrow @endif">{{__(@$submenu->backendMenu->name)}} </a>
                                                             @endif    
                                                             @if(@$submenu->children->count())
                                                                 <ul class="metis_submenu">

@@ -103,11 +103,10 @@
                 <div
                     class="white-box single-summery @if (app('dashboard_setup')->where('type', 'total_products')->first()->is_active == 1) active @elseif (app('dashboard_setup')->where('type', 'total_products')->first()->is_active == 2) bg_active @endif">
                     <a @if (Auth::user()->role->type == "seller")
-                        href="{{ route('seller.product.index') }}"
+                        href="javascript:void(0);"
                         @else
-                        href="{{ route('product.index') }}"
-                        @endif
-                        target="_blank">
+                        href="javascript:void(0);"
+                        @endif>
                         <div class="d-block mt-10">
                             <h3>{{ __('dashboard.total_product') }} </h3>
                             <img class="demo_wait d-none" height="60px"
@@ -124,12 +123,11 @@
                 <div
                     class="white-box single-summery @if (app('dashboard_setup')->where('type', 'total_order')->first()->is_active == 1) active @elseif (app('dashboard_setup')->where('type', 'total_order')->first()->is_active == 2) bg_active  @endif">
                     <a @if (Auth::user()->role->type == "seller" && isModuleActive('MultiVendor'))
-                        href="{{route('order_manage.my_sales_index')}}"
+                        href="javascript:void(0);"
                         @else
-                        href="{{route('order_manage.total_sales_index')}}"
+                        href="javascript:void(0);"
                         @endif
-
-                        target="_blank">
+                        >
                         <div class="d-block mt-10">
                             <h3>{{ __('dashboard.total_order') }}</h3>
                             <img class="demo_wait d-none" height="60px"
@@ -146,12 +144,11 @@
                 <div
                     class="white-box single-summery @if (app('dashboard_setup')->where('type', 'pending_order')->first()->is_active == 1) active @elseif (app('dashboard_setup')->where('type', 'pending_order')->first()->is_active == 2) bg_active  @endif">
                     <a @if (Auth::user()->role->type == "seller" && isModuleActive('MultiVendor'))
-                        href="{{route('order_manage.my_sales_index')}}"
+                        href="javascript:void(0);"
                         @else
-                        href="{{route('order_manage.total_sales_index')}}"
+                        href="javascript:void(0);"
                         @endif
-
-                        target="_blank">
+                        >
                         <div class="d-block mt-10">
                             <h3>{{ __('dashboard.total_delivered_order') }}</h3>
                             <img class="demo_wait d-none" height="60px"
@@ -168,12 +165,11 @@
                 <div
                     class="white-box single-summery @if (app('dashboard_setup')->where('type', 'pending_order')->first()->is_active == 1) active @elseif (app('dashboard_setup')->where('type', 'pending_order')->first()->is_active == 2) bg_active  @endif">
                     <a @if (Auth::user()->role->type == "seller")
-                        href="{{route('order_manage.my_sales_index')}}"
+                        href="javascript:void(0);"
                         @else
-                        href="{{route('order_manage.total_sales_index')}}"
+                        href="javascript:void(0);"
                         @endif
-
-                        target="_blank">
+                        >
                         <div class="d-block mt-10">
                             <h3>{{ __('dashboard.total_non_delivered_order') }}</h3>
                             <img class="demo_wait d-none" height="60px"
@@ -191,12 +187,11 @@
                 <div
                     class="white-box single-summery @if (app('dashboard_setup')->where('type', 'completed_order')->first()->is_active == 1) active @elseif (app('dashboard_setup')->where('type', 'completed_order')->first()->is_active == 2) bg_active  @endif">
                     <a @if (Auth::user()->role->type == "seller" && isModuleActive('MultiVendor'))
-                        href="{{route('order_manage.my_sales_index')}}"
+                        href="javascript:void(0);"
                         @else
-                        href="{{route('order_manage.total_sales_index')}}"
+                        href="javascript:void(0);"
                         @endif
-
-                        target="_blank">
+                        >
                         <div class="d-block mt-10">
                             <h3>{{ __('dashboard.total_sale') }}</h3>
                             <img class="demo_wait d-none" height="60px"
@@ -253,7 +248,7 @@
             <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">
                 <div
                     class="white-box single-summery ">
-                    <a href="{{route('seller.order-commssion-for-admin')}}" class="d-block mt-10">
+                    <a href="javascript:void(0);" class="d-block mt-10">
                         <h3>{{ __('Order Commission For Pay') }}</h3>
                         <img class="demo_wait d-none" height="60px"
                             src="{{showImage('backend/img/loader.gif')}}" alt="">
@@ -267,7 +262,7 @@
         @endif
 
         @if(permissionCheck('seller_graphs'))
-        <div class="row mb_30 @if(permissionCheck('seller_widgets')) @else mt-30 @endif">
+        <!-- <div class="row mb_30 @if(permissionCheck('seller_widgets')) @else mt-30 @endif">
             @if(permissionCheck('seller_graphs_total_order_summary'))
             <div class="col-lg-4 col-md-6 col-sm-6">
                 <div class="white_box_30px mb_30 graph_dashboard">
@@ -314,11 +309,11 @@
             </div>
             @endif
 
-        </div>
+        </div> -->
         @endif
 
 
-        <div class="row mb_30">
+        <!-- <div class="row mb_30">
             @if(permissionCheck('seller_top_sale_products'))
             <div class="col-lg-6 col-md-6 col-sm-6">
                 <div class="white_box_30px mb_30">
@@ -329,7 +324,6 @@
                     </div>
                     <div class="QA_section">
                         <div class="QA_table ">
-                            <!-- table-responsive -->
                             <div class="">
                                 <table class="table Crm_table_active4">
                                     <thead>
@@ -368,7 +362,6 @@
                     </div>
                     <div class="QA_section">
                         <div class="QA_table ">
-                            <!-- table-responsive -->
                             <div class="">
                                 <table class="table Crm_table_active4">
                                     <thead>
@@ -411,7 +404,6 @@
                     </div>
                     <div class="QA_section">
                         <div class="QA_table ">
-                            <!-- table-responsive -->
                             <div class="">
                                 <table class="table Crm_table_active4">
                                     <thead>
@@ -473,7 +465,6 @@
                     </div>
                     <div class="QA_section">
                         <div class="QA_table ">
-                            <!-- table-responsive -->
                             <div class="">
                                 <table class="table Crm_table_active4">
                                     <thead>
@@ -540,7 +531,6 @@
                     </div>
                     <div class="QA_section">
                         <div class="QA_table ">
-                            <!-- table-responsive -->
                             <div class="">
                                 <table class="table Crm_table_active4">
                                     <thead>
@@ -575,7 +565,7 @@
                 </div>
             </div>
             @endif
-        </div>
+        </div> -->
         <input type="hidden" id="graph_total_orders" value="{{ $graph_total_orders }}">
         <input type="hidden" id="graph_total_delivered_orders" value="{{ $graph_total_delivered_orders }}">
         <input type="hidden" id="graph_total_not_delivered_orders" value="{{ $graph_total_not_delivered_orders }}">

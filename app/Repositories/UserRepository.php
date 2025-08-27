@@ -39,10 +39,11 @@ class UserRepository implements  UserRepositoryInterface
                 });
             })->latest()->get();
         }else {
-            return Staff::latest()->get();
+            return User::where('role_id',3)->get();
         }
 
     }
+    
 
     public function create(array $data)
     {
@@ -181,6 +182,7 @@ class UserRepository implements  UserRepositoryInterface
 
     public function updateProfile(array $data, $id)
     {
+        
         $user = User::findOrFail($id);
         if (isset($data['avatar'])) {
             $user->avatar = $this->saveAvatar($data['avatar'],60,60);
@@ -265,5 +267,25 @@ class UserRepository implements  UserRepositoryInterface
         $user->save();
         return 1;
 
+    }
+
+    public function updateOrganiser(array $data, $id)
+    {
+        
+        $user = User::findOrFail($id);
+
+        if (isset($data['photo'])) {
+            $this->deleteImage($user->avatar);
+            $data = Arr::add($data, 'avatar', $this->saveAvatar($data['photo'],165,165));
+            $user->avatar = $data['avatar'];
+        }
+
+        $user->first_name = $data['first_name'];
+        $user->last_name = $data['last_name'];
+        $user->username = $data['phone'];
+        $user->password = isset($data['password'])?Hash::make($data['password']):$user->password;
+        $result = $user->save();
+
+        return $result;
     }
 }

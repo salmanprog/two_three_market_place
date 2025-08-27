@@ -15,7 +15,7 @@
                 <div class="col-12">
                     <div class="box_header common_table_header">
                         <div class="main-title d-md-flex">
-                            <h3 class="mb-0 mr-30 mb_xs_15px mb_sm_20px">{{ __('hr.staff_list') }}</h3>
+                            <h3 class="mb-0 mr-30 mb_xs_15px mb_sm_20px">{{ __('Organiser List') }}</h3>
                             @if(permissionCheck('staffs.store'))
                             <ul class="d-flex">
                                 <li><a class="primary-btn radius_30px mr-10 fix-gr-bg" href="{{ route('staffs.create') }}"><i class="ti-plus"></i>{{ __('common.add_new') }} {{ __('hr.staff') }}</a></li>
@@ -37,36 +37,17 @@
 
                                         <th scope="col">{{ __('common.email') }}</th>
                                         <th scope="col">{{ __('common.phone') }}</th>
-                                        <th scope="col">{{ __('hr.role') }}</th>
-                                        <th scope="col">{{ __('common.status') }}</th>
-                                        <th scope="col">{{ __('hr.department') }}</th>
-                                        <th scope="col">{{ __('common.registered_date') }}</th>
                                         <th scope="col">{{ __('common.action') }}</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     @foreach($staffs as $key => $staff)
-                                        @if ($staff->user != null)
                                             <tr>
                                                 <th>{{ getNumberTranslate($key+1) }}</th>
-                                                <td><a href="{{ route('staffs.view', $staff->id) }}">{{ucwords( @$staff->user->getFullNameAttribute() ) }}</a></td>
-
-
-                                                <td><a href="mailto:{{ @$staff->user->email }}">{{ @$staff->user->email }}</a></td>
-                                                <td><a href="tel:{{ @$staff->phone }}">{{ @getNumberTranslate($staff->phone) }}</a></td>
-                                                <td>{{ @$staff->user->role->name }}</td>
-                                                <td>
-                                                    @if (@$staff->user->role_id != 1)
-                                                        <label class="switch_toggle" for="active_checkbox{{ $staff->id }}">
-                                                        <input class="update_status_staff" type="checkbox" id="active_checkbox{{ $staff->id }}" {{ permissionCheck('staffs.edit') ? '' : 'disabled' }} {{$staff->user->is_active == 1 ? 'checked' : ''}}
-                                                        value="{{ $staff->id }}" data-id="{{$staff->user->id}}">
-                                                        <div class="slider round"></div>
-                                                    </label>
-                                                    @endif
-
-                                                </td>
-                                                <td>{{ @$staff->department->name }}</td>
-                                               <td>{{ dateConvert($staff->created_at) }}</td>
+                                                <td><a href="{{ route('staffs.view', $staff->id) }}">{{ucwords( @$staff->first_name ) }}</a></td>
+                                                <td>{{ @$staff->email }}</td>
+                                                <td>{{ @getNumberTranslate($staff->phone) }}</td>
+                                               
 
                                                 <td>
                                                     <!-- shortby  -->
@@ -78,23 +59,22 @@
                                                             {{ __('common.select') }}
                                                         </button>
                                                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
-                                                            @if(permissionCheck('staffs.view'))
+                                                            <!-- @if(permissionCheck('staffs.view'))
                                                             <a href="{{ route('staffs.view', $staff->id) }}" class="dropdown-item">{{__('common.view')}}</a>
-                                                            @endif
+                                                            @endif -->
 
                                                             @if(permissionCheck('staffs.edit'))
                                                             <a href="{{ route('staffs.edit', $staff->id) }}" class="dropdown-item">{{__('common.edit')}}</a>
                                                             @endif
 
                                                             @if(permissionCheck('staffs.destroy'))
-                                                            <a data-value="{{route('staffs.destroy', $staff->user->id)}}" class="dropdown-item delete_staff">{{__('common.delete')}}</a>
+                                                            <a data-value="{{route('staffs.destroy', $staff->id)}}" class="dropdown-item delete_staff">{{__('common.delete')}}</a>
                                                             @endif
                                                         </div>
                                                     </div>
                                                     <!-- shortby  -->
                                                 </td>
                                             </tr>
-                                        @endif
                                     @endforeach
                                     </tbody>
                                 </table>

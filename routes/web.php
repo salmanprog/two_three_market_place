@@ -267,6 +267,7 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
     Route::post('/profile-edit', [StaffController::class, 'profile_edit'])->name('profile_edit_modal');
     Route::post('/profile-update/{id}', [StaffController::class, 'profile_update'])->name('profile.update')->middleware('prohibited_demo_mode');
     Route::post('/staff-profile/img-delete', [StaffController::class, 'profileImgDelete'])->name('staff.img.delete')->middleware('prohibited_demo_mode');
+    Route::post('/organiser-update/{id}', [StaffController::class, 'update_organiser'])->name('organiser.update');
 });
 //for profile
 Route::group(['middleware' => ['auth', 'customer'], 'prefix' => 'profile'], function () {

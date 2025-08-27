@@ -36,4 +36,9 @@ class EventBooking extends Model
             $model->updated_by = Auth::id() ?? null;
         });
     }
+
+    public static function scopeAdminTotalBookings()
+    {
+        return EventBooking::query()->get()->count();
+    }
 }
