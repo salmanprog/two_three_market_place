@@ -94,7 +94,7 @@
                         </div>
 
                     </div>
-                    <div class="col-xl-6">
+                    <div class="col-xl-6" >
                         <div class="primary_input mb-25">
                             <label class="primary_input_label" for="business_person_incharge_name">{{__('seller.person_in_charge_name')}}</label>
                             <input name="business_person_incharge_name" class="primary_input_field" placeholder="-" type="text"
@@ -105,7 +105,7 @@
                         </div>
 
                     </div>
-                    <div class="col-xl-6">
+                    <div class="col-xl-6" style="display:none;">
                         <div class="primary_input mb-25">
                             <label class="primary_input_label" for="business_registration_number">{{__('seller.business_registration_number')}}</label>
                             <input name="business_registration_number" class="primary_input_field" placeholder="-" type="text"
@@ -117,7 +117,7 @@
 
                     </div>
 
-                    <div class="col-xl-6">
+                    <div class="col-xl-6" style="display:none;">
                         <div class="primary_input mb-25">
                             <label class="primary_input_label" for="seller_tin">{{__('seller.seller_tin')}}</label>
                             <input name="seller_tin" class="primary_input_field" placeholder="-" type="text"
@@ -126,7 +126,7 @@
                         <span class="text-danger" id="error_seller_tin"></span>
                     </div>
 
-                    <div class="col-xl-6">
+                    <!-- <div class="col-xl-6">
                         <div class="primary_input mb-35">
                             <label class="primary_input_label" for="">{{__('seller.upload_business_document')}}</label>
                             <div class="primary_file_uploader">
@@ -149,7 +149,7 @@
                             <img id="imgDiv34"
                              src="{{showImage($seller->SellerBusinessInformation->business_document??'backend/img/default.png')}}" alt="">
                         </div>
-                    </div>
+                    </div> -->
 
 
 

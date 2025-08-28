@@ -135,7 +135,7 @@
                             </div>
                         </div>
                         @endif
-                        <div class="col-xl-6">
+                        <div class="col-xl-6" style="display:none;">
                             <div class="primary_input">
                                 <label class="primary_input_label"
                                     for="holiday_mode">{{ __('seller.holiday_mode') }}</label>

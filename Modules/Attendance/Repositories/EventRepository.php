@@ -20,10 +20,10 @@ class EventRepository implements EventRepositoryInterface
     use ImageStore;
     public function all()
     {
-        if(auth()->user()->role->type != 'superadmin'){
+        if(auth()->user()->role->type != 'admin'){
             return Event::latest()->where('created_by',auth()->user()->id)->get();
         }else{
-            return Event::latest()->get();
+            return Event::latest()->with('user')->get();
         }
         
     }
@@ -102,7 +102,11 @@ class EventRepository implements EventRepositoryInterface
 
     public function getbookingsall()
     {
-        return EventBooking::latest()->with('event')->with('user')->where('is_paid','1')->where('created_by',auth()->user()->id)->get();
+        if(Auth::user()->role->type == 'admin'){
+             return EventBooking::latest()->with('event')->with('user')->where('is_paid','1')->get();
+        }else{
+            return EventBooking::latest()->with('event')->with('user')->where('is_paid','1')->where('created_by',auth()->user()->id)->get();
+        }
     }
 
     public function getbooking($id)

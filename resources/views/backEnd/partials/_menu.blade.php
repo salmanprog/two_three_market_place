@@ -306,8 +306,8 @@
                                 @endif
                                 @endif
                                 @if(auth()->user()->role->type == 'seller')
-                                <a href="{{url('/profile')}}">{{ __('customer_panel.customer_profile') }}<i class="ti-user"></i></a>
-                                <a href="{{url('/seller/profile')}}">{{ __('seller.seller_profile') }}<i class="ti-user"></i></a>
+                                <a href="{{url('/profile')}}">{{ __('customer_panel.my_profile') }}<i class="ti-user"></i></a>
+                                <!-- <a href="{{url('/seller/profile')}}">{{ __('common.setting') }}<i class="ti-user"></i></a> -->
                                 <a href="{{url('/seller/setting')}}">{{ __('common.setting') }}<i class="ti-user"></i></a>
                                 @endif
                                 @if(auth()->user()->role->type == 'customer')

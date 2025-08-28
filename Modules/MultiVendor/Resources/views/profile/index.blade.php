@@ -32,14 +32,14 @@
                             <a class="link_change_btn nav-link {{ $profileTab == 'tab_3'?'active':'' }} show" href="#bankAccount" role="tab" data-toggle="tab" id="tab_3"
                                aria-selected="false">{{__('common.bank_account')}}</a>
                         </li>
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a class="link_change_btn nav-link {{ $profileTab == 'tab_4'?'active':'' }} show" href="#warehouseAddress" role="tab" data-toggle="tab" id="tab_4"
                                aria-selected="true">{{__('common.warehouse_address')}}</a>
                         </li>
                         <li class="nav-item">
                             <a class="link_change_btn nav-link {{ $profileTab == 'tab_5'?'active':'' }} show" href="#returnAddress" role="tab" data-toggle="tab" id="tab_5"
                                aria-selected="true">{{__('common.return_address')}}</a>
-                        </li>
+                        </li> -->
 
                     </ul>
                 </div>
@@ -65,7 +65,7 @@
                         </div>
 
 
-                        <div role="tabpanel" class="tab-pane {{ $profileTab == 'tab_4'?'active show':'' }} fade" id="warehouseAddress">
+                        <!-- <div role="tabpanel" class="tab-pane {{ $profileTab == 'tab_4'?'active show':'' }} fade" id="warehouseAddress">
                             @include('multivendor::profile.components.warehouse_address')
 
                         </div>
@@ -74,7 +74,7 @@
                         <div role="tabpanel" class="tab-pane {{ $profileTab == 'tab_5'?'active show':'' }} fade" id="returnAddress">
                             @include('multivendor::profile.components.return_address')
 
-                        </div>
+                        </div> -->
 
 
                     </div>

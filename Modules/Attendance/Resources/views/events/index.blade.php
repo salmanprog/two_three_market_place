@@ -18,8 +18,8 @@
                 </div>
             @endif
             <div class="row">
-                <div class="@if (auth()->user()->role->type != 'superadmin') col-lg-3 @else col-lg-12 @endif">
-                    @if (auth()->user()->role->type != 'superadmin')
+                <div class="@if (auth()->user()->role->type != 'admin') col-lg-3 @else col-lg-12 @endif">
+                    @if (auth()->user()->role->type != 'admin')
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="main-title">
@@ -223,7 +223,7 @@
                         </div>
                     </div>
                     @endif
-                    <div class="@if (auth()->user()->role->type != 'superadmin') col-lg-9 @else col-lg-12 @endif">
+                    <div class="@if (auth()->user()->role->type != 'admin') col-lg-9 @else col-lg-12 @endif">
                         @if(session()->has('message-success-delete'))
                             <div class="alert alert-success">
                                 {{ session()->get('message-success-delete') }}
@@ -255,7 +255,8 @@
                                                     <th>@lang('common.title')</th>
                                                     <th>@lang('common.price')</th>
                                                     <th>@lang('common.start_date')</th>
-                                                    <th>@lang('total ticket')</th>
+                                                    <th>@lang('Created By')</th>
+                                                    <th>@lang('Created By Email')</th>
                                                     <th>@lang('sold ticket')</th>
                                                     <th>@lang('common.action')</th>
                                                 </tr>
@@ -272,7 +273,8 @@
                                                             <td>{{ dateConvert($event->from_date) }}</td>
 
 
-                                                            <td>{{$event->total_ticket}}</td>
+                                                            <td>{{ @$event->user->first_name}}</td>
+                                                            <td>{{$event->user->email}}</td>
 
                                                             <td>{{ @$event->sold_ticket}}</td>
 
@@ -286,7 +288,7 @@
                                                                         {{__('common.select')}}
                                                                     </button>
                                                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
-                                                                        @if (auth()->user()->role->type != 'superadmin')
+                                                                        @if (auth()->user()->role->type != 'admin')
                                                                         @if (permissionCheck('events.update'))
                                                                             <a class="dropdown-item" href="{{route('events.edit',$event->id)}}">@lang('common.edit')</a>
                                                                         @endif

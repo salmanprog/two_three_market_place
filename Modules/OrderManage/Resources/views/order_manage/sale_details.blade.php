@@ -231,6 +231,33 @@
                                         </tr>
                                     </table>
                                 </div>
+                                <div class="col-md-6 col-lg-6">
+                                    <table class="table-borderless clone_line_table">
+                                        <tr>
+                                            <td><strong>{{__('Artist Info')}}</strong></td>
+                                        </tr>
+                                        @foreach ($order->packages as $key => $order_package)
+                                        <tr>
+                                            <td>{{__('Name')}}</td>
+                                            <td>: {{ @$order_package->seller->first_name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{__('Email')}}</td>
+                                            <td>: {{ @$order_package->seller->email }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{__('Shop')}}</td>
+                                            <td>: {{ @$order_package->seller->SellerAccount->seller_shop_display_name ? @$order_package->seller->SellerAccount->seller_shop_display_name : @$order_package->seller->first_name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{__('Phone')}}</td>
+                                            <td>:
+                                                {{ @$order_package->seller->phone }}
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </table>
+                                </div>
                                 @if(isModuleActive('Affiliate'))
                                     @if($order->affiliateUser)
                                     <div class="col-md-6 col-lg-6">
@@ -255,6 +282,7 @@
                                     @endif
                                 @endif
                             </div>
+                            
                             <div class="row mt-30">
                                 @foreach ($order->packages as $key => $order_package)
                                     <div class="col-12 mt-30">

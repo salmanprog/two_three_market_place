@@ -183,7 +183,7 @@
             @endif
             @if (app('dashboard_setup')->where('type', 'total_completed_order_card')->first()->is_active &&
             permissionCheck('seller_widgets_total_sale'))
-            <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">
+            <!-- <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">
                 <div
                     class="white-box single-summery @if (app('dashboard_setup')->where('type', 'completed_order')->first()->is_active == 1) active @elseif (app('dashboard_setup')->where('type', 'completed_order')->first()->is_active == 2) bg_active  @endif">
                     <a @if (Auth::user()->role->type == "seller" && isModuleActive('MultiVendor'))
@@ -200,11 +200,11 @@
                         </div>
                     </a>
                 </div>
-            </div>
+            </div> -->
             @endif
             @if (app('dashboard_setup')->where('type', 'total_review_card')->first()->is_active &&
             permissionCheck('seller_widgets_shop_review'))
-            <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">
+            <!-- <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">
                 <div
                     class="white-box single-summery @if (app('dashboard_setup')->where('type', 'total_review')->first()->is_active == 1) active @elseif (app('dashboard_setup')->where('type', 'total_sale')->first()->is_active == 2) bg_active  @endif">
                     <div class="d-block mt-10">
@@ -214,11 +214,11 @@
                         <h1 class="gradient-color2 shop_review">{{ getNumberTranslate($shop_review) }}</h1>
                     </div>
                 </div>
-            </div>
+            </div> -->
             @endif
             @if (app('dashboard_setup')->where('type', 'total_revenue_card')->first()->is_active &&
             permissionCheck('seller_widgets_total_product_refund'))
-            <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">
+            <!-- <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">
                 <div
                     class="white-box single-summery @if (app('dashboard_setup')->where('type', 'total_revenue')->first()->is_active == 1) active @elseif (app('dashboard_setup')->where('type', 'total_sale')->first()->is_active == 2) bg_active  @endif">
                     <div class="d-block mt-10">
@@ -228,11 +228,11 @@
                         <h1 class="gradient-color2 total_refund">{{ single_price($total_refund) }}</h1>
                     </div>
                 </div>
-            </div>
+            </div> -->
             @endif
             @if (app('dashboard_setup')->where('type', 'total_revenue_card')->first()->is_active &&
             permissionCheck('seller_widgets_total_product_refund'))
-            <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">
+            <!-- <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">
                 <div
                     class="white-box single-summery @if (app('dashboard_setup')->where('type', 'total_revenue')->first()->is_active == 1) active @elseif (app('dashboard_setup')->where('type', 'total_sale')->first()->is_active == 2) bg_active  @endif">
                     <div class="d-block mt-10">
@@ -242,10 +242,10 @@
                         <h1 class="gradient-color2 total_commision">{{ single_price($total_commision) }}</h1>
                     </div>
                 </div>
-            </div>
+            </div> -->
             @endif
             @if(app('general_setting')->seller_wise_payment)
-            <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">
+            <!-- <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">
                 <div
                     class="white-box single-summery ">
                     <a href="javascript:void(0);" class="d-block mt-10">
@@ -255,7 +255,7 @@
                         <h1 class="gradient-color2 total_commision">{{ single_price($order_commission_for_admin) }}</h1>
                     </a>
                 </div>
-            </div>
+            </div> -->
             @endif
         </div>
 

@@ -71,6 +71,38 @@
                            <span class="menu_seperator">
                                 {{__(@$section->backendMenu->name)}}
                             </span>
+                        @else
+                            <span class="menu_seperator">
+                                {{__(@$section->backendMenu->name)}}
+                            </span>
+                        @endif
+                    @elseif(auth()->user()->role->type == 'admin')
+                        @if(__(@$section->backendMenu->name) == 'Frontend CMS')
+                           <span class="menu_seperator">
+                                {{__('Events Manage')}}
+                            </span>
+                        @elseif(__(@$section->backendMenu->name) == 'Promotional')
+                        @elseif(__(@$section->backendMenu->name) == 'Content')
+                        @elseif(__(@$section->backendMenu->name) == 'System')
+                        <span class="menu_seperator">
+                                {{__('Gateways Manage')}}
+                            </span>
+                        @else
+                            <span class="menu_seperator">
+                                {{__(@$section->backendMenu->name)}}
+                            </span>
+                        @endif
+                    @elseif(auth()->user()->role->type == 'seller')
+                        @if(__(@$section->backendMenu->name) == 'User manages')
+                           <span class="menu_seperator">
+                                {{__('Events Manage')}}
+                            </span>
+                        @elseif(__(@$section->backendMenu->name) == 'Content')
+                        @elseif(__(@$section->backendMenu->name) == 'System')
+                        @else
+                            <span class="menu_seperator">
+                                {{__(@$section->backendMenu->name)}}
+                            </span>
                         @endif
                     @else
                     <span class="menu_seperator">
@@ -139,12 +171,14 @@
                                                 @elseif($menu->backendMenu->name == 'hr.human_resource')
                                                     <span class="admin">{{__('Manage Organiser')}}</span>
                                                 @elseif($menu->backendMenu->name == 'seller.manage_seller')
-                                                    <span class="admin">{{__('Manage Artist')}}</span>    
+                                                    <span class="admin">{{__('Manage Artist')}}</span>
+                                                @elseif($menu->backendMenu->name == 'frontendCms.frontend_cms')
+                                                    <span class="admin">{{__('Event Manage')}}</span>    
                                                 @else
-                                                    <span class="admin">{{__($menu->backendMenu->name)}} </span>  
+                                                    <span class="admin">{{__($menu->backendMenu->name)}}  </span>  
                                                 @endif  
                                             @else
-                                            <span class="jhs">{{__($menu->backendMenu->name)}} </span>                                                                                
+                                            <span class="jhs">{{__($menu->backendMenu->name)}}  </span>                                                                                
                                             @endif
                                             @php
                                                 $exp = explode('.',$menu->backendMenu->name)
@@ -211,7 +245,15 @@
                                                                 @else
                                                                     javascript:void(0)
                                                                 @endif"
-                                                                class="{{spn_active_link(childrenRoute($submenu), 'active')}} @if(@$submenu->children->count()) has-arrow @endif">{{__('All Artist')}}</a>        
+                                                                class="{{spn_active_link(childrenRoute($submenu), 'active')}} @if(@$submenu->children->count()) has-arrow @endif">{{__('All Artist')}}</a>
+                                                            @elseif(auth()->user()->role->type == 'admin'  && $submenu->backendMenu->name == 'frontendCms.home_page')
+                                                                                                                                                                                 <a href="{{route('events.index')}}"
+                                                                class="{{spn_active_link(childrenRoute($submenu), 'active')}} @if(@$submenu->children->count()) has-arrow @endif">{{__('All Events')}}</a>
+                                                            @elseif(auth()->user()->role->type == 'admin'  && $submenu->backendMenu->name == 'frontendCms.return_exchange')
+                                                                                                                                                                                 <a href="{{route('booking.events')}}"
+                                                                class="{{spn_active_link(childrenRoute($submenu), 'active')}} @if(@$submenu->children->count()) has-arrow @endif">{{__('Events Bookings')}}</a>
+                                                            @elseif(auth()->user()->role->type == 'admin'  && $submenu->backendMenu->name == 'common.bulk_customer_upload') 
+                                                            @elseif(auth()->user()->role->type == 'admin'  && $submenu->backendMenu->name == 'list.Income')               
                                                             @else
                                                             <a href="
                                                                 @if(\Illuminate\Support\Facades\Route::has($submenu->backendMenu->route) && !$submenu->children->count())

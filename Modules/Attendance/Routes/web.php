@@ -44,7 +44,7 @@ Route::prefix('attendance')->middleware(['auth','admin'])->group(function () {
         Route::get('/attendence-report-print/{role_id}/{month}/{year}', 'AttendanceReportController@attendance_report_print')->name('attendance_report_print');
     });
 });
-Route::resource('events','EventController')->middleware(['admin','auth','permission']);
+Route::resource('events','EventController')->middleware(['admin','auth']);
 Route::prefix('booking')->name('booking.')->group(function () {
         Route::get('/events', 'EventController@bookingIndex')->name('events');
         Route::get('/events/view/{id}', 'EventController@viewBooking')->name('events_view');

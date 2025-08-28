@@ -11,10 +11,10 @@
             <div class="white-box">
                 <div class="add-visitor">
                     <div class="row">
-                        <div class="col-xl-12">
+                        <div class="col-xl-12" style="display:none;">
                             <div class="primary_input">
                                 <label class="primary_input_label" for="cash_payment">{{ __('common.payment') }} <span class="text-danger">*</span></label>
-                                <ul id="theme_nav" class="permission_list sms_list ">
+                                <ul id="theme_nav" class="permission_list sms_list " >
                                     <li>
                                         <label data-id="bg_option" class="primary_checkbox d-flex mr-12">
                                             <input name="payment" id="cash_payment_active" {{$seller->sellerBankAccount->payment ==1?'checked':''}} value="1" class="active"
@@ -112,7 +112,7 @@
 
                         </div>
 
-                        <div class="col-xl-6">
+                        <!-- <div class="col-xl-6">
                             <div class="primary_input mb-35">
                                 <label class="primary_input_label" for="cheque_copy">{{__('seller.upload_cheque_copy')}}</label>
                                 <div class="primary_file_uploader">
@@ -136,7 +136,7 @@
                                 <img id="imgDiv33" src="{{showImage(@$seller->sellerBankAccount->bank_cheque?@$seller->sellerBankAccount->bank_cheque:'backend/img/default.png')}}" alt="">
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
                     <div class="row mt-40">
                         <div class="col-lg-12 text-center tooltip-wrapper" data-title=""

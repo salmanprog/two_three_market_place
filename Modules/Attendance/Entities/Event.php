@@ -5,6 +5,7 @@ namespace Modules\Attendance\Entities;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Modules\Attendance\Entities\EventBooking;
+use App\Models\User;
 
 class Event extends Model
 {
@@ -13,6 +14,10 @@ class Event extends Model
     public function scopeActive($query)
     {
         return $query->where('status',1);
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class, 'created_by', 'id');
     }
 
     public static function boot()
@@ -26,7 +31,7 @@ class Event extends Model
             $model->updated_by = Auth::id() ?? null;
         });
     }
-
+    
     public static function scopeTotalEvents()
     {
         $auth_id = auth()->user()->id;

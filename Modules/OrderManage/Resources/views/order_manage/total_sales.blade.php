@@ -32,21 +32,21 @@
                             @endif
 
                             @if (permissionCheck('pending_payment_orders'))
-                                <li class="nav-item">
+                                <!-- <li class="nav-item">
                                     <a class="nav-link" href="#pending_payment_data" role="tab" data-toggle="tab" id="4" aria-selected="true">{{__('order.pending_payment_orders')}}</a>
-                                </li>
+                                </li> -->
                             @endif
 
                             @if (permissionCheck('cancelled_orders'))
-                                <li class="nav-item">
+                                <!-- <li class="nav-item">
                                     <a class="nav-link" href="#cancelled_data" role="tab" data-toggle="tab" id="5" aria-selected="true">{{__('order.cancelled_orders')}}</a>
-                                </li>
+                                </li> -->
                             @endif
 
                             @if (permissionCheck('inhouse_orders'))
-                                <li class="nav-item">
+                                <!-- <li class="nav-item">
                                     <a class="nav-link" href="#inhouse_order_data" role="tab" data-toggle="tab" id="6" aria-selected="true">{{__('order.inhouse_orders')}}</a>
-                                </li>
+                                </li> -->
                             @endif
 
                         </ul>

@@ -8,9 +8,9 @@
             <div class="main-title mb-25 d-md-flex">
                 <h3 class="mb-0 mr-30 mb_xs_15px mb_sm_20px">{{ __('general_settings.activation') }}</h3>
                 @if(isModuleActive('MultiVendor') && auth()->user()->role->type != 'seller')
-                    <ul class="d-flex">
+                    <!-- <ul class="d-flex">
                         <li><a class="primary-btn radius_30px mr-10 fix-gr-bg" href="{{route("payment_gateway.setting")}}"><i class="fas fa-cog"></i>{{__('payment_gatways.global_configuration')}}</a></li>
-                    </ul>
+                    </ul> -->
                 @endif
             </div>
             <div class="common_QA_section QA_section_heading_custom">
