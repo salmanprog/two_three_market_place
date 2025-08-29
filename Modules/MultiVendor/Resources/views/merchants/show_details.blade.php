@@ -23,7 +23,7 @@
                                 @endif
 
                                 @if (permissionCheck('admin.change_merchant_trusted_status'))
-                                    <li>
+                                    <!-- <li>
                                         <a class="primary-btn radius_30px mr-10 fix-gr-bg abtn trusted_seller_btn" data-value="{{route('admin.change_merchant_trusted_status', @$user->SellerAccount->id)}}">
                                             @if (@$user->SellerAccount->is_trusted == 0)
                                                 <i class="ti-check"></i>{{ __('seller.make_trusted') }}
@@ -32,7 +32,7 @@
                                             @endif
 
                                         </a>
-                                    </li>
+                                    </li> -->
                                 @endif
 
                             </ul>
@@ -404,9 +404,9 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="#Products" role="tab" data-toggle="tab">{{ __('common.products') }}</a>
                                 </li>
-                                <li class="nav-item">
+                                <!-- <li class="nav-item">
                                     <a class="nav-link" href="#OrderRepand" role="tab" data-toggle="tab">{{ __('common.order_refund') }}</a>
-                                </li>
+                                </li> -->
                             </ul>
                             <div class="tab-content pt-30">
 

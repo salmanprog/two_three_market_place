@@ -8,32 +8,32 @@
         @endif
 
         @if (permissionCheck('admin.secret_login'))
-            <a href="{{route('admin.secret_login',$seller->user->id)}}" class="dropdown-item" type="button">{{ __('common.secret_login') }}</a>
+            <!-- <a href="{{route('admin.secret_login',$seller->user->id)}}" class="dropdown-item" type="button">{{ __('common.secret_login') }}</a> -->
         @endif
 
         @if (permissionCheck('admin.change_merchant_trusted_status'))
-            <a class="dropdown-item trust_seller_change" type="button" data-value="{{route('admin.change_merchant_trusted_status', @$seller->id)}}">
+            <!-- <a class="dropdown-item trust_seller_change" type="button" data-value="{{route('admin.change_merchant_trusted_status', @$seller->id)}}">
                 @if (@$seller->is_trusted == 0)
                     {{ __('seller.make_trusted') }}
                 @else
                     {{ __('seller.remove_from_trusted') }}
                 @endif
-            </a>
+            </a> -->
         @endif
 
         @if (permissionCheck('admin.change_merchant_trusted_status'))
-            <a class="dropdown-item trust_seller_change" type="button" data-value="{{route('admin.update_status', @$seller->user->id)}}">
+            <!-- <a class="dropdown-item trust_seller_change" type="button" data-value="{{route('admin.update_status', @$seller->user->id)}}">
                 @if (@$seller->user->is_active  == 1)
                     {{ __('common.deactive') }}
                 @else
                     {{ __('common.active') }}
                 @endif
-            </a>
+            </a> -->
         @endif
 
-        <a class="dropdown-item seller_change_password" type="button" data-value="{{$seller->user->id}}">
+        <!-- <a class="dropdown-item seller_change_password" type="button" data-value="{{$seller->user->id}}">
             {{ __('seller.change_password') }}
-        </a>
+        </a> -->
 
     </div>
 </div>

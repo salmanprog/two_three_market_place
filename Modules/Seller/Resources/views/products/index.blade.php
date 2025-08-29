@@ -12,29 +12,29 @@
                         <div class="float-lg-right float-none pos_tab_btn justify-content-end">
                             <ul class="nav nav_list" role="tablist">
                                 @if (permissionCheck('seller.product.index') || auth()->user()->role->type =="seller")
-                                    <li class="nav-item" id="product_list_li">
+                                    <!-- <li class="nav-item" id="product_list_li">
                                         <a class="nav-link active show" href="#product_list" role="tab" data-toggle="tab" id="1" aria-selected="true">{{__('product.product_list')}}</a>
-                                    </li>
+                                    </li> -->
                                 @endif
                                 @if (permissionCheck('seller_own_product') && auth()->user()->role->type != 'superadmin')
                                     <li class="nav-item" id="my_product_list_li">
-                                        <a class="nav-link" href="#my_product_data" role="tab" data-toggle="tab" id="1" aria-selected="true">{{ __('product.my_product_list') }}</a>
+                                        <a class="nav-link active show" href="#my_product_data" role="tab" data-toggle="tab" id="1" aria-selected="true">{{ __('product.my_product_list') }}</a>
                                     </li>
                                 @endif
                                 @if (permissionCheck('seller_alert_product'))
-                                    <li class="nav-item" id="alert_product_list_li">
+                                    <!-- <li class="nav-item" id="alert_product_list_li">
                                         <a class="nav-link" href="#alert_product_list" role="tab" data-toggle="tab" id="1" aria-selected="true">{{ __('product.alert_list') }}</a>
-                                    </li>
+                                    </li> -->
                                 @endif
                                 @if (permissionCheck('seller_out_of_stock_product'))
-                                    <li class="nav-item" id="stock_out_product_list_li">
+                                    <!-- <li class="nav-item" id="stock_out_product_list_li">
                                         <a class="nav-link" href="#out_of_stock_product_list" role="tab" data-toggle="tab" id="1" aria-selected="true">{{ __('product.out_of_stock_list') }}</a>
-                                    </li>
+                                    </li> -->
                                 @endif
                                 @if (permissionCheck('seller_disabled_product'))
-                                    <li class="nav-item" id="disabled_product_list_li">
+                                    <!-- <li class="nav-item" id="disabled_product_list_li">
                                         <a class="nav-link" href="#disabled_product_list" role="tab" data-toggle="tab" id="1" aria-selected="true">{{ __('product.disabled_product_list') }}</a>
-                                    </li>
+                                    </li> -->
                                 @endif
                                 @if (auth()->user()->role->type == "seller")
                                     @if (permissionCheck('seller.product.create'))

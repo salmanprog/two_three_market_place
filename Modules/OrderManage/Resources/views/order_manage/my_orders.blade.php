@@ -32,9 +32,9 @@
                             @endif
 
                             @if (permissionCheck('cancelled_orders'))
-                                <li class="nav-item">
+                                <!-- <li class="nav-item">
                                     <a class="nav-link" href="#cancelled_data" role="tab" data-toggle="tab" id="1" aria-selected="true">{{__('order.cancelled_orders')}}</a>
-                                </li>
+                                </li> -->
                             @endif
 
                         </ul>

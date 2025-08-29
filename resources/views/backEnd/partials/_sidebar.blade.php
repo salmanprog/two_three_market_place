@@ -138,7 +138,7 @@
                                             @else
                                                 @if(auth()->user()->role->type == 'staff')
                                                     @if(@$menu->backendMenu->route == 'admin.dashboard')
-                                                        {{route('event.dashboard')}}
+                                                        {{route('event.dashboard')}}    
                                                     @else
                                                         {{route(@$menu->backendMenu->route)}}    
                                                     @endif    
@@ -157,7 +157,7 @@
                                                 @if($section->backendMenu?->name == 'common.user_manages')
                                                     <span class="abc">Event Managment</span>
                                                 @else
-                                                    <span class="jhs">{{__($menu->backendMenu->name)}} </span>    
+                                                    <span class="jhs">{{__($menu->backendMenu->name)}}  </span>    
                                                 @endif
                                             @elseif(auth()->user()->role->type == 'seller')
                                                 @if($section->backendMenu?->name == 'common.user_manages')

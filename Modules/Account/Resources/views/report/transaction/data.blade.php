@@ -4,10 +4,10 @@
         <tr>
             <th scope="col">{{ __('common.date') }}</th>
             <th scope="col">{{ __('chart_of_account.Chart Of Accounts') }}</th>
-            <th scope="col">{{ __('bank_account.Bank Accounts') }}</th>
+            <!-- <th scope="col">{{ __('bank_account.Bank Accounts') }}</th> -->
             <th scope="col">{{ __('common.title') }}</th>
             <th scope="col">{{ __('transaction.Credit') }}</th>
-            <th scope="col">{{ __('transaction.Debit') }}</th>
+            <!-- <th scope="col">{{ __('transaction.Debit') }}</th> -->
         </tr>
     </thead>
     <tbody>
@@ -19,8 +19,8 @@
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
-            <td></td>
+            <!-- <td></td>
+            <td></td> -->
         </tr>
     </tfoot>
 </table>

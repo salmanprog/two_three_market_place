@@ -28,15 +28,15 @@
                                             <th>{{ __('common.email') }}</th>
                                             <th>{{ __('common.phone') }}</th>
                                             <th>{{ __('common.commission_type') }}</th>
-                                            @if (file_exists(base_path().'/Modules/GST/'))
+                                            <!-- @if (file_exists(base_path().'/Modules/GST/'))
                                                 @if (app('gst_config')['enable_gst'] == "gst" || app('gst_config')['enable_gst'] == "flat_tax")
                                                     <th>{{ __('gst.gst_or_flat_tax_claim_by_seller') }}</th>
                                                 @endif
-                                            @endif
-                                            <th>{{ __('common.is_trusted') }}</th>
+                                            @endif -->
+                                            <!-- <th>{{ __('common.is_trusted') }}</th> -->
                                             <th>{{ __('common.shop_name') }}</th>
-                                            <th>{{ __('common.wallet_balance') }}</th>
-                                            <th>{{ __('common.total_orders') }}</th>
+                                            <!-- <th>{{ __('common.wallet_balance') }}</th>
+                                            <th>{{ __('common.total_orders') }}</th> -->
                                             <th>{{ __('common.action') }}</th>
                                         </tr>
                                     </thead>
@@ -160,11 +160,11 @@
                                 { data: 'email', name: 'user.email' },
                                 { data: 'phone', name: 'user.username' },
                                 { data: 'commission_type', name: 'commission_type' },
-                                { data: 'gst', name: 'gst' },
-                                { data: 'is_trusted', name: 'is_trusted' },
+                                //{ data: 'gst', name: 'gst' },
+                                //{ data: 'is_trusted', name: 'is_trusted' },
                                 { data: 'shop_name', name: 'shop_name' },
-                                { data: 'wallet_balance', name: 'wallet_balance' },
-                                { data: 'total_orders', name: 'total_orders' },
+                                //{ data: 'wallet_balance', name: 'wallet_balance' },
+                                //{ data: 'total_orders', name: 'total_orders' },
                                 { data: 'action', name: 'action' }
                             ];
                 }else {
@@ -176,10 +176,10 @@
                                 { data: 'email', name: 'user.email' },
                                 { data: 'phone', name: 'user.username' },
                                 { data: 'commission_type', name: 'commission_type' },
-                                { data: 'is_trusted', name: 'is_trusted' },
+                                //{ data: 'is_trusted', name: 'is_trusted' },
                                 { data: 'shop_name', name: 'shop_name' },
-                                { data: 'wallet_balance', name: 'wallet_balance' },
-                                { data: 'total_orders', name: 'total_orders' },
+                                //{ data: 'wallet_balance', name: 'wallet_balance' },
+                                //{ data: 'total_orders', name: 'total_orders' },
                                 { data: 'action', name: 'action' }
                             ];
                 }

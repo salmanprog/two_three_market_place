@@ -57,10 +57,10 @@ $elements = ['datatable', 'datepicker']
                     columns: [
                         { data: 'date', name: 'date', searchable:false },
                         { data: 'chart_of_account', name: 'chart_of_account' },
-                        { data: 'bank_account', name: 'bank_account' },
+                        //{ data: 'bank_account', name: 'bank_account' },
                         { data: 'title', name: 'title' },
                         { data: 'credit', name: 'credit' },
-                        { data: 'debit', name: 'debit' }
+                        //{ data: 'debit', name: 'debit' }
 
                     ],
                     "footerCallback": function ( row, data, start, end, display ) {
@@ -75,23 +75,23 @@ $elements = ['datatable', 'datepicker']
                         };
 
                         var creditTotal = api
-                            .column( 4 , { page: 'current'})
+                            .column( 3 , { page: 'current'})
                             .data()
                             .reduce( function (a, b) {
                                 return parseFloat(a) + parseFloat(b);
                             }, 0 );
-                        var debitTotal = api
-                            .column( 5 , { page: 'current'})
-                            .data()
-                            .reduce( function (a, b) {
-                                return parseFloat(a) + parseFloat(b);
-                            }, 0 );
+                        // var debitTotal = api
+                        //     .column( 5 , { page: 'current'})
+                        //     .data()
+                        //     .reduce( function (a, b) {
+                        //         return parseFloat(a) + parseFloat(b);
+                        //     }, 0 );
 
                         var currency_sym = $('#currency_sym').val();
                         // Update footer by showing the total with the reference of the column index
                     $( api.column( 0 ).footer() ).html('Total');
-                        $( api.column( 4 ).footer() ).html(currency_sym + ' ' +creditTotal.toFixed(2));
-                        $( api.column( 5 ).footer() ).html(currency_sym + ' ' +debitTotal.toFixed(2));
+                        $( api.column( 3 ).footer() ).html(currency_sym + ' ' +creditTotal.toFixed(2));
+                        //$( api.column( 5 ).footer() ).html(currency_sym + ' ' +debitTotal.toFixed(2));
                     },
                     bLengthChange: true,
                     "bDestroy": true,
