@@ -84,6 +84,27 @@ class OrderController extends Controller
         }
     }
 
+    public function my_orders(Request $request)
+    {
+        if ($request->has('rn')) {
+            $data['orders'] = $this->orderService->myPurchaseOrderListwithRN($request->rn);
+            $data['rn'] = $request->rn;
+        } else {
+            $data['orders'] = $this->orderService->myPurchaseOrderList();
+        }
+        $cancelReasonRepo = new CancelReasonRepository;
+        $data['cancel_reasons'] = $cancelReasonRepo->getAll();
+        $data['no_paid_orders'] = $this->orderService->myPurchaseOrderListNotPaid();
+        $data['to_shippeds'] = $this->orderService->myPurchaseOrderPackageListShipped();
+        $data['to_recieves'] = $this->orderService->myPurchaseOrderPackageListRecieved();
+
+        if (auth()->user()->role->type != 'customer') {
+            return view('backEnd.pages.customer_data.myorder', $data);
+        } else {
+            return view(theme('pages.profile.order'), $data);
+        }
+    }
+
 
 
     public function store(Request $request)

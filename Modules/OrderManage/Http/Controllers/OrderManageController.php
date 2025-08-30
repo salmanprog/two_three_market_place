@@ -53,7 +53,6 @@ class OrderManageController extends Controller
             return DataTables::of($order_package)
                 ->addIndexColumn()
                 ->addColumn('date', function ($order_package) {
-
                     return dateConvert($order_package->order->created_at);
                 })
                 ->addColumn('order_number', function ($order_package) {

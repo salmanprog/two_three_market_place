@@ -71,6 +71,15 @@
                            <span class="menu_seperator">
                                 {{__(@$section->backendMenu->name)}}
                             </span>
+                        @elseif(__(@$section->backendMenu->name) == 'User manages')
+                            <span class="menu_seperator">
+                                {{__('Events Manage')}}
+                            </span>
+                        @elseif(__(@$section->backendMenu->name) == 'Frontend CMS')
+                        @elseif(__(@$section->backendMenu->name) == 'Product Manage')
+                        @elseif(__(@$section->backendMenu->name) == 'Promotional')
+                        @elseif(__(@$section->backendMenu->name) == 'Content')
+                        @elseif(__(@$section->backendMenu->name) == 'System')
                         @else
                             <span class="menu_seperator">
                                 {{__(@$section->backendMenu->name)}}
@@ -214,6 +223,9 @@
                                                             @if(auth()->user()->role->type == 'staff' && $submenu->backendMenu->id == 12 && $submenu->backendMenu->name == 'hr.holiday_setup' && $submenu->backendMenu->route == 'holidays.index' )
                                                             <a href="{{route('booking.events')}}"
                                                                 class="{{spn_active_link(['booking.events'], 'active')}} @if(@$submenu->children->count()) has-arrow @endif">{{__('Event Bookings')}}</a>
+                                                            @elseif(auth()->user()->role->type == 'staff' &&$submenu->backendMenu->name == 'order.total_order' )
+                                                            <a href="{{route('frontend.orders_manage')}}"
+                                                                class="{{spn_active_link(['order.total_order'], 'active')}} @if(@$submenu->children->count()) has-arrow @endif">{{__('Total Order')}}</a>
                                                             @elseif(auth()->user()->role->type == 'admin'  && $submenu->backendMenu->name == 'hr.staff')
                                                                                                                                                                                  <a href="
                                                                 @if(\Illuminate\Support\Facades\Route::has($submenu->backendMenu->route) && !$submenu->children->count())
@@ -269,7 +281,7 @@
                                                                 @else
                                                                     javascript:void(0)
                                                                 @endif"
-                                                                class="{{spn_active_link(childrenRoute($submenu), 'active')}} @if(@$submenu->children->count()) has-arrow @endif">{{__(@$submenu->backendMenu->name)}} </a>
+                                                                class="{{spn_active_link(childrenRoute($submenu), 'active')}} @if(@$submenu->children->count()) has-arrow @endif">{{__(@$submenu->backendMenu->name)}}</a>
                                                             @endif    
                                                             @if(@$submenu->children->count())
                                                                 <ul class="metis_submenu">
