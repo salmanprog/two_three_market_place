@@ -76,12 +76,14 @@
                                 <div class="customer_profile">
                                     <h3>{{__('common.wallet_summary')}}</h3>
                                     <table class="table table-borderless customer_view">
-                                        <tr><td>{{__('common.total_recharge')}}</td>
+                                        <tr><td>{{__('Total Spent')}}</td>
+                                        <td>: <span class="ml-1"></span>{{single_price($customer->orders->sum('grand_total'))}}</td></tr>
+                                        <!-- <tr><td>{{__('common.total_recharge')}}</td>
                                         <td>: <span class="ml-1"></span>{{single_price($customer->wallet_balances->where('type', 'Deposite')->sum('amount'))}}</td></tr>
                                         <tr><td>{{__('common.pending_balance_approval')}}</td>
                                         <td>: <span class="ml-1"></span>{{single_price($customer->CustomerCurrentWalletPendingAmounts)}}</td></tr>
                                         <tr><td>{{__('common.total_balance')}}</td>
-                                        <td>: <span class="ml-1"></span>{{single_price($customer->CustomerCurrentWalletAmounts)}}</td></tr>
+                                        <td>: <span class="ml-1"></span>{{single_price($customer->CustomerCurrentWalletAmounts)}}</td></tr> -->
                                     </table>
                                 </div>
                             </div>
@@ -114,13 +116,13 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="#Wallet" role="tab" data-toggle="tab">{{ __('common.wallet_histories') }}</a>
                                 </li>
-                                <li class="nav-item">
+                                <!-- <li class="nav-item">
                                     <a class="nav-link" href="#Address" role="tab" data-toggle="tab">{{ __('common.addresses') }}</a>
                                 </li>
 
                                 <li class="nav-item">
                                     <a class="nav-link" href="#login_ip" role="tab" data-toggle="tab">{{ __('common.login_ip') }}</a>
-                                </li>
+                                </li> -->
                             </ul>
                             <div class="tab-content pt-30">
 

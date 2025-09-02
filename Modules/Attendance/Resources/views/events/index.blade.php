@@ -296,7 +296,7 @@
                                                                             <a data-value="{{route('events.delete', $event->id)}}" class="dropdown-item delete_event">{{__('common.delete')}}</a>
                                                                         @endif
                                                                         @else
-                                                                            <a target="_blank" class="dropdown-item" href="{{route('frontend.organiser-events-show',$event->id)}}">@lang('common.view')</a>
+                                                                            <a class="dropdown-item" href="{{route('view_event',$event->id)}}">@lang('common.view')</a>
                                                                         @endif
                                                                     </div>
                                                                 </div>

@@ -257,7 +257,7 @@
                                                                 @else
                                                                     javascript:void(0)
                                                                 @endif"
-                                                                class="{{spn_active_link(childrenRoute($submenu), 'active')}} @if(@$submenu->children->count()) has-arrow @endif">{{__('All Artist')}}</a>
+                                                                class="{{spn_active_link(childrenRoute($submenu), 'active')}} @if(@$submenu->children->count()) has-arrow @endif">{{__('All Artist')}} </a>
                                                             @elseif(auth()->user()->role->type == 'admin'  && $submenu->backendMenu->name == 'frontendCms.home_page')
                                                                                                                                                                                  <a href="{{route('events.index')}}"
                                                                 class="{{spn_active_link(childrenRoute($submenu), 'active')}} @if(@$submenu->children->count()) has-arrow @endif">{{__('All Events')}}</a>
@@ -281,7 +281,7 @@
                                                                 @else
                                                                     javascript:void(0)
                                                                 @endif"
-                                                                class="{{spn_active_link(childrenRoute($submenu), 'active')}} @if(@$submenu->children->count()) has-arrow @endif">{{__(@$submenu->backendMenu->name)}}</a>
+                                                                class="{{spn_active_link(childrenRoute($submenu), 'active')}} @if(@$submenu->children->count()) has-arrow @endif">{{__(@$submenu->backendMenu->name)}} </a>
                                                             @endif    
                                                             @if(@$submenu->children->count())
                                                                 <ul class="metis_submenu">

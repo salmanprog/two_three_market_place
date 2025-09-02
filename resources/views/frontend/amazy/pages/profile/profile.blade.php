@@ -63,12 +63,12 @@
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="Password-tab" data-bs-toggle="tab" data-bs-target="#Password" type="button" role="tab" aria-controls="Password" aria-selected="false">{{__('common.change_password') }}</button>
                         </li>
-                        <li class="nav-item" role="presentation">
+                        <!-- <li class="nav-item" role="presentation">
                             <button class="nav-link " id="Address-tab" data-bs-toggle="tab" data-bs-target="#Address" type="button" role="tab" aria-controls="Address" aria-selected="false">{{__('common.address') }}</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
+                        </li> -->
+                        <!-- <li class="nav-item" role="presentation">
                             <button class="nav-link " id="language-tab" data-bs-toggle="tab" data-bs-target="#Language" type="button" role="tab" aria-controls="Language" aria-selected="false">{{__('common.language') }}</button>
-                        </li>
+                        </li> -->
                     </ul>
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active" id="Info" role="tabpanel" aria-labelledby="Info-tab">

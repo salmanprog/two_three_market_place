@@ -72,6 +72,13 @@ class EventController extends Controller
         return view('attendance::show');
     }
 
+    public function viewDetails($id)
+    {
+        $events = $this->eventRepository->find($id);
+        $event_booking = $this->eventRepository->getAllBookingById($id);
+        return view('attendance::events.viewevent', compact('events','event_booking'));
+    }
+
     public function edit($id)
     {
         try {

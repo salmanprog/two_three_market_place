@@ -23,11 +23,11 @@
                 </div>
             </div>
             @if (permissionCheck('widget_card'))
-            <!-- <div class="col-lg-8 col-md-8 col-sm-12">
+            <div class="col-lg-8 col-md-8 col-sm-12">
                 <div class="float-md-right float-none pos_tab_btn justify-content-end">
                     <ul class="nav">
                         <li class="nav-item mb_5">
-                            <a class="nav-link filtering active" data-type="today" href="javascript:void(0)">{{
+                            <a class="nav-link filtering" data-type="today" href="javascript:void(0)">{{
                                 __('dashboard.today') }}</a>
                         </li>
                         <li class="nav-item mb_5">
@@ -44,7 +44,7 @@
                         </li>
                     </ul>
                 </div>
-            </div> -->
+            </div>
             @endif
         </div>
         @if (permissionCheck('widget_card'))
@@ -53,7 +53,7 @@
             permissionCheck('widget_total_product'))
             <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">
                 <div class="white-box single-summery @if (app('dashboard_setup')->where('type', 'total_products')->first()->is_active == 1) active @elseif (app('dashboard_setup')->where('type', 'total_products')->first()->is_active == 2) bg_active @endif">
-                    <a href="javascript:void(0);">
+                    <a href="{{route('product.index')}}">
                         <div class="d-block mt-10">
                             <h3>{{ __('Total Inventory') }}</h3>
                             <img class="demo_wait d-none" height="60px"
@@ -69,12 +69,12 @@
             <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">
                 <div
                     class="white-box single-summery @if (app('dashboard_setup')->where('type', 'total_sellers')->first()->is_active == 1) active @elseif (app('dashboard_setup')->where('type', 'total_sellers')->first()->is_active == 2) bg_active @endif">
-                    <a href="javascript:void(0);">
+                    <a href="{{route('admin.merchants_list')}}">
                         <div class="d-block mt-10">
                             <h3>{{ __('Total Artist') }}</h3>
                             <img class="demo_wait d-none" height="60px"
                                 src="{{showImage('backend/img/loader.gif')}}" alt="">
-                            <h1 class="gradient-color2">{{ getNumberTranslate($totalSellers) }}</h1>
+                            <h1 class="gradient-color2 total_sellers">{{ getNumberTranslate($totalSellers) }}</h1>
                         </div>
                     </a>
                 </div>
@@ -85,12 +85,12 @@
             <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">
                 <div
                     class="white-box single-summery @if (app('dashboard_setup')->where('type', 'total_customer')->first()->is_active == 1) active @elseif (app('dashboard_setup')->where('type', 'total_customer')->first()->is_active == 2) bg_active  @endif">
-                    <a href="javascript:void(0);">
+                    <a href="{{route('cusotmer.list_active')}}">
                         <div class="d-block mt-10">
                             <h3>{{ __('Total Buyer') }}</h3>
                             <img class="demo_wait d-none" height="60px"
                                 src="{{showImage('backend/img/loader.gif')}}" alt="">
-                            <h1 class="gradient-color2">{{ getNumberTranslate($totalCustomers) }}</h1>
+                            <h1 class="gradient-color2 total_customer">{{ getNumberTranslate($totalCustomers) }}</h1>
                         </div>
                     </a>
                 </div>
@@ -101,7 +101,7 @@
             <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">
                 <div
                     class="white-box single-summery @if (app('dashboard_setup')->where('type', 'todays_visitor')->first()->is_active == 1) active @elseif (app('dashboard_setup')->where('type', 'todays_visitor')->first()->is_active == 2) bg_active  @endif">
-                    <a href="javascript:void(0);">
+                    <a href="{{route('staffs.index')}}">
                         <div class="d-block mt-10">
                             <h3>{{ __('Total Organiser') }}</h3>
                             <img class="demo_wait d-none" height="60px"
@@ -117,7 +117,7 @@
             <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">
                 <div
                     class="white-box single-summery @if (app('dashboard_setup')->where('type', 'total_order')->first()->is_active == 1) active @elseif (app('dashboard_setup')->where('type', 'total_order')->first()->is_active == 2) bg_active  @endif">
-                    <a href="javascript:void(0);"">
+                    <a href="{{route('order_manage.total_sales_index')}}">
                         <div class="d-block mt-10">
                             <h3>{{ __('dashboard.total_order') }}</h3>
                             <img class="demo_wait d-none" height="60px"
@@ -133,7 +133,7 @@
             <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">
                 <div
                     class="white-box single-summery @if (app('dashboard_setup')->where('type', 'pending_order')->first()->is_active == 1) active @elseif (app('dashboard_setup')->where('type', 'pending_order')->first()->is_active == 2) bg_active  @endif">
-                    <a href="javascript:void(0);">
+                    <a href="{{route('order_manage.total_sales_index')}}">
                         <div class="d-block mt-10">
                             <h3>{{ __('dashboard.total_pending_order') }}</h3>
                             <img class="demo_wait d-none" height="60px"
@@ -149,7 +149,7 @@
             <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">
                 <div
                     class="white-box single-summery @if (app('dashboard_setup')->where('type', 'completed_order')->first()->is_active == 1) active @elseif (app('dashboard_setup')->where('type', 'completed_order')->first()->is_active == 2) bg_active  @endif">
-                    <a href="javascript:void(0);">
+                    <a href="{{route('order_manage.total_sales_index')}}">
                         <div class="d-block mt-10">
                             <h3>{{ __('dashboard.total_completed_order') }}</h3>
                             <img class="demo_wait d-none" height="60px"
@@ -165,12 +165,14 @@
             <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">
                 <div
                     class="white-box single-summery @if (app('dashboard_setup')->where('type', 'total_sale')->first()->is_active == 1) active @elseif (app('dashboard_setup')->where('type', 'total_sale')->first()->is_active == 2) bg_active  @endif">
+                    <a href="{{route('account.transaction')}}">
                     <div class="d-block mt-10">
                         <h3>{{ __('dashboard.total_sale') }}</h3>
                         <img class="demo_wait d-none" height="60px"
                             src="{{showImage('backend/img/loader.gif')}}" alt="">
                         <h1 class="gradient-color2 total_sale">{{ single_price($total_sale) }}</h1>
                     </div>
+                    </a>
                 </div>
             </div>
             @endif
@@ -179,12 +181,14 @@
             <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">
                 <div
                     class="white-box single-summery @if (app('dashboard_setup')->where('type', 'total_review')->first()->is_active == 1) active @elseif (app('dashboard_setup')->where('type', 'total_sale')->first()->is_active == 2) bg_active  @endif">
+                    <a href="{{route('events.index')}}">
                     <div class="d-block mt-10">
                         <h3>{{ __('Total Events') }}</h3>
                         <img class="demo_wait d-none" height="60px"
                             src="{{showImage('backend/img/loader.gif')}}" alt="">
-                        <h1 class="gradient-color2 total_review">{{ getNumberTranslate($total_event) }}</h1>
+                        <h1 class="gradient-color2 total_event">{{ getNumberTranslate($total_event) }}</h1>
                     </div>
+                    </a>
                 </div>
             </div>
             @endif
@@ -193,12 +197,14 @@
             <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">
                 <div
                     class="white-box single-summery @if (app('dashboard_setup')->where('type', 'total_revenue')->first()->is_active == 1) active @elseif (app('dashboard_setup')->where('type', 'total_sale')->first()->is_active == 2) bg_active  @endif">
+                    <a href="{{route('events.index')}}">
                     <div class="d-block mt-10">
                         <h3>{{ __('Total Active Events') }}</h3>
                         <img class="demo_wait d-none" height="60px"
                             src="{{showImage('backend/img/loader.gif')}}" alt="">
-                        <h1 class="gradient-color2 total_revenue">{{ getNumberTranslate($total_active_event) }}</h1>
+                        <h1 class="gradient-color2 total_active_event">{{ getNumberTranslate($total_active_event) }}</h1>
                     </div>
+                    </a>
                 </div>
             </div>
             @endif
@@ -207,12 +213,12 @@
             <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">
                 <div
                     class="white-box single-summery @if (app('dashboard_setup')->where('type', 'active_customer')->first()->is_active == 1) active @elseif (app('dashboard_setup')->where('type', 'total_sale')->first()->is_active == 2) bg_active  @endif">
-                    <a href="javascript:void(0);">
+                    <a href="{{route('events.index')}}">
                         <div class="d-block mt-10">
                             <h3>{{ __('Total Expire Events') }}</h3>
                             <img class="demo_wait d-none" height="60px"
                                 src="{{showImage('backend/img/loader.gif')}}" alt="">
-                            <h1 class="gradient-color2">{{ getNumberTranslate($total_expire_event) }}</h1>
+                            <h1 class="gradient-color2 total_expire_event">{{ getNumberTranslate($total_expire_event) }}</h1>
                         </div>
                     </a>
                 </div>
@@ -223,12 +229,14 @@
             <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6">
                 <div
                     class="white-box single-summery @if (app('dashboard_setup')->where('type', 'total_subcriber')->first()->is_active == 1) active @elseif (app('dashboard_setup')->where('type', 'total_sale')->first()->is_active == 2) bg_active  @endif">
+                    <a href="{{route('booking.events')}}">
                     <div class="d-block mt-10">
                         <h3>{{ __('Total Event Bookings') }}</h3>
                         <img class="demo_wait d-none" height="60px"
                             src="{{showImage('backend/img/loader.gif')}}" alt="">
-                        <h1 class="gradient-color2">{{ getNumberTranslate($total_event_bookings) }}</h1>
+                        <h1 class="gradient-color2 total_event_bookings">{{ getNumberTranslate($total_event_bookings) }}</h1>
                     </div>
+                    </a>
                 </div>
             </div>
             @endif
@@ -418,13 +426,20 @@
                   url: "{{url('dashboard-cards-info')}}" + "/" + type,
                   success: function (data) {
 
-                      $('.total_visitors').text(numbertrans(data.total_visitors));
+                      $('.total_visitors').text(numbertrans(data.totalOrganiser));
                       $('.total_sale').text(numbertrans(data.total_sale));
                       $('.total_order').text(numbertrans(data.total_order));
                       $('.total_pending_order').text(numbertrans(data.total_pending_order));
                       $('.total_completed_order').text(numbertrans(data.total_completed_order));
                       $('.total_review').text(numbertrans(data.total_review));
                       $('.total_revenue').text(numbertrans(data.total_revenue));
+                      $('.total_products').text(numbertrans(data.totalProducts));
+                      $('.total_sellers').text(numbertrans(data.totalSellers));  
+                      $('.total_customer').text(numbertrans(data.totalCustomers));
+                      $('.total_event').text(numbertrans(data.total_event));
+                      $('.total_active_event').text(numbertrans(data.total_active_event));
+                      $('.total_expire_event').text(numbertrans(data.total_expire_event));
+                      $('.total_event_bookings').text(numbertrans(data.total_event_bookings));
                       $('.gradient-color2').show();
                       $('.demo_wait').addClass('d-none');
                   }

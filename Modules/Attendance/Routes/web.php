@@ -45,6 +45,7 @@ Route::prefix('attendance')->middleware(['auth','admin'])->group(function () {
     });
 });
 Route::resource('events','EventController')->middleware(['admin','auth']);
+Route::get('/view/event/{id}', 'EventController@viewDetails')->name('view_event');
 Route::prefix('booking')->name('booking.')->group(function () {
         Route::get('/events', 'EventController@bookingIndex')->name('events');
         Route::get('/events/view/{id}', 'EventController@viewBooking')->name('events_view');

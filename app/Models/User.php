@@ -45,6 +45,7 @@ use Modules\GeneralSetting\Entities\EmailTemplate;
 use Modules\Language\Entities\Language;
 use Modules\MultiVendor\Entities\FollowSeller;
 use Modules\SidebarManager\Entities\BackendmenuUser;
+use Carbon\Carbon;
 
 class User extends Authenticatable
 {
@@ -120,6 +121,68 @@ class User extends Authenticatable
     protected $appends  = [
         'name'
     ];
+
+    public function scopeBuyerInfo($query, $type, $state)
+    {
+        $year = Carbon::now()->year;
+        if ($type == "today") {
+            $query->whereBetween('created_at', [Carbon::now()->format('y-m-d')." 00:00:00", Carbon::now()->format('y-m-d')." 23:59:59"]);
+        }
+        elseif ($type == "week") {
+            $query->whereBetween('created_at', [Carbon::now()->subDays(7)->format('y-m-d')." 00:00:00", Carbon::now()->format('y-m-d')." 23:59:59"]);
+        }
+        elseif ($type == "month") {
+            $month = Carbon::now()->month;
+            $date_1 = Carbon::create($year, $month)->startOfMonth()->format('Y-m-d')." 00:00:00";
+            $query->whereBetween('created_at', [$date_1, Carbon::now()->format('y-m-d')." 23:59:59"]);
+        }
+        elseif ($type == "year") {
+            $date_1 = Carbon::create($year, 1)->startOfMonth()->format('Y-m-d')." 00:00:00";
+            $query->whereBetween('created_at', [$date_1, Carbon::now()->format('y-m-d')." 23:59:59"]);
+        }
+
+        if ($state === "all") {
+            return $query->where('role_id',4)->count();
+        }
+        elseif ($state === 0) {
+            return $query->where('role_id',4)->count();
+        }
+        elseif ($state === 1) {
+            return $query->where('role_id',4)->count();
+        }
+
+    }
+
+    public function scopeOrganiserInfo($query, $type, $state)
+    {
+        $year = Carbon::now()->year;
+        if ($type == "today") {
+            $query->whereBetween('created_at', [Carbon::now()->format('y-m-d')." 00:00:00", Carbon::now()->format('y-m-d')." 23:59:59"]);
+        }
+        elseif ($type == "week") {
+            $query->whereBetween('created_at', [Carbon::now()->subDays(7)->format('y-m-d')." 00:00:00", Carbon::now()->format('y-m-d')." 23:59:59"]);
+        }
+        elseif ($type == "month") {
+            $month = Carbon::now()->month;
+            $date_1 = Carbon::create($year, $month)->startOfMonth()->format('Y-m-d')." 00:00:00";
+            $query->whereBetween('created_at', [$date_1, Carbon::now()->format('y-m-d')." 23:59:59"]);
+        }
+        elseif ($type == "year") {
+            $date_1 = Carbon::create($year, 1)->startOfMonth()->format('Y-m-d')." 00:00:00";
+            $query->whereBetween('created_at', [$date_1, Carbon::now()->format('y-m-d')." 23:59:59"]);
+        }
+
+        if ($state === "all") {
+            return $query->where('role_id',3)->count();
+        }
+        elseif ($state === 0) {
+            return $query->where('role_id',3)->count();
+        }
+        elseif ($state === 1) {
+            return $query->where('role_id',3)->count();
+        }
+
+    }
 
     public function getNameAttribute()
     {

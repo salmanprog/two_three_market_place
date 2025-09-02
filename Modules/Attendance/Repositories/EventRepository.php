@@ -56,7 +56,7 @@ class EventRepository implements EventRepositoryInterface
 
     public function find($id)
     {
-        return Event::find($id);
+        return Event::with('user')->find($id);
     }
 
     public function update(array $data, $id)
@@ -107,6 +107,11 @@ class EventRepository implements EventRepositoryInterface
         }else{
             return EventBooking::latest()->with('event')->with('user')->where('is_paid','1')->where('created_by',auth()->user()->id)->get();
         }
+    }
+
+    public function getAllBookingById($id)
+    {
+        return EventBooking::latest()->with('event')->with('user')->where('is_paid','1')->where('event_id',$id)->get();
     }
 
     public function getbooking($id)

@@ -6,8 +6,8 @@
             <th>{{ __('common.name') }}</th>
             <th>{{ __('common.email') }}</th>
             <th>{{ __('common.phone') }}</th>
-            <!-- <th>{{ __('common.is_active') }}</th> -->
-            <!-- <th>{{ __('common.wallet_balance') }}</th> -->
+            <th>{{ __('common.is_active') }}</th>
+            <th>{{ __('Total Balance') }}</th>
             <th>{{ __('common.total_orders') }}</th>
             <th>{{ __('common.action') }}</th>
         </tr>

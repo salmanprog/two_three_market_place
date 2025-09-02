@@ -45,7 +45,7 @@
                                     <h3 class=" font_20 f_w_700 m-0">{{ getNumberTranslate($total_wishlist_count) }}</h3>
                                 </div>
                                 <!-- single_items -->
-                                <div class="single_cart_box d-flex align-items-center justify-content-center text-center flex-column">
+                                <!-- <div class="single_cart_box d-flex align-items-center justify-content-center text-center flex-column">
                                     <div class="icon d-flex align-items-center justify-content-center text-center">
                                     <svg  width="23.999" height="24" viewBox="0 0 23.999 24">
                                         <g  transform="translate(-1.25 -1.25)">
@@ -59,7 +59,7 @@
                                     </div>
                                     <span class="font_14 f_w_500">{{ __('refund.refund_success') }}</span>
                                     <h3 class=" font_20 f_w_700 m-0">{{ getNumberTranslate($total_success_refund) }}</h3>
-                                </div>
+                                </div> -->
                                 <!-- single_items -->
                                 <div class="single_cart_box d-flex align-items-center justify-content-center text-center flex-column">
                                     <div class="icon d-flex align-items-center justify-content-center text-center">
@@ -76,7 +76,7 @@
                                     <h3 class=" font_20 f_w_700 m-0">{{ getNumberTranslate($total_item_in_carts) }}</h3>
                                 </div>
                                 <!-- single_items -->
-                                <div class="single_cart_box d-flex align-items-center justify-content-center text-center flex-column">
+                                <!-- <div class="single_cart_box d-flex align-items-center justify-content-center text-center flex-column">
                                     <div class="icon d-flex align-items-center justify-content-center text-center">
                                         <svg  width="22.924" height="24" viewBox="0 0 22.924 24">
                                             <g id="clipboard" transform="translate(-1.227 -1.254)">
@@ -88,7 +88,7 @@
                                     </div>
                                     <span class="font_14 f_w_500"> {{__('amazy.Coupon Used')}}</span>
                                     <h3 class=" font_20 f_w_700 m-0">{{ getNumberTranslate($total_coupon_used) }}</h3>
-                                </div>
+                                </div> -->
                                 <!-- single_items -->
                                 <div class="single_cart_box d-flex align-items-center justify-content-center text-center flex-column">
                                     <div class="icon d-flex align-items-center justify-content-center text-center">

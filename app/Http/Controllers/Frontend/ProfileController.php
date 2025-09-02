@@ -192,6 +192,15 @@ class ProfileController extends Controller
         $income = Transaction::GetIncome($type);
         $expense = Transaction::GetExpense($type);
         $total_revenue = $income - $expense;
+        $total_product = Product::ProductInfo($type, 0);
+        $total_sellers = SellerAccount::SellerInfo($type, 0);
+        $total_buyer = User::BuyerInfo($type, 0);
+        $total_organiser = User::OrganiserInfo($type, 0);
+        $total_event = Event::EventInfo($type, 'all');
+        $total_active_event = Event::EventInfo($type, 1);
+        $total_expire_event = Event::EventInfo($type, 0);
+        $total_event_bookings = EventBooking::EventBookingInfo($type, 0);
+
         return [
             'total_visitors' => $total_visitors,
             'total_sale' => single_price($total_sale),
@@ -200,6 +209,14 @@ class ProfileController extends Controller
             'total_completed_order' => $total_completed_order,
             'total_review' => $total_review,
             'total_revenue' => single_price($total_revenue),
+            'totalProducts' => $total_product,
+            'totalSellers' => $total_sellers,
+            'totalCustomers' => $total_buyer,
+            'totalOrganiser' => $total_organiser,
+            'total_event' => $total_event,
+            'total_active_event' => $total_active_event,
+            'total_expire_event' => $total_expire_event,
+            'total_event_bookings' => $total_event_bookings
         ];
     }
 
