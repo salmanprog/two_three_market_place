@@ -16,39 +16,39 @@
             <a href="{{url('/')}}" class="logo mb_50 d-block">
                 <img src="{{showImage(app('general_setting')->logo)}}" alt="{{app('general_setting')->company_name}}" title="{{app('general_setting')->company_name}}">
             </a>
-            <h3 class="m-0">{{__('auth.Sign Up')}}</h3>
+            <h3 class="m-0">Buyer {{__('auth.Sign Up')}}</h3>
             <p class="support_text">{{__('auth.See your growth and get consulting support!')}}</p>
 
             @if (app('general_setting')->google_status)
-            <a href="{{url('/login/google')}}" class="google_logIn d-flex align-items-center justify-content-center">
+            <!-- <a href="{{url('/login/google')}}" class="google_logIn d-flex align-items-center justify-content-center">
                 <img src="{{url('/')}}/public/frontend/amazy/img/svg/google_icon.svg" alt="{{__('auth.Sign up with Google')}}" title="{{__('auth.Sign up with Google')}}">
                 <h5 class="m-0 font_16 f_w_500">{{__('auth.Sign up with Google')}}</h5>
-            </a>
+            </a> -->
             @endif
             @if (app('general_setting')->facebook_status)
-            <a href="{{url('/login/facebook')}}" class="google_logIn d-flex align-items-center justify-content-center">
+            <!-- <a href="{{url('/login/facebook')}}" class="google_logIn d-flex align-items-center justify-content-center">
                 <img src="{{url('/')}}/public/frontend/amazy/img/svg/facebook_icon.svg" alt="{{__('auth.Sign up with Facebook')}}" title="{{__('auth.Sign up with Facebook')}}">
                 <h5 class="m-0 font_16 f_w_500">{{__('auth.Sign up with Facebook')}}</h5>
-            </a>
+            </a> -->
             @endif
             @if (app('general_setting')->twitter_status)
-            <a href="{{url('/login/twitter')}}" class="google_logIn d-flex align-items-center justify-content-center">
+            <!-- <a href="{{url('/login/twitter')}}" class="google_logIn d-flex align-items-center justify-content-center">
                 <img src="{{url('/')}}/public/frontend/amazy/img/svg/twitter_icon.svg" alt="{{__('auth.Sign up with Twitter')}}" title="{{__('auth.Sign up with Twitter')}}">
                 <h5 class="m-0 font_16 f_w_500">{{__('auth.Sign up with Twitter')}}</h5>
-            </a>
+            </a> -->
             @endif
             @if (app('general_setting')->linkedin_status)
-            <a href="{{url('/login/linkedin')}}" class="google_logIn d-flex align-items-center justify-content-center">
+            <!-- <a href="{{url('/login/linkedin')}}" class="google_logIn d-flex align-items-center justify-content-center">
                 <img src="{{url('/')}}/public/frontend/amazy/img/svg/linkedin_icon.svg" alt="{{__('auth.Sign up with LinkedIn')}}" title="{{__('auth.Sign up with LinkedIn')}}">
                 <h5 class="m-0 font_16 f_w_500">{{__('auth.Sign up with LinkedIn')}}</h5>
-            </a>
+            </a> -->
             @endif
 
-            <div class="form_sep2 d-flex align-items-center">
+            <!-- <div class="form_sep2 d-flex align-items-center">
                 <span class="sep_line flex-fill"></span>
                 <span class="form_sep_text font_14 f_w_500 ">{{__('auth.Sign up with Email or Phone')}}</span>
                 <span class="sep_line flex-fill"></span>
-            </div>
+            </div> -->
             <form action="{{ route('register') }}" method="POST" name="register" id="register_form" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
@@ -180,11 +180,19 @@
                             <span class="text-danger" >{{ $errors->first('email') }}</span>
                         </div>
                         @endif
-                        <div class="col-12 mb_20">
+                       
+                        <div class="col-lg-12 mb_20">
+                            <label class="primary_label2">{{ __('common.phone_number') }} <span>*</span></label>
+                            <input type="text" id="phone" name="phone" value="{{old('phone')}}" placeholder="{{ __('common.phone_number') }}" onfocus="this.placeholder = ''" onblur="this.placeholder = '{{ __('common.phone_number') }}'" class="primary_input3 radius_5px">
+                            @error('phone')
+                                <span class="text-danger" >{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <!-- <div class="col-12 mb_20">
                             <label for="referral_code" class="primary_label2">{{__('common.referral_code_(optional)')}}</label>
                             <input name="referral_code" id="referral_code" value="{{ old('referral_code') }}" placeholder="{{ __('common.referral_code') }}" onfocus="this.placeholder = ''" onblur="this.placeholder = '{{ __('common.referral_code') }}'" class="primary_input3 radius_5px" type="text">
                             <span class="text-danger" >{{ $errors->first('referral_code') }}</span>
-                        </div>
+                        </div> -->
                         <div class="col-12 mb_20">
                             <label class="primary_label2">{{ __('common.password') }} <span>*</span></label>
                             <input name="password" id="password" placeholder="{{__('amazy.Min. 8 Character')}}" onfocus="this.placeholder = ''" onblur="this.placeholder = '{{__('amazy.Min. 8 Character')}}'" class="primary_input3 radius_5px" type="password">

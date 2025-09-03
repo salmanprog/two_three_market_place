@@ -945,7 +945,7 @@
                                     $seller_score = ($seller_rating_avg * 20);
                                 @endphp
                                     <input type="hidden" class="form-control" name="seller_id" id="seller_id" value="{{$product->seller->id}}">
-                                    <div class="Information_box d-flex gap-2 flex-wrap ">
+                                    <!-- <div class="Information_box d-flex gap-2 flex-wrap ">
                                         <div class="Information_box_left flex-fill">
                                             <div class="single_info_seller d-flex align-items-center gap_15">
                                                 <h4 class="font_14 f_w_500 m-0">{{getNumberTranslate($seller_score)}}%</h4>
@@ -967,7 +967,7 @@
                                                 <a href="{{url('/login')}}" class="amaz_primary_btn style3 text-uppercase">{{__('common.follow')}}</a>
                                             @endif
                                         </div>
-                                    </div>
+                                    </div> -->
                                 <div class="seller_performance_box">
                                     <h4 class="font_14 f_w_700 text-uppercase ">{{__('amazy.Seller Performance')}}</h4>
                                     @php

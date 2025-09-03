@@ -13,7 +13,7 @@
                 <a href="{{url('/')}}" class="logo mb_50 d-block">
                     <img src="{{showImage(app('general_setting')->logo)}}" alt="{{app('general_setting')->company_name}}" title="{{app('general_setting')->company_name}}">
                 </a>
-                <h3 class="m-0">{{ __('common.welcome') }}! {{ __('common.please') }} <br>{{ __('Create your event-organiser account') }}</h3>
+                <h3 class="m-0">Organizer {{__('auth.Sign Up')}}</h3>
                 <p class="support_text">{{__('auth.See your growth and get consulting support!')}}</p>
                 <form id="registerForm" action="{{route('frontend.event.organiser.store')}}" method="POST" class="register_form">
                     @csrf
@@ -209,7 +209,7 @@
                         @endif
                         </div>
                         <div class="col-12">
-                            <p class="sign_up_text">{{ __('defaultTheme.already_a_merchant') }}  <a href="{{route('seller.login')}}">{{__('auth.Sign In')}}</a></p>
+                            <p class="sign_up_text">{{ __('Already a organizer') }}  <a href="{{route('event.login')}}">{{__('auth.Sign In')}}</a></p>
                         </div>
                     </div>
                 </form>

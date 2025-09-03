@@ -402,7 +402,7 @@
                                     <a class="nav-link" href="#Wallet" role="tab" data-toggle="tab">{{ __('common.wallet_histories') }}</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#Products" role="tab" data-toggle="tab">{{ __('common.products') }}</a>
+                                    <a class="nav-link" href="#Products" role="tab" data-toggle="tab">{{ __('Available Inventory & Services') }}</a>
                                 </li>
                                 <!-- <li class="nav-item">
                                     <a class="nav-link" href="#OrderRepand" role="tab" data-toggle="tab">{{ __('common.order_refund') }}</a>

@@ -64,6 +64,8 @@ Route::post('/ajax-search-product', [WelcomeController::class, 'ajax_search_for_
 Route::get('/search', [WelcomeController::class, 'searchPage'])->name('frontend.searchPage');
 Route::get('/secret-logout', [WelcomeController::class, 'secret_logout'])->name('secret_logout');
 Route::get('/uploads/digital_file/{slug}', [OrderManageController::class, 'download'])->name('digital_file_download');
+Route::get('/account-signup', [WelcomeController::class, 'newRegister'])->name('frontend.account.signup');
+Route::get('/account-signin', [WelcomeController::class, 'newLogin'])->name('frontend.account.signin');
 
 Route::middleware(['admin'])->group(function () {
     Route::get('/admin-dashboard', [ProfileController::class, 'dashboard'])->name('admin.dashboard')->middleware('permission');

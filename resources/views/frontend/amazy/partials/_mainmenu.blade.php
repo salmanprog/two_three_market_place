@@ -81,8 +81,8 @@
                                 </div>
                                 @guest
                                     <span class="d-inline-block lh-1 ">
-                                        <a href="{{url('/login')}}">{{ __('defaultTheme.login') }}</a>
-                                        <a href="{{url('/register')}}">/ {{ __('defaultTheme.register') }}</a>
+                                        <a href="{{route('frontend.account.signin')}}">{{ __('defaultTheme.login') }}</a>
+                                        <a href="{{route('frontend.account.signup')}}">/ {{ __('defaultTheme.register') }}</a>
                                     </span>
                                 @else
                                     <span class="d-inline-block lh-1 ">

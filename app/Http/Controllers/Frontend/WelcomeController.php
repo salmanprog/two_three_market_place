@@ -238,4 +238,10 @@ class WelcomeController extends Controller
     public function newHome(){
         return view(theme('new_home.index'));
     }
+    public function newRegister(){
+        return view(theme('pages.new_register'));
+    }
+    public function newLogin(){
+        return view(theme('pages.new_login'));
+    }
 }

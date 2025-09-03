@@ -13,7 +13,7 @@
                 <a href="{{url('/')}}" class="logo mb_50 d-block">
                     <img src="{{showImage(app('general_setting')->logo)}}" alt="{{app('general_setting')->company_name}}" title="{{app('general_setting')->company_name}}">
                 </a>
-                <h3 class="m-0">{{ __('common.welcome') }}! {{ __('common.please') }} <br>{{ __('defaultTheme.create_your_merchant_account') }}</h3>
+                <h3 class="m-0">Artist {{__('auth.Sign Up')}}</h3>
                 <p class="support_text">{{__('auth.See your growth and get consulting support!')}}</p>
                 <form id="registerForm" action="{{route('frontend.merchant.store')}}" method="POST" class="register_form">
                     @csrf

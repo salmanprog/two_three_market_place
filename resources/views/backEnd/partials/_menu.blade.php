@@ -44,16 +44,13 @@
                     </div>
                 </div>
                 <div class="header_right d-flex justify-content-between align-items-center">
-                    <div class="header_notification_warp d-flex align-items-center">
+                    <!-- <div class="header_notification_warp d-flex align-items-center">
                         @if(auth()->user()->role->type != 'affiliate' && auth()->user()->role->type != 'customer')
                         <li class="notification_warp_pop">
                             <a class="popUP_clicker gredient_hover" href="#">
-                                <!-- plus     -->
                                 <i class="fas fa-plus-square"></i>
-                                <!--/ plus      -->
                             </a>
                             <div class="menu_popUp_list_wrapper">
-                                <!-- popUp_single_wrap  -->
                                 <div class="popUp_single_wrap">
                                     @if (permissionCheck('appearance.slider.index') || permissionCheck('menu.manage'))
                                     <div class="popup_single_item">
@@ -103,7 +100,6 @@
                                         @endif
                                     @endif
                                 </div>
-                                <!-- popUp_single_wrap  -->
                                 <div class="popUp_single_wrap">
                                     <div class="popup_single_item">
                                         <div class="main-title2 mb_10">
@@ -149,7 +145,6 @@
                                     </div>
                                     @endif
                                 </div>
-                                <!-- popUp_single_wrap  -->
                                 <div class="popUp_single_wrap">
                                     @if(isModuleActive('MultiVendor'))
                                         @if (permissionCheck('admin.my-product.index') || permissionCheck('admin.my-product.create'))
@@ -197,7 +192,6 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <!-- popUp_single_wrap  -->
                                 @if (Auth::user()->role->type == "superadmin")
                                 <div class="popUp_single_wrap">
                                     <div class="popup_single_item">
@@ -235,21 +229,17 @@
                         @endif
                         <li class="scroll_notification_list">
                             <a class="pulse theme_color bell_notification_clicker" href="javascript:void(0)">
-                                <!-- bell   -->
                                 <i class="fa fa-bell"></i>
-                                <!--/ bell   -->
                                 @if (count($notifications) > 0)
                                 <span class="notification_count">{{getNumberTranslate(count($notifications))}} </span>
                                 <span class="pulse-ring notification_count_pulse"></span>
                                 @endif
                             </a>
-                            <!-- Menu_NOtification_Wrap  -->
                             <div class="Menu_NOtification_Wrap">
                                 <div class="notification_Header">
                                     <h4>{{ __('common.notifications') }}</h4>
                                 </div>
                                 <div class="Notification_body">
-                                    <!-- single_notify  -->
                                     @forelse ($notifications as $notification)
                                     <div class="single_notify d-flex align-items-center">
                                         <div class="notify_content">
@@ -279,9 +269,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <!--/ Menu_NOtification_Wrap  -->
                         </li>
-                    </div>
+                    </div> -->
                     <div class="profile_info">
 
                         <div class="user_avatar_div">

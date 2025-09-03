@@ -143,7 +143,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="member_info_text">
+                        <!-- <div class="member_info_text">
                             <div class="amazcart_delivery_wiz_body">
                                 @php
                                 $seller_rating_avg = $seller->sellerReviews()->where('status',1)->avg('rating');
@@ -175,7 +175,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
