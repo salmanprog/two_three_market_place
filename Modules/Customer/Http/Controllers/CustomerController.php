@@ -12,6 +12,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use App\Traits\ImageStore;
 use Modules\Customer\Services\CustomerService;
+use Modules\MultiVendor\Services\MerchantService;
+use Modules\MultiVendor\Entities\SellerSubcription;
 use App\Repositories\UserRepository;
 use Brian2694\Toastr\Facades\Toastr;
 use Modules\Setup\Entities\Country;
@@ -26,11 +28,12 @@ class CustomerController extends Controller
     use ImageStore;
     protected $customerService;
 
-    public function __construct(CustomerService  $customerService)
+    public function __construct(CustomerService  $customerService, MerchantService $merchantService)
     {
         $this->middleware(['auth','maintenance_mode']);
         $this->middleware(['prohibited_demo_mode'])->only('updatePassword');
         $this->customerService = $customerService;
+        $this->merchantService = $merchantService;
     }
     public function customer_index()
     {
@@ -201,7 +204,10 @@ class CustomerController extends Controller
 
         $data['customer'] = $this->customerService->find($id);
         $logins = LogActivityModel::where('user_id',$id)->where('login',1)->orderBy('id','DESC')->limit(20)->get();
+        $user = $this->merchantService->findUserByID($id);
+        $order_package = $user->seller_products;
         $data['logins'] = $logins;
+        $data['products'] = $order_package;
         return view('customer::customers.show_details', $data);
     }
 

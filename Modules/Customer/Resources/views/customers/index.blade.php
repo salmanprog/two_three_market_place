@@ -171,9 +171,9 @@
                                 { data: 'name', name: 'first_name' },
                                 { data: 'email', name: 'email' },
                                 { data: 'phone', name: 'username' },
-                                { data: 'status', name: 'status' },
                                 { data: 'wallet_balance', name: 'wallet_balance' },
                                 { data: 'orders', name: 'orders' },
+                                { data: 'status', name: 'status' },
                                 { data: 'action', name: 'action' }
                             ],
 
@@ -275,9 +275,9 @@
                                 { data: 'name', name: 'first_name' },
                                 { data: 'email', name: 'email' },
                                 { data: 'phone', name: 'username' },
-                                { data: 'status', name: 'status' },
                                 { data: 'wallet_balance', name: 'wallet_balance' },
                                 { data: 'orders', name: 'orders' },
+                                { data: 'status', name: 'status' },
                                 { data: 'action', name: 'action' }
 
                             ],
@@ -380,9 +380,9 @@
                                 { data: 'name', name: 'first_name' },
                                 { data: 'email', name: 'email' },
                                 { data: 'phone', name: 'username' },
-                                { data: 'status', name: 'status' },
                                 { data: 'wallet_balance', name: 'wallet_balance' },
                                 { data: 'orders', name: 'orders' },
+                                { data: 'status', name: 'status' },
                                 { data: 'action', name: 'action' }
 
                             ],

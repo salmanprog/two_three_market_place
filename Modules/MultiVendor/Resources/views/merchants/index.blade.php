@@ -6,11 +6,11 @@
                 <div class="col-lg-12">
                     <div class="box_header common_table_header">
                         <div class="main-title d-flex">
-                            <h3 class="mb-0 mr-30 mb_xs_15px mb_sm_20px">{{__('common.seller')}} {{__('common.list')}}</h3>
+                            <h3 class="mb-0 mr-30 mb_xs_15px mb_sm_20px">Artist List</h3>
                             @if (permissionCheck('admin.merchants_create'))
-                                <ul class="d-flex">
+                                <!-- <ul class="d-flex">
                                     <li><a id="create_new_seller_btn" class="primary-btn radius_30px mr-10 fix-gr-bg" href="{{ route('admin.merchants_create') }}"><i class="ti-plus"></i>{{ __('common.add_new_seller') }}</a></li>
-                                </ul>
+                                </ul> -->
                             @endif
                         </div>
                     </div>
@@ -24,6 +24,7 @@
                                     <thead>
                                         <tr>
                                             <th>{{ __('common.sl') }}</th>
+                                            <th>{{ __('common.avatar') }}</th>
                                             <th>{{ __('common.name') }}</th>
                                             <th>{{ __('common.email') }}</th>
                                             <th>{{ __('common.phone') }}</th>
@@ -156,6 +157,7 @@
                                 { data: 'DT_RowIndex', name: 'id',render:function(data){
                                     return numbertrans(data)
                                 }},
+                                { data: 'avatar', name: 'avatar' },
                                 { data: 'name', name: 'user.first_name'},
                                 { data: 'email', name: 'user.email' },
                                 { data: 'phone', name: 'user.username' },
@@ -172,6 +174,7 @@
                                 { data: 'DT_RowIndex', name: 'id',render:function(data){
                                     return numbertrans(data)
                                 }},
+                                { data: 'avatar', name: 'avatar' },
                                 { data: 'name', name: 'user.first_name' },
                                 { data: 'email', name: 'user.email' },
                                 { data: 'phone', name: 'user.username' },

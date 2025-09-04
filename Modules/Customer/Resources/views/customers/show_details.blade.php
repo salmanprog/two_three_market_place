@@ -78,12 +78,12 @@
                                     <table class="table table-borderless customer_view">
                                         <tr><td>{{__('Total Spent')}}</td>
                                         <td>: <span class="ml-1"></span>{{single_price($customer->orders->sum('grand_total'))}}</td></tr>
-                                        <!-- <tr><td>{{__('common.total_recharge')}}</td>
-                                        <td>: <span class="ml-1"></span>{{single_price($customer->wallet_balances->where('type', 'Deposite')->sum('amount'))}}</td></tr>
+                                        <tr><td>{{__('Total Earn')}}</td>
+                                        <td>: <span class="ml-1"></span>{{single_price($customer->wallet_balances->where('type', 'Sale Payment')->sum('amount'))}}</td></tr>
                                         <tr><td>{{__('common.pending_balance_approval')}}</td>
-                                        <td>: <span class="ml-1"></span>{{single_price($customer->CustomerCurrentWalletPendingAmounts)}}</td></tr>
-                                        <tr><td>{{__('common.total_balance')}}</td>
-                                        <td>: <span class="ml-1"></span>{{single_price($customer->CustomerCurrentWalletAmounts)}}</td></tr> -->
+                                        <td>: <span class="ml-1"></span>{{single_price($customer->wallet_balances->where('type', 'Withdraw')->where('status', '0')->sum('amount'))}}</td></tr>
+                                        <tr><td>{{__('WithDraw Balance Approval')}}</td>
+                                        <td>: <span class="ml-1"></span>{{single_price($customer->wallet_balances->where('type', 'Withdraw')->where('status', '1')->sum('amount'))}}</td></tr>
                                     </table>
                                 </div>
                             </div>
@@ -116,11 +116,11 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="#Wallet" role="tab" data-toggle="tab">{{ __('common.wallet_histories') }}</a>
                                 </li>
-                                <!-- <li class="nav-item">
-                                    <a class="nav-link" href="#Address" role="tab" data-toggle="tab">{{ __('common.addresses') }}</a>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#Product" role="tab" data-toggle="tab">{{ __('Resell Products') }}</a>
                                 </li>
 
-                                <li class="nav-item">
+                                <!-- <li class="nav-item">
                                     <a class="nav-link" href="#login_ip" role="tab" data-toggle="tab">{{ __('common.login_ip') }}</a>
                                 </li> -->
                             </ul>
@@ -181,7 +181,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div role="tabpanel" class="tab-pane fade" id="Address">
+                                <div role="tabpanel" class="tab-pane fade" id="Product">
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div class="QA_section QA_section_heading_custom check_box_table">
@@ -191,24 +191,58 @@
                                                             <thead>
                                                                 <tr>
                                                                     <th>{{ __('common.sl') }}</th>
-                                                                    <th>{{ __('common.full_name') }}</th>
-                                                                    <th>{{ __('common.address') }}</th>
-                                                                    <th>{{ __('common.region') }}</th>
-                                                                    <th>{{ __('common.email') }}</th>
-                                                                    <th>{{ __('common.phone_number') }}</th>
-                                                                    <th>{{ __('common.postcode') }}</th>
+                                                                    <th>{{ __('Name') }}</th>
+                                                                    <th>{{ __('Image') }}</th>
+                                                                    <th>{{ __('Stock') }}</th>
+                                                                    <th>{{ __('Price') }}</th>
+                                                                    <th>{{ __('Action') }}</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                @foreach ($customer->customerAddresses as $key => $address)
-                                                                    <tr class="{{ $address->is_updated == 0 ? 'bg-success':'' }}">
-                                                                        <td class="{{ $address->is_updated == 0 ? 'white-color':'' }}" >{{ getNumberTranslate($key+1) }}</td>
-                                                                        <td class="{{ $address->is_updated == 0 ? 'white-color':'' }}" >{{ $address->name }}</td>
-                                                                        <td class="{{ $address->is_updated == 0 ? 'white-color':'' }}" >{{ $address->address }}</td>
-                                                                        <td class="{{ $address->is_updated == 0 ? 'white-color':'' }}" >{{ getNumberTranslate($address->city.'-'.$address->state.'-'.$address->country) }}</td>
-                                                                        <td class="{{ $address->is_updated == 0 ? 'white-color':'' }}" >{{ $address->email }}</td>
-                                                                        <td class="{{ $address->is_updated == 0 ? 'white-color':'' }}" >{{ getNumberTranslate($address->phone) }}</td>
-                                                                        <td class="{{ $address->is_updated == 0 ? 'white-color':'' }}" >{{ getNumberTranslate($address->postal_code) }}</td>
+                                                                @foreach ($products as $key => $product)
+                                                                    <tr>
+                                                                        <td>{{ getNumberTranslate($key+1) }}</td>
+                                                                        <td>{{ $product->product_name }}</td>
+                                                                        <td>
+                                                                            @if ($product->thum_img)
+                                                                                <img class="fix_height" src="{{ showImage($product->thum_img) }}" alt="{{ $product->product->product_name }}" height="50px">
+                                                                            @elseif ($product->product->thumbnail_image_source != null)
+                                                                                <img class="fix_height" src="{{ showImage($product->product->thumbnail_image_source) }}"
+                                                                                    alt="{{ $product->product->product_name }}" height="50px">
+                                                                            @else
+                                                                                <img class="fix_height" src="{{ showImage($product->product->thumbnail_image_source) }}" alt="{{ $product->product->product_name }}" height="50px">
+                                                                            @endif
+                                                                        </td>
+                                                                        <td>
+                                                                            @if ($product->stock_manage == 1)
+                                                                                @php
+                                                                                    $stock = 0;
+                                                                                @endphp
+                                                                                @foreach ($product->skus as $sku)
+                                                                                    @php
+                                                                                        $stock += $sku->product_stock;
+                                                                                    @endphp
+                                                                                @endforeach
+                                                                            @else
+                                                                                @php
+                                                                                    $stock = __("common.not_manage");
+                                                                                @endphp
+                                                                            @endif
+
+                                                                            {{ getNumberTranslate($stock) }}
+                                                                        </td>
+                                                                        <td>{{ single_price($product->max_sell_price) }}</td>
+                                                                        <td>
+                                                                            <div class="dropdown CRM_dropdown">
+                                                                             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                                {{ __('common.select') }}
+                                                                            </button>
+                                                                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
+                                                                                <a class="dropdown-item view_product_btn" data-id="{{$product->id}}">{{__('common.view')}}</a>
+                                                                                
+                                                                            </div>
+                                                                            </div>
+                                                                        </td>
                                                                     </tr>
                                                                 @endforeach
                                                             </tbody>
@@ -260,6 +294,7 @@
             </div>
         </div>
     </section>
+    <div id="product_detail_view_div"></div>
 @endsection
 @push("scripts")
     <script type="text/javascript">
@@ -464,6 +499,21 @@
                 }],
                 responsive: true,
             });
+
+            $(document).on('click', '.view_product_btn', function(event){
+                    event.preventDefault();
+                    let id = $(this).data('id');
+                    seller_product_show(id);
+                });
+            function seller_product_show(el){
+                    $('#pre-loader').removeClass('d-none');
+                    $.post('{{ route('seller.admin_product.show') }}', {_token:'{{ csrf_token() }}', id:el}, function(data){
+                        $('#product_detail_view_div').empty();
+                        $('#product_detail_view_div').html(data);
+                        $('#productDetails').modal('show');
+                        $('#pre-loader').addClass('d-none');
+                    });
+                }
         });
     </script>
 @endpush

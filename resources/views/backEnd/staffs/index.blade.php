@@ -33,10 +33,12 @@
                                     <thead>
                                     <tr>
                                         <th scope="col">{{ __('common.sl') }}</th>
+                                        <th scope="col">{{ __('common.avatar') }}</th>
                                         <th scope="col">{{ __('common.name') }}</th>
-
                                         <th scope="col">{{ __('common.email') }}</th>
                                         <th scope="col">{{ __('common.phone') }}</th>
+                                        <th scope="col">{{ __('Total Balance') }}</th>
+                                        <th scope="col">{{ __('Total Event') }}</th>
                                         <th scope="col">{{ __('common.action') }}</th>
                                     </tr>
                                     </thead>
@@ -44,11 +46,16 @@
                                     @foreach($staffs as $key => $staff)
                                             <tr>
                                                 <th>{{ getNumberTranslate($key+1) }}</th>
+                                                <th>
+                                                    <div class="logo_div">
+                                                        <img class="mini_logo img-size" src="{{ showImage($staff->avatar != null?$staff->avatar:'frontend/default/img/avatar.jpg') }}" alt="" height="60px">
+                                                    </div>
+                                                </th>
                                                 <td><a href="{{ route('staffs.view', $staff->id) }}">{{ucwords( @$staff->first_name ) }}</a></td>
                                                 <td>{{ @$staff->email }}</td>
                                                 <td>{{ @getNumberTranslate($staff->phone) }}</td>
-                                               
-
+                                                <td>{{single_price($staff->wallet_balances->sum('amount'))}}</td>
+                                                <td>{{count($staff->event)}}</td>
                                                 <td>
                                                     <!-- shortby  -->
                                                     <div class="dropdown CRM_dropdown">
@@ -59,9 +66,9 @@
                                                             {{ __('common.select') }}
                                                         </button>
                                                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
-                                                            <!-- @if(permissionCheck('staffs.view'))
+                                                            @if(permissionCheck('staffs.view'))
                                                             <a href="{{ route('staffs.view', $staff->id) }}" class="dropdown-item">{{__('common.view')}}</a>
-                                                            @endif -->
+                                                            @endif
 
                                                             @if(permissionCheck('staffs.edit'))
                                                             <a href="{{ route('staffs.edit', $staff->id) }}" class="dropdown-item">{{__('common.edit')}}</a>

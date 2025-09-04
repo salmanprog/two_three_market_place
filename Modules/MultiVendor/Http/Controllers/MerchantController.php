@@ -81,6 +81,9 @@ class MerchantController extends Controller
                 $query->whereRaw($sql, ["%{$keyword}%"]);
             })
             ->addIndexColumn()
+            ->addColumn('avatar', function($seller){
+                return view('multivendor::merchants.components._avatar_td',compact('seller'));
+            })
             ->addColumn('name', function($seller){
                 return view('multivendor::merchants.components._name_td',compact('seller'));
             })

@@ -11,7 +11,7 @@
                     <div class="white_box_50px box_shadow_white">
                         <div class="box_header">
                             <div class="main-title d-flex">
-                                <h3 class="mb-0 mr-30">{{ __('common.seller_details')}}</h3>
+                                <h3 class="mb-0 mr-30">{{ __('Artist Details')}}</h3>
                             </div>
                             <ul class="d-flex justify-content-between button_list">
                                 @if (permissionCheck('admin.merchant_edit_profile'))
@@ -65,7 +65,7 @@
                                         <td class="first_row_width">{{ __('common.commission_type') }}</td>
                                         <td>: <span class="ml-1"></span>{{ @$user->SellerAccount->commission_type->name}} @if ($user->SellerAccount->commission_type->id == 1) ({{ $user->SellerAccount->commission_rate }} %) @endif</td>
                                     </tr>
-                                    <tr>
+                                    <!-- <tr>
                                         <td class="first_row_width">{{ __('common.is_trusted') }}</td>
                                         <td>: <span class="ml-1"></span>
                                             @if (@$user->SellerAccount->is_trusted == 1)
@@ -74,7 +74,7 @@
                                                 <i class="ti-close"></i><span class="ml-1"></span>{{ __('common.no') }}
                                             @endif
                                         </td>
-                                    </tr>
+                                    </tr> -->
                                 </table>
                             </div>
                             <div class="col-md-3 col-sm-12 customer_profile m-2">
@@ -90,6 +90,10 @@
                                 <h3>{{__('common.wallet_summary')}}</h3>
                                     <tr><td class="first_row_width">{{__('common.total_balance')}}</td>
                                     <td>: <span class="ml-1"></span>{{single_price($user->SellerCurrentWalletAmounts)}}</td></tr>
+                                        <tr><td>{{__('Pending WithDraw')}}</td>
+                                        <td>: <span class="ml-1"></span>{{single_price($user->wallet_balances->where('type', 'Withdraw')->where('status', '0')->sum('amount'))}}</td></tr>
+                                        <tr><td>{{__('Approve WithDraw')}}</td>
+                                        <td>: <span class="ml-1"></span>{{single_price($user->wallet_balances->where('type', 'Withdraw')->where('status', '1')->sum('amount'))}}</td></tr>
                                 </table>
                             </div>
                         </div>
@@ -106,7 +110,7 @@
                                         <td class="first_row_width">{{ __('common.shop_name') }}</td>
                                         <td>: <span class="ml-1"></span>{{ @$user->SellerAccount->seller_shop_display_name }}</td>
                                     </tr>
-                                    <tr>
+                                    <!-- <tr>
                                         <td class="first_row_width">{{ __('common.holiday_mode') }}</td>
                                         <td>: <span class="ml-1"></span>
                                             @if (@$user->SellerAccount->holiday_mode == 1)
@@ -154,7 +158,7 @@
                                                 <span class="badge_4">{{__('common.no')}}</span>
                                             @endif
                                         </td>
-                                    </tr>
+                                    </tr> -->
 
                                 </table>
                             </div>
@@ -189,7 +193,7 @@
                                         <td class="first_row_width">{{ __('common.postcode') }}</td>
                                         <td>: <span class="ml-1"></span>{{ @$user->SellerBusinessInformation->business_postcode }}</td>
                                     </tr>
-                                    <tr>
+                                    <!-- <tr>
                                         <td class="first_row_width">{{ __('common.registration_number') }}</td>
                                         <td>: <span class="ml-1"></span>{{ @$user->SellerBusinessInformation->business_registration_number }}</td>
                                     </tr>
@@ -218,14 +222,14 @@
                                             </td>
                                         </tr>
                                         @endif
-                                    @endif
+                                    @endif -->
 
                                 </table>
                             </div>
                             <div class="col-md-4 col-sm-12">
                                 <h3>{{__('common.payment_information')}}</h3>
                                 <table class="table table-borderless customer_view">
-                                    <tr>
+                                    <!-- <tr>
                                         <td class="first_row_width">{{ __('common.payment_type') }}</td>
                                         <td>: <span class="ml-1"></span>
                                             @if (@$user->SellerBankAccount->payment == 1)
@@ -236,7 +240,7 @@
                                                 {{ __('common.n/a') }}
                                             @endif
                                         </td>
-                                    </tr>
+                                    </tr> -->
                                     <tr>
                                         <td class="first_row_width">{{ __('common.bank_title') }}</td>
                                         <td>: <span class="ml-1"></span>{{ @$user->SellerBankAccount->bank_title }}</td>
@@ -261,14 +265,14 @@
                                         <td class="first_row_width">{{ __('common.ibn') }}</td>
                                         <td>: <span class="ml-1"></span>{{ @$user->SellerBankAccount->bank_ibn }}</td>
                                     </tr>
-                                    <tr>
+                                    <!-- <tr>
                                         <td class="first_row_width">{{ __('common.bank_cheque') }}</td>
                                         <td>: <span class="ml-1"></span>
                                             @if (@$user->SellerBankAccount->bank_cheque != null)
                                                 <a href="{{ asset(asset_path($user->SellerBankAccount->bank_cheque)) }}" target="_blank" download> Click on it.</a>
                                             @endif
                                         </td>
-                                    </tr>
+                                    </tr> -->
                                 </table>
                             </div>
                         </div>
@@ -480,8 +484,8 @@
                                                                 <tr>
                                                                     <th scope="col">{{ __('common.sl') }}</th>
                                                                     <th scope="col">{{ __('common.name') }}</th>
-                                                                    <th scope="col">{{ __('product.category') }}</th>
-                                                                    <th scope="col">{{ __('product.brand') }}</th>
+                                                                    <!-- <th scope="col">{{ __('product.category') }}</th>
+                                                                    <th scope="col">{{ __('product.brand') }}</th> -->
                                                                     <th scope="col">{{ __('product.logo') }}</th>
                                                                     <th scope="col">{{ __('product.stock') }}</th>
                                                                     <th scope="col">{{ __('common.status') }}</th>
@@ -856,8 +860,8 @@
                             return numbertrans(data)
                         }},
                         { data: 'product_name', name: 'product_name' },
-                        { data: 'category', name: 'category' },
-                        { data: 'brand', name: 'brand' },
+                        // { data: 'category', name: 'category' },
+                        // { data: 'brand', name: 'brand' },
                         { data: 'logo', name: 'logo' },
                         { data: 'stock', name: 'stock' },
                         { data: 'status', name: 'status' },

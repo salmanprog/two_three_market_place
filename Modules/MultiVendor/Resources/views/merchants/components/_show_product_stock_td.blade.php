@@ -14,6 +14,3 @@
 @endif
 
 {{ getNumberTranslate($stock) }}
-@if ($product->product->unit_type_id != null)
-    ({{ @$product->product->unit_type->name }})
-@endif

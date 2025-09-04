@@ -39,7 +39,7 @@ class UserRepository implements  UserRepositoryInterface
                 });
             })->latest()->get();
         }else {
-            return User::where('role_id',3)->get();
+            return User::with('wallet_balances')->with('event')->where('role_id',3)->get();
         }
 
     }

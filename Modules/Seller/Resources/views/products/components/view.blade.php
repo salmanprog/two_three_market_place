@@ -13,7 +13,7 @@
                         <div class="col-lg-6">
                             <div class="products_view_left text-center mb-35">
                                 <div class="products_image_div">
-                                    <img src="{{ showImage(@$product->product->thumbnail_image_source) }}" alt="">
+                                    <img src="{{ showImage(@$product->product->thumbnail_image_source) }}" alt="" height="455px">
                                 </div>
                             </div>
                         </div>
