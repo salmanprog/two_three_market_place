@@ -28,7 +28,7 @@
                                             <th>{{ __('common.name') }}</th>
                                             <th>{{ __('common.email') }}</th>
                                             <th>{{ __('common.phone') }}</th>
-                                            <th>{{ __('common.commission_type') }}</th>
+                                            <th>{{ __('Subscription Type') }}</th>
                                             <!-- @if (file_exists(base_path().'/Modules/GST/'))
                                                 @if (app('gst_config')['enable_gst'] == "gst" || app('gst_config')['enable_gst'] == "flat_tax")
                                                     <th>{{ __('gst.gst_or_flat_tax_claim_by_seller') }}</th>

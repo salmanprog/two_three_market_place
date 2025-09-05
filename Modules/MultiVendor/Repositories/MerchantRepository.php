@@ -59,7 +59,7 @@ class MerchantRepository
 
     public function findUserByID($id)
     {
-        return User::with('SellerAccount', 'SellerBankAccount', 'SellerAccount.commission_type', 'SellerWarehouseAddress', 'SellerBusinessInformation', 'SellerReturnAddress', 'order_packages', 'seller_products')->findOrFail($id);
+        return User::with('SellerAccount', 'SellerBankAccount', 'SellerAccount.commission_type', 'SellerWarehouseAddress', 'SellerBusinessInformation', 'SellerReturnAddress', 'order_packages', 'seller_products','SellerSubscriptions')->findOrFail($id);
     }
 
     public function create($data)

@@ -253,11 +253,11 @@
                                                 <thead>
                                                 <tr>
                                                     <th>@lang('common.title')</th>
-                                                    <th>@lang('common.price')</th>
                                                     <th>@lang('common.start_date')</th>
                                                     <th>@lang('Created By')</th>
                                                     <th>@lang('Created By Email')</th>
                                                     <th>@lang('sold ticket')</th>
+                                                    <th>@lang('common.price')</th>
                                                     <th>@lang('common.action')</th>
                                                 </tr>
                                                 </thead>
@@ -268,7 +268,7 @@
                                                         <tr>
 
                                                             <td>{{ @$event->title}}</td>
-                                                            <td>{{ @$event->price}}</td>
+                                                            
 
                                                             <td>{{ dateConvert($event->from_date) }}</td>
 
@@ -277,7 +277,7 @@
                                                             <td>{{$event->user->email}}</td>
 
                                                             <td>{{ @$event->sold_ticket}}</td>
-
+                                                            <td>{{ single_price(@$event->price) }}</td>
                                                             <td>
                                                                 <div class="dropdown CRM_dropdown">
                                                                     <button class="btn btn-secondary dropdown-toggle"

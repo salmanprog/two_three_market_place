@@ -46,6 +46,7 @@ use Modules\Language\Entities\Language;
 use Modules\MultiVendor\Entities\FollowSeller;
 use Modules\SidebarManager\Entities\BackendmenuUser;
 use Modules\Attendance\Entities\Event;
+use Modules\FrontendCMS\Entities\SubsciptionPaymentInfo;
 use Carbon\Carbon;
 
 class User extends Authenticatable
@@ -203,6 +204,11 @@ class User extends Authenticatable
     public function social_providers()
     {
         return $this->hasMany(SocialProvider::class, 'user_id', 'id');
+    }
+
+    public function subscriptioninfo()
+    {
+        return $this->belongsTo(SubsciptionPaymentInfo::class, 'seller_id', 'id');
     }
 
     public function event()

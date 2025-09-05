@@ -176,7 +176,7 @@
                                                 @endif
                                             @elseif(auth()->user()->role->type == 'admin')
                                                 @if($menu->backendMenu->name == 'common.customer')
-                                                    <span class="admin">{{__('Manage Customer')}}</span>
+                                                    <span class="admin">{{__('Manage Buyer')}}</span>
                                                 @elseif($menu->backendMenu->name == 'hr.human_resource')
                                                     <span class="admin">{{__('Manage Organiser')}}</span>
                                                 @elseif($menu->backendMenu->name == 'seller.manage_seller')
@@ -264,6 +264,22 @@
                                                             @elseif(auth()->user()->role->type == 'admin'  && $submenu->backendMenu->name == 'frontendCms.return_exchange')
                                                                                                                                                                                  <a href="{{route('booking.events')}}"
                                                                 class="{{spn_active_link(childrenRoute($submenu), 'active')}} @if(@$submenu->children->count()) has-arrow @endif">{{__('Events Bookings')}}</a>
+                                                            @elseif(auth()->user()->role->type == 'admin'  && $submenu->backendMenu->name == 'common.all_customer')
+                                                            <a href="
+                                                                @if(\Illuminate\Support\Facades\Route::has($submenu->backendMenu->route) && !$submenu->children->count())
+                                                                    @if(@$submenu->backendMenu->route == 'my-wallet.index')
+                                                                        @if(auth()->user()->role->type == 'seller')
+                                                                            {{route(@$submenu->backendMenu->route, 'seller')}}
+                                                                        @else
+                                                                            {{route(@$submenu->backendMenu->route, 'admin')}}
+                                                                        @endif
+                                                                    @else
+                                                                        {{route(@$submenu->backendMenu->route)}}
+                                                                    @endif
+                                                                @else
+                                                                    javascript:void(0)
+                                                                @endif"
+                                                                class="{{spn_active_link(childrenRoute($submenu), 'active')}} @if(@$submenu->children->count()) has-arrow @endif">{{__('All Buyer')}} </a>
                                                             @elseif(auth()->user()->role->type == 'admin'  && $submenu->backendMenu->name == 'common.bulk_customer_upload') 
                                                             @elseif(auth()->user()->role->type == 'admin'  && $submenu->backendMenu->name == 'list.Income')               
                                                             @else

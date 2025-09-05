@@ -16,17 +16,17 @@
 
                             <li class="nav-item">
                                 <a class="nav-link active show" href="#all_customer" role="tab" data-toggle="tab"
-                                    id="1" aria-selected="true">{{ __('common.all') }} {{__('common.customer')}}</a>
+                                    id="1" aria-selected="true">{{ __('common.all') }} {{__('Buyer')}}</a>
                             </li>
 
                             <li class="nav-item">
                                 <a class="nav-link" href="#active_customer" role="tab" data-toggle="tab"
-                                    id="1" aria-selected="true">{{ __('common.active_customer') }}</a>
+                                    id="1" aria-selected="true">{{ __('Active Buyer') }}</a>
                             </li>
                             @if (permissionCheck('customer.list_inactive'))
                             <li class="nav-item">
                                 <a class="nav-link" href="#in_active_customer" role="tab" data-toggle="tab" id="1"
-                                    aria-selected="true">{{ __('common.in_active_customer') }}</a>
+                                    aria-selected="true">{{ __('Inactive Buyer') }}</a>
                             </li>
                             @endif
 
@@ -46,7 +46,7 @@
                         <div role="tabpanel" class="tab-pane fade active show" id="all_customer">
                             <div class="box_header common_table_header ">
                                 <div class="main-title d-md-flex">
-                                    <h3 class="mb-0 mr-30 mb_xs_15px mb_sm_20px">{{__('common.active_customer')}}</h3>
+                                    <h3 class="mb-0 mr-30 mb_xs_15px mb_sm_20px">{{__('Active Buyer')}}</h3>
                                 </div>
                             </div>
                             <div class="QA_section QA_section_heading_custom check_box_table">
@@ -62,7 +62,7 @@
                         <div role="tabpanel" class="tab-pane fade" id="active_customer">
                             <div class="box_header common_table_header ">
                                 <div class="main-title d-md-flex">
-                                    <h3 class="mb-0 mr-30 mb_xs_15px mb_sm_20px">{{__('common.active_customer')}}</h3>
+                                    <h3 class="mb-0 mr-30 mb_xs_15px mb_sm_20px">{{__('Active Buyer')}}</h3>
                                 </div>
                             </div>
                             <div class="QA_section QA_section_heading_custom check_box_table">
@@ -78,7 +78,7 @@
                         <div role="tabpanel" class="tab-pane fade" id="in_active_customer">
                             <div class="box_header common_table_header ">
                                 <div class="main-title d-md-flex">
-                                    <h3 class="mb-0 mr-30 mb_xs_15px mb_sm_20px">{{ __('common.in_active_customer') }}
+                                    <h3 class="mb-0 mr-30 mb_xs_15px mb_sm_20px">{{ __('Inactive Buyer') }}
                                     </h3>
                                 </div>
                             </div>

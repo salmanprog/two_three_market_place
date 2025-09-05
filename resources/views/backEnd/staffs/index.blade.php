@@ -37,7 +37,7 @@
                                         <th scope="col">{{ __('common.name') }}</th>
                                         <th scope="col">{{ __('common.email') }}</th>
                                         <th scope="col">{{ __('common.phone') }}</th>
-                                        <th scope="col">{{ __('Total Balance') }}</th>
+                                        <th scope="col">{{ __('Total Earn') }}</th>
                                         <th scope="col">{{ __('Total Event') }}</th>
                                         <th scope="col">{{ __('common.action') }}</th>
                                     </tr>

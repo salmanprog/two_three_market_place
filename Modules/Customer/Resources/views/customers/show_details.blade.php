@@ -15,7 +15,7 @@
                     <div class="white_box_50px box_shadow_white">
                         <div class="box_header">
                             <div class="main-title d-flex">
-                                <h3 class="mb-0 mr-30">{{ __('common.customer_profile')}}</h3>
+                                <h3 class="mb-0 mr-30">{{ __('Buyer Profile')}}</h3>
                             </div>
                         </div>
                         <div class="row">

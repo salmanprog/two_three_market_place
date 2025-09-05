@@ -171,13 +171,14 @@ class ProductController extends Controller
         return DataTables::of($products)
             ->addIndexColumn()
             ->addColumn('product_type', function ($products) {
-                return view('product::products.components._product_type_td', compact('products'));
+                //return view('product::products.components._product_type_td', compact('products'));
+                return @$products->seller->first_name ?? '';
             })
             ->editColumn('product_name', function ($products) {
                 return @$products->product_name ?? '';
             })
             ->addColumn('brand', function ($products) {
-                return @$products->brand->name ?? '';
+                return @$products->seller->email ?? '';
             })
             ->addColumn('logo', function ($products) {
                 return view('product::products.components._product_logo_td', compact('products'));

@@ -377,6 +377,23 @@
                                     </table>
                                 @endif
                             </div>
+                            <div class="col-md-4 col-sm-12">
+                                <h3>{{__('Subscription')}}</h3>
+                                <table class="table table-borderless customer_view">
+                                    <tr>
+                                        <td class="first_row_width">{{ __('Plan') }}</td>
+                                        <td>: <span class="ml-1"></span>{{ getNumberTranslate(@$subscription->commission_type) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="first_row_width">{{ __('Start Date') }}</td>
+                                        <td>: <span class="ml-1"></span>{{ dateConvert($subscription_info->last_payment_date) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="first_row_width">{{ __('End Date') }}</td>
+                                        <td>: <span class="ml-1"></span>{{ dateConvert($subscription_info->expiry_date) }}</td>
+                                    </tr>
+                                </table>
+                            </div>
                         </div>
                         @if ($user->description)
                             <hr>

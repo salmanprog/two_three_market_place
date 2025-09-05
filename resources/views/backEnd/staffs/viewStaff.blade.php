@@ -113,16 +113,120 @@
                               <a class="nav-link" href="#Wallet" role="tab" data-toggle="tab">{{ __('common.wallet_histories') }}</a>
                            </li>
                            <li class="nav-item">
-                              <a class="nav-link" href="#Product" role="tab" data-toggle="tab">{{ __('Resell Products') }}</a>
+                              <a class="nav-link" href="#Event" role="tab" data-toggle="tab">{{ __('Event') }}</a>
                            </li>
 
                            <!-- <li class="nav-item">
                               <a class="nav-link" href="#login_ip" role="tab" data-toggle="tab">{{ __('common.login_ip') }}</a>
                            </li> -->
                         </ul>
+                        <div class="tab-content pt-30">
+                           <div role="tabpanel" class="tab-pane fade show active" id="Order">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="QA_section QA_section_heading_custom check_box_table">
+                                                <div class="QA_table ">
+                                                    <div class="">
+                                                        <table class="table" id="orderTable">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>{{__('common.sl')}}</th>
+                                                                    <th width="10%">{{__('common.date')}}</th>
+                                                                    <th>{{__('common.order_id')}}</th>
+                                                                    <th>{{__('order.total_product_qty')}}</th>
+                                                                    <th>{{__('common.total_amount')}}</th>
+                                                                    <th>{{__('order.order_status')}}</th>
+                                                                    <th>{{__('order.is_paid')}}</th>
+                                                                    <th>{{__('common.action')}}</th>
+                                                                </tr>
+                                                            </thead>
 
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane fade" id="Wallet">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="QA_section QA_section_heading_custom check_box_table">
+                                                <div class="QA_table ">
 
+                                                    <div class="">
+                                                        <table class="table Crm_table_active3" id="walletTable">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>{{__('common.sl')}}</th>
+                                                                    <th>{{__('common.date')}}</th>
+                                                                    <th>{{__('common.user')}}</th>
+                                                                    <th>{{__('order.txn_id')}}</th>
+                                                                    <th>{{__('common.amount')}}</th>
+                                                                    <th>{{__('common.type')}}</th>
+                                                                    <th>{{__('common.payment_method')}}</th>
+                                                                    <th>{{__('common.approval')}}</th>
+                                                                </tr>
+                                                            </thead>
 
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane fade" id="Event">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="QA_section QA_section_heading_custom check_box_table">
+                                                <div class="QA_table ">
+                                                    <div class="">
+                                                        <table class="table Crm_table_active3">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>{{ __('common.sl') }}</th>
+                                                                    <th>{{ __('Title') }}</th>
+                                                                    <th>{{ __('Start Date') }}</th>
+                                                                    <th>{{ __('End Date') }}</th>
+                                                                    <th>{{ __('Total Ticket') }}</th>
+                                                                    <th>{{ __('Sold Ticket') }}</th>
+                                                                    <th>{{ __('Remaining Ticket') }}</th>
+                                                                    <th>{{ __('Action') }}</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                              @foreach ($staffDetails->event as $key => $events)
+                                                                  <tr>
+                                                                     <td>{{ getNumberTranslate($key+1) }}</td>
+                                                                     <td>{{ $events->title }}</td>
+                                                                     <td>{{ dateConvert($events->from_date) }}</td>
+                                                                     <td>{{ dateConvert($events->to_date) }}</td>
+                                                                     <td>{{getNumberTranslate($events->total_ticket)}}</td>
+                                                                     <td>{{getNumberTranslate($events->sold_ticket)}}</td>
+                                                                     <td>{{getNumberTranslate($events->remaining_ticket)}}</td>
+                                                                     <td>
+                                                                            <div class="dropdown CRM_dropdown">
+                                                                             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                                {{ __('common.select') }}
+                                                                            </button>
+                                                                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
+                                                                                <a class="dropdown-item" href="{{route('view_event',$events->id)}}">{{__('common.view')}}</a>
+                                                                                
+                                                                            </div>
+                                                                            </div>
+                                                                        </td>
+                                                                  </tr>
+                                                              @endforeach
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
                         </div>
                </div>
             </div>
@@ -132,5 +236,223 @@
 <div id="product_detail_view_div"></div>
 @endsection
 @push("scripts")
+<script type="text/javascript">
+        $(document).ready(function(){
+            let baseUrl = $('#url').val();
+            let urlForOrders = baseUrl + '/customer/profile/details/' + "{{$staffDetails->id}}" + '/get-orders';
+            $('#orderTable').DataTable({
+                processing: true,
+                serverSide: true,
+                "stateSave": true,
+                "ajax": ( {
+                    url: urlForOrders
+                }),
+                "initComplete":function(json){
+                },
+                columns: [
+                    { data: 'DT_RowIndex', name: 'id',render:function(data){
+                        return numbertrans(data)
+                    }},
+                    { data: 'date', name: 'date' },
+                    { data: 'order_number', name: 'order_number' },
+                    { data: 'number_of_product', name: 'number_of_product' },
+                    { data: 'total_amount', name: 'total_amount' },
+                    { data: 'order_status', name: 'order_status' },
+                    { data: 'is_paid', name: 'is_paid' },
+                    { data: 'action', name: 'action' }
+                ],
+                bLengthChange: false,
+                "bDestroy": true,
+                language: {
+                    search: "<i class='ti-search'></i>",
+                    searchPlaceholder: trans('common.quick_search'),
+                    paginate: {
+                        next: "<i class='ti-arrow-right'></i>",
+                        previous: "<i class='ti-arrow-left'></i>"
+                    }
+                },
+                dom: 'Bfrtip',
+                buttons: [{
+                        extend: 'copyHtml5',
+                        text: '<i class="fa fa-files-o"></i>',
+                        title: $("#header_title").text(),
+                        titleAttr: 'Copy',
+                        exportOptions: {
+                            columns: ':visible',
+                            columns: ':not(:last-child)',
+                        }
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel-o"></i>',
+                        titleAttr: 'Excel',
+                        title: $("#header_title").text(),
+                        margin: [10, 10, 10, 0],
+                        exportOptions: {
+                            columns: ':visible',
+                            columns: ':not(:last-child)',
+                        },
 
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-text-o"></i>',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: ':visible',
+                            columns: ':not(:last-child)',
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        text: '<i class="fa fa-file-pdf-o"></i>',
+                        title: $("#header_title").text(),
+                        titleAttr: 'PDF',
+                        exportOptions: {
+                            columns: ':visible',
+                            columns: ':not(:last-child)',
+                        },
+                        pageSize: 'A4',
+                        margin: [0, 0, 0, 0],
+                        alignment: 'center',
+                        header: true,
+
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i>',
+                        titleAttr: 'Print',
+                        title: $("#header_title").text(),
+                        exportOptions: {
+                            columns: ':not(:last-child)',
+                        }
+                    },
+                    {
+                        extend: 'colvis',
+                        text: '<i class="fa fa-columns"></i>',
+                        postfixButtons: ['colvisRestore']
+                    }
+                ],
+                columnDefs: [{
+                    visible: false
+                }],
+                responsive: true,
+            });
+
+            let urlForWallet = baseUrl + '/customer/profile/details/' + "{{$staffDetails->id}}" + '/get-wallet-history';
+            $('#walletTable').DataTable({
+                processing: true,
+                serverSide: true,
+                "stateSave": true,
+                "ajax": ( {
+                    url: urlForWallet
+                }),
+                "initComplete":function(json){
+
+                },
+                columns: [
+                    { data: 'DT_RowIndex', name: 'id' ,render:function(data){
+                        return numbertrans(data)
+                    }},
+                    { data: 'date', name: 'date' },
+                    { data: 'user', name: 'user' },
+                    { data: 'txn_id', name: 'txn_id' },
+                    { data: 'amount', name: 'amount' },
+                    { data: 'type', name: 'type' },
+                    { data: 'payment_method', name: 'payment_method' },
+                    { data: 'approval', name: 'approval' }
+                ],
+
+                bLengthChange: false,
+                "bDestroy": true,
+                language: {
+                    search: "<i class='ti-search'></i>",
+                    searchPlaceholder: trans('common.quick_search'),
+                    paginate: {
+                        next: "<i class='ti-arrow-right'></i>",
+                        previous: "<i class='ti-arrow-left'></i>"
+                    }
+                },
+                dom: 'Bfrtip',
+                buttons: [{
+                        extend: 'copyHtml5',
+                        text: '<i class="fa fa-files-o"></i>',
+                        title: $("#header_title").text(),
+                        titleAttr: 'Copy',
+                        exportOptions: {
+                            columns: ':visible',
+                            columns: ':not(:last-child)',
+                        }
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel-o"></i>',
+                        titleAttr: 'Excel',
+                        title: $("#header_title").text(),
+                        margin: [10, 10, 10, 0],
+                        exportOptions: {
+                            columns: ':visible',
+                            columns: ':not(:last-child)',
+                        },
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-text-o"></i>',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: ':visible',
+                            columns: ':not(:last-child)',
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        text: '<i class="fa fa-file-pdf-o"></i>',
+                        title: $("#header_title").text(),
+                        titleAttr: 'PDF',
+                        exportOptions: {
+                            columns: ':visible',
+                            columns: ':not(:last-child)',
+                        },
+                        pageSize: 'A4',
+                        margin: [0, 0, 0, 0],
+                        alignment: 'center',
+                        header: true,
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i>',
+                        titleAttr: 'Print',
+                        title: $("#header_title").text(),
+                        exportOptions: {
+                            columns: ':not(:last-child)',
+                        }
+                    },
+                    {
+                        extend: 'colvis',
+                        text: '<i class="fa fa-columns"></i>',
+                        postfixButtons: ['colvisRestore']
+                    }
+                ],
+                columnDefs: [{
+                    visible: false
+                }],
+                responsive: true,
+            });
+
+            $(document).on('click', '.view_product_btn', function(event){
+                    event.preventDefault();
+                    let id = $(this).data('id');
+                    seller_product_show(id);
+                });
+            function seller_product_show(el){
+                    $('#pre-loader').removeClass('d-none');
+                    $.post('{{ route('seller.admin_product.show') }}', {_token:'{{ csrf_token() }}', id:el}, function(data){
+                        $('#product_detail_view_div').empty();
+                        $('#product_detail_view_div').html(data);
+                        $('#productDetails').modal('show');
+                        $('#pre-loader').addClass('d-none');
+                    });
+                }
+        });
+    </script>
 @endpush

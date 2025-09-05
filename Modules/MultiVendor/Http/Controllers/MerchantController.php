@@ -26,6 +26,7 @@ use Modules\GeneralSetting\Entities\NotificationSetting;
 use Modules\MultiVendor\Repositories\CommisionRepository;
 use Modules\GeneralSetting\Entities\UserNotificationSetting;
 use Modules\MultiVendor\Http\Requests\SellerPassordChangeRequest;
+use Modules\FrontendCMS\Entities\SubsciptionPaymentInfo;
 
 class MerchantController extends Controller
 {
@@ -121,6 +122,8 @@ class MerchantController extends Controller
     public function show($id)
     {
         $data['user'] = $this->merchantService->findUserByID($id);
+        $data['subscription'] = SubsciptionPaymentInfo::where('seller_id',$id)->first();
+        $data['subscription_info'] = DB::table('seller_subcriptions')->where('seller_id',$id)->first();
         return view('multivendor::merchants.show_details', $data);
     }
 
