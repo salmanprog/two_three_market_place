@@ -25,7 +25,7 @@
                     @csrf
                     <div class="customer_review_wrapper">
                         <div class="customer_review_wrapper_inner">
-                            <!-- customer_review_left  -->
+                            <!-- customer_reviews_left  -->
                             <div class="customer_review_left">
                                 <div class="review_box">
                                     <span class="deliverd_date" >

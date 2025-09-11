@@ -867,7 +867,7 @@
                                     </select>
                                 </div>
                                 <div class="selectBox_box">
-                                    @php
+                                    @php0
                                         $pickup_locations = \Modules\Shipping\Entities\PickupLocation::where('created_by', $product->user_id)->where('status', 1)->get();
                                     @endphp
                                     <select class="amaz_select2 w-100" id="selectPickup">
@@ -976,7 +976,7 @@
                                     @endphp
                                     @php
                                         $review  = 1;
-                                         if( $total_review > 0 && review_count > 0){
+                                         if( $total_review > 0 && $review_count > 0){
                                             $review = round($total_review /$review_count,0);
                                          }
 
