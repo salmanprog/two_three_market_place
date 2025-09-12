@@ -250,9 +250,18 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $user = null;
-        $check_user = User::where('email', $request->login)->where('is_active', 1)->whereHas('role', function($q){
-            return $q->where('type', 'customer');
-        })->first();
+        // $check_user = User::where('email', $request->login)->where('is_active', 1)->whereHas('role', function($q){
+        //     return $q->where('type', 'customer');
+        // })->first();
+        $check_user = User::where('email', $request->login)
+        ->where('is_active', 1)
+        ->whereHas('role', function ($q) {
+            $q->where(function ($sub) {
+                $sub->where('type', 'customer')
+                    ->orWhere('type', 'interior_designer');
+            });
+        })
+        ->first();
         if(!$check_user){
             $check_user = User::where('username', $request->login)->where('is_active', 1)->whereHas('role', function($q){
                 return $q->where('type', 'customer');

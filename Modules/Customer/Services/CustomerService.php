@@ -17,6 +17,11 @@ class CustomerService
         return $this->customerRepository->getAll();
     }
 
+    public function getAllInterior()
+    {
+        return $this->customerRepository->getAllInterior();
+    }
+
     public function find($id)
     {
         return $this->customerRepository->find($id);

@@ -138,7 +138,7 @@
                         </svg>
                     {{__('common.dashboard')}}</a>
                 </li>
-              
+              @if(auth()->user()->role_id == 4)
                 <li>
                     <a class="position-relative d-flex align-items-center" href="{{route('frontend.bank')}}">
                     <svg  width="16.326" height="18" viewBox="0 0 16.326 18">
@@ -149,7 +149,7 @@
                         <path  data-name="Path 4132" d="M16,18.507H8.879a.629.629,0,0,1,0-1.257H16a.629.629,0,1,1,0,1.257Z" transform="translate(-0.983 -2.606)" fill="#00124e"/>
                     </g>
                     </svg>
-                     {{__('Bank Detail')}}</a>
+                     {{__('Bank Detail')}} </a>
                 </li>
                 <li>
                     <a class="position-relative d-flex align-items-center" href="{{route('frontend.resell_product_list')}}">
@@ -187,6 +187,7 @@
                     </svg>
                      {{__('Resell Orders')}}</a>
                 </li>
+                @endif
                 <li>
                     <a class="position-relative d-flex align-items-center" href="{{route('frontend.user.book.event')}}">
                     <svg  width="16.326" height="18" viewBox="0 0 16.326 18">

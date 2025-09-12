@@ -71,6 +71,7 @@ class User extends Authenticatable
         'is_active',
         'verify_code',
         'phone',
+        'web_site_url',
         'date_of_birth',
         'description',
         'secret_login',

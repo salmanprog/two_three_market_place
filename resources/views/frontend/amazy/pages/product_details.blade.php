@@ -867,7 +867,7 @@
                                     </select>
                                 </div>
                                 <div class="selectBox_box">
-                                    @php0
+                                    @php
                                         $pickup_locations = \Modules\Shipping\Entities\PickupLocation::where('created_by', $product->user_id)->where('status', 1)->get();
                                     @endphp
                                     <select class="amaz_select2 w-100" id="selectPickup">

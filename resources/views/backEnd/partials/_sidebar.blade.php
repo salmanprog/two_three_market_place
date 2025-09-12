@@ -125,8 +125,28 @@
 
 
                 @if($section->children->count())
+                    @if(auth()->user()->role->type == 'admin')
+                        @if(__(@$section->backendMenu->name) == 'User manages')
+                            <li class="{{spn_active_link(childrenRoute($menu))}}">
+                                <a href="{{route('interior-designer.list_active')}}" class="has-arrow" aria-expanded="false">
+                                    <div class="nav_icon_small">
+                                        <span class="fas fa-users"></span>
+                                    </div>
+                                    <div class="nav_title">
+                                        Interior Designers
+                                    </div>
+                                </a>
+                                <ul class="mm-collapse">
+                                    <li>
+                                        <a href="{{route('interior-designer.list_active')}}"
+                                            class="{{spn_active_link(['interior-designer.list_active'], 'active')}}">{{__('All Interior Designers')}}</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        @endif
+                    @endif
                     @foreach($section->children as $menu)
-
+                        
                         @if(!@$menu->backendMenu->module or isModuleActive(@$menu->backendMenu->module))
                             @if(@$menu->backendMenu->route == 'payment_gateway.index' && auth()->user()->role->type == 'seller' && !app('general_setting')->seller_wise_payment)
                                 @continue

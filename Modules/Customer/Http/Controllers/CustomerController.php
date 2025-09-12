@@ -40,6 +40,11 @@ class CustomerController extends Controller
         $data['customers'] = $this->customerService->getAll();
         return view('customer::customers.index', $data);
     }
+    public function interior_designer_index()
+    {
+        $data['customers'] = $this->customerService->getAllInterior();
+        return view('customer::interiordesigner.index', $data);
+    }
     public function customer_index_get_data(){
         if(isset($_GET['table'])){
             $table = $_GET['table'];
@@ -75,6 +80,48 @@ class CustomerController extends Controller
             })
             ->addColumn('action',function($customer){
                 return view('customer::customers.components._action_td',compact('customer'));
+            })
+            ->rawColumns(['avatar','status','action','name'])
+            ->make(true);
+        }else{
+            return [];
+        }
+    }
+    public function interior_designer_get_data(){
+        if(isset($_GET['table'])){
+            $table = $_GET['table'];
+            if($table == 'active_customer'){
+                $customer = $this->customerService->getAllInterior()->where('is_active',1);
+            }
+            elseif($table == 'inactive_customer'){
+                $customer = $this->customerService->getAllInterior()->where('is_active', 0);
+            }elseif($table == 'all_customer'){
+                $customer = $this->customerService->getAllInterior()->whereNotIn('is_active', ['2']);
+            }
+            return DataTables::of($customer)
+            ->addIndexColumn()
+            ->addColumn('avatar', function($customer){
+                return view('customer::interiordesigner.components._avatar_td',compact('customer'));
+            })
+            ->addColumn('name', function($customer){
+                return view('customer::interiordesigner.components._name_td',compact('customer'));
+            })
+            ->addColumn('phone', function($customer){
+                return getNumberTranslate($customer->username);
+            })
+            ->addColumn('status', function($customer){
+                return ($customer->is_active == 1) ? 'Active' : 'No-Active';
+                //return view('customer::customers.components._status_td',compact('customer'));
+            })
+            ->addColumn('wallet_balance', function($customer){
+                //return single_price($customer->CustomerCurrentWalletAmounts);
+                return single_price($customer->orders->sum('grand_total'));
+            })
+            ->addColumn('orders', function($customer){
+                return getNumberTranslate(count($customer->orders));
+            })
+            ->addColumn('action',function($customer){
+                return view('customer::interiordesigner.components._action_td',compact('customer'));
             })
             ->rawColumns(['avatar','status','action','name'])
             ->make(true);
@@ -155,6 +202,11 @@ class CustomerController extends Controller
         return view('customer::customers.edit', compact('customer'));
     }
 
+    public function interior_designer_edit($id){
+        $customer = $this->customerService->find($id);
+        return view('customer::interiordesigner.edit', compact('customer'));
+    }
+
     public function update(Request $request, $id){
         $request->validate([
             'first_name' => 'required|max:255',
@@ -168,6 +220,26 @@ class CustomerController extends Controller
             Toastr::success(__('common.updated_successfully'), __('common.success'));
             LogActivity::successLog('Customer Updated Successfully.');
             return redirect()->route('cusotmer.list_active');
+        }catch(Exception $e){
+            LogActivity::errorLog($e->getMessage());
+            Toastr::error(__('common.error_message'), __('common.error'));
+            return back();
+        }
+    }
+
+    public function interior_designer_update(Request $request, $id){
+        $request->validate([
+            'first_name' => 'required|max:255',
+            'last_name' => 'nullable|max:255',
+            'email' => ['required', 'string', 'max:255', 'unique:users,email,'.$id],
+            'password' => 'sometimes|nullable|confirmed|min:8',
+            'status' => 'required'
+        ]);
+        try{
+            $this->customerService->update($request->except('_token'), $id);
+            Toastr::success(__('common.updated_successfully'), __('common.success'));
+            LogActivity::successLog('Designer Updated Successfully.');
+            return redirect()->route('interior-designer.list_active');
         }catch(Exception $e){
             LogActivity::errorLog($e->getMessage());
             Toastr::error(__('common.error_message'), __('common.error'));
@@ -209,6 +281,18 @@ class CustomerController extends Controller
         $data['logins'] = $logins;
         $data['products'] = $order_package;
         return view('customer::customers.show_details', $data);
+    }
+
+    public function interior_designer_show($id)
+    {
+
+        $data['customer'] = $this->customerService->find($id);
+        $logins = LogActivityModel::where('user_id',$id)->where('login',1)->orderBy('id','DESC')->limit(20)->get();
+        $user = $this->merchantService->findUserByID($id);
+        $order_package = $user->seller_products;
+        $data['logins'] = $logins;
+        $data['products'] = $order_package;
+        return view('customer::interiordesigner.show_details', $data);
     }
 
     public function getOrders($id){

@@ -33,6 +33,12 @@ class AuthRouteMethods
                     $this->post('register', 'Auth\RegisterController@register');
                 }
 
+                // Interior Designer Registration Routes...
+                if ($options['interior-designer-register'] ?? true) {
+                    $this->get('interior-designer-register', 'Auth\InteriorDesignerRegisterController@showRegistrationForm')->name('interiorregister');
+                    $this->post('interior-designer-register', 'Auth\InteriorDesignerRegisterController@register');
+                }
+
                 // Password Reset Routes...
                 if ($options['reset'] ?? true) {
                     $this->resetPassword();

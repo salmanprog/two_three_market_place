@@ -15,7 +15,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('customer')->group(function() {
     Route::get('/active-customer-list', 'CustomerController@customer_index')->name('cusotmer.list_active')->middleware(['auth','admin','permission']);
+    Route::get('/active-interior-designer-list', 'CustomerController@interior_designer_index')->name('interior-designer.list_active')->middleware(['auth','admin']);
     Route::get('/customer-list/get-data', 'CustomerController@customer_index_get_data')->name('cusotmer.list.get-data')->middleware(['auth','admin']);
+    Route::get('/interior-designer-list/get-data', 'CustomerController@interior_designer_get_data')->name('interior-designer.list.get-data')->middleware(['auth','admin']);
     Route::post('/is-active/update','CustomerController@update_active_status')->name('customer.update_active_status')->middleware(['auth','admin','permission','prohibited_demo_mode']);
 
     Route::get('/profile/details/{id}/get-orders','CustomerController@getOrders')->name('customer.show_details.get-orders')->middleware(['auth','admin']);
@@ -28,6 +30,7 @@ Route::prefix('customer')->group(function() {
     Route::post('/address/default/billing','CustomerController@setDefaultBilling')->name('customer.address.default.billing')->middleware(['auth','prohibited_demo_mode']);
     Route::post('/address/delete','CustomerController@deleteAddress')->name('customer.address.delete')->middleware(['auth','prohibited_demo_mode']);
     Route::get('/profile/details/{id}','CustomerController@show')->name('customer.show_details')->middleware(['auth','admin','permission']);
+    Route::get('/designerprofile/details/{id}','CustomerController@interior_designer_show')->name('designer.show_details')->middleware(['auth','admin']);
     Route::post('/profile/image/delete','CustomerController@imageDelete')->name('customer.profile.image.delete')->middleware(['auth','prohibited_demo_mode']);
 });
 Route::get('/customer/address/edit/{c_id}','CustomerController@editAddress')->middleware('auth');
@@ -37,7 +40,9 @@ Route::prefix('admin')->middleware(['auth','admin'])->as('admin.')->group(functi
    Route::get('/customer/create', 'CustomerController@create')->name('customer.create')->middleware('permission'); 
    Route::post('/customer/store', 'CustomerController@store')->name('customer.store')->middleware('prohibited_demo_mode'); 
    Route::get('/customer/{id}/edit', 'CustomerController@edit')->name('customer.edit')->middleware('permission'); 
+   Route::get('/designer/{id}/edit', 'CustomerController@interior_designer_edit')->name('designer.edit'); 
    Route::post('/customer/update/{id}', 'CustomerController@update')->name('customer.update')->middleware('prohibited_demo_mode'); 
+   Route::post('/designer/update/{id}', 'CustomerController@interior_designer_update')->name('designer.update')->middleware('prohibited_demo_mode');
    Route::get('/customer/{id}/destroy', 'CustomerController@destroy')->name('customer.destroy')->middleware('permission'); 
    Route::get('/customer/bulk-upload', 'CustomerController@customerBulkUpload')->name('customer.bulk_upload')->middleware('permission'); 
    Route::post('/customer/bulk-upload/store', 'CustomerController@customerBulkUploadStore')->name('coustomer.bulkupload.store')->middleware('permission'); 

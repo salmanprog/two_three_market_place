@@ -29,6 +29,13 @@ class CustomerRepository
         })->latest();
     }
 
+    public function getAllInterior()
+    {
+        return User::with('wallet_balances', 'orders')->whereHas('role', function($query){
+            return $query->where('type', 'interior_designer');
+        })->latest();
+    }
+
     public function find($id)
     {
         return User::with('wallet_balances', 'orders', 'customerAddresses')->findOrFail($id);

@@ -241,6 +241,9 @@ class WelcomeController extends Controller
     public function newRegister(){
         return view(theme('pages.new_register'));
     }
+    public function buyerRegister(){
+        return view(theme('pages.buyer_register'));
+    }
     public function newLogin(){
         return view(theme('pages.new_login'));
     }

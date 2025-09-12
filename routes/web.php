@@ -65,6 +65,7 @@ Route::get('/search', [WelcomeController::class, 'searchPage'])->name('frontend.
 Route::get('/secret-logout', [WelcomeController::class, 'secret_logout'])->name('secret_logout');
 Route::get('/uploads/digital_file/{slug}', [OrderManageController::class, 'download'])->name('digital_file_download');
 Route::get('/account-signup', [WelcomeController::class, 'newRegister'])->name('frontend.account.signup');
+Route::get('/buyer-signup', [WelcomeController::class, 'buyerRegister'])->name('frontend.buyer.signup');
 Route::get('/account-signin', [WelcomeController::class, 'newLogin'])->name('frontend.account.signin');
 
 Route::middleware(['admin'])->group(function () {

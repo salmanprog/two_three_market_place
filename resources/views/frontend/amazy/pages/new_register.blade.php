@@ -22,9 +22,9 @@
                         </div>
                     </div>
                     <div data-type="component-text">
-                        <p style="text-align: center;">Create your buyer account to explore products, connect with sellers, and start purchasing with ease.</p>
+                        <p style="text-align: center;">Create your buyer account to explore products, connect with sellers, and start purchasing.</p>
                         <div style="text-align:center;">
-                            <a href="{{URL('/register')}}" class="home10_primary_btn2 gj-cursor-pointer mb-0 small_btn">
+                            <a href="{{route('frontend.buyer.signup')}}" class="home10_primary_btn2 gj-cursor-pointer mb-0 small_btn">
                                 Become a Buyer
                             </a>
                         </div>
