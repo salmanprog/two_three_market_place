@@ -252,7 +252,7 @@
                                             </svg>
                                             {{__('defaultTheme.add_to_cart')}}
                                         </a>
-                                        <p>
+                                        <p class="p_rice_2">
                                             @if (getProductwitoutDiscountPrice(@$product) != single_price(0))
                                                 <del>
                                                     {{getProductwitoutDiscountPrice(@$product)}}

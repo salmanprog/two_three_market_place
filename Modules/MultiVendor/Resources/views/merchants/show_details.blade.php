@@ -386,11 +386,11 @@
                                     </tr>
                                     <tr>
                                         <td class="first_row_width">{{ __('Start Date') }}</td>
-                                        <td>: <span class="ml-1"></span>{{ dateConvert($subscription_info->last_payment_date) }}</td>
+                                        <td>: <span class="ml-1"></span>{{ $subscription_info ? dateConvert($subscription_info->last_payment_date) : 'N/A' }}</td>
                                     </tr>
                                     <tr>
                                         <td class="first_row_width">{{ __('End Date') }}</td>
-                                        <td>: <span class="ml-1"></span>{{ dateConvert($subscription_info->expiry_date) }}</td>
+                                        <td>: <span class="ml-1"></span>{{ $subscription_info ? dateConvert($subscription_info->expiry_date) : 'N/A' }}</td>
                                     </tr>
                                 </table>
                             </div>

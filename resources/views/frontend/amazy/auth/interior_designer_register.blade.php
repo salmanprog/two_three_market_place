@@ -190,7 +190,7 @@
                         </div>
                         <div class="col-lg-12 mb_20">
                             <label class="primary_label2">{{ __('Website') }} <span>*</span></label>
-                            <input type="text" id="web_site_url" name="web_site_url" value="{{old('web_site_url')}}" placeholder="{{ __('common.phone_number') }}" onfocus="this.placeholder = ''" onblur="this.placeholder = '{{ __('common.phone_number') }}'" class="primary_input3 radius_5px">
+                            <input type="text" id="web_site_url" name="web_site_url" value="{{old('web_site_url')}}" placeholder="{{ __('Website Url') }}" onfocus="this.placeholder = ''" onblur="this.placeholder = '{{ __('Website Url') }}'" class="primary_input3 radius_5px">
                             @error('web_site_url')
                                 <span class="text-danger" >{{ $message }}</span>
                             @enderror
@@ -253,6 +253,23 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="confirm-modal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg">
+      <div class="modal-header justify-content-center">
+        <h4 class="modal-title fw-bold text-center">Congratulations</h4>
+        <button type="button" class="btn-close position-absolute end-0 me-2" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <p class="mb-0">{{ session('modal_msg') ?? 'You have successfully signed up. Your account is waiting for admin approval.' }}</p>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <a href="{{ url('/') }}" class="amaz_primary_btn style2 radius_5px  w-100 text-uppercase  text-center mb_25">Go to Home</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 @endsection
 
 @push('scripts')
@@ -261,6 +278,27 @@
     function onSubmit(token) {
         document.getElementById("register_form").submit();
     }
+   
+</script>
+<script>
+  window.addEventListener('load', function () {
+    @if(session('show_modal'))
+      var el = document.getElementById('confirm-modal');
+      if (!el) return;
+
+      // Bootstrap 5
+      if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+        var m = new bootstrap.Modal(el, { backdrop: 'static', keyboard: false });
+        m.show();
+        return;
+      }
+      // Bootstrap 4 fallback
+      if (typeof jQuery !== 'undefined' && typeof jQuery.fn.modal === 'function') {
+        jQuery('#confirm-modal').modal({ backdrop: 'static', keyboard: false });
+        jQuery('#confirm-modal').modal('show');
+      }
+    @endif
+  });
 </script>
 <script>
     (function($){

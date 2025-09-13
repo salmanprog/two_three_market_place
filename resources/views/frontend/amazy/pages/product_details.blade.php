@@ -209,9 +209,16 @@
                                 <div class="destils_prise_information_box mb_20">
                                     @if(isGuestAddtoCart() == true)
                                     <h2 class="pro_details_prise d-flex align-items-center  m-0">
+                                        @if(auth()->user()->role_id == 7)
+                                            <del>
+                                                {{getProductDiscountedPrice($product)}}
+                                            </del>
+                                            {{getProductPriceAfterPercent(getProductDiscountedPrice(@$product),10)}} <sup style="font-size:8px;color:red">10% discount</sup>
+                                        @else
                                         <span>
                                             {{getProductDiscountedPrice($product)}}
                                         </span>
+                                        @endif
                                     </h2>
                                     @endif
                                     <div class="pro_details_disPrise d-flex align-items-center gap_15">
@@ -393,13 +400,25 @@
                                     @if(isGuestAddtoCart() == true)
                                     <h5 class="mb-0">{{__('common.total')}}:
                                         <span id="total_price">
-                                            @if(@$product->hasDeal)
-                                                {{single_price(selling_price(@$product->skus->where('status',1)->first()->sell_price,@$product->hasDeal->discount_type,@$product->hasDeal->discount) * $product->product->minimum_order_qty)}}
-                                            @else
-                                                @if($product->hasDiscount == 'yes')
-                                                    {{single_price(selling_price(@$product->skus->where('status',1)->first()->sell_price,@$product->discount_type,@$product->discount) * $product->product->minimum_order_qty)}}
+                                            @if(auth()->user()->role_id == 7)
+                                                 @if(@$product->hasDeal)
+                                                    {{getProductPriceAfterPercent(selling_price(@$product->skus->where('status',1)->first()->sell_price,@$product->hasDeal->discount_type,@$product->hasDeal->discount) * $product->product->minimum_order_qty,10)}}
                                                 @else
-                                                    {{single_price(@$product->skus->where('status',1)->first()->sell_price * $product->product->minimum_order_qty)}}
+                                                    @if($product->hasDiscount == 'yes')
+                                                        {{getProductPriceAfterPercent(selling_price(@$product->skus->where('status',1)->first()->sell_price,@$product->discount_type,@$product->discount) * $product->product->minimum_order_qty,10)}}
+                                                    @else
+                                                        {{getProductPriceAfterPercent(@$product->skus->where('status',1)->first()->sell_price * $product->product->minimum_order_qty,10)}}
+                                                    @endif
+                                                @endif
+                                            @else
+                                                @if(@$product->hasDeal)
+                                                    {{single_price(selling_price(@$product->skus->where('status',1)->first()->sell_price,@$product->hasDeal->discount_type,@$product->hasDeal->discount) * $product->product->minimum_order_qty)}}
+                                                @else
+                                                    @if($product->hasDiscount == 'yes')
+                                                        {{single_price(selling_price(@$product->skus->where('status',1)->first()->sell_price,@$product->discount_type,@$product->discount) * $product->product->minimum_order_qty)}}
+                                                    @else
+                                                        {{single_price(@$product->skus->where('status',1)->first()->sell_price * $product->product->minimum_order_qty)}}
+                                                    @endif
                                                 @endif
                                             @endif
                                         </span>

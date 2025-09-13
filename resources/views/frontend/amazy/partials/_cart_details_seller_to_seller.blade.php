@@ -200,6 +200,9 @@
                                                             <span class="opacity-60 font_12 d-block d-lg-none">{{__('common.total')}}</span>
                                                             <h4 class="font_16 f_w_700 m-0 lh-1 text-nowrap">
                                                                 {{single_price($cart->total_price)}}
+                                                                @if(auth()->user()->role_id == 7)
+                                                                <sup style="font-size:8px;color:red">10% discount</sup>
+                                                                @endif
                                                             </h4>
                                                         </div>
                                                         <div class="col-lg-auto col-6 order-5 order-lg-0 text-end">
@@ -331,14 +334,14 @@
                             <span>- {{single_price($discount)}}</span>
                         </div>
                     </div>
-                    <div class="single_total_list d-flex align-items-center flex-wrap">
+                    <!-- <div class="single_total_list d-flex align-items-center flex-wrap">
                         <div class="single_total_left flex-fill">
                             <h4>{{__('common.vat/tax/gst')}}</h4>
                         </div>
                         <div class="single_total_right">
                             <span>{{__('defaultTheme.calculated_at_next_step')}}</span>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="total_amount d-flex align-items-center flex-wrap">
                         <div class="single_total_left flex-fill">
                             <span class="total_text">{{__('common.total')}}</span>

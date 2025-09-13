@@ -100,6 +100,9 @@ class CartRepository{
                 }
             }
         }
+        if(auth()->user()->role_id == 7){
+            $price = getProductPriceAfterPercent( $price,10,'',2,false);
+        }
         $total_price = $price*$data['qty'];
         if($data['type'] == 'product' && $product){
             if($sku->product_stock <= $sku->product->product->minimum_order_qty && $sku->product->stock_manage == 1){

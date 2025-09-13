@@ -470,6 +470,53 @@ if (!function_exists('getProductDiscountedPrice')) {
     }
 }
 
+if (!function_exists('normalize_amount')) {
+    function normalize_amount($amount): float {
+        $s = trim((string) $amount);
+
+        // (1,234.56) → negative
+        $neg = false;
+        if ($s !== '' && $s[0] === '(' && substr($s, -1) === ')') {
+            $neg = true; $s = trim($s, '()');
+        }
+
+        // symbols/codes/spaces remove
+        $s = str_ireplace(['$', 'usd', 'pkr', 'rs', '₨'], '', $s);
+        $s = str_replace(["\xC2\xA0", ' '], '', $s);
+
+        // separators handle
+        $hasComma = strpos($s, ',') !== false;
+        $hasDot   = strpos($s, '.') !== false;
+
+        if ($hasComma && $hasDot) {
+            $lastComma = strrpos($s, ','); $lastDot = strrpos($s, '.');
+            if ($lastComma > $lastDot) { $s = str_replace('.', '', $s); $s = str_replace(',', '.', $s); }
+            else { $s = str_replace(',', '', $s); }
+        } elseif ($hasComma && !$hasDot) {
+            $s = str_replace(',', '.', $s);
+        }
+
+        $s = preg_replace('/[^\d\.\-]/', '', $s);
+        $val = (float) $s;
+        return $neg ? -$val : $val;
+    }
+}
+
+if (!function_exists('getProductPriceAfterPercent')) {
+    function getProductPriceAfterPercent($amount, $percent = null, $symbol = '$', $decimals = 2, $with_symbol = true)
+    {
+        $base = normalize_amount($amount);
+
+        if ($percent !== null) {
+            $base = max(0, round($base * (1 - ($percent / 100)), $decimals));
+        }
+
+        // comma-separated (1,234.56) and prefixed with $
+        $formatted = number_format($base, $decimals, '.', ',');
+        return $with_symbol ? ($symbol . $formatted) : $formatted;
+    }
+}
+
 if (!function_exists('getProductwitoutDiscountPrice')) {
     function getProductwitoutDiscountPrice($product){
         $price = single_price(0);

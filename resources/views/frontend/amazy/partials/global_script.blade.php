@@ -50,7 +50,7 @@
                         $('#cart_suceess_thumbnail').attr('alt', prod_info.name);
                         $('#cart_suceess_thumbnail').attr('title', prod_info.name);
                         $('#cart_suceess_name').text(prod_info.name);
-                        $('#cart_suceess_price').text(numbertrans(prod_info.price));
+                        //$('#cart_suceess_price').text(numbertrans(prod_info.price));
                         $('#cart_suceess_url').attr('href',prod_info.url);
                         $('#cart_add_modal').modal('show');
                     }

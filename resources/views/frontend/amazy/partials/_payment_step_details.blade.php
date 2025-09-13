@@ -639,14 +639,14 @@
                         @endif
                     </div>
                 </div>
-                <div class="single_total_list d-flex align-items-center flex-wrap">
+                <!-- <div class="single_total_list d-flex align-items-center flex-wrap">
                     <div class="single_total_left flex-fill">
                         <h4>{{__('common.vat/tax/gst')}}</h4>
                     </div>
                     <div class="single_total_right">
                         <span>+ {{single_price($tax_total)}}</span>
                     </div>
-                </div>
+                </div> -->
                 @php
                     $coupon = 0;
                     $coupon_id = null;
@@ -725,10 +725,10 @@
                             </div>
                         </div>
                     @else
-                        <div class="coupon_wrapper pb_25 couponCodeDiv">
+                        <!-- <div class="coupon_wrapper pb_25 couponCodeDiv">
                             <input placeholder="{{__('common.coupon')}} {{__('common.code')}}" id="coupon_code" class="primary_input5 " onfocus="this.placeholder = ''" onblur="this.placeholder = '{{__('common.coupon')}} {{__('common.code')}}'" type="text">
                             <button type="button" class="amaz_primary_btn style4 min_100 text-uppercase text-center coupon_apply_btn" data-total="{{$actual_total}}">{{__('common.apply')}}</button>
-                        </div>
+                        </div> -->
                     @endif
                     @isset($coupon_amount)
                         @php

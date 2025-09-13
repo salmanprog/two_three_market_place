@@ -427,7 +427,11 @@
                                                             <h4 class="font_16_top f_w_500 m-0 text-nowrap">{{__('common.qty')}}: {{getNumberTranslate($item->qty)}}</h4>
                                                         </td>
                                                         <td>
-                                                            <h4 class="font_16 f_w_500 m-0 text-nowrap">{{single_price($item->total_price)}}</h4>
+                                                            <h4 class="font_16 f_w_500 m-0 text-nowrap">{{single_price($item->total_price)}} 
+                                                                 @if(auth()->user()->role_id == 7)
+                                                                <sup style="font-size:8px;color:red">10% discount</sup>
+                                                                @endif
+                                                            </h4>
                                                         </td>
                                                     </tr>
 
@@ -941,7 +945,7 @@
                             @endif
                         </div>
                     </div>
-                    <div class="single_total_list d-flex align-items-center flex-wrap">
+                    <!-- <div class="single_total_list d-flex align-items-center flex-wrap">
                         <div class="single_total_left flex-fill">
                             <h4>{{__('common.vat/tax/gst')}}</h4>
                         </div>
@@ -952,7 +956,7 @@
                             <span>{{__('defaultTheme.calculated_at_next_step')}}</span>
                             @endif
                         </div>
-                    </div>
+                    </div> -->
                     @php
                         $coupon = 0;
                         $coupon_id = null;

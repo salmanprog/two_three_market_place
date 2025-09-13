@@ -213,8 +213,12 @@ class InteriorDesignerRegisterController extends Controller
                 $url =app('general_setting')->registration_success_url;
                 return  redirect()->to($url);
             }else{
-                Toastr::success(__('auth.successfully_registered_activation'), __('common.success'));
-                return redirect()->to('/');
+                return redirect()
+            ->back()
+            ->with('show_modal', true)
+            ->with('modal_msg', __('auth.successfully_registered_activation'));
+                //Toastr::success(__('auth.successfully_registered_activation'), __('common.success'));
+                //return redirect()->to('/');
             }
         }
 
