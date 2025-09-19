@@ -384,14 +384,14 @@ class OrderController extends Controller
             $data['processes'] = $orderDeliveryRepo->getAll();
             $cancelReasonRepo = new CancelReasonRepository;
             $data['cancel_reasons'] = $cancelReasonRepo->getAll();
-            if (auth()->check() && auth()->user()->role->type != 'customer') {
-                return view('backEnd.pages.customer_data.order_details',$data);
-            }else {
+            if (auth()->check() && auth()->user()->role->type == 'customer' || auth()->user()->role->type == 'interior_designer') {
                 if (auth()->check() && $data['order']->customer_id != null) {
                     return view(theme('pages.profile.order_details'), $data);
                 } else {
                     return view(theme('pages.profile.order_details_for_guest'), $data);
                 }
+            }else {
+                return view('backEnd.pages.customer_data.order_details',$data);
             }
         } catch (Exception $e) {
             LogActivity::errorLog($e->getMessage());

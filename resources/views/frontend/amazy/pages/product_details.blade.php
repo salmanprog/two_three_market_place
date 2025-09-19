@@ -209,7 +209,7 @@
                                 <div class="destils_prise_information_box mb_20">
                                     @if(isGuestAddtoCart() == true)
                                     <h2 class="pro_details_prise d-flex align-items-center  m-0">
-                                        @if(auth()->user()->role_id == 7)
+                                        @if(auth()->check() && auth()->user()->role_id == 7)
                                             <del>
                                                 {{getProductDiscountedPrice($product)}}
                                             </del>
@@ -400,7 +400,7 @@
                                     @if(isGuestAddtoCart() == true)
                                     <h5 class="mb-0">{{__('common.total')}}:
                                         <span id="total_price">
-                                            @if(auth()->user()->role_id == 7)
+                                            @if(auth()->check() && auth()->user()->role_id == 7)
                                                  @if(@$product->hasDeal)
                                                     {{getProductPriceAfterPercent(selling_price(@$product->skus->where('status',1)->first()->sell_price,@$product->hasDeal->discount_type,@$product->hasDeal->discount) * $product->product->minimum_order_qty,10)}}
                                                 @else

@@ -428,7 +428,7 @@
                                                         </td>
                                                         <td>
                                                             <h4 class="font_16 f_w_500 m-0 text-nowrap">{{single_price($item->total_price)}} 
-                                                                 @if(auth()->user()->role_id == 7)
+                                                                 @if(auth()->check() && auth()->user()->role_id == 7)
                                                                 <sup style="font-size:8px;color:red">10% discount</sup>
                                                                 @endif
                                                             </h4>

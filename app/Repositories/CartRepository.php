@@ -100,7 +100,7 @@ class CartRepository{
                 }
             }
         }
-        if(auth()->user()->role_id == 7){
+        if(auth()->check() && auth()->user()->role_id == 7){
             $price = getProductPriceAfterPercent( $price,10,'',2,false);
         }
         $total_price = $price*$data['qty'];

@@ -21,11 +21,11 @@ class WishlistController extends Controller
     {
         try{
             $data['products'] = $this->wishlistService->myWishlist(auth()->user()->id);
-            if (auth()->user()->role->type != 'customer') {
-                return view('backEnd.pages.customer_data.wishlist', $data);
+            if (auth()->user()->role->type != 'customer' || auth()->user()->role->type != 'interior_designer') {
+                return view(theme('pages.profile.wishlist'), $data);
             }
             else {
-                return view(theme('pages.profile.wishlist'), $data);
+                return view('backEnd.pages.customer_data.wishlist', $data);
             }
         }catch(Exception $e){
             LogActivity::errorLog($e->getMessage());

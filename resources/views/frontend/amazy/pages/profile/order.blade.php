@@ -184,10 +184,14 @@
                                                 </td>
                                                 <td>
                                                     {{-- Only show resell button if package is delivered (delivery_status >= 5) and product data exists --}}
+                                                    @if(auth()->user()->role->type == 'interior_designer')
+                                                    <a href="{{ route('frontend.my_purchase_order_detail', encrypt($order->id)) }}" class="amaz_primary_btn style2 text-nowrap ">{{__('defaultTheme.order_details')}}</a>
+                                                    @else
                                                     @if($package->delivery_status >= 5 && $package_product->seller_product_sku && $package_product->seller_product_sku->product_id)
                                                         <a href="{{route('frontend.resell_product', $package_product->seller_product_sku->product_id)}}" class="amaz_primary_btn style2 text-nowrap ">resell product</a>
                                                     @else
                                                         <span class="text-muted font_12">Resell Available after delivery</span>
+                                                    @endif
                                                     @endif
                                                 </td>
                                             </tr>
@@ -199,7 +203,9 @@
                                 </div>
 
                                 <div class="d-flex justify-content-end flex-wrap gap_10">
+                                    @if(auth()->user()->role->type == 'customer')
                                     <a href="{{ route('frontend.my_purchase_order_detail', encrypt($order->id)) }}" class="amaz_primary_btn style2 text-nowrap ">{{__('defaultTheme.order_details')}}</a>
+                                    @endif
                                     @if ($order->is_confirmed == 0)
                                     @if ($order->is_cancelled == 0)
                                     <a data-id={{ $order->id }} class="amaz_primary_btn gray_bg_btn min_200 radius_3px ml_10 order_cancel_by_id" href="">{{__('defaultTheme.cancel_order')}}</a>

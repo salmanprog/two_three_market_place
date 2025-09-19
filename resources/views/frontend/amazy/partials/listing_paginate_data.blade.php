@@ -109,7 +109,7 @@
                     @if (get_class($product) == \Modules\Seller\Entities\SellerProduct::class)
                         <input type="hidden" name="base_sku_price" id="base_sku_price"
                             value="
-                        @if(auth()->user()->role_id == 7) 
+                        @if(auth()->check() && auth()->user()->role_id == 7) 
                         {{getProductPriceAfterPercent( @$product->skus->first()->sell_price,10,'',2,false) }}
                         @else 
                         @if (@$product->hasDeal) {{ selling_price(@$product->skus->first()->sell_price, @$product->hasDeal->discount_type, @$product->hasDeal->discount) }}
@@ -233,7 +233,7 @@
                                 @if(isGuestAddtoCart())
                                 <div class="product_price d-flex align-items-center justify-content-between flex-wrap">
                                     <a class="amaz_primary_btn addToCartFromThumnail" data-producttype="{{ @$product->product->product_type }}" data-seller={{ $product->user_id }} data-product-sku={{ @$product->skus->first()->id }}
-                                        @if(auth()->user()->role_id == 7)
+                                        @if(auth()->check() && auth()->user()->role_id == 7)
                                             data-base-price={{ getProductPriceAfterPercent(@$product->skus->first()->sell_price,10,'',2,false) }}
                                         @else
                                             @if (@$product->hasDeal)
@@ -264,7 +264,7 @@
                                                 {{getProductwitoutDiscountPrice(@$product)}}
                                             </del>
                                         @endif
-                                        @if(auth()->user()->role_id == 7)   
+                                        @if(auth()->check() && auth()->user()->role_id == 7)   
                                             <del>
                                                 {{getProductDiscountedPrice(@$product)}}
                                             </del>

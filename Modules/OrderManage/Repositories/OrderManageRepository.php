@@ -6,6 +6,7 @@ use App\Models\OrderPackageDetail;
 use App\Models\OrderProductDetail;
 use App\Models\DigitalFileDownload;
 use App\Models\OrderPayment;
+use App\Models\User;
 use Modules\OrderManage\Entities\OrderDeliveryState;
 use Modules\Account\Repositories\TransactionRepository;
 use Modules\Wallet\Repositories\WalletRepository;
@@ -287,6 +288,25 @@ class OrderManageRepository
             return $data;
         }
     }
+    
+    public function get_designer_commission_rate($seller_id, $package)
+    {
+        $merchantRepo = new MerchantRepository();
+        $seller = $merchantRepo->findUserByID($package->seller_id);
+        $order_products = OrderProductDetail::with('seller_product_sku', 'seller_product_sku.sku', 'seller_product_sku.sku.product', 'seller_product_sku.sku.product.categories')->where('package_id', $package->id)->get()->toArray();
+        if ($seller) {
+            $purchasing_amount = $order_products[0]['seller_product_sku']['purchase_price'];
+            $total_amount_of_package = $package->products->sum('total_price');
+            $actual_amount = $total_amount_of_package - $purchasing_amount;
+            $commission_rate = 30;
+            $final_commission = ($commission_rate * $actual_amount) / 100;
+            $seller_rcv_money = ($actual_amount - $final_commission) + $purchasing_amount;
+            $data['seller_rcv_money'] = $seller_rcv_money;
+            $data['claim_gst'] = 0;
+            $data['final_commission'] = $final_commission;
+            return $data;
+        }
+    }
 
     public function get_commission_rate($seller_id, $package)
     {
@@ -377,7 +397,7 @@ class OrderManageRepository
        
         $order_package = $this->findOrderPackageByID($id);
         $order = $this->findOrderByID($order_package->order_id);
-
+        $user = User::find($order->customer_id);
         if ($order_package->delivery_status != $data['delivery_status']) {
             if (app('business_settings')->where('type', 'mail_notification')->first()->status == 1) {
                 $this->sendOrderRefundorDeliveryProcessMail($order, "Modules\OrderManage\Entities\DeliveryProcess", $data['delivery_status']);
@@ -428,7 +448,11 @@ class OrderManageRepository
                 if($order_package->seller->role->type == 'customer'){
                     $amount = $this->get_customer_commission_rate($order_package->seller_id, $order_package);
                 }else{
-                    $amount = $this->get_commission_rate($order_package->seller_id, $order_package);
+                    if($user->role_id == 7){
+                        $amount = $this->get_designer_commission_rate($order_package->seller_id, $order_package);
+                    }else{
+                        $amount = $this->get_commission_rate($order_package->seller_id, $order_package);
+                    }
                 }
                 $seller_amount = $amount['seller_rcv_money'] + $order_package->tax_amount;
                 $seller_commision = $amount['final_commission'];

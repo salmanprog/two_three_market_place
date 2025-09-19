@@ -42,7 +42,7 @@ class AmazCartService
         if (!$temp) {
             $database = $this->service_repo->checkDatabase();
             $logout = Storage::exists('.logout') ? Storage::get('.logout') : false;
-            
+           
             if (!$database and !$logout) {
                 Log::info($request->url());
                 Log::info('Table not found');

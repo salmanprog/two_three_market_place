@@ -53,11 +53,11 @@ class ProfileController extends Controller
             $data['countries'] = Country::where('status', 1)->orderBy('name')->get();
             $data['states'] = (new StateRepository())->getByCountryId(app('general_setting')->default_country)->where('status', 1);
             $data['cities'] = (new CityRepository())->getByStateId(app('general_setting')->default_state)->where('status', 1);
-            if (auth()->user()->role->type != 'customer') {
-                return view('backEnd.pages.customer_data.profile',$data);
+            if (auth()->user()->role->type == 'customer' || auth()->user()->role->type == 'interior_designer') {
+                return view(theme('pages.profile.profile'),$data);                
             }
             else {
-                return view(theme('pages.profile.profile'),$data);
+                return view('backEnd.pages.customer_data.profile',$data);
             }
         }catch(Exception $e){
             LogActivity::errorLog($e->getMessage());

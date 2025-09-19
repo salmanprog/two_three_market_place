@@ -200,7 +200,7 @@
                                                             <span class="opacity-60 font_12 d-block d-lg-none">{{__('common.total')}}</span>
                                                             <h4 class="font_16 f_w_700 m-0 lh-1 text-nowrap">
                                                                 {{single_price($cart->total_price)}}
-                                                                @if(auth()->user()->role_id == 7)
+                                                                @if(auth()->check() && auth()->user()->role_id == 7)
                                                                 <sup style="font-size:8px;color:red">10% discount</sup>
                                                                 @endif
                                                             </h4>
