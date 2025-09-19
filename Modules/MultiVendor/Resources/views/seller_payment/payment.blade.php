@@ -38,7 +38,7 @@
                                     <td style="width: 20%">{{ __("common.plan_name") }}:</td>
                                     <td>{{ $seller_subscription->pricing->name }}</td>
                                 </tr>
-                                <tr>
+                                <!-- <tr>
                                     <td style="width: 20%">{{ __("common.stock_limit") }}:</td>
                                     <td>{{ $seller_subscription->pricing->stock_limit }}</td>
                                 </tr>
@@ -54,15 +54,21 @@
                                 <tr>
                                     <td style="width: 20%">{{ __("common.expire_in") }}:</td>
                                     <td>{{ $seller_subscription->pricing->expire_in }} {{ __("common.days") }}</td>
-                                </tr>
+                                </tr> -->
                             </table>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-12">
+                            @if($seller_subscription->pricing->plan_price == 0)
+                            <a href="{{ route('stripe.free_artist_create') }}" class="amaz_primary_btn style2  min_200 text-center text-uppercase">
+                                {{ __("Complete Signup") }}
+                            </a>
+                            @else
                             <a href="{{ route('seller.subscriptionPaymentGateway',$seller_subscription->id) }}" class="amaz_primary_btn style2  min_200 text-center text-uppercase">
                                 {{ __("common.continue_payment") }}
                             </a>
+                            @endif
                         </div>
                     </div>
                 </form>

@@ -28,6 +28,7 @@ Route::post('paypal-payment', 'PayPalController@payment')->name('paypal.payment'
 Route::get('paypal-cancel', 'PayPalController@paypalFailed')->name('paypal.paypalFailed');
 Route::get('paypal-payment/success', 'PayPalController@paypalSuccess')->name('paypal.paypalSuccess');
 Route::get('stripe-payment', 'StripeController@payment_page')->name('stripe.payment_create');
+Route::get('stripe-free-artist', 'StripeController@freeArtistPost')->name('stripe.free_artist_create');
 Route::post('stripe-payment-store', 'StripeController@stripePost')->name('stripe.payment');
 Route::post('stripe-webhook', 'StripeController@webhook')->name('stripe.webhook')->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
 Route::get('pay-with-razorpay', 'RazorpayController@payWithRazorpay')->name('paywithrazorpay');

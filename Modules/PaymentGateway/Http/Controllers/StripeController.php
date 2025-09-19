@@ -216,6 +216,101 @@ class StripeController extends Controller
         }
     }
 
+    public function freeArtistPost()
+    {
+        try {
+
+            $currency_code = getCurrencyCode();
+            if (auth()->check()) {
+                $key = substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 16);
+                $return_data =$key;
+                DB::beginTransaction();
+                try {
+                    // Get the default income account
+                    $defaultIncomeAccount = $this->defaultIncomeAccount();
+                    if (!$defaultIncomeAccount) {
+                        throw new Exception('Income account not configured');
+                    }
+                    // Get seller subscription
+                    $seller_subscription = getParentSeller()->SellerSubscriptions;
+                    if (!$seller_subscription) {
+                        throw new Exception('Seller subscription not found');
+                    }
+                    
+                    // Create transaction record
+                    $transactionRepo = new TransactionRepository(new Transaction);
+                    $transaction = $transactionRepo->makeTransaction(
+                        getParentSeller()->first_name . " - 0 Cost Subscription Payment",
+                        "in",
+                        "Stripe",
+                        "subscription_payment",
+                        $defaultIncomeAccount,
+                        "Subscription Payment",
+                        $seller_subscription,
+                        0,
+                        Carbon::now()->format('Y-m-d'),
+                        getParentSellerId(),
+                        null,
+                        null
+                    );
+
+                    // Update subscription
+                    $seller_subscription->update([
+                        'last_payment_date' => Carbon::now()->format('Y-m-d')
+                    ]);
+                    
+                    // Create payment info
+                    SubsciptionPaymentInfo::create([
+                        'transaction_id' => $transaction->id,
+                        'txn_id' => $return_data,
+                        'seller_id' => getParentSellerId(),
+                        'subscription_type' => getParentSeller()->sellerAccount->subscription_type,
+                        'commission_type' => @$seller_subscription->pricing->name
+                    ]);
+
+                    // Commit transaction
+                    DB::commit();
+
+                    // Log success
+                    LogActivity::successLog('Subscription payment successful via Stripe.');
+
+                    // Clear session
+                    session()->forget('subscription_payment');
+
+                    // Return success response with redirect
+                    return redirect()->route('seller.dashboard');
+
+                } catch (Exception $e) {
+                    // Rollback transaction on error
+                    DB::rollBack();
+                    Log::error('Subscription Processing Error', [
+                        'error' => $e->getMessage(),
+                        'seller_id' => getParentSellerId(),
+                        'charge_id' => $return_data ?? 'unknown'
+                    ]);
+                    throw new Exception('Error processing subscription: ' . $e->getMessage());
+                }
+            }
+
+        } catch (Exception $e) {
+            Log::error('Stripe Payment Error', [
+                'error' => $e->getMessage(),
+                'seller_id' => getParentSellerId() ?? 'unknown',
+                'data' => $data
+            ]);
+
+            if (session()->has('subscription_payment')) {
+                session()->forget('subscription_payment');
+            }
+
+            return [
+                'status' => 'error',
+                'message' => $e->getMessage(),
+                'redirect_url' => route('seller.dashboard')
+            ];
+        }
+    }
+
     public function stripeOrganisersPayment($data)
     {
         try {
