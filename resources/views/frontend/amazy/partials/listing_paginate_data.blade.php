@@ -110,7 +110,7 @@
                         <input type="hidden" name="base_sku_price" id="base_sku_price"
                             value="
                         @if(auth()->check() && auth()->user()->role_id == 7) 
-                        {{getProductPriceAfterPercent( @$product->skus->first()->sell_price,10,'',2,false) }}
+                        {{getProductPriceAfterPercent( @$product->skus->first()->sell_price,getDesignerCommissionPercentage(auth()->user()),'',2,false) }}
                         @else 
                         @if (@$product->hasDeal) {{ selling_price(@$product->skus->first()->sell_price, @$product->hasDeal->discount_type, @$product->hasDeal->discount) }}
                         @else
@@ -234,7 +234,7 @@
                                 <div class="product_price d-flex align-items-center justify-content-between flex-wrap">
                                     <a class="amaz_primary_btn addToCartFromThumnail" data-producttype="{{ @$product->product->product_type }}" data-seller={{ $product->user_id }} data-product-sku={{ @$product->skus->first()->id }}
                                         @if(auth()->check() && auth()->user()->role_id == 7)
-                                            data-base-price={{ getProductPriceAfterPercent(@$product->skus->first()->sell_price,10,'',2,false) }}
+                                            data-base-price={{ getProductPriceAfterPercent(@$product->skus->first()->sell_price,getDesignerCommissionPercentage(auth()->user()),'',2,false) }}
                                         @else
                                             @if (@$product->hasDeal)
                                                 data-base-price={{ selling_price(@$product->skus->first()->sell_price,@$product->hasDeal->discount_type,@$product->hasDeal->discount) }}
@@ -269,7 +269,7 @@
                                                 {{getProductDiscountedPrice(@$product)}}
                                             </del>
                                             <strong >
-                                                {{getProductPriceAfterPercent(getProductDiscountedPrice(@$product),10)}} <sup style="font-size:8px;color:red">10% discount</sup>
+                                                {{getProductPriceAfterPercent(getProductDiscountedPrice(@$product),getDesignerCommissionPercentage(auth()->user()))}} <sup style="font-size:8px;color:red">{{getDesignerCommissionPercentage(auth()->user())}}% discount</sup>
                                             </strong>
                                         @else
                                             <strong>

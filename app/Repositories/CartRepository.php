@@ -101,7 +101,7 @@ class CartRepository{
             }
         }
         if(auth()->check() && auth()->user()->role_id == 7){
-            $price = getProductPriceAfterPercent( $price,10,'',2,false);
+            $price = getProductPriceAfterPercent( $price,getDesignerCommissionPercentage(auth()->user()),'',2,false);
         }
         $total_price = $price*$data['qty'];
         if($data['type'] == 'product' && $product){

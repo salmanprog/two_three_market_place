@@ -21,128 +21,12 @@
                     @csrf
                     <div class="customer_review_wrapper">
                         <div class="customer_review_wrapper_inner">
-                            <!-- customer_review_left  -->
-                            <div class="customer_review_left">
-                                <div class="review_box">
-                                    <span class="deliverd_date" >
-
-                                        {{ __('defaultTheme.delivered_on') }}
-                                        {{date('dS M- Y',strtotime($package->updated_at))}}</span>
-                                    <h6 class="subtitle font_14 f_w_700" >{{ __('defaultTheme.rate_and_review_purchased_product') }}:</h6>
-
-                                    <input type="hidden" id="product_length" value="{{count($package->products)}}">
-
-                                    @foreach($package->products as $key => $product)
-                                        @if($product->type == 'product')
-                                            <div class="product_item_box">
-                                                <div class="thumb">
-                                                    <img src="{{showImage(@$product->seller_product_sku->product->product->thumbnail_image_source)}}" alt="{{@$product->seller_product_sku->product->product_name}}" title="{{@$product->seller_product_sku->product->product_name}}">
-                                                    <input type="hidden" name="product_id[]" value="{{@$product->seller_product_sku->product->id}}">
-                                                    <input type="hidden" name="product_type[]" value="{{@$product->type}}">
-                                                </div>
-                                                <div class="product_item_dTails w-100">
-                                                    <div class="product_item_info">
-                                                        <h4 class="font_14 f_w_700">{{@$product->seller_product_sku->product->product_name}}</h4>
-
-                                                        <div class="star_icon d-flex align-items-center">
-                                                            <a class="rating">
-                                                            <input type="radio" id="product_star_{{$key}}_5" name="product_rating_{{@$product->seller_product_sku->product->id}}" checked value="5" class="rating"><label class="full product_rating" for="product_star_{{$key}}_5" id="star5" title="Delightful - 5 stars" data-rate="5"></label>
-                                                            <input type="radio" id="product_star_{{$key}}_4" name="product_rating_{{@$product->seller_product_sku->product->id}}" value="4" class="rating"><label class="full product_rating" for="product_star_{{$key}}_4" title="Satisfactory - 4 stars" data-rate="4"></label>
-                                                            <input type="radio" id="product_star_{{$key}}_3" name="product_rating_{{@$product->seller_product_sku->product->id}}" value="3" class="rating"><label class="full product_rating" for="product_star_{{$key}}_3" title="Neutral - 3 stars" data-rate="3"></label>
-                                                            <input type="radio" id="product_star_{{$key}}_2" name="product_rating_{{@$product->seller_product_sku->product->id}}" value="2" class="rating"><label class="full product_rating" for="product_star_{{$key}}_2" title="Poor - 2 stars" data-rate="2"></label>
-                                                            <input type="radio" id="product_star_{{$key}}_1" name="product_rating_{{@$product->seller_product_sku->product->id}}" value="1" class="rating"><label class="full product_rating" for="product_star_{{$key}}_1" title="Very Poor - 1 star" data-rate="1"></label>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="send_query ">
-                                                        <div class="form-group">
-                                                            <textarea id="textarea_{{$key}}" placeholder="{{ __('defaultTheme.please_share_your_feedback_about_the_product') }}" name="product_review[]" spellcheck="false" class="primary_textarea4 radius_5px mb_25"></textarea>
-                                                            <span class="text-danger" id="error_textarea_{{$key}}"></span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="photo_uploader_lists">
-                                                        <div class="row">
-
-                                                            <div class="col-lg-12">
-                                                                <div class="img_upload_group d-flex align-items-center flex-wrap">
-                                                                    <div class="flex-wrap img_upload_div" id="img_upload_div_{{$key}}">
-
-                                                                    </div>
-                                                                    <label for="photo_{{$key}}" class="photo_uploader">
-                                                                        <i class="fas fa-camera"></i>
-                                                                        <p id="count_{{$key}}">0/6</p>
-                                                                        <input class="d-none upload_img_for_product" type="file" id="photo_{{$key}}" name="product_images_{{@$product->seller_product_sku->product->id}}[]" data-upload_div="#img_upload_div_{{$key}}" data-count="#count_{{$key}}" max="6" multiple>
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                    <div class="review_guidelines">
-                                                        <h4>{{ __('defaultTheme.important') }}</h4>
-                                                        <p>{{ __('defaultTheme.maximum_6_images_can_be_uploaded') }}</p>
-                                                        <p>{{ __('defaultTheme.image_size_can_be_maximum_5mb') }}</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @else
-                                            <div class="product_item_box">
-                                                <div class="thumb">
-                                                    <img src="{{showImage(@$product->giftCard->thumbnail_image)}}" alt="{{@$product->giftCard->name}}" title="{{@$product->giftCard->name}}">
-                                                    <input type="hidden" name="product_id[]" value="{{@$product->giftcard->id}}">
-                                                    <input type="hidden" name="product_type[]" value="{{@$product->type}}">
-                                                </div>
-                                                <div class="product_item_dTails w-100">
-                                                    <div class="product_item_info">
-                                                        <h4 class="font_14 f_w_700">{{@$product->giftCard->name}}</h4>
-
-                                                        <div class="star_icon d-flex align-items-center">
-                                                            <a class="rating">
-                                                            <input type="radio" id="product_star_{{$key}}_5" name="giftcard_rating_{{@$product->giftcard->id}}" checked value="5" class="rating"><label class="full product_rating" for="product_star_{{$key}}_5" id="star5" title="Delightful - 5 stars" data-rate="5"></label>
-                                                            <input type="radio" id="product_star_{{$key}}_4" name="giftcard_rating_{{@$product->giftcard->id}}" value="4" class="rating"><label class="full product_rating" for="product_star_{{$key}}_4" title="Satisfactory - 4 stars" data-rate="4"></label>
-                                                            <input type="radio" id="product_star_{{$key}}_3" name="giftcard_rating_{{@$product->giftcard->id}}" value="3" class="rating"><label class="full product_rating" for="product_star_{{$key}}_3" title="Neutral - 3 stars" data-rate="3"></label>
-                                                            <input type="radio" id="product_star_{{$key}}_2" name="giftcard_rating_{{@$product->giftcard->id}}" value="2" class="rating"><label class="full product_rating" for="product_star_{{$key}}_2" title="Poor - 2 stars" data-rate="2"></label>
-                                                            <input type="radio" id="product_star_{{$key}}_1" name="giftcard_rating_{{@$product->giftcard->id}}" value="1" class="rating"><label class="full product_rating" for="product_star_{{$key}}_1" title="Very Poor - 1 star" data-rate="1"></label>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="send_query ">
-                                                        <div class="form-group">
-                                                            <textarea class="primary_textarea4 radius_5px mb_25" id="textarea_{{$key}}" placeholder="{{ __('defaultTheme.please_share_your_feedback_about_the_product') }}" name="product_review[]" spellcheck="false"></textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="photo_uploader_lists">
-                                                        <div class="row">
-                                                            <div class="col-lg-12">
-                                                                <div class="img_upload_group d-flex align-items-center flex-wrap">
-                                                                    <div class="flex-wrap img_upload_div" id="img_upload_div_{{$key}}">
-                                                                    </div>
-                                                                    <label for="photo_{{$key}}" class="photo_uploader">
-                                                                        <i class="fas fa-camera"></i>
-                                                                        <p id="count_{{$key}}">{{getNumberTranslate(0)}}/{{getNumberTranslate(6)}}</p>
-                                                                        <input class="d-none upload_img_for_product" type="file" id="photo_{{$key}}" name="gift_images_{{@$product->giftCard->id}}[]" data-upload_div="#img_upload_div_{{$key}}" data-count="#count_{{$key}}" max="6" multiple>
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="review_guidelines">
-                                                        <h4>{{ __('defaultTheme.important') }}</h4>
-                                                        <p>{{ __('defaultTheme.maximum_6_images_can_be_uploaded') }}</p>
-                                                        <p>{{ __('defaultTheme.image_size_can_be_maximum_5mb') }}</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endif
-                                    @endforeach
-                                </div>
-                            </div>
+                            <!-- customer_review_lefts  -->
+                            
                             <div class="customer_review_right">
                                 <div class="review_seller_box">
                                     @if(isModuleActive('MultiVendor'))
-                                        <p>{{__('common.sold_by') }}
+                                        <p>
                                             @if (@$package->seller->slug)
                                                 <a href="{{route('frontend.seller',@$package->seller->slug)}}">
                                                     @if(@$package->seller->id == 1)
@@ -156,7 +40,7 @@
                                             @endif
                                         </p>
                                     @endif
-                                    <input type="hidden" name="seller_id" value="{{@$package->seller->id}}">
+                                    <input type="hidden" name="seller_id" value="{{ request()->get('seller_id') }}">
                                     <input type="hidden" name="order_id" value="{{@$package->order->id}}">
                                     <input type="hidden" name="package_id" value="{{@$package->id}}">
                                     <h5 class="font_14 f_w_700">@if(isModuleActive('MultiVendor')){{ __('defaultTheme.rate_and_review_your_seller') }}@else {{__('common.company_rating_review')}} @endif</h5>
@@ -172,7 +56,7 @@
                                     <div class="send_query mt-3">
                                         <div class="form-group">
                                             <label for="textarea" class="font_14">{{ __('defaultTheme.review_details') }}</label>
-                                            <textarea class="primary_textarea4 radius_5px mb_25" name="seller_review" id="seller_review_field" placeholder="{{ __('defaultTheme.how_over_all_experience_with_seller') }}" spellcheck="false"></textarea>
+                                            <textarea class="primary_textarea4 radius_5px mb_25" name="seller_review" id="seller_review_field" placeholder="{{ __('How over all experience with artist?') }}" spellcheck="false"></textarea>
                                             <span class="text-danger" id="error_seller_review_field"></span>
                                         </div>
                                     </div>

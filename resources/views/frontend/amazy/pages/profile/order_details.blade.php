@@ -418,7 +418,7 @@
                                                 @endif
                                             @endif
                                             @if($order->is_completed == 1)
-                                                <a href="{{url('/')}}/profile/product-review?order_id={{base64_encode($order->id)}}&&package_id={{base64_encode($package->id)}}&&seller_id={{base64_encode($package->seller_id)}}" class="amaz_primary_btn gray_bg_btn radius_3px">{{__('defaultTheme.write_a_review')}}</a>
+                                                <!-- <a href="{{url('/')}}/profile/product-review?order_id={{base64_encode($order->id)}}&&package_id={{base64_encode($package->id)}}&&seller_id={{base64_encode($package->seller_id)}}" class="amaz_primary_btn gray_bg_btn radius_3px">{{__('defaultTheme.write_a_review')}}</a> -->
                                             @endif
                                         </div>
                                     </div>

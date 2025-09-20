@@ -3,6 +3,8 @@
 use App\Http\Controllers\Frontend\ThemeDynamicData;
 use App\Mail\ContactMail;
 use App\Models\User;
+use App\Models\Order;
+use App\Models\OrderPayment;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -514,6 +516,28 @@ if (!function_exists('getProductPriceAfterPercent')) {
         // comma-separated (1,234.56) and prefixed with $
         $formatted = number_format($base, $decimals, '.', ',');
         return $with_symbol ? ($symbol . $formatted) : $formatted;
+    }
+}
+
+if (!function_exists('getDesignerCommissionPercentage')) {
+    function getDesignerCommissionPercentage($user)
+    {
+        $joiningDate = $user->created_at->toDateString();
+        $yearsCompleted = \Carbon\Carbon::parse($joiningDate)->diffInYears(now());
+        $startDate = \Carbon\Carbon::parse($joiningDate)->addYears($yearsCompleted)->startOfDay();
+        $endDate   = \Carbon\Carbon::parse($joiningDate)->addYears($yearsCompleted + 1)->endOfDay();
+        $total_purchasing = OrderPayment::where('user_id', $user->id)
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->where('status', 1)
+            ->sum('amount') ?? 0;
+
+        $user_discount_percentage = 10;
+        if ($total_purchasing > 50000 && $total_purchasing < 100000) { 
+            $user_discount_percentage = 15;
+        } elseif ($total_purchasing >= 100000) { 
+            $user_discount_percentage = 20;
+        }
+        return $user_discount_percentage;
     }
 }
 

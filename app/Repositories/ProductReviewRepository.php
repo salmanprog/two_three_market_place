@@ -26,83 +26,84 @@ class ProductReviewRepository
         } else {
             $product_type_temp = '';
 
-            foreach ($data['product_id'] as $key => $id) {
-                $product_type_temp = $data['product_type'][$key];
-                $review = ProductReview::create([
-                    'customer_id' => $user->id,
-                    'seller_id' => $data['seller_id'],
-                    'product_id' => $id,
-                    'type' => $product_type_temp,
-                    'order_id' => $data['order_id'],
-                    'package_id' => $data['package_id'],
-                    'review' => isset($data['product_review'][$key]) ? $data['product_review'][$key] : null,
-                    'rating' => ($product_type_temp == 'product') ? $data['product_rating_' . $id] : $data['giftcard_rating_' . $id],
-                    'is_anonymous' => isset($data['is_anonymous']) ? $data['is_anonymous'] : 0
-                ]);
-                if ($product_type_temp == 'product') {
+            // foreach ($data['product_id'] as $key => $id) {
+            //     $product_type_temp = $data['product_type'][$key];
+            //     $review = ProductReview::create([
+            //         'customer_id' => $user->id,
+            //         'seller_id' => $data['seller_id'],
+            //         'product_id' => $id,
+            //         'type' => $product_type_temp,
+            //         'order_id' => $data['order_id'],
+            //         'package_id' => $data['package_id'],
+            //         'review' => isset($data['product_review'][$key]) ? $data['product_review'][$key] : null,
+            //         'rating' => ($product_type_temp == 'product') ? $data['product_rating_' . $id] : $data['giftcard_rating_' . $id],
+            //         'is_anonymous' => isset($data['is_anonymous']) ? $data['is_anonymous'] : 0
+            //     ]);
+            //     if ($product_type_temp == 'product') {
 
-                    if (isset($data['product_images_' . $id])) {
+            //         if (isset($data['product_images_' . $id])) {
 
-                        foreach ($data['product_images_' . $id] as $key => $image) {
-                            $file_extention = $image->getClientOriginalExtension();
-                            $video_extentions = ['mp4'];
+            //             foreach ($data['product_images_' . $id] as $key => $image) {
+            //                 $file_extention = $image->getClientOriginalExtension();
+            //                 $video_extentions = ['mp4'];
 
-                            if(in_array($file_extention, $video_extentions)){
+            //                 if(in_array($file_extention, $video_extentions)){
 
-                                    if(!File::isDirectory(public_path('uploads/review_videos/').$current_date)){
-                                        File::makeDirectory(public_path('uploads/review_videos/').$current_date, 0777, true, true);
-                                    }
-                                    $video_name = time().'.'.$file_extention;
-                                    $image->move(public_path('uploads/review_videos/'.$current_date),$video_name);
-                                    $imagename = 'uploads/review_videos/'.$current_date.'/'. $video_name;
-                            }else{
-                                $imagename = ImageStore::saveImage($image);
-                            }
+            //                         if(!File::isDirectory(public_path('uploads/review_videos/').$current_date)){
+            //                             File::makeDirectory(public_path('uploads/review_videos/').$current_date, 0777, true, true);
+            //                         }
+            //                         $video_name = time().'.'.$file_extention;
+            //                         $image->move(public_path('uploads/review_videos/'.$current_date),$video_name);
+            //                         $imagename = 'uploads/review_videos/'.$current_date.'/'. $video_name;
+            //                 }else{
+            //                     $imagename = ImageStore::saveImage($image);
+            //                 }
 
-                            $reviewImg =  ReviewImage::create([
-                                'review_id' => $review->id,
-                                'product_id' => $id,
-                                'type' => $product_type_temp,
-                                'image' => $imagename
-                            ]);
+            //                 $reviewImg =  ReviewImage::create([
+            //                     'review_id' => $review->id,
+            //                     'product_id' => $id,
+            //                     'type' => $product_type_temp,
+            //                     'image' => $imagename
+            //                 ]);
 
-                            dump($reviewImg);
-                        }
-                    }
-                } else {
-                    if (isset($data['gift_images_' . $id])) {
-                        foreach ($data['gift_images_' . $id] as $key => $image) {
-                            $file_extention = $image->getClientOriginalExtension();
-                            $video_extentions = ['mp4'];
+            //                 dump($reviewImg);
+            //             }
+            //         }
+            //     } else {
+            //         if (isset($data['gift_images_' . $id])) {
+            //             foreach ($data['gift_images_' . $id] as $key => $image) {
+            //                 $file_extention = $image->getClientOriginalExtension();
+            //                 $video_extentions = ['mp4'];
 
-                            if(in_array($file_extention, $video_extentions)){
-                                    if($image->getSize() < 2283670){
-                                        if(!File::isDirectory(asset_path('uploads/review_videos/').$current_date)){
-                                            File::makeDirectory(asset_path('uploads/review_videos/').$current_date, 0777, true, true);
-                                        }
-                                        $video_name = time().'.'.$file_extention;
-                                        $image->move(public_path('uploads/review_videos/'.$current_date),$video_name);
-                                        $imagename = 'uploads/review_videos/'.$current_date.'/'. $video_name;
-                                    }
-                                    return false;
+            //                 if(in_array($file_extention, $video_extentions)){
+            //                         if($image->getSize() < 2283670){
+            //                             if(!File::isDirectory(asset_path('uploads/review_videos/').$current_date)){
+            //                                 File::makeDirectory(asset_path('uploads/review_videos/').$current_date, 0777, true, true);
+            //                             }
+            //                             $video_name = time().'.'.$file_extention;
+            //                             $image->move(public_path('uploads/review_videos/'.$current_date),$video_name);
+            //                             $imagename = 'uploads/review_videos/'.$current_date.'/'. $video_name;
+            //                         }
+            //                         return false;
 
-                            }else{
-                                $imagename = ImageStore::saveImage($image);
-                            }
+            //                 }else{
+            //                     $imagename = ImageStore::saveImage($image);
+            //                 }
 
-                            ReviewImage::create([
-                                'review_id' => $review->id,
-                                'product_id' => $id,
-                                'type' => $product_type_temp,
-                                'image' => $imagename
-                            ]);
-                        }
-                    }
-                }
-            }
+            //                 ReviewImage::create([
+            //                     'review_id' => $review->id,
+            //                     'product_id' => $id,
+            //                     'type' => $product_type_temp,
+            //                     'image' => $imagename
+            //                 ]);
+            //             }
+            //         }
+            //     }
+            // }
+            
             $sellerReview = SellerReview::create([
                 'seller_id' => $data['seller_id'],
-                'order_id' => $data['order_id'],
+                'order_id' => isset($data['order_id']) ? $data['order_id'] : 0,
                 'rating' => $data['seller_rating'],
                 'review' => isset($data['seller_review']) ? $data['seller_review'] : null,
                 'customer_id' => $user->id,
@@ -116,20 +117,20 @@ class ProductReviewRepository
 
             if(auto_approve_product_review()){
                 // Send Notification to seller direct
-                $review->status = 1;
-                $review->save();
-                if(isModuleActive('MultiVendor')){
-                    $notificationUrl = route('seller.product-reviews.index');
-                    $notificationUrl = str_replace(url('/'),'',$notificationUrl);
-                    $this->notificationUrl = $notificationUrl;
-                    $this->adminNotificationUrl = '/review/product-list';
-                    $this->routeCheck = 'review.product.index';
-                    $this->typeId = EmailTemplateType::where('type', 'review_email_template')->first()->id;
-                    $notification = NotificationSetting::where('slug','product-review')->first();
-                    if ($notification) {
-                        $this->notificationSend($notification->id, $data['seller_id']);
-                    }
-                }
+                // $review->status = 1;
+                // $review->save();
+                // if(isModuleActive('MultiVendor')){
+                //     $notificationUrl = route('seller.product-reviews.index');
+                //     $notificationUrl = str_replace(url('/'),'',$notificationUrl);
+                //     $this->notificationUrl = $notificationUrl;
+                //     $this->adminNotificationUrl = '/review/product-list';
+                //     $this->routeCheck = 'review.product.index';
+                //     $this->typeId = EmailTemplateType::where('type', 'review_email_template')->first()->id;
+                //     $notification = NotificationSetting::where('slug','product-review')->first();
+                //     if ($notification) {
+                //         $this->notificationSend($notification->id, $data['seller_id']);
+                //     }
+                // }
             }else{
                 // Send Notification to admin
                 $notificationUrl = route('review.product.index');

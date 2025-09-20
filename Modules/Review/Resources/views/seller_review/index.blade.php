@@ -43,7 +43,7 @@
                         <div class="col-12">
                             <div class="box_header common_table_header">
                                 <div class="main-title d-md-flex">
-                                    <h3 class="mb-0 mr-30 mb_xs_15px mb_sm_20px">@if(isModuleActive('MultiVendor')){{__('review.seller_review_list')}}@else {{__('review.company_review_list')}} @endif</h3>
+                                    <h3 class="mb-0 mr-30 mb_xs_15px mb_sm_20px">@if(isModuleActive('MultiVendor')){{__('Artist Review List')}}@else {{__('review.company_review_list')}} @endif</h3>
                                 </div>
                             </div>
                         </div>

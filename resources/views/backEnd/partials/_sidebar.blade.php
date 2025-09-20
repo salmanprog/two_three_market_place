@@ -301,7 +301,23 @@
                                                                 @endif"
                                                                 class="{{spn_active_link(childrenRoute($submenu), 'active')}} @if(@$submenu->children->count()) has-arrow @endif">{{__('All Buyer')}} </a>
                                                             @elseif(auth()->user()->role->type == 'admin'  && $submenu->backendMenu->name == 'common.bulk_customer_upload') 
-                                                            @elseif(auth()->user()->role->type == 'admin'  && $submenu->backendMenu->name == 'list.Income')               
+                                                            @elseif(auth()->user()->role->type == 'admin'  && $submenu->backendMenu->name == 'list.Income')
+                                                            @elseif(auth()->user()->role->type == 'admin'  && $submenu->backendMenu->name == 'review.company_review')  
+                                                            <a href="
+                                                                @if(\Illuminate\Support\Facades\Route::has($submenu->backendMenu->route) && !$submenu->children->count())
+                                                                    @if(@$submenu->backendMenu->route == 'my-wallet.index')
+                                                                        @if(auth()->user()->role->type == 'seller')
+                                                                            {{route(@$submenu->backendMenu->route, 'seller')}}
+                                                                        @else
+                                                                            {{route(@$submenu->backendMenu->route, 'admin')}}
+                                                                        @endif
+                                                                    @else
+                                                                        {{route(@$submenu->backendMenu->route)}}
+                                                                    @endif
+                                                                @else
+                                                                    javascript:void(0)
+                                                                @endif"
+                                                                class="{{spn_active_link(childrenRoute($submenu), 'active')}} @if(@$submenu->children->count()) has-arrow @endif">{{__('Artist Reviews')}} </a>             
                                                             @else
                                                             <a href="
                                                                 @if(\Illuminate\Support\Facades\Route::has($submenu->backendMenu->route) && !$submenu->children->count())

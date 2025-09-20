@@ -22,16 +22,17 @@ class ProductReviewController extends Controller
     }
     public function index(Request $request){
 
-         $package = OrderPackageDetail::findOrFail(base64_decode($request->package_id));
-        return view(theme('pages.review'),compact('package'));
+        // $package = OrderPackageDetail::findOrFail(base64_decode($request->package_id));
+       // return view(theme('pages.review'),compact('package'));
+        return view(theme('pages.review'));
     }
 
     public function store(Request $request){
-        foreach ($request->product_id as $product) {
-            $request->validate([
-                'product_images_'.$product.'.*' => 'nullable',
-            ]);
-        }
+        // foreach ($request->product_id as $product) {
+        //     $request->validate([
+        //         'product_images_'.$product.'.*' => 'nullable',
+        //     ]);
+        // }
         $review = $this->productReviewService->store($request->except('_token'), auth()->user());
             if($review){
                 DB::commit();

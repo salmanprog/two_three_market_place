@@ -22,6 +22,7 @@ use Modules\GeneralSetting\Entities\NotificationSetting;
 use Modules\MultiVendor\Entities\PackageWiseSellerCommision;
 use Modules\OrderManage\Entities\DeliveryProcess;
 use Modules\Product\Entities\Category;
+use Modules\FrontendCMS\Entities\Pricing;
 
 class OrderManageRepository
 {
@@ -289,21 +290,26 @@ class OrderManageRepository
         }
     }
     
-    public function get_designer_commission_rate($seller_id, $package)
+    public function get_designer_commission_rate($seller_id, $package,$user)
     {
         $merchantRepo = new MerchantRepository();
         $seller = $merchantRepo->findUserByID($package->seller_id);
         $order_products = OrderProductDetail::with('seller_product_sku', 'seller_product_sku.sku', 'seller_product_sku.sku.product', 'seller_product_sku.sku.product.categories')->where('package_id', $package->id)->get()->toArray();
         if ($seller) {
+            $seller_account = $seller->SellerAccount;
+            $seller_subscription = $seller->SellerSubscriptions;
+            $plans = Pricing::where('id',$seller_subscription->pricing_id)->first();
+            $designer_commission_percentage = getDesignerCommissionPercentage($user);
             $purchasing_amount = $order_products[0]['seller_product_sku']['purchase_price'];
             $total_amount_of_package = $package->products->sum('total_price');
             $actual_amount = $total_amount_of_package - $purchasing_amount;
-            $commission_rate = 30;
+            $commission_rate = $plans->transaction_fee;
             $final_commission = ($commission_rate * $actual_amount) / 100;
             $seller_rcv_money = ($actual_amount - $final_commission) + $purchasing_amount;
-            $data['seller_rcv_money'] = $seller_rcv_money;
+            $afterDiscount_admin = $final_commission - ($final_commission * $designer_commission_percentage / 100);
+            $data['seller_rcv_money'] = number_format($seller_rcv_money,2);
             $data['claim_gst'] = 0;
-            $data['final_commission'] = $final_commission;
+            $data['final_commission'] = number_format($afterDiscount_admin,2);
             return $data;
         }
     }
@@ -449,7 +455,7 @@ class OrderManageRepository
                     $amount = $this->get_customer_commission_rate($order_package->seller_id, $order_package);
                 }else{
                     if($user->role_id == 7){
-                        $amount = $this->get_designer_commission_rate($order_package->seller_id, $order_package);
+                        $amount = $this->get_designer_commission_rate($order_package->seller_id, $order_package,$user);
                     }else{
                         $amount = $this->get_commission_rate($order_package->seller_id, $order_package);
                     }

@@ -188,7 +188,7 @@
                                         @endif
                                     </span></p>
                                 </div>
-                                <div class="d-flex flex-wrap align-items-center">
+                                <!-- <div class="d-flex flex-wrap align-items-center">
                                     <div class="product_ratings mb-2">
                                         <div class="stars">
                                             <x-rating :rating="$rating"/>
@@ -205,7 +205,7 @@
                                         </span>
                                     </div>
                                     @endif
-                                </div>
+                                </div> -->
                                 <div class="destils_prise_information_box mb_20">
                                     @if(isGuestAddtoCart() == true)
                                     <h2 class="pro_details_prise d-flex align-items-center  m-0">
@@ -213,7 +213,7 @@
                                             <del>
                                                 {{getProductDiscountedPrice($product)}}
                                             </del>
-                                            {{getProductPriceAfterPercent(getProductDiscountedPrice(@$product),10)}} <sup style="font-size:8px;color:red">10% discount</sup>
+                                            {{getProductPriceAfterPercent(getProductDiscountedPrice(@$product),getDesignerCommissionPercentage(auth()->user()))}} <sup style="font-size:8px;color:red">{{getDesignerCommissionPercentage(auth()->user())}}% discount</sup>
                                         @else
                                         <span>
                                             {{getProductDiscountedPrice($product)}}
@@ -402,12 +402,12 @@
                                         <span id="total_price">
                                             @if(auth()->check() && auth()->user()->role_id == 7)
                                                  @if(@$product->hasDeal)
-                                                    {{getProductPriceAfterPercent(selling_price(@$product->skus->where('status',1)->first()->sell_price,@$product->hasDeal->discount_type,@$product->hasDeal->discount) * $product->product->minimum_order_qty,10)}}
+                                                    {{getProductPriceAfterPercent(selling_price(@$product->skus->where('status',1)->first()->sell_price,@$product->hasDeal->discount_type,@$product->hasDeal->discount) * $product->product->minimum_order_qty,getDesignerCommissionPercentage(auth()->user()))}}
                                                 @else
                                                     @if($product->hasDiscount == 'yes')
-                                                        {{getProductPriceAfterPercent(selling_price(@$product->skus->where('status',1)->first()->sell_price,@$product->discount_type,@$product->discount) * $product->product->minimum_order_qty,10)}}
+                                                        {{getProductPriceAfterPercent(selling_price(@$product->skus->where('status',1)->first()->sell_price,@$product->discount_type,@$product->discount) * $product->product->minimum_order_qty,getDesignerCommissionPercentage(auth()->user()))}}
                                                     @else
-                                                        {{getProductPriceAfterPercent(@$product->skus->where('status',1)->first()->sell_price * $product->product->minimum_order_qty,10)}}
+                                                        {{getProductPriceAfterPercent(@$product->skus->where('status',1)->first()->sell_price * $product->product->minimum_order_qty,getDesignerCommissionPercentage(auth()->user()))}}
                                                     @endif
                                                 @endif
                                             @else
@@ -838,9 +838,9 @@
                                         </div>
                                     </div>
                                 @endif
-                                <div class="col-12" id="Reviews">
+                                <!-- <div class="col-12" id="Reviews">
                                     @include(theme('partials._product_review_with_paginate'),['reviews' => @$product->ActiveReviewsWithPaginate, 'all_reviews' => $product->reviews])
-                                </div>
+                                </div> -->
                     </div>
                 </div>
 

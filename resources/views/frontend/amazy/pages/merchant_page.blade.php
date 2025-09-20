@@ -132,6 +132,7 @@
                                     <x-rating :rating="$seller_rating"/>
                                 </div>
                                 <p> {{getNumberTranslate(sprintf("%.2f",$seller_rating))}}/{{getNumberTranslate(5)}} ({{$seller_total_review<10 ? getNumberTranslate(0) : ''}}{{getNumberTranslate($seller_total_review)}} {{__('defaultTheme.review')}})</p>
+                                <a href="{{url('/')}}/profile/product-review?order_id={{base64_encode(36)}}&&package_id={{base64_encode(36)}}&&seller_id={{$seller->id}}" class="" style="background-color:#FEB74C;width:20%;font-size:9px;color:#fff;margin:0 1px;text-align:center">{{__('defaultTheme.write_a_review')}}</a>
                             </div>
                             <div class="contact_wiz_box">
                                 <div class="contact_link">
