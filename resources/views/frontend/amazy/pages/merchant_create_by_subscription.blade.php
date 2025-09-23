@@ -68,12 +68,25 @@
                         </div>
                     </div>
                     <ul class="mb-5">
-                        <li>
+                        @if($item->id == 1)
+                        <li>60% commission on art & service sales</li>
+                        <li>Unlimited Digital Gallery and Service Listing Space</li>
+                        <li>Customizable Online Profile</li>
+                        <li>Delivery & Shipping Services</li>
+                        @elseif($item->id == 2)
+                        <li>75% commission on art & service sales</li>
+                        <li>All services in the Basic Tier</li>
+                        <li>Priority connections to physical gallery spaces.</li>
+                        <li>Profile Advertisements & Features on Social Media and marketing campaigns</li>
+                        <li>Search Optimization/Increased Exposure</li>
+                        @else
+                        <li>   
                             {{ __('defaultTheme.team_member') }}
                             : {{$item->team_size}}</li>
                         <li>{{__('defaultTheme.products')}} : {{$item->stock_limit}}</li>
                         <li>{{__('defaultTheme.categories')}} : {{$item->category_limit}}</li>
                         <li>{{__('defaultTheme.transaction_charge')}} : {{$item->transaction_fee}} % </li>
+                        @endif
                     </ul>
                     <a class="amaz_primary_btn py-2 rounded-pill mb_20 text-center justify-content-center cursor_pointer select_btn_price" data-id='{{ $item->id }}'>{{__('defaultTheme.choose plan')}}</a>
 
