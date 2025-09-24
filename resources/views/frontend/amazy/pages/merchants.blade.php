@@ -84,60 +84,68 @@
         background: var(--menu_color);
         padding: 0 15px;
     }
-    
+    .artist-galary-images img {
+            max-height: 118px;
+    object-fit: cover;
+    border-radius: 10px;
+    }
+    .love-art-card img{
+        height:300px;
+    }
    
 </style>
 @section('content')
 <div class="amazy_section_padding">
     <div class="container">
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-12">
                 <div class="section_title d-flex align-items-center justify-content-between mb_30">
                     <h3>{{ __('All Artists') }}</h3>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            @foreach($sellers as $seller)
-            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6">
-                <div class="seller_shop_box mb_30">
-                    <!-- <div class="seller_shop_banner">
-                        @if($seller->SellerAccount && $seller->SellerAccount->banner)
-                            <img src="{{ showImage($seller->SellerAccount->banner) }}" alt="{{ $seller->first_name }}" title="{{ $seller->first_name }}">
-                        @else
-                            <img src="{{ showImage('frontend/default/img/default_shop_banner.png') }}" alt="{{ $seller->first_name }}" title="{{ $seller->first_name }}">
-                        @endif
-                    </div> -->
-                    <a href="{{ route('frontend.seller', $seller->slug ?? base64_encode($seller->id)) }}">
-                        <div class="seller_shop_box_wrapper">
-                            <div class="seller_shop_details">
-                                <div class="seller_shop_logo">
-                                    <img src="{{ showImage($seller->photo ?? 'frontend/default/img/avatar.jpg') }}"
-                                        alt="{{ $seller->first_name }}"
-                                        title="{{ $seller->first_name }}">
+        </div> -->
+        <section class="love-art-sec pb-40">
+            <div class="container">
+                <h2 class="fs-55 fw-700 text-center text-black mb-40 secondry-font text-center mx-auto max-w-1020px">artist and their work</h2>
+                <!-- <p class="primary-font text-black fs-20 mb-30 mx-auto text-center max-w-540px">Each 23LD artist is unique in their own way just like art. Learn their story and their life's work</p> -->
+                @if(count($sellers) > 0) 
+                <div class="row row-gap-30">
+                    @foreach($sellers as $seller)
+                        
+                            <!-- Artist 1: Devin Pughslsey -->
+                            <div class="col-12 col-md-6">
+                                <div class="love-art-card">
+                                <div class="d-flex gap-5 mb-10">
+                                    <div>
+                                    <img src="{{ showImage($seller->avatar != null?$seller->avatar: 'frontend/default/img/avatar.png') }}" alt="" class="">
+                                    </div>
+                                   
+                                    <div class="d-flex flex-column gap-4 artist-galary-images">
+                                         @if(count($seller->seller_products) > 0)
+                                            @foreach($seller->seller_products->take(3) as $product)
+                                            <img src="{{ showImage($product->thum_img ?? 'frontend/amazy/img/6438ce493d38b.svg') }}" alt="{{ $product->product_name }}" title="{{ $product->product_name }}">
+                                            @endforeach
+                                        @endif
+                                    <!-- <img src="{{ asset('public/uploads/all/6852ea5fd54b7.png') }}" alt="" class="">
+                                    <img src="{{ asset('public/uploads/all/6852ea5fe1482.png') }}" alt="" class="">
+                                    <img src="{{ asset('public/uploads/all/6852ea600077c.png') }}" alt="" class=""> -->
+                                    </div>
                                 </div>
-                                <div class="seller_shop_info">
-                                    <!-- <div class="d-flex align-items-center justify-content-between"> -->
-                                    <p><span>Seller Name:</span> {{ $seller->first_name }} {{ $seller->last_name }}</h4>
-                                    <p><span>Shop Name:</span> {{ $seller->SellerAccount->seller_shop_display_name }}</p>
-                                    <!-- </div> -->
-                                    <div class="border-bottom"></div>
-                                    <p><span>Address:</span> {{ $seller->SellerBusinessInformation->business_address1 }}</p>
-                                    <!-- @if(!empty($seller->SellerAccount?->seller_shop_display_name))
-                                <p>{{ $seller->SellerAccount->seller_shop_display_name }}</p>
-                                @endif -->
+                                <h4 class="secondry-font text-start fs-40 fw-700">{{ $seller->first_name }} {{ $seller->last_name }}</h4>
+                                <p class="primary-font text-start mb-10">Portraits &amp; Wildlife</p>
+                                <a href="{{ route('frontend.seller', $seller->slug ?? base64_encode($seller->id)) }}" class="btn btn-secondary">View Profile</a>
                                 </div>
                             </div>
-                            <div class="seller_shop_box_hover">
-                                <span class="text-white"><i class="fas fa-eye"></i></span>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+                            <!-- Artist 2: Robbie Lasky -->
+                        
+                    @endforeach
+                    </div>
+                @endif
+                <!-- <div class="d-flex justify-content-center mt-45 mx-auto">
+                <a href="#" class="btn bg-black text-white primary-font py-10 px-50">View All Artists</a>
+                </div> -->
             </div>
-            @endforeach
-        </div>
-
+            </section>
         <div class="row">
             <div class="col-12">
                 <div class="pagination_part">

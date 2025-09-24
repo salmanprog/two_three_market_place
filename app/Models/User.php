@@ -352,6 +352,10 @@ class User extends Authenticatable
         return $this->hasMany(SellerProduct::class, 'user_id', 'id');
     }
 
+    public function artist_products(){
+        return $this->hasMany(SellerProduct::class, 'user_id', 'created_by');
+    }
+
     public function getSellerProductsAPIAttribute(){
         return SellerProduct::with('skus','product','reviews.customer','reviews.images')->where('user_id', $this->id)->where('status', 1)->paginate(10);
     }

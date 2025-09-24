@@ -342,7 +342,7 @@ class ProductController extends Controller
             return redirect()->route('seller.product.index');
         }catch(Exception $e){
             LogActivity::errorLog($e->getMessage());
-            Toastr::error(__('common.error_message'), __('common.error'));
+            Toastr::error(__('common.error_message'), __($e->getMessage()));
             return back();
         }
     }

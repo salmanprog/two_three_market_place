@@ -191,7 +191,7 @@ if($total_number_of_items > 0){
                                     @endif
                                 </div>
                             </div>
-                            <div class="product_star mx-auto">
+                            <!-- <div class="product_star mx-auto">
                                 @php
                                     $reviews = @$product->reviews->where('status', 1)->pluck('rating');
 
@@ -209,7 +209,7 @@ if($total_number_of_items > 0){
                                     }
                                 @endphp
                                 <x-rating :rating="$rating" />
-                            </div>
+                            </div> -->
                             <div class="product__meta text-center">
                                 <span class="product_banding ">{{ @$product->brand->name ?? " " }}</span>
                                 <a href="{{singleProductURL(@$product->seller->slug, $product->slug)}}">
@@ -314,7 +314,7 @@ if($total_number_of_items > 0){
                                         @endif
                                     </div>
                                 </div>
-                                <div class="product_star mx-auto">
+                                <!-- <div class="product_star mx-auto">
                                     @php
                                         $reviews = @$product->reviews->where('status', 1)->pluck('rating');
 
@@ -332,7 +332,7 @@ if($total_number_of_items > 0){
                                         }
                                     @endphp
                                         <x-rating :rating="$rating" />
-                                </div>
+                                </div> -->
                                 <div class="product__meta text-center">
                                     <span class="product_banding ">{{ @$product->brand->name ?? " " }}</span>
                                     <a href="{{ route('frontend.gift-card.show', $product->slug) }}">

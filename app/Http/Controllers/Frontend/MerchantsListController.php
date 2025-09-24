@@ -20,7 +20,7 @@ class MerchantsListController extends Controller
          $data['sellers'] = User::where('role_id', 5)
             ->where('is_active', 1)
             ->orderBy('created_at', 'desc')
-            ->with(['SellerAccount', 'SellerBusinessInformation'])
+            ->with(['SellerAccount', 'SellerBusinessInformation', 'seller_products'])
             ->paginate(12);
         
         return view(theme('pages.merchants'), $data);

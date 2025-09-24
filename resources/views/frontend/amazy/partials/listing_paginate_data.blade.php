@@ -206,7 +206,7 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="product_star mx-auto">
+                            <!-- <div class="product_star mx-auto">
                                 @php
                                     $reviews = @$product->reviews->where('status', 1)->pluck('rating');
 
@@ -224,7 +224,7 @@
                                     }
                                 @endphp
                                 <x-rating :rating="$rating" />
-                            </div>
+                            </div> -->
                             <div class="product__meta text-center">
                                 <span class="product_banding ">{{ @$product->brand->name ?? " " }}</span>
                                 <a href="{{singleProductURL(@$product->seller->slug, $product->slug)}}">
@@ -357,7 +357,7 @@
                                         @endif
                                     </div>
                                 </div>
-                                <div class="product_star mx-auto">
+                                <!-- <div class="product_star mx-auto">
                                     @php
                                         $reviews = @$product->reviews->where('status', 1)->pluck('rating');
 
@@ -375,7 +375,7 @@
                                         }
                                     @endphp
                                         <x-rating :rating="$rating" />
-                                </div>
+                                </div> -->
                                 <div class="product__meta text-center">
                                     <span class="product_banding ">{{ @$product->brand->name ?? " " }}</span>
                                     <a href="{{ route('frontend.gift-card.show.multiple', $product->slug) }}">

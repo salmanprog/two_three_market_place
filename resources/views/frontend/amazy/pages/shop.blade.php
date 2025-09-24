@@ -87,7 +87,7 @@
         <div class="prodcuts_area ">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-4 col-xl-3">
+                    <!-- <div class="col-lg-4 col-xl-3">
                         <div id="product_category_chose" class="product_category_chose mb_30 mt_15">
                             <div class="course_title mb_15 d-flex align-items-center">
                                 <svg width="19.5" height="13" viewBox="0 0 19.5 13">
@@ -242,8 +242,8 @@
                                 <div class="attributeDiv"></div>
                             </div>
                         </div>
-                    </div>
-                    <div id="productShow" class="col-lg-8 col-xl-9">
+                    </div> -->
+                    <div id="productShow" class="col-lg-12 col-xl-12">
                         @include('frontend.amazy.partials.listing_paginate_data')
                     </div>
                 </div>

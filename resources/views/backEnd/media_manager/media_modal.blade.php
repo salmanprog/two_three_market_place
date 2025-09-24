@@ -9,12 +9,12 @@
                                 <a class="nav-link active show" href="#order_processing_data" role="tab"
                                     data-toggle="tab" id="product_list_id" aria-selected="true">{{__('common.select_files')}}</a>
                             </li>
-                            @if(permissionCheck('media-manager.new-upload'))
+                           
                             <li class="nav-item">
                                 <a class="nav-link" href="#order_complete_data" role="tab" data-toggle="tab" id="product_request_id"
                                     aria-selected="true">{{__('common.uplaod_new')}}</a>
                             </li>
-                            @endif
+                           
                         </ul>
                     </div>
                 </div>
@@ -70,7 +70,7 @@
                                 </div>
                             </div>
                         </div>
-                        @if(permissionCheck('media-manager.new-upload'))
+                       
                         <div role="tabpanel" class="tab-pane fade" id="order_complete_data">
                             <div class="row">
                                 <div class="col-lg-12">
@@ -79,7 +79,7 @@
                                 </div>
                             </div>
                         </div>
-                        @endif
+                       
                     </div>
                 </div>
             </div>
