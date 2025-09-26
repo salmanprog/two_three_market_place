@@ -23,7 +23,7 @@
 
 @php
     $discount = 0;
-    $sub_total = $events->price * $bookingevents->no_of_ticket;
+    $sub_total = $events->price * ($bookingevents->no_of_ticket ?? 0);
     $tax = 0;
     $vat = 0;
     $total_pay = $sub_total + $vat;

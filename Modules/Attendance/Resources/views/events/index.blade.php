@@ -159,6 +159,7 @@
                                                        value="{{isset($editData) ? $editData->total_ticket : old('total_ticket') }}"
                                                        placeholder="Total Ticket" type="text">
                                                 <span class="text-danger">{{$errors->first('total_ticket')}}</span>
+                                                <span style="font-size:8px;float:right;color:gray;">Platform service fee applicable on per ticket</span>
                                             </div>
                                         </div>
                                         <div class="col-lg-12">

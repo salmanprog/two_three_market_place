@@ -623,7 +623,7 @@ class StripeController extends Controller
 
             // Create the charge
             $stripe = Stripe\Charge::create($charge_data);
-
+            
             // Log successful charge
             Log::info('Stripe Charge Created Successfully', [
                 'charge_id' => $stripe['id'],
@@ -649,9 +649,12 @@ class StripeController extends Controller
                 $event->sold_ticket = $sold_ticket;
                 $event->remaining_ticket = $remaining_ticket;
                 $event->save();
+                
+                $admin_commision = $data['quantity'] * 1.5;
+                $final_amount = $amount - $admin_commision;
 
                 $wallet_service = new WalletRepository;
-                $wallet_service->walletSalePaymentAdd($get_booking->id, $amount, 'Deposite', $event->created_by);
+                $wallet_service->walletSalePaymentAdd($get_booking->id, $final_amount, 'Deposite', $event->created_by);
 
                  // Create transaction record
                 $transactionRepo = new TransactionRepository(new Transaction);
@@ -664,7 +667,7 @@ class StripeController extends Controller
                     "1",
                     "Event Booking Payment",
                     "event_organiser_subscription",
-                    $amount,
+                    $final_amount,
                     Carbon::now()->format('Y-m-d'),
                     auth()->user()->id,
                     null,

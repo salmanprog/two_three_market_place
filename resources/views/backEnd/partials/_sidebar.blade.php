@@ -190,7 +190,7 @@
                                                 @endif
                                             @elseif(auth()->user()->role->type == 'seller')
                                                 @if($section->backendMenu?->name == 'common.user_manages')
-                                                    <span class="jhs">{{__('Event Booknigs')}}</span>
+                                                    <span class="jhs">{{__('Event Bookings')}}</span>
                                                 @else
                                                     <span class="jhs">{{__($menu->backendMenu->name)}} </span>    
                                                 @endif
