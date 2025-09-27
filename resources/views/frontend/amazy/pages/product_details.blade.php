@@ -476,15 +476,15 @@
                                             <a id="wishlist_btn" data-product_id="{{$product->id}}" data-seller_id="{{$product->user_id}}" class="single_wish_compare text-uppercase text-nowrap cursor_pointer">
                                                 <i class="far fa-heart"></i> {{__('defaultTheme.add_to_wishlist')}}
                                             </a>
-                                            <a id="add_to_compare_btn_modify" data-product_sku_id="#product_sku_id" data-product_type="{{$product->product->product_type}}" class="single_wish_compare text-uppercase text-nowrap cursor_pointer">
+                                            <!-- <a id="add_to_compare_btn_modify" data-product_sku_id="#product_sku_id" data-product_type="{{$product->product->product_type}}" class="single_wish_compare text-uppercase text-nowrap cursor_pointer">
                                                 <i class="ti-control-shuffle"></i> {{__('defaultTheme.add_to_compare')}}
-                                            </a>
+                                            </a> -->
                                             @if(!empty($product->seller) && $product->seller->role_id !=  1 && app('general_setting')->product_report == 1)
 
-                                                <a class="report-product" data-product-id='{{ $product->product_id }}' href="javascript:void(0)">
+                                                <!-- <a class="report-product" data-product-id='{{ $product->product_id }}' href="javascript:void(0)">
                                                     <i class="fas fa-ban"></i>
                                                     {{ __('product.report_this_product') }}
-                                                </a>
+                                                </a> -->
                                             @endif
                                         </div>
                                     @else
