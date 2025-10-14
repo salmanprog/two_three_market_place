@@ -59,7 +59,7 @@ class WelcomeController extends Controller
                             ->where('is_active', 1)
                             ->with(['SellerAccount', 'SellerBusinessInformation', 'seller_products'])
                             ->orderby('id','desc')
-                            ->limit(6)->get();
+                            ->limit(4)->get();
             $products = Product::with(['brand','unit_type'])->where('is_approved', 1)->where('status', 1)->orderby('id','desc')
                             ->limit(5)->get();
             $previous_route = session()->get('previous_user_last_route');
