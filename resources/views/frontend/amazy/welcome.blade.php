@@ -205,7 +205,7 @@
 
 <!-- love art section -->  
 @if(count($sellers) > 0) 
-<section class="love-art-sec pb-40">
+<section class="love-art-sec py-50">
   <div class="container">
     <h2 class="fs-55 fw-700 text-center text-black mb-40 secondry-font text-center mx-auto max-w-1020px">Love Art? Connect with an artist and their work</h2>
     <p class="primary-font text-black fs-20 mb-30 mx-auto text-center max-w-540px">Each 23LD artist is unique in their own way just like art. Learn their story and their life's work</p>
