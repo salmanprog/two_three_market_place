@@ -220,7 +220,7 @@
                     <div class="d-flex flex-column gap-4">
                             @if(count($seller->seller_products) > 0)
                             @foreach($seller->seller_products->take(3) as $product)
-                            <img src="{{ showImage($product->thum_img ?? 'frontend/amazy/img/6438ce493d38b.svg') }}" alt="{{ $product->product_name }}" title="{{ $product->product_name }}" height="149px" width="110px">
+                            <img src="{{ showImage($product->thum_img ?? 'frontend/amazy/img/6438ce493d38b.svg') }}" alt="{{ $product->product_name }}" title="{{ $product->product_name }}" width="149px" height="110px">
                             @endforeach
                         @endif
                     </div>
