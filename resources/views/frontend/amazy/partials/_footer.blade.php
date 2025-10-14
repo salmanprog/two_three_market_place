@@ -138,7 +138,7 @@
         <div class="logo" style="max-width: 250px;">
           <img src="{{ asset('public/uploads/all/68534b76c74ba.png') }}" alt="logo" class="mb-20">
         </div>
-        <p class="text-white fs-22 mb-30 primary-font">Join us and get 10% off your first order!</p>
+        <!-- <p class="text-white fs-22 mb-30 primary-font">Join us and get 10% off your first order!</p> -->
         <p class="text-white fs-22 mb-20 primary-font" style="max-width: 410px;">Stay inspired with fresh artwork and curated collections added weekly.</p>
         <ul class="d-flex gap-20 ps-0">
           <li><a href="/" class="text-white fs-25"><i class="fa-brands fa-facebook-f"></i></a></li>
@@ -167,8 +167,8 @@
           <li class="text-white fs-22 mb-20 fw-700 primary-font">Contact Us</li>
           <li class="mb-10"><a href="tel:9548500145" class="text-white fs-22 d-flex gap-10 primary-font"> <i class="fa-solid fa-phone"></i> 954 850 0145</a></li>
           <li class="mb-10"><a href="tel:2057778284" class="text-white fs-22 d-flex gap-10 primary-font"> <i class="fa-solid fa-phone"></i> 205 777 8284</a></li>
-          <li class="mb-10"><a href="mailto:alexsoto.23ld@gmail.com" class="text-white fs-22 d-flex gap-10 primary-font"> <i class="fa-solid fa-envelope d-flex align-items-center"></i> alexsoto.23ld@gmail.com</a></li>
-          <li class="mb-10"><a href="mailto:devinpughsley.23ld@gmail.com" class="text-white fs-22 d-flex gap-10 primary-font"> <i class="fa-solid fa-envelope d-flex align-items-center"></i> devinpughsley.23ld@gmail.com</a></li>
+          <!-- <li class="mb-10"><a href="mailto:alexsoto.23ld@gmail.com" class="text-white fs-22 d-flex gap-10 primary-font"> <i class="fa-solid fa-envelope d-flex align-items-center"></i> alexsoto.23ld@gmail.com</a></li>
+          <li class="mb-10"><a href="mailto:devinpughsley.23ld@gmail.com" class="text-white fs-22 d-flex gap-10 primary-font"> <i class="fa-solid fa-envelope d-flex align-items-center"></i> devinpughsley.23ld@gmail.com</a></li> -->
         </ul>
         <form action="">
           <div class="d-flex align-items-center mt-40">

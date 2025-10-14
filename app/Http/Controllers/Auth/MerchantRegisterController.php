@@ -51,6 +51,7 @@ use Modules\MultiVendor\Events\SellerPickupLocationCreated;
 use Modules\GeneralSetting\Entities\UserNotificationSetting;
 use Modules\FormBuilder\Repositories\FormBuilderRepositories;
 use \Modules\PaymentGateway\Services\PaymentGatewayService;
+use Modules\Setup\Entities\Country;
 use Illuminate\Support\Facades\DB;
 
 class MerchantRegisterController extends Controller
@@ -314,6 +315,7 @@ class MerchantRegisterController extends Controller
                     }
                 }
                 $data['pricing_plans'] = Pricing::where('best_for', 'Artist')->where('status', 1)->get(['name', 'id']);
+                $data['countries'] = Country::all();
                 return view(theme('pages.merchant_create_step_two'), $data);
             } else {
                 return abort(404);
@@ -428,6 +430,7 @@ class MerchantRegisterController extends Controller
 
     protected function create($data)
     {
+        
         $c_data = [];
         if($data->has('custom_field')){
             foreach (json_decode($data['custom_field']) as  $key => $f){
@@ -461,6 +464,23 @@ class MerchantRegisterController extends Controller
         }
         $user->slug = $this->productSlug($data['name']);
         $user->save();
+        $customer_addresses = [
+            'customer_id' => $user->id,
+            'name' => $user->first_name,
+            'email' => $user->email,
+            'phone' => $user->phone,
+            'address' => $data['address'],
+            'city' => $data['city'],
+            'state' => $data['state'],
+            'country' => $data['country'],
+            'postal_code' => $data['postal_code'],
+            'is_shipping_default' => '1',
+            'is_billing_default' => '1',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ];
+
+        DB::table('customer_addresses')->insert($customer_addresses);
         // User Notification Setting Create
         (new UserNotificationSetting())->createForRegisterUser($user->id);
         $this->adminNotificationUrl = '/admin/merchants';

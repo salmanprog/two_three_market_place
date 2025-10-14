@@ -45,6 +45,44 @@ trait SendMail
             }
         }
     }
+    public function sendContactEmail($typeId, $content)
+    {
+        try {
+            $email_template = EmailTemplate::where('type_id', $typeId)
+                ->where('is_active', 1)
+                ->first();
+
+            $body = $email_template->body;
+            foreach ($content as $key => $value) {
+                $body = str_replace('{{ ' . $key . ' }}', $value, $body);
+            }
+            
+            $toEmail = env('MAIL_RECIEVER_ADDRESS');
+            $protocol = app('general_setting')->mail_protocol ?? 'smtp';
+
+            if ($protocol === 'smtp') {
+                $datas = $this->contactMailData($email_template, $content['first_name'], $content['email'], $content['phone'], $content['service'], $content['message']);
+                Mail::to($toEmail)->queue(new SendQueueMail($datas));
+                return true;
+            } elseif ($protocol === 'sendmail') {
+                $message = (string) view('emails.mail', compact('data'));
+
+                if (config('queue.default') === 'sync') {
+                    $this->phpMailData($toEmail, $data['subject'], $message);
+                } else {
+                    dispatch(new SendmailJob($toEmail, $data['subject'], $message));
+                }
+            } else {
+                return false;
+            }
+
+            return true;
+        } catch (\Exception $e) {
+            \LogActivity::errorLog($e->getMessage());
+            return false;
+        }
+    }
+
     public function sendOtpByMail($user, $otp)
     {
 
@@ -639,6 +677,22 @@ trait SendMail
         $datas["body"] = str_replace("{RESET_URL}", $RESET_URL, $datas["body"]);
         $datas["body"] = str_replace("{VERIFICATION_LINK}", $VERIFICATION_LINK, $datas["body"]);
         $datas["body"] = str_replace("{DIGITAL_FILE_LINK}", $DIGITAL_FILE_LINK, $datas["body"]);
+        return $datas;
+    }
+
+    public function contactMailData($email_template, $to_name, $to_mail, $to_phone, $to_interested, $custom_message = null)
+    {
+        $datas["email"] = app('general_setting')->email;
+        $datas["title"] = $email_template->subject;
+        $datas['from'] = env('MAIL_FROM_ADDRESS');
+        $datas["body"] = $email_template->value;
+        $datas["body"] = str_replace("{USER_FIRST_NAME}", $to_name, $datas["body"]);
+        $datas["body"] = str_replace("{USER_EMAIL}", $to_mail, $datas["body"]);
+        $datas["body"] = str_replace("{USER_PHONE}", $to_phone, $datas["body"]);
+        $datas["body"] = str_replace("{USER_INTERESTED}", $to_interested, $datas["body"]);
+        $datas["body"] = str_replace("{CUSTOM_MESSAGE}", $custom_message, $datas["body"]);
+        $datas["body"] = str_replace("{EMAIL_FOOTER}", $email_template->footer, $datas["body"]);
+        $datas["body"] = str_replace("{WEBSITE_NAME}", app('general_setting')->site_title, $datas["body"]);
         return $datas;
     }
 

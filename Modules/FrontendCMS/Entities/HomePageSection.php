@@ -37,7 +37,7 @@ class HomePageSection extends Model
     {
         $filterRepo = new FilterRepository();
         $data = $filterRepo->getSectionProducts($this->section_name);
-        return $data['products']->with('skus','product.gallary_images')->take(12)->get();
+        return $data['products']->with('skus','product.gallary_images')->take(5)->get();
     }
     public function getHomePageProductByQuery()
     {

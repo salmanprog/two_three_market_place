@@ -18,6 +18,28 @@
     top: 0;
     left: 0;
 }
+
+.artist-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.artist-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* maintain ratio but crop extra */
+  display: block;
+}
+.visible_text {
+  background: #00000082;
+  padding: 8px;
+  width: auto !important;
+}
+.ratio-540-394 { aspect-ratio: 270 / 197; }  /* first div */
+.ratio-540-191 { aspect-ratio: 540 / 191; }  /* second, third */
+.ratio-540-192 { aspect-ratio: 45 / 16; }    /* fourth */
+.ratio-265-192 { aspect-ratio: 265 / 192; }  /* fifth */
+.ratio-265-196 { aspect-ratio: 265 / 196; }  /* sixth */
 </style>
 @endpush
 
@@ -30,11 +52,121 @@
 <!-- home_banner::end  -->
 
 <!-- new featured section -->
-<section class="featured-profile-sec py-100 ">
+<!-- <section class="featured-profile-sec py-100 ">
   <div class="container">
-    <h2 class="fs-55 fw-700 text-center text-black mb-80 secondry-font">Featured Artist Profiles</h2>
-    <div class="row row-gap-10">
-      <div class="col-md-6">
+    <h2 class="fs-55 fw-700 text-center text-black mb-80 secondry-font">Featured Artist Profiles</h2> -->
+    <!-- <div class="row row-gap-10">
+        @php
+            $sellers = $seller->values();
+        @endphp
+
+        {{-- 1st col --}}
+        @if(isset($sellers[0]))
+        <div class="col-md-6">
+            <div class="artist-card position-relative ratio-540-394">
+                <img src="{{ $sellers[0]->avatar 
+                                ? showImage($seller[0]->avatar) 
+                                : showImage('frontend/default/img/avatar.png') }}" 
+                    alt="{{ $sellers[0]->first_name }}" class="w-100">
+                <h4 class="fw-700 fs-30 text-white position-absolute w-100 visible_text" 
+                    style="bottom: 40px;">
+                    <a href="{{ route('frontend.seller', $sellers[0]->slug ?? base64_encode($sellers[0]->id)) }}">
+                    {{ $sellers[0]->first_name }}
+                    </a>
+                </h4>
+            </div>
+        </div>
+        @endif
+
+        {{-- 2nd col stacked --}}
+        @if(isset($sellers[1]) || isset($sellers[2]))
+        <div class="col-md-6">
+            @if(isset($sellers[1]))
+            <div class="artist-card position-relative mb-10 ratio-540-191">
+                <img src="{{ $sellers[1]->avatar 
+                                ? showImage($seller[1]->avatar) 
+                                : showImage('frontend/default/img/avatar.png') }}" 
+                    alt="{{ $sellers[1]->first_name }}" class="w-100">
+                <h4 class="fw-700 fs-30 text-white position-absolute w-100 visible_text" 
+                    style="bottom: 40px;">
+                    <a href="{{ route('frontend.seller', $sellers[1]->slug ?? base64_encode($sellers[1]->id)) }}">
+                    {{ $sellers[1]->first_name }}
+                    </a>
+                </h4>
+        </div>
+        @endif
+
+        @if(isset($sellers[2]))
+        <div class="artist-card position-relative ratio-540-191">
+                <img src="{{ $sellers[2]->avatar 
+                                ? showImage($seller[2]->avatar) 
+                                : showImage('frontend/default/img/avatar.png') }}" 
+                    alt="{{ $sellers[2]->first_name }}" class="w-100">
+                <h4 class="fw-700 fs-30 text-white position-absolute w-100 visible_text" 
+                    style="bottom: 40px;">
+                    <a href="{{ route('frontend.seller', $sellers[2]->slug ?? base64_encode($sellers[2]->id)) }}">
+                    {{ $sellers[2]->first_name }}
+                    </a>
+                </h4>
+            </div>
+            @endif
+        </div>
+        @endif
+
+        {{-- 3rd col --}}
+        @if(isset($sellers[3]))
+        <div class="col-md-6">
+            <div class="artist-card position-relative ratio-540-192">
+                <img src="{{ $sellers[3]->SellerAccount->profile_image 
+                                ? asset('uploads/sellers/'.$sellers[3]->SellerAccount->profile_image) 
+                                : showImage('frontend/default/img/avatar.png') }}" 
+                    alt="{{ $sellers[3]->first_name }}" class="w-100">
+                <h4 class="fw-700 fs-30 text-white position-absolute w-100 visible_text" 
+                    style="bottom: 40px;">
+                    <a href="{{ route('frontend.seller', $sellers[3]->slug ?? base64_encode($sellers[3]->id)) }}">
+                    {{ $sellers[3]->first_name }}
+                    </a>
+                </h4>
+            </div>
+        </div>
+        @endif
+
+        {{-- 4th col side by side --}}
+        @if(isset($sellers[4]) || isset($sellers[5]))
+        <div class="col-md-6 d-flex flex-column flex-md-row gap-10">
+            @if(isset($sellers[4]))
+            <div class="artist-card position-relative w-100 ratio-265-192">
+                <img src="{{ $sellers[4]->SellerAccount->profile_image 
+                                ? asset('uploads/sellers/'.$sellers[4]->SellerAccount->profile_image) 
+                                : showImage('frontend/default/img/avatar.png') }}" 
+                    alt="{{ $sellers[4]->first_name }}" class="w-100">
+                <h4 class="fw-700 fs-30 text-white position-absolute w-100 visible_text" 
+                    style="bottom: 40px;">
+                    <a href="{{ route('frontend.seller', $sellers[4]->slug ?? base64_encode($sellers[4]->id)) }}">
+                    {{ $sellers[4]->first_name }}
+                    </a>
+                </h4>
+        </div>
+        @endif
+
+        @if(isset($sellers[5]))
+        <div class="artist-card position-relative w-100 ratio-265-196">
+                <img src="{{ $sellers[5]->SellerAccount->profile_image 
+                                ? asset('uploads/sellers/'.$sellers[5]->SellerAccount->profile_image) 
+                                : showImage('frontend/default/img/avatar.png') }}" 
+                    alt="{{ $sellers[5]->first_name }}" class="w-100">
+                <h4 class="fw-700 fs-30 text-white position-absolute w-100 visible_text" 
+                    style="bottom: 40px;">
+                    <a href="{{ route('frontend.seller', $sellers[5]->slug ?? base64_encode($sellers[5]->id)) }}">
+                    {{ $sellers[5]->first_name }}
+                    </a>
+                </h4>
+            </div>
+            @endif
+        </div>
+        @endif -->
+
+      <!-- <div class="col-md-6">
         <div class="artist-card position-relative">
           <img src="{{ asset('public/uploads/all/6852ea5c2146c.png') }}" alt="" class="w-100">
           <h4 class="fw-700 fs-30 text-white position-absolute w-100" style="bottom: 40px; left: 40px;">Devin Pughsley</h4>
@@ -65,87 +197,42 @@
           <img src="{{ asset('public/uploads/all/6852ea5fe2609.png') }}" alt="" class="w-100">
           <h4 class="fw-700 fs-30 text-white position-absolute w-100" style="bottom: 40px; left: 40px;">Emily Brown</h4>
         </div>
-      </div>
-    </div>
+      </div> -->
+    <!-- </div>
   </div>
-</section>
+</section> -->
 <!-- new featured section --> 
-<!-- filter artist section --> 
-<section class="filter-artist-sec pb-40">
-  <div class="container">
-    <div class="bg-light-gray-filter py-70">
-      <h2 class="fs-55 fw-700 text-center text-black mb-40 secondry-font">Filter Artist Profiles</h2>
-      <form action="">
-        <div class="row row-gap-20">
-          <div class="col-md-4">
-            <div class="position-relative w-100">
-              <input type="text" class="primary-font filter-artist-input" placeholder="Search">
-              <i class="fa-solid fa-magnifying-glass position-absolute fs-20 text-gray-400 pe-none" style="left: 10px; top: 50%; transform: translateY(-50%);"></i>
-            </div>
-          </div>
-          <div class="col-md-8">
-            <div class="row row-gap-20">
-              <div class="col-md-3">
-                <div class="position-relative w-100">
-                  <select class=" filter-artist-select primary-font" aria-label="Sizes">
-                    <option selected="">Choose Sizes</option>
-                    <option value="us">Artists</option>
-                    <option value="ca">Artists</option>
-                    <option value="fr">Artists</option>
-                  </select>
-                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-12 text-gray-400 me-3 pe-none"></i>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="position-relative w-100">
-                  <select class=" filter-artist-select primary-font" aria-label="Price">
-                    <option selected="">Choose Price</option>
-                    <option value="us">Artists</option>
-                    <option value="ca">Artists</option>
-                    <option value="fr">Artists</option>
-                  </select>
-                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-12 text-gray-400 me-3 pe-none"></i>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="position-relative w-100">
-                  <select class=" filter-artist-select primary-font" aria-label="Location">
-                    <option selected="">Choose Location</option>
-                    <option value="us">Artists</option>
-                    <option value="ca">Artists</option>
-                    <option value="fr">Artists</option>
-                  </select>
-                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-12 text-gray-400 me-3 pe-none"></i>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="position-relative w-100">
-                  <select class=" filter-artist-select primary-font" aria-label="Art Style">
-                    <option selected="">Choose Art Style</option>
-                    <option value="us">Artists</option>
-                    <option value="ca">Artists</option>
-                    <option value="fr">Artists</option>
-                  </select>
-                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-12 text-gray-400 me-3 pe-none"></i>
-                </div>
-              </div>
-            </div>
-          </div>
 
-        </div>
-      </form>
-    </div>
-  </div>
-</section>
-<!-- filter artist section -->  
 <!-- love art section -->  
+@if(count($sellers) > 0) 
 <section class="love-art-sec pb-40">
   <div class="container">
     <h2 class="fs-55 fw-700 text-center text-black mb-40 secondry-font text-center mx-auto max-w-1020px">Love Art? Connect with an artist and their work</h2>
     <p class="primary-font text-black fs-20 mb-30 mx-auto text-center max-w-540px">Each 23LD artist is unique in their own way just like art. Learn their story and their life's work</p>
     <div class="row row-gap-30">
+        @foreach($sellers as $seller)
+            <div class="col-12 col-md-6">
+                <div class="love-art-card">
+                <div class="d-flex gap-5 mb-10">
+                    <div>
+                    <img src="{{ showImage($seller->avatar != null?$seller->avatar: 'frontend/default/img/avatar.png') }}" alt="" class="" height="335px" width="386px">
+                    </div>
+                    <div class="d-flex flex-column gap-4">
+                            @if(count($seller->seller_products) > 0)
+                            @foreach($seller->seller_products->take(3) as $product)
+                            <img src="{{ showImage($product->thum_img ?? 'frontend/amazy/img/6438ce493d38b.svg') }}" alt="{{ $product->product_name }}" title="{{ $product->product_name }}" height="149px" width="110px">
+                            @endforeach
+                        @endif
+                    </div>
+                </div>
+                <h4 class="secondry-font text-start fs-40 fw-700">{{ $seller->first_name }} {{ $seller->last_name }}</h4>
+                <p class="primary-font text-start mb-10">Portraits &amp; Wildlife</p>
+                <a href="{{ route('frontend.seller', $seller->slug ?? base64_encode($seller->id)) }}" class="btn btn-secondary">View Profile</a>
+                </div>
+            </div>
+        @endforeach
       <!-- Artist 1: Devin Pughsley -->
-      <div class="col-12 col-md-6">
+      <!-- <div class="col-12 col-md-6">
         <div class="love-art-card">
           <div class="d-flex gap-5 mb-10">
             <div>
@@ -161,9 +248,9 @@
           <p class="primary-font text-start mb-10">Portraits &amp; Wildlife</p>
           <a href="#" class="btn btn-secondary">View Profile</a>
         </div>
-      </div>
+      </div> -->
       <!-- Artist 2: Robbie Lasky -->
-      <div class="col-12 col-md-6">
+      <!-- <div class="col-12 col-md-6">
         <div class="love-art-card">
           <div class="d-flex gap-5 mb-10">
             <div>
@@ -179,9 +266,9 @@
           <p class="primary-font text-start mb-10">Abstract &amp; Nature</p>
           <a href="#" class="btn btn-secondary">View Profile</a>
         </div>
-      </div>
+      </div> -->
       <!-- Artist 3: Luke Joshu -->
-      <div class="col-12 col-md-6">
+      <!-- <div class="col-12 col-md-6">
         <div class="love-art-card">
           <div class="d-flex gap-5 mb-10">
             <div>
@@ -197,9 +284,9 @@
           <p class="primary-font text-start mb-10">Digital Art</p>
           <a href="#" class="btn btn-secondary">View Profile</a>
         </div>
-      </div>
+      </div> -->
       <!-- Artist 4: Marla Gibson -->
-      <div class="col-12 col-md-6">
+      <!-- <div class="col-12 col-md-6">
         <div class="love-art-card">
           <div class="d-flex gap-5 mb-10">
             <div>
@@ -216,12 +303,101 @@
           <a href="#" class="btn btn-secondary">View Profile</a>
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="d-flex justify-content-center mt-45 mx-auto">
-      <a href="#" class="btn bg-black text-white primary-font py-10 px-50">View All Artists</a>
+      <a href="{{ route('frontend.artists') }}" class="btn bg-black text-white primary-font py-10 px-50">View All Artists</a>
     </div>
   </div>
 </section>
+<!-- filter artist section --> 
+<section class="filter-artist-sec pb-40">
+  <div class="container">
+    <div class="bg-light-gray-filter py-70">
+      <h2 class="fs-55 fw-700 text-center text-black mb-40 secondry-font">Filter Artist Profiles</h2>
+      <form action="{{ route('frontend.artists') }}" method="GET">
+        <input type="hidden" name="search_artist" id="search_artist" value="1">
+        <div class="row row-gap-20">
+          <div class="col-md-12">
+            <div class="position-relative w-100">
+              <input type="text" name="search" class="primary-font filter-artist-input" placeholder="Search By Name" value="{{ request('search') }}">
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="row row-gap-20">
+              <div class="col-md-3">
+                <div class="position-relative w-100">
+                  <select class=" filter-artist-select primary-font" name="country" id="country" aria-label="Sizes">
+                    <option value="">{{__('Choose Country')}}</option>
+                    @foreach($countries as $key => $country)
+                        <option value="{{$country->id}}">{{$country->name}}</option>
+                    @endforeach
+                  </select>
+                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-12 text-gray-400 me-3 pe-none"></i>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="position-relative w-100">
+                  <select class=" filter-artist-select primary-font" name="state" id="state" aria-label="Location">
+                    <option value="">{{__('Choose State')}}</option>
+                  </select>
+                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-12 text-gray-400 me-3 pe-none"></i>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="position-relative w-100">
+                  <select class=" filter-artist-select primary-font" name="city" id="city" aria-label="Price">
+                    <option selected="">Choose City</option>
+                  </select>
+                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-12 text-gray-400 me-3 pe-none"></i>
+                </div>
+              </div>
+              <div class="col-md-3">
+              <div class="position-relative w-100">
+                  <input type="text" name="postal_code" class="primary-font filter-artist-select" placeholder="{{ __('common.postal_code') }}">
+                </div>
+              </div>
+              <!-- <div class="col-md-3">
+                <div class="position-relative w-100">
+                  <select class=" filter-artist-select primary-font" aria-label="Price">
+                    <option selected="">Choose Price</option>
+                    <option value="250">250</option>
+                    <option value="500">500</option>
+                    <option value="1000">1000</option>
+                    <option value="5000">5000</option>
+                    <option value="10000">10,000</option>
+                  </select>
+                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-12 text-gray-400 me-3 pe-none"></i>
+                </div>
+              </div> -->
+
+              <!-- <div class="col-md-3">
+                <div class="position-relative w-100">
+                    @php
+                        // get all parent categories
+                        $parent_categories = \Modules\Product\Entities\Category::where('parent_id', 0)->where('status', 1)->get();
+                    @endphp
+                  <select class=" filter-artist-select primary-font" aria-label="Art Style">
+                    <option selected="">Choose Art Style</option>
+                    @foreach($parent_categories as $key => $category)
+                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                    @endforeach
+                  </select>
+                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-12 text-gray-400 me-3 pe-none"></i>
+                </div>
+              </div> -->
+            </div>
+          </div>
+
+        </div>
+        <div class="d-flex justify-content-center mt-45 mx-auto">
+            <button type="submit" class="btn bg-black text-white primary-font py-10 px-50">Find Artists</button>
+            </div>
+            <i class="fa-solid fa-magnifying-glass position-absolute fs-20 text-gray-400 pe-none" style="left: 10px; top: 50%; transform: translateY(-50%);"></i>
+      </form>
+    </div>
+  </div>
+</section>
+<!-- filter artist section -->  
 <!-- love art section -->  
 <!-- Slider section -->
 <section class="market-place-sec d-none d-md-block position-relative pb-35 mb-35">
@@ -294,13 +470,14 @@
   </div>
   
 </section>
+@endif
 <!-- Slider section -->
 <!-- newsletter section -->
 <section class="newsletter-sec pb-40">
   <div class="container">
     <div class="newsletter-card py-62 radius-44 bg-white">
       <h2 class="fs-55 fw-700 text-center text-black mb-40 secondry-font">Subscribe Our Newsletter</h2>
-      <p class="primary-font text-black text-center fs-25 mx-auto mb-30" style="max-width: 863px;">Be the first to see new collections, get exclusive behind-the-scenes content, and receive special offers just for art lovers.</p>
+      <p class="primary-font text-black text-center fs-25 mx-auto mb-30" style="max-width: 863px;">Be the first to learn about new collections, new artists, local events, and special offers just for art lovers.</p>
       <form action="">
         <div class="position-relative mx-auto" style="max-width: 830px;">
           <input type="email" class="bg-white border-gray-light fs-16 px-16 py-18 primary-font" placeholder="Email">
@@ -315,14 +492,38 @@
 @php
     // get all parent categories
     use Modules\Product\Entities\Category;
-    $parent_categories = Category::where('parent_id', 0)->where('status', 1)->get();
-    
+    $parent_categories = Category::where('parent_id', 0)->where('status', 1)->take(5)->orderby('id','desc')->get();
+    $peoples_choice = $widgets->where('section_name','people_choices')->first();
 @endphp
 <section class="categories-sec pb-60">
   <div class="container">
-    <h2 class="fs-55 fw-700 text-center text-black mx-auto mb-30 line-height-1-2 secondry-font" style="max-width: 990px;">We provide a specialized service to these categories</h2>
+    <h2 class="fs-55 fw-700 text-center text-black mx-auto mb-30 line-height-1-2 secondry-font" style="max-width: 990px;">We provide specialized service to these categories</h2>
     <div class="row row-gap-40 row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-5 justify-content-center">
-      @foreach($parent_categories as $key => $category)
+      <div class="col">
+        <div class="categories-card mx-auto">
+            <img src="{{ showImage('uploads/images/16-06-2025/6850494d1cc2c.png') }}" alt="Interior Designers" class="mb-20">
+          <h3 class="text-start fw-700 text-black fs-18 secondry-font">Interior Designers</h3>
+          <p class="mb-10 primary-font">Source art for your clients</p>
+          <a href="{{route('frontend.buyer.signup')}}" class="btn btn-secondary pri mary-font border-gray-light text-gray-400 px-44 py-10">View More</a>
+        </div>
+      </div>
+      <div class="col">
+        <div class="categories-card mx-auto">
+            <img src="{{ showImage('uploads/images/16-06-2025/685068899e6ec.png') }}" alt="Artists" class="mb-20">
+          <h3 class="text-start fw-700 text-black fs-18 secondry-font">Artists</h3>
+          <p class="mb-10 primary-font">Join our team</p>
+          <a href="{{route('frontend.merchant-register','subscription')}}" class="btn btn-secondary pri mary-font border-gray-light text-gray-400 px-44 py-10">View More</a>
+        </div>
+      </div>
+      <div class="col">
+        <div class="categories-card mx-auto">
+            <img src="{{ showImage('uploads/images/16-06-2025/6850681225004.png') }}" alt="Artists" class="mb-20">
+          <h3 class="text-start fw-700 text-black fs-18 secondry-font">Organiser</h3>
+          <p class="mb-10 primary-font">Join Organiser account</p>
+          <a href="{{route('frontend.event-organiser-register','subscription')}}" class="btn btn-secondary pri mary-font border-gray-light text-gray-400 px-44 py-10">View More</a>
+        </div>
+      </div>
+      <!-- @foreach($parent_categories as $key => $category)
       <div class="col">
         <div class="categories-card mx-auto">
           @if($category->categoryImage && $category->categoryImage->image)
@@ -335,7 +536,7 @@
           <a href="{{ route('frontend.category-product', ['slug' => $category->slug, 'item' => 'category']) }}" class="btn btn-secondary primary-font border-gray-light text-gray-400 px-44 py-10">View More</a>
         </div>
       </div>
-      @endforeach
+      @endforeach -->
     </div>
   </div>
 </section>
@@ -343,7 +544,7 @@
 <!-- how it works section -->
 <section class="how-it-works-sec py-100 bg-black">
   <div class="container">
-    <h2 class="fs-55 fw-700 text-center text-white mx-auto secondry-font mb-40">Source Art For Your Business</h2>
+    <h2 class="fs-55 fw-700 text-center text-white mx-auto secondry-font mb-40">Connect your business with local artists</h2>
     <div class="row justify-content-center align-items-center row-gap-30">
       <div class="col-md-6 col-lg-4">
         <div class="d-flex gap-30 flex-column flex-md-row align-items-center align-items-md-start text-center text-md-start  ">
@@ -355,9 +556,9 @@
               <div>
                 <img src="{{ asset('public/uploads/all/685340c7ec6fb.png') }}" alt="Vision Casting" class="mb-20 mx-auto">
               </div>
-              <h3 class="fs-24 fw-700 text-white secondry-font mb-10">Vision Casting</h3>
+              <h3 class="fs-24 fw-700 text-white secondry-font mb-10">Walk Through</h3>
             </div>
-            <p class="fs-16 fw-400 text-white primary-font">During our in-person or virtual discovery, we'll learn about your story, vision, and budget; and put together a plan that connects where you are to where you want your space to be.</p>
+            <p class="fs-16 fw-400 text-white primary-font">During our in-person discovery, we’ll learn about the vision for your business and put together a plan that connects your space with local art that helps you achieve your desired aesthetic.</p>
           </div>
         </div>
       </div>
@@ -373,7 +574,7 @@
               </div>
               <h3 class="fs-24 fw-700 text-white secondry-font mb-10">Fine Art Matching &amp; Acquisition</h3>
             </div>
-            <p class="fs-16 fw-400 text-white primary-font">We will connect you with artists best suited to meet your needs, and negotiate purchase prices for you that will stick to your budget.</p>
+            <p class="fs-16 fw-400 text-white primary-font">We’ll connect you with artists best suited to meet your needs.</p>
           </div>
         </div>
       </div>
@@ -389,7 +590,8 @@
               </div>
               <h3 class="fs-24 fw-700 text-white secondry-font mb-10">Installation</h3>
             </div>
-            <p class="fs-16 fw-400 text-white primary-font">Our team will configure all the pieces in your space after your final approval, including identifying art labels and desired light fixtures.</p>
+            <p class="fs-16 fw-400 text-white primary-font">Our team will configure all the pieces in your space for a flat rate. including identifying art labels and desired light fixtures.</p>
+            <a href="{{route('frontend.art-gallery')}}" class="btn btn-secondary pri mary-font border-gray-light text-gray-400 px-44 py-10">View More</a>
           </div>
         </div>
       </div>
@@ -469,32 +671,71 @@
       </div>
       <div class="col-12 col-md-6">
         <h2 class="secondry-font text-start fs-55 fw-400 mb-20">Contact Us</h2>
-        <form action="">
+        @if (session('success'))
+            <div class="alert alert-success mb-3">
+                {{ session('success') }}
+            </div>
+        @endif
+        <form action="{{ route('frontend.contact.us') }}" method="POST">
+            @csrf
           <div class="row row-gap-20">
             <div class="col-12 col-sm-6">
-              <input type="text" placeholder="First Name" class=" primary-font border-gray-light fs-16 px-16 py-18 input-field w-100" name="first_name">
+                <input type="text"
+                    name="first_name"
+                    value="{{ old('first_name') }}"
+                    placeholder="First Name"
+                    class="primary-font border-gray-light fs-16 px-16 py-18 input-field w-100">
+                @error('first_name')
+                    <small class="text-danger d-block mt-1">{{ $message }}</small>
+                @enderror
             </div>
             <div class="col-12 col-sm-6">
-              <input type="text" placeholder="Last Name" class=" primary-font border-gray-light fs-16 px-16 py-18 input-field w-100" name="last_name">
+                <input type="text"
+                    name="last_name"
+                    value="{{ old('last_name') }}"
+                    placeholder="Last Name"
+                    class="primary-font border-gray-light fs-16 px-16 py-18 input-field w-100">
+                @error('last_name')
+                    <small class="text-danger d-block mt-1">{{ $message }}</small>
+                @enderror
             </div>
             <div class="col-12 col-sm-6">
-              <input type="email" placeholder="Email" class=" primary-font border-gray-light fs-16 px-16 py-18 input-field w-100" name="email">
+                <input type="email"
+                    name="email"
+                    value="{{ old('email') }}"
+                    placeholder="Email"
+                    class="primary-font border-gray-light fs-16 px-16 py-18 input-field w-100">
+                @error('email')
+                    <small class="text-danger d-block mt-1">{{ $message }}</small>
+                @enderror
             </div>
             <div class="col-12 col-sm-6">
-              <input type="tel" placeholder="Phone" class=" primary-font border-gray-light fs-16 px-16 py-18 input-field w-100" name="phone">
+                <input type="tel"
+                    name="phone"
+                    value="{{ old('phone') }}"
+                    placeholder="Phone"
+                    class="primary-font border-gray-light fs-16 px-16 py-18 input-field w-100">
+                @error('phone')
+                    <small class="text-danger d-block mt-1">{{ $message }}</small>
+                @enderror
             </div>
             <div class="col-12">
-              <textarea placeholder="Message" class="primary-font border-gray-light fs-16 px-16 py-18 text-area" name="message" rows="5"></textarea>
+                <textarea name="message"
+                        rows="5"
+                        placeholder="Message"
+                        class="primary-font border-gray-light fs-16 px-16 py-18 text-area w-100">{{ old('message') }}</textarea>
+                @error('message')
+                    <small class="text-danger d-block mt-1">{{ $message }}</small>
+                @enderror
             </div>
             <div class="col-12">
               <div class="position-relative w-100">
                 <select class="primary-font border-gray-light fs-16 px-16 py-18 input-field" id="serviceSelect" name="service">
                   <option selected="" disabled="">Which service are you interested in?</option>
                   <option value="interior_designers">Interior Designers</option>
-                  <option value="commercial">Commercial</option>
-                  <option value="residential">Residential</option>
-                  <option value="collectors">Collectors</option>
                   <option value="artists">Artists</option>
+                  <option value="organiser">Organiser</option>
+                  <option value="other">Other</option>
                 </select>
                 <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-17 text-black me-3 pe-none"></i>
               </div>
@@ -2664,3 +2905,59 @@
 @endsection
 @include(theme('partials.add_to_cart_script'))
 @include(theme('partials.add_to_compare_script'))
+@push('scripts')
+<script>
+$(document).on('change', '#country', function(event){
+    let country = $('#country').val();
+    $('#pre-loader').show();
+    if(country){
+        let base_url = $('#url').val();
+        let url = base_url + '/seller/profile/get-state?country_id=' +country;
+
+        $('#state').empty();
+
+        $('#state').append(
+            `<option value="">{{__("common.select_from_options")}}</option>`
+        );
+        $('#state').niceSelect('update');
+        $('#city').empty();
+        $('#city').append(
+            `<option value="">{{__("common.select_from_options")}}</option>`
+        );
+        $('#city').niceSelect('update');
+        $.get(url, function(data){
+
+            $.each(data, function(index, stateObj) {
+                $('#state').append('<option value="'+ stateObj.id +'">'+ stateObj.name +'</option>');
+            });
+
+            $('#state').niceSelect('update');
+            $('#pre-loader').hide();
+        });
+    }
+});
+$(document).on('change', '#state', function(event){
+    let state = $('#state').val();
+    $('#pre-loader').show();
+    if(state){
+        let base_url = $('#url').val();
+        let url = base_url + '/seller/profile/get-city?state_id=' +state;
+
+
+        $('#city').empty();
+        $('#city').append(
+            `<option value="">{{__("common.select_from_options")}}</option>`
+        );
+        $.get(url, function(data){
+
+            $.each(data, function(index, cityObj) {
+                $('#city').append('<option value="'+ cityObj.id +'">'+ cityObj.name +'</option>');
+            });
+
+            $('#city').niceSelect('update');
+            $('#pre-loader').hide();
+        });
+    }
+});
+</script>
+@endpush

@@ -88,6 +88,7 @@
         (function($){
             "use strict";
             $(document).ready(function(){
+                $('#pre-loader').hide();
                 $('#submit_btn').removeAttr('disabled');
                 $(document).on('submit', '#login_form', function(event){
 

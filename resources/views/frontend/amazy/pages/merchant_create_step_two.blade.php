@@ -17,6 +17,7 @@
                 <p class="support_text">{{__('auth.See your growth and get consulting support!')}}</p>
                 <form id="registerForm" action="{{route('frontend.merchant.store')}}" method="POST" class="register_form">
                     @csrf
+                    <input type="hidden" name="url" id="url" value="{{url('/')}}">
                     <div class="row">
                         @php
                             $custom_field = [];
@@ -172,6 +173,50 @@
                                     <span class="text-danger" >{{ $message }}</span>
                                 @enderror
                             </div>
+                            <div class="col-lg-12 mb_20">
+                                <label class="primary_label2">{{ __('Country') }} <span>*</span></label>
+                                <select class="primary_input3 radius_5px" name="country" id="country" aria-label="Sizes" required>
+                                    <option value="">{{__('Choose Country')}}</option>
+                                    @foreach($countries as $key => $country)
+                                        <option value="{{$country->id}}">{{$country->name}}</option>
+                                    @endforeach
+                                </select>
+                                @error('country')
+                                    <span class="text-danger" >{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="col-lg-12 mb_20">
+                                <label class="primary_label2">{{ __('State') }} <span>*</span></label>
+                                <select class="primary_input3 radius_5px" name="state" id="state" aria-label="Sizes" required>
+                                    <option value="">{{__('Choose State')}}</option>
+                                </select>
+                                @error('state')
+                                    <span class="text-danger" >{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="col-lg-12 mb_20">
+                                <label class="primary_label2">{{ __('City') }} <span>*</span></label>
+                                <select class="primary_input3 radius_5px" name="city" id="city" aria-label="Sizes" required>
+                                    <option selected="">Choose City</option>
+                                </select>
+                                @error('city')
+                                    <span class="text-danger" >{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="col-lg-12 mb_20">
+                                <label class="primary_label2">{{ __('common.postal_code') }} <span>*</span></label>
+                                <input type="text" id="postal_code" name="postal_code" value="{{old('postal_code')}}" placeholder="{{ __('common.postal_code') }}" onfocus="this.placeholder = ''" onblur="this.placeholder = '{{ __('common.postal_code') }}'" class="primary_input3 radius_5px" required>
+                                @error('postal_code')
+                                    <span class="text-danger" >{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="col-lg-12 mb_20">
+                                <label class="primary_label2">{{ __('Address') }} <span>*</span></label>
+                                <input type="text" id="address" name="address" value="{{old('address')}}" placeholder="{{ __('common.address') }}" onfocus="this.placeholder = ''" onblur="this.placeholder = '{{ __('common.address') }}'" class="primary_input3 radius_5px" required>
+                                @error('address')
+                                    <span class="text-danger" >{{ $message }}</span>
+                                @enderror
+                            </div>
                             <div class="col-12 mb_20">
                                 <label class="primary_label2" for="password">{{ __('common.password') }} <span>*</span></label>
                                 <input type="password" id="password" name="password" value="{{old('password')}}" placeholder="{{ __('common.password') }}" onfocus="this.placeholder = ''" onblur="this.placeholder = '{{ __('common.password') }}'" class="primary_input3 radius_5px">
@@ -240,6 +285,7 @@
     (function($){
         "use strict";
         $(document).ready(function(){
+            $('#pre-loader').hide();
             $(document).on('click','#termCheck',function(event){
 
                 if($("#termCheck").prop('checked') == true){
@@ -253,5 +299,57 @@
             $('.select_box').niceSelect();
         });
     })(jQuery);
+    $(document).on('change', '#country', function(event){
+    let country = $('#country').val();
+    $('#pre-loader').show();
+    if(country){
+        let base_url = $('#url').val();
+        let url = base_url + '/seller/profile/get-state?country_id=' +country;
+
+        $('#state').empty();
+
+        $('#state').append(
+            `<option value="">{{__("common.select_from_options")}}</option>`
+        );
+        $('#state').niceSelect('update');
+        $('#city').empty();
+        $('#city').append(
+            `<option value="">{{__("common.select_from_options")}}</option>`
+        );
+        $('#city').niceSelect('update');
+        $.get(url, function(data){
+
+            $.each(data, function(index, stateObj) {
+                $('#state').append('<option value="'+ stateObj.id +'">'+ stateObj.name +'</option>');
+            });
+
+            $('#state').niceSelect('update');
+            $('#pre-loader').hide();
+        });
+    }
+});
+$(document).on('change', '#state', function(event){
+    let state = $('#state').val();
+    $('#pre-loader').show();
+    if(state){
+        let base_url = $('#url').val();
+        let url = base_url + '/seller/profile/get-city?state_id=' +state;
+
+
+        $('#city').empty();
+        $('#city').append(
+            `<option value="">{{__("common.select_from_options")}}</option>`
+        );
+        $.get(url, function(data){
+
+            $.each(data, function(index, cityObj) {
+                $('#city').append('<option value="'+ cityObj.id +'">'+ cityObj.name +'</option>');
+            });
+
+            $('#city').niceSelect('update');
+            $('#pre-loader').hide();
+        });
+    }
+});
 </script>
 @endpush

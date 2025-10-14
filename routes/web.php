@@ -194,6 +194,8 @@ Route::get('/merchant-register-step-2/{id}', [MerchantRegisterController::class,
 Route::get('/merchant-register-step-3', [MerchantRegisterController::class, 'showRegisterForm2'])->name('frontend.merchant-register-subscription-type');
 Route::post('/merchant-register', [MerchantRegisterController::class, 'register'])->name('frontend.merchant.store');
 Route::get('/user-email-verify', [WelcomeController::class, 'emailVerify'])->name('frontend.mail-verify');
+Route::get('/art-gallery-tier', [WelcomeController::class, 'artgallery'])->name('frontend.art-gallery');
+Route::post('/contact/send', [WelcomeController::class, 'contact_us'])->name('frontend.contact.us');
 Route::get('/verify', [\App\Http\Controllers\Auth\EmailVerificationController::class, 'emailVerify'])->name('frontend.mail-verify-link');
 Route::post('/resend-link', [\App\Http\Controllers\Auth\EmailVerificationController::class, 'resendMail'])->name('frontend.resend-link');
 //event organiser register

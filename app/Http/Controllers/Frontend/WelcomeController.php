@@ -12,7 +12,9 @@ use Modules\FrontendCMS\Entities\HomePageSection;
 use App\Repositories\ProductRepository;
 use Modules\Seller\Entities\SellerProduct;
 use Modules\Visitor\Entities\VisitorHistory;
+use Modules\Product\Entities\Product;
 use Modules\Visitor\Entities\IgnoreIP;
+use Modules\Setup\Entities\Country;
 use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
 use Stevebauman\Location\Facades\Location;
@@ -22,11 +24,11 @@ use Browser;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Session;
 use Modules\UserActivityLog\Traits\LogActivity;
-
+use App\Traits\SendMail;
 
 class WelcomeController extends Controller
 {
-
+    use SendMail;
     protected $subscribe;
 
     public function __construct(SubscriptionService $subscribe)
@@ -53,14 +55,22 @@ class WelcomeController extends Controller
             }
             $CategoryList = collect();
             $widgets = HomePageSection::all();
+            $seller = User::where('role_id', 5)
+                            ->where('is_active', 1)
+                            ->with(['SellerAccount', 'SellerBusinessInformation', 'seller_products'])
+                            ->orderby('id','desc')
+                            ->limit(6)->get();
+            $products = Product::with(['brand','unit_type'])->where('is_approved', 1)->where('status', 1)->orderby('id','desc')
+                            ->limit(5)->get();
             $previous_route = session()->get('previous_user_last_route');
             $previous_user_id = session()->get('previous_user_id');
+            $countries = Country::all();
             if ($previous_route != null) {
                 session()->forget('previous_user_id');
                 session()->forget('previous_user_last_route');
                 return redirect($previous_route);
             } else {
-                return view(theme('welcome'), compact('CategoryList', 'widgets'));
+                return view(theme('welcome'), compact('CategoryList', 'seller', 'products', 'widgets', 'countries'));
             }
         } catch (Exception $e) {
             LogActivity::errorLog($e->getMessage());
@@ -246,5 +256,36 @@ class WelcomeController extends Controller
     }
     public function newLogin(){
         return view(theme('pages.new_login'));
+    }
+    public function artgallery(){
+        return view(theme('pages.art_gallery_tier'));
+    }
+
+    public function contact_us(Request $request)
+    {
+        // Validation
+        $request->validate([
+            'first_name' => 'required|string|max:100',
+            'last_name'  => 'required|string|max:100',
+            'email'      => 'required|email',
+            'phone'      => 'nullable|string|max:20',
+            'message'    => 'required|string',
+            'service'    => 'nullable|string',
+        ]);
+
+        // Email details
+        $details = [
+            'first_name' => $request->first_name,
+            'last_name'  => $request->last_name,
+            'email'      => $request->email,
+            'phone'      => $request->phone,
+            'message'    => $request->message,
+            'service'    => $request->service,
+        ];
+
+        // Send email
+        $this->sendContactEmail(21,$details);
+
+        return back()->with('success', 'Your message has been sent successfully!');
     }
 }
