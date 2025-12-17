@@ -357,4 +357,8 @@ Route::get('/become-a-organizer', function() {
 Route::get('organizers-events', function() {
     return view('frontend.amazy.pages.events');
 });
+Route::get('faqs', function() {
+    return view('frontend.amazy.pages.faqs');
+});
+
 
