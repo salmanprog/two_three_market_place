@@ -139,7 +139,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-12">
+                        <div class="col-12">    
                             <textarea name="message"
                                     rows="5"
                                     placeholder="Message"
