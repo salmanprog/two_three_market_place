@@ -14,6 +14,113 @@
             background: var(--base_color);
             border-color: var(--base_color);
         }
+
+        /* New Pricing Card Styles */
+        .new_pricing_card {
+            border: 1px solid gray;
+            border-radius: 20px;
+            padding: 30px;
+            background: #fff;
+            position: relative;
+            height: 100%;
+            text-align: left;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+        }
+        .new_pricing_card:hover {
+            box-shadow: 0 10px 40px rgba(43, 54, 228, 0.1);
+        }
+        .plan_title {
+            font-size: 28px;
+            color: black;
+            font-weight: 500;
+            margin-bottom: 0;
+            line-height: 1.2;
+        }
+        .discount_badge {
+            background: #ffeeb2;
+            color: #333;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 4px;
+            display: inline-block;
+            white-space: nowrap;
+        }
+        .big_price {
+            font-size: 56px;
+            color: black;
+            font-weight: 500;
+            line-height: 1;
+            margin-right: 10px;
+        }
+        .price_meta {
+            font-size: 14px;
+            line-height: 1.3;
+            color: #000;
+            font-weight: 500;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .billed_yearly {
+            font-size: 15px;
+            color: #000;
+            margin-top: 8px;
+            font-weight: 400;
+        }
+        .cta_btn {
+            background-color: black;
+            color: #fff !important;
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 14px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 16px;
+            margin: 25px 0;
+            text-decoration: none;
+            transition: background 0.3s;
+            border: none;
+        }
+        .cta_btn:hover {
+            background-color: #1F1F1F;
+        }
+        .feature_divider {
+            border-top: 1px solid #eee; /* Light gray line */
+            margin-bottom: 25px;
+        }
+        .feature_list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .feature_list li {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+        }
+        .feature_list li i {
+            margin-right: 12px;
+            color: #888;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        @media (max-width: 767px) {
+            .new_pricing_card {
+                margin-bottom: 40px;
+            }
+            .big_price {
+                font-size: 40px;
+            }
+            .plan_title {
+                font-size: 25px;
+            }
+        }
     </style>
 @endpush
 
@@ -41,43 +148,34 @@
             </div> --}}
 
             @foreach($pricing_plans as $key => $item)
-            <div class="col-lg-4 col-md-6">
-                <div class="single_pricing_part {{$item->is_featured?'product_tricker':''}}">
-                    @if($item->is_featured == 1)<span
-                        class="product_tricker_text">{{__('defaultTheme.best value')}}</span> @endif
-                    <div class="price_icon">
-                        <!-- <i class="fas fa-star"></i> -->
-
-                        <svg width="56" height="53" viewBox="0 0 56 53" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M26.0979 1.8541C26.6966 0.0114833 29.3034 0.0114799 29.9021 1.8541L34.9599 17.4205C35.2277 18.2445 35.9956 18.8024 36.862 18.8024H53.2295C55.1669 18.8024 55.9725 21.2817 54.4051 22.4205L41.1635 32.041C40.4625 32.5503 40.1692 33.453 40.437 34.2771L45.4948 49.8435C46.0935 51.6861 43.9845 53.2183 42.4171 52.0795L29.1756 42.459C28.4746 41.9497 27.5254 41.9497 26.8244 42.459L13.5829 52.0795C12.0155 53.2183 9.9065 51.6861 10.5052 49.8435L15.563 34.2771C15.8308 33.453 15.5375 32.5503 14.8365 32.041L1.59493 22.4205C0.0275064 21.2817 0.833055 18.8024 2.7705 18.8024H19.138C20.0044 18.8024 20.7723 18.2445 21.0401 17.4205L26.0979 1.8541Z" fill="currentColor"/>
-                        </svg>
-
+            <div class="col-lg-4 col-md-6 mb_30">
+                <div class="new_pricing_card">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                         <h2 class="plan_title">{{$item->name}}</h2>
+                         @if($item->is_featured == 1)
+                            <span class="discount_badge">{{__('defaultTheme.best value')}}</span>
+                         @endif
                     </div>
-                    <div class="pricing_header">
-                        <h5>{{$item->name}}</h5>
-                        <div class="w-100">
-                            <img src="{{ showImage($item->image) }}" alt="" class="img-fluid">
-                        </div>
-                        <div class="monthly_price_div">
-                            <h2>{{single_price($item->monthly_cost)}}</h2>
-                            <p>{{__('defaultTheme.per month')}}</p>
-                        </div>
-                        <div class="yearly_price_div d-none">
-                            <h2>{{single_price($item->yearly_cost)}}</h2>
-                            <p>{{__('defaultTheme.per year')}}</p>
+                    
+                    <div class="mb-4">
+                        <div class="d-flex align-items-center">
+                            <span class="big_price">{{single_price($item->monthly_cost)}}</span>
+                            <div class="price_meta">
+                                <span>{{__('defaultTheme.per month')}}</span>
+                            </div>
                         </div>
                     </div>
-                    <ul class="mb-5">
-                        <li>{{ __('Events') }} : {{__('defaultTheme.unlimited')}}</li>
-                        <li>{{__('defaultTheme.transaction_charge')}} : {{$item->transaction_fee}} % </li>
+
+                    <a class="cta_btn select_btn_price cursor_pointer" data-id='{{ $item->id }}'>
+                        {{__('defaultTheme.choose plan')}}
+                    </a>
+
+                    <div class="feature_divider"></div>
+
+                    <ul class="feature_list">
+                        <li><i class="fas fa-calendar"></i> {{ __('Events') }} : {{__('defaultTheme.unlimited')}}</li>
+                        <li><i class="fas fa-percentage"></i> {{__('defaultTheme.transaction_charge')}} : {{$item->transaction_fee}} % </li>
                     </ul>
-                    <a class="amaz_primary_btn py-2 rounded-pill mb_20 text-center justify-content-center cursor_pointer select_btn_price" data-id='{{ $item->id }}'>{{__('defaultTheme.choose plan')}}</a>
-
-                    <!-- <div class="d-flex flex-wrap justify-content-center align-items-center gap-3">
-                        <a class="amaz_primary_btn secondary cursor_pointer select_btn_price rounded-pill py-2">Edit</a>
-
-                        <a class="amaz_primary_btn cursor_pointer select_btn_price rounded-pill py-2">Delete</a>
-                    </div> -->
                 </div>
             </div>
             @endforeach
@@ -88,6 +186,8 @@
                 <input type="hidden" id="type" name="type" value="">
             </form>
         </div>
+
+        
     </div>
 </section>
 

@@ -71,9 +71,9 @@
 .ti-settings:before {
 	content: "\e60f";
 }
-.ti-search:before {
+/* .ti-search:before {
 	content: "\e610";
-}
+} */
 .ti-zoom-in:before {
 	content: "\e611";
 }

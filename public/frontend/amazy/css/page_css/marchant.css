@@ -15,7 +15,7 @@ html[dir="rtl"] .right_float {
 }
 
 .pl-18 {
-    padding-left: 18px!important;
+    padding-left: 18px !important;
 }
 
 html[dir="rtl"] .pl-18 {
@@ -25,7 +25,11 @@ html[dir="rtl"] .pl-18 {
 
 .pricing_header {
     min-height: 162px;
+
+
 }
+
+
 
 .benefit_img_div {
     height: 65px;

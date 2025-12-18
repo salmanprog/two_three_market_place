@@ -357,8 +357,18 @@ Route::get('/become-a-organizer', function() {
 Route::get('organizers-events', function() {
     return view('frontend.amazy.pages.events');
 });
-Route::get('faqs', function() {
-    return view('frontend.amazy.pages.faqs');
+Route::get('artists/faqs', function() {
+    return view('frontend.amazy.pages.artists-faqs');
 });
-
-
+Route::get('art-galleries/faqs', function() {
+    return view('frontend.amazy.pages.art-galleries-faqs');
+});
+Route::get('locations/faqs', function() {
+    return view('frontend.amazy.pages.locations-faqs');
+});
+Route::get('interior-designers/faqs', function() {
+    return view('frontend.amazy.pages.interior-designers-faqs');
+});
+Route::get('buyer/faqs', function() {
+    return view('frontend.amazy.pages.buyer-faqs');
+});
