@@ -27,7 +27,6 @@
                 <h2 class="faq-heading text-start mb-5">Artist FAQ</h2>
                 
                 <div class="accordion custom-accordion" id="artistFaqAccordion">
-                    
                     <!-- Item 1 -->
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingOne">
