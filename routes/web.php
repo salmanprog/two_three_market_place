@@ -372,3 +372,7 @@ Route::get('interior-designers/faqs', function() {
 Route::get('buyer/faqs', function() {
     return view('frontend.amazy.pages.buyer-faqs');
 });
+
+Route::get('/packages', function() {
+    return view('frontend.amazy.pages.packages');
+})->name('frontend.packages');

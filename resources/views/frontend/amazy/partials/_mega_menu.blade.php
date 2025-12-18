@@ -126,12 +126,12 @@
                                                 @continue
                                             @endif
                                             @if($element->childs->count() > 0)
-                                                <li class="submenu_active"><a href="{{ url(@$element->page->slug) }}" {{$element->is_newtab == 1? 'target="_blank"':''}}>{{ ucfirst(textLimit($element->title, 20)) }}  <i class="ti-angle-down"></i></a>
+                                                <li class="submenu_active"><a href="{{ (strtolower(trim($element->title)) == 'interior designers') ? route('frontend.packages') : url(@$element->page->slug) }}" {{$element->is_newtab == 1? 'target="_blank"':''}}>{{ ucfirst(textLimit($element->title, 20)) }}  <i class="ti-angle-down"></i></a>
                                                     @include(theme('partials._menu_chield'), ['element' => $element])
                                                 </li>
                                             @else
                                                 <li class="">
-                                                    <a href="{{ url(@$element->page->slug) }}" {{$element->is_newtab == 1? 'target="_blank"':''}}>{{ ucfirst(textLimit($element->title, 20)) }}</a>
+                                                    <a href="{{ (strtolower(trim($element->title)) == 'interior designers') ? route('frontend.packages') : url(@$element->page->slug) }}" {{$element->is_newtab == 1? 'target="_blank"':''}}>{{ ucfirst(textLimit($element->title, 20)) }}</a>
                                                 </li>
                                             @endif
                                         @elseif($element->type == 'category')
@@ -179,12 +179,12 @@
                                         @elseif($element->type == 'link')
                                             @if($element->childs->count() > 0)
                                                 <li class="submenu_active">
-                                                    <a href="{{ $element->link }}" {{$element->is_newtab == 1? 'target="_blank"':''}}>{{textLimit($element->title,20)}} <i class="ti-angle-down"></i></a>
+                                                    <a href="{{ (strtolower(trim($element->title)) == 'interior designers') ? route('frontend.packages') : $element->link }}" {{$element->is_newtab == 1? 'target="_blank"':''}}>{{textLimit($element->title,20)}} <i class="ti-angle-down"></i></a>
                                                     @include(theme('partials._menu_chield'), ['element' => $element])
                                                 </li>
                                             @else
                                                 <li class="">
-                                                    <a href="{{ $element->link }}" {{$element->is_newtab == 1? 'target="_blank"':''}}>{{textLimit($element->title,20)}}</a>
+                                                    <a href="{{ (strtolower(trim($element->title)) == 'interior designers') ? route('frontend.packages') : $element->link }}" {{$element->is_newtab == 1? 'target="_blank"':''}}>{{textLimit($element->title,20)}}</a>
                                                 </li>
                                             @endif
                                         @elseif($element->type == 'function' & $element->element_id == 1)

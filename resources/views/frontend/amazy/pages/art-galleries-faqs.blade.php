@@ -24,7 +24,7 @@
     <div class="container">
         <div class="row justify-content-center py-30">
             <div class="col-lg-10 col-xl-8">
-                <h2 class="faq-heading text-start mb-5">Artist FAQ</h2>
+                <h2 class="faq-heading text-start mb-5">Art Gallery FAQ</h2>
                 
                 <div class="accordion custom-accordion" id="artistFaqAccordion">
                     <!-- Item 1 -->
