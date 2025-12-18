@@ -61,7 +61,7 @@
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingThree">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                             Who is in charge of the art? (To Dev: What’s this question asking?) This is for managers or people who are in charge of the space.
+                             Who is in charge of the art? This is for managers or people who are in charge of the space.
                             </button>
                         </h2>
                         <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#artistFaqAccordion">
@@ -81,25 +81,12 @@
                         </h2>
                         <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#artistFaqAccordion">
                             <div class="accordion-body">
-                              <!-- Yes! We have community partners with whom we connect our artists and market their work and services. If something comes up that may be a good fit for you, we’ll reach out to you directly.  -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Item 5 -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingFive">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
                               Why wouldn’t you?
-                            </button>
-                        </h2>
-                        <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#artistFaqAccordion">
-                            <div class="accordion-body">
-                               <!-- We’ll deposit what’s in your wallet into your bank account on the 1st and the 15th of every month. Only completed & verified transactions and deliveries will be available in your wallet. -->
                             </div>
                         </div>
                     </div>
 
+                   
                     <!-- Item 6 -->
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingSix">
