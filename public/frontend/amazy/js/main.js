@@ -17,7 +17,7 @@
         )
     })
 
-    //* Navbar Fixed
+    //* Navbar Fixed - DISABLED (Header will not stick on scroll)
     var nav_offset_top = $("header").height() + 50;
     /*-------------------------------------------------------------------------------
 	  Navbar
@@ -25,10 +25,10 @@
     $(window).on("scroll", function() {
         var scroll = $(window).scrollTop();
         if (scroll < 400) {
-            $("#sticky-header").removeClass("navbar_fixed");
+            // $("#sticky-header").removeClass("navbar_fixed");
             $("#back-top").fadeOut(500);
         } else {
-            $("#sticky-header").addClass("navbar_fixed");
+            // $("#sticky-header").addClass("navbar_fixed");
             $("#back-top").fadeIn(500);
         }
     });

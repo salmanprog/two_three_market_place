@@ -15216,10 +15216,10 @@ $(document).ready(function () {
   $(window).on("scroll", function () {
     var scroll = $(window).scrollTop();
     if (scroll < 400) {
-      $("#sticky-header").removeClass("navbar_fixed");
+      // $("#sticky-header").removeClass("navbar_fixed");
       $("#back-top").fadeOut(500);
     } else {
-      $("#sticky-header").addClass("navbar_fixed");
+      // $("#sticky-header").addClass("navbar_fixed");
       $("#back-top").fadeIn(500);
     }
   });

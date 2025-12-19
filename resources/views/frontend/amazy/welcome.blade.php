@@ -310,7 +310,7 @@
   </div>
 </section>
 <!-- filter artist section --> 
-<section class="filter-artist-sec pb-40">
+<!-- <section class="filter-artist-sec pb-40">
   <div class="container">
     <div class="bg-light-gray-filter py-70">
       <h2 class="fs-55 fw-700 text-center text-black mb-40 secondry-font">Filter Artist Profiles</h2>
@@ -393,6 +393,292 @@
             <button type="submit" class="btn bg-black text-white primary-font py-10 px-50">Find Artists</button>
             </div>
             <i class="fa-solid fa-magnifying-glass position-absolute fs-20 text-gray-400 pe-none" style="left: 10px; top: 50%; transform: translateY(-50%);"></i>
+      </form>
+    </div>
+  </div>
+</section> 
+<!-- filter artist section -->  
+<!-- New Filter Artist Section -->
+<section class="filter-artist-sec pb-40">
+  <div class="container">
+    <div class="bg-light-gray-filter py-70">
+      <h2 class="fs-55 fw-700 text-center text-black mb-40 secondry-font">Filter Artist Profiles</h2>
+      <form action="{{ route('frontend.artists') }}" method="GET">
+        <input type="hidden" name="search_artist" id="search_artist" value="1">
+        <div class="row row-gap-20">
+          <!-- Search By Name -->
+          <div class="col-md-12">
+            <div class="position-relative w-100">
+              <input type="text" name="search" class="primary-font filter-artist-input" placeholder="Search By Name" value="{{ request('search') }}">
+            </div>
+          </div>
+          
+          <div class="col-md-12">
+            <div class="row row-gap-20">
+              <!-- Artist Dropdown -->
+              <div class="col-md-3">
+                <div class="position-relative w-100">
+                  <select class="filter-artist-select primary-font" name="artist" aria-label="Artist">
+                    <option value="">Artist</option>
+                    @foreach($sellers as $seller)
+                      <option value="{{ $seller->id }}">{{ $seller->first_name }} {{ $seller->last_name }}</option>
+                    @endforeach
+                  </select>
+                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-12 text-gray-400 me-3 pe-none"></i>
+                </div>
+              </div>
+
+              <!-- Art Dropdown -->
+              <div class="col-md-3">
+                <div class="position-relative w-100">
+                  <select class="filter-artist-select primary-font" name="art" aria-label="Art">
+                    <option value="">Art</option>
+                    @php
+                      $parent_categories = \Modules\Product\Entities\Category::where('parent_id', 0)->where('status', 1)->get();
+                    @endphp
+                    @foreach($parent_categories as $category)
+                      <option value="{{ $category->id }}">{{ $category->name }}</option>
+                    @endforeach
+                  </select>
+                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-12 text-gray-400 me-3 pe-none"></i>
+                </div>
+              </div>
+
+              <!-- Location - State -->
+              <div class="col-md-3">
+                <div class="position-relative w-100">
+                  <select class="filter-artist-select primary-font" name="state" id="state" aria-label="State">
+                    <option value="">Select State</option>
+                    <option value="AL">Alabama</option>
+                    <option value="AK">Alaska</option>
+                    <option value="AZ">Arizona</option>
+                    <option value="AR">Arkansas</option>
+                    <option value="CA">California</option>
+                    <option value="CO">Colorado</option>
+                    <option value="CT">Connecticut</option>
+                    <option value="DE">Delaware</option>
+                    <option value="FL">Florida</option>
+                    <option value="GA">Georgia</option>
+                    <option value="HI">Hawaii</option>
+                    <option value="ID">Idaho</option>
+                    <option value="IL">Illinois</option>
+                    <option value="IN">Indiana</option>
+                    <option value="IA">Iowa</option>
+                    <option value="KS">Kansas</option>
+                    <option value="KY">Kentucky</option>
+                    <option value="LA">Louisiana</option>
+                    <option value="ME">Maine</option>
+                    <option value="MD">Maryland</option>
+                    <option value="MA">Massachusetts</option>
+                    <option value="MI">Michigan</option>
+                    <option value="MN">Minnesota</option>
+                    <option value="MS">Mississippi</option>
+                    <option value="MO">Missouri</option>
+                    <option value="MT">Montana</option>
+                    <option value="NE">Nebraska</option>
+                    <option value="NV">Nevada</option>
+                    <option value="NH">New Hampshire</option>
+                    <option value="NJ">New Jersey</option>
+                    <option value="NM">New Mexico</option>
+                    <option value="NY">New York</option>
+                    <option value="NC">North Carolina</option>
+                    <option value="ND">North Dakota</option>
+                    <option value="OH">Ohio</option>
+                    <option value="OK">Oklahoma</option>
+                    <option value="OR">Oregon</option>
+                    <option value="PA">Pennsylvania</option>
+                    <option value="RI">Rhode Island</option>
+                    <option value="SC">South Carolina</option>
+                    <option value="SD">South Dakota</option>
+                    <option value="TN">Tennessee</option>
+                    <option value="TX">Texas</option>
+                    <option value="UT">Utah</option>
+                    <option value="VT">Vermont</option>
+                    <option value="VA">Virginia</option>
+                    <option value="WA">Washington</option>
+                    <option value="WV">West Virginia</option>
+                    <option value="WI">Wisconsin</option>
+                    <option value="WY">Wyoming</option>
+                  </select>
+                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-12 text-gray-400 me-3 pe-none"></i>
+                </div>
+              </div>
+
+              <!-- Type in your area -->
+              <div class="col-md-3">
+                <div class="position-relative w-100">
+                  <input type="text" name="area" class="primary-font filter-artist-select" placeholder="Type in your area">
+                </div>
+              </div>
+
+              <!-- Art Services -->
+              <div class="col-md-3">
+                <div class="position-relative w-100">
+                  <select class="filter-artist-select primary-font" name="art_service" aria-label="Art Services">
+                    <option value="">Art Services</option>
+                    <option value="commissions">Commissions</option>
+                    <option value="murals">Murals</option>
+                    <option value="art_classes">Art Classes</option>
+                    <option value="live_art">Live Art for Events</option>
+                  </select>
+                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-12 text-gray-400 me-3 pe-none"></i>
+                </div>
+              </div>
+
+              <!-- Category -->
+              <div class="col-md-3">
+                <div class="position-relative w-100">
+                  <select class="filter-artist-select primary-font" name="category" aria-label="Category">
+                    <option value="">Category</option>
+                    <option value="all">All</option>
+                    <option value="paintings">Paintings</option>
+                    <option value="drawing">Drawing</option>
+                    <option value="mixed_media">Mixed Media</option>
+                    <option value="sculpture">Sculpture</option>
+                    <option value="other">Other</option>
+                  </select>
+                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-12 text-gray-400 me-3 pe-none"></i>
+                </div>
+              </div>
+
+              <!-- Style -->
+              <div class="col-md-3">
+                <div class="position-relative w-100">
+                  <select class="filter-artist-select primary-font" name="style" aria-label="Style">
+                    <option value="">Style</option>
+                    <option value="abstract_art">Abstract Art</option>
+                    <option value="art_deco">Art Deco</option>
+                    <option value="art_nouveau">Art Nouveau</option>
+                    <option value="baroque">Baroque</option>
+                    <option value="bauhaus">Bauhaus</option>
+                    <option value="classicism">Classicism</option>
+                    <option value="contemporary_art">Contemporary Art</option>
+                    <option value="cubism">Cubism</option>
+                    <option value="dadaism">Dadaism</option>
+                    <option value="expressionism">Expressionism</option>
+                    <option value="fauvism">Fauvism</option>
+                    <option value="figurative">Figurative</option>
+                    <option value="harlem_renaissance">Harlem Renaissance</option>
+                    <option value="impressionism">Impressionism</option>
+                    <option value="minimalism">Minimalism</option>
+                    <option value="neoclassicism">Neoclassicism</option>
+                    <option value="neo_impressionism">Neo-Impressionism</option>
+                    <option value="pop_art">Pop Art</option>
+                    <option value="post_impressionism">Post-Impressionism</option>
+                    <option value="realism">Realism</option>
+                    <option value="surrealism">Surrealism</option>
+                    <option value="other">Other</option>
+                  </select>
+                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-12 text-gray-400 me-3 pe-none"></i>
+                </div>
+              </div>
+
+              <!-- Subject -->
+              <div class="col-md-3">
+                <div class="position-relative w-100">
+                  <select class="filter-artist-select primary-font" name="subject" aria-label="Subject">
+                    <option value="">Subject</option>
+                    <option value="abstract">Abstract</option>
+                    <option value="landscape">Landscape</option>
+                    <option value="pop_culture">Pop Culture</option>
+                    <option value="people">People</option>
+                    <option value="animal">Animal</option>
+                    <option value="floral">Floral</option>
+                    <option value="nature">Nature</option>
+                    <option value="seascape">Seascape</option>
+                    <option value="dogs">Dogs</option>
+                    <option value="cats">Cats</option>
+                    <option value="religious">Religious</option>
+                    <option value="love">Love</option>
+                    <option value="nude">Nude</option>
+                    <option value="geometric">Geometric</option>
+                    <option value="music">Music</option>
+                    <option value="food_drinks">Food/Drinks</option>
+                    <option value="medical">Medical</option>
+                    <option value="sports">Sports</option>
+                    <option value="men">Men</option>
+                    <option value="women">Women</option>
+                    <option value="buildings">Buildings</option>
+                    <option value="cartoon">Cartoon</option>
+                    <option value="other">Other</option>
+                  </select>
+                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-12 text-gray-400 me-3 pe-none"></i>
+                </div>
+              </div>
+
+              <!-- Medium -->
+              <div class="col-md-3">
+                <div class="position-relative w-100">
+                  <select class="filter-artist-select primary-font" name="medium" aria-label="Medium">
+                    <option value="">Medium</option>
+                    <option value="acrylic">Acrylic</option>
+                    <option value="oil">Oil</option>
+                    <option value="watercolor">Watercolor</option>
+                    <option value="ink">Ink</option>
+                    <option value="ceramic">Ceramic</option>
+                    <option value="other">Other</option>
+                  </select>
+                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-12 text-gray-400 me-3 pe-none"></i>
+                </div>
+              </div>
+
+              <!-- Material -->
+              <div class="col-md-3">
+                <div class="position-relative w-100">
+                  <select class="filter-artist-select primary-font" name="material" aria-label="Material">
+                    <option value="">Material</option>
+                    <option value="canvas">Canvas</option>
+                    <option value="paper">Paper</option>
+                    <option value="wood">Wood</option>
+                    <option value="metal">Metal</option>
+                    <option value="other">Other</option>
+                  </select>
+                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-12 text-gray-400 me-3 pe-none"></i>
+                </div>
+              </div>
+              <!-- Price -->
+              <div class="col-md-3">
+                <div class="filter-artist-select primary-font">
+
+                    <input 
+                    type="range" 
+                    class="form-range" 
+                    min="0" 
+                    max="5000" 
+                    step="100" 
+                    value="2500"
+                    id="priceRange"
+                    >
+                    
+                    <p class="mt-2 fw-semibold">
+                        Up to: <span class="text-primary">$<span id="priceValue">2500</span></span>
+                    </p>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="position-relative w-100">
+                  <select class="filter-artist-select primary-font" name="size" aria-label="Size">
+                    <option value="small">Small (< 20in)</option>
+                    <option value="med">Med (20-38in)</option>
+                    <option value="large">Large (38-60in)</option>
+                    <option value="xlarge">X Large (>60in)</option>
+                  </select>
+                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-12 text-gray-400 me-3 pe-none"></i>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="filter-artist-select primary-font">
+                    <label for="" class="">Select Color</label>
+                    <input type="color">
+                </div>
+            </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="d-flex justify-content-center mt-45 mx-auto">
+          <button type="submit" class="btn bg-black text-white primary-font py-10 px-50">Find Artists</button>
+        </div>
       </form>
     </div>
   </div>
@@ -2960,5 +3246,12 @@ $(document).on('change', '#state', function(event){
         });
     }
 });
+
+const range = document.getElementById("priceRange");
+    const priceValue = document.getElementById("priceValue");
+
+    range.addEventListener("input", function () {
+      priceValue.textContent = this.value;
+    });
 </script>
 @endpush
