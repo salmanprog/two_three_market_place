@@ -400,6 +400,51 @@
 <!-- filter artist section -->  
 <!-- love art section -->  
 <!-- Slider section -->
+ <section class="categories-sec pb-60">
+  <div class="container">
+    <h2 class="fs-55 fw-700 text-center text-black mx-auto mb-30 line-height-1-2 secondry-font" style="max-width: 990px;">We provide specialized service to these categories</h2>
+    <div class="row row-gap-40 row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-5 justify-content-center">
+      <div class="col">
+        <div class="categories-card mx-auto">
+            <img src="{{ showImage('uploads/images/16-06-2025/6850494d1cc2c.png') }}" alt="Interior Designers" class="mb-20">
+          <h3 class="text-start fw-700 text-black fs-18 secondry-font">Interior Designers</h3>
+          <p class="mb-10 primary-font">Source art for your clients</p>
+          <a href="{{route('frontend.buyer.signup')}}" class="btn btn-secondary pri mary-font border-gray-light text-gray-400 px-44 py-10">View More</a>
+        </div>
+      </div>
+      <div class="col">
+        <div class="categories-card mx-auto">
+            <img src="{{ showImage('uploads/images/16-06-2025/685068899e6ec.png') }}" alt="Artists" class="mb-20">
+          <h3 class="text-start fw-700 text-black fs-18 secondry-font">Artists</h3>
+          <p class="mb-10 primary-font">Join our team</p>
+          <a href="{{route('frontend.merchant-register','subscription')}}" class="btn btn-secondary pri mary-font border-gray-light text-gray-400 px-44 py-10">View More</a>
+        </div>
+      </div>
+      <div class="col">
+        <div class="categories-card mx-auto">
+            <img src="{{ showImage('uploads/images/16-06-2025/6850681225004.png') }}" alt="Artists" class="mb-20">
+          <h3 class="text-start fw-700 text-black fs-18 secondry-font">Organiser</h3>
+          <p class="mb-10 primary-font">Join Organiser account</p>
+          <a href="{{route('frontend.event-organiser-register','subscription')}}" class="btn btn-secondary pri mary-font border-gray-light text-gray-400 px-44 py-10">View More</a>
+        </div>
+      </div>
+      <!-- @foreach($parent_categories as $key => $category)
+      <div class="col">
+        <div class="categories-card mx-auto">
+          @if($category->categoryImage && $category->categoryImage->image)
+            <img src="{{ showImage($category->categoryImage->image) }}" alt="{{ $category->name }}" class="mb-20">
+          @else
+            <img src="{{ asset('assets/images/category-0'.($key+1).'.png') }}" alt="{{ $category->name }}" class="mb-20">
+          @endif
+          <h3 class="text-start fw-700 text-black fs-18 secondry-font">{{ $category->name }}</h3>
+          <p class="mb-10 primary-font">{{ $category->description ?? 'Explore our ' . $category->name . ' collection' }}</p>
+          <a href="{{ route('frontend.category-product', ['slug' => $category->slug, 'item' => 'category']) }}" class="btn btn-secondary primary-font border-gray-light text-gray-400 px-44 py-10">View More</a>
+        </div>
+      </div>
+      @endforeach -->
+    </div>
+  </div>
+</section>
 <section class="market-place-sec d-none d-md-block position-relative pb-35 mb-35">
   <div class="row">
     <div class="col-md-3 pl-50">
@@ -495,51 +540,7 @@
     $parent_categories = Category::where('parent_id', 0)->where('status', 1)->take(5)->orderby('id','desc')->get();
     $peoples_choice = $widgets->where('section_name','people_choices')->first();
 @endphp
-<section class="categories-sec pb-60">
-  <div class="container">
-    <h2 class="fs-55 fw-700 text-center text-black mx-auto mb-30 line-height-1-2 secondry-font" style="max-width: 990px;">We provide specialized service to these categories</h2>
-    <div class="row row-gap-40 row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-5 justify-content-center">
-      <div class="col">
-        <div class="categories-card mx-auto">
-            <img src="{{ showImage('uploads/images/16-06-2025/6850494d1cc2c.png') }}" alt="Interior Designers" class="mb-20">
-          <h3 class="text-start fw-700 text-black fs-18 secondry-font">Interior Designers</h3>
-          <p class="mb-10 primary-font">Source art for your clients</p>
-          <a href="{{route('frontend.buyer.signup')}}" class="btn btn-secondary pri mary-font border-gray-light text-gray-400 px-44 py-10">View More</a>
-        </div>
-      </div>
-      <div class="col">
-        <div class="categories-card mx-auto">
-            <img src="{{ showImage('uploads/images/16-06-2025/685068899e6ec.png') }}" alt="Artists" class="mb-20">
-          <h3 class="text-start fw-700 text-black fs-18 secondry-font">Artists</h3>
-          <p class="mb-10 primary-font">Join our team</p>
-          <a href="{{route('frontend.merchant-register','subscription')}}" class="btn btn-secondary pri mary-font border-gray-light text-gray-400 px-44 py-10">View More</a>
-        </div>
-      </div>
-      <div class="col">
-        <div class="categories-card mx-auto">
-            <img src="{{ showImage('uploads/images/16-06-2025/6850681225004.png') }}" alt="Artists" class="mb-20">
-          <h3 class="text-start fw-700 text-black fs-18 secondry-font">Organiser</h3>
-          <p class="mb-10 primary-font">Join Organiser account</p>
-          <a href="{{route('frontend.event-organiser-register','subscription')}}" class="btn btn-secondary pri mary-font border-gray-light text-gray-400 px-44 py-10">View More</a>
-        </div>
-      </div>
-      <!-- @foreach($parent_categories as $key => $category)
-      <div class="col">
-        <div class="categories-card mx-auto">
-          @if($category->categoryImage && $category->categoryImage->image)
-            <img src="{{ showImage($category->categoryImage->image) }}" alt="{{ $category->name }}" class="mb-20">
-          @else
-            <img src="{{ asset('assets/images/category-0'.($key+1).'.png') }}" alt="{{ $category->name }}" class="mb-20">
-          @endif
-          <h3 class="text-start fw-700 text-black fs-18 secondry-font">{{ $category->name }}</h3>
-          <p class="mb-10 primary-font">{{ $category->description ?? 'Explore our ' . $category->name . ' collection' }}</p>
-          <a href="{{ route('frontend.category-product', ['slug' => $category->slug, 'item' => 'category']) }}" class="btn btn-secondary primary-font border-gray-light text-gray-400 px-44 py-10">View More</a>
-        </div>
-      </div>
-      @endforeach -->
-    </div>
-  </div>
-</section>
+
 <!-- category section -->
 <!-- how it works section -->
 <section class="how-it-works-sec py-100 bg-black">

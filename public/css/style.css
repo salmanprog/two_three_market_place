@@ -585,7 +585,14 @@ input {
 
 /* faqs */
 
-
+/* .line-clamp-1 {
+} */
+.categories-card p {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;  
+  overflow: hidden;
+}
 /* responsive */
 @media (max-width: 1800px) {
   .header_top_area .container {
