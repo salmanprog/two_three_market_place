@@ -340,6 +340,7 @@ Route::get('/translate', [DemoController::class, 'translate'])->name('translateD
 
 // Shop page routes
 Route::get('/shop', [App\Http\Controllers\Frontend\ShopController::class, 'index'])->name('frontend.shop');
+Route::get('/product-search', [App\Http\Controllers\Frontend\ShopController::class, 'productSearch'])->name('frontend.searchshop');
 Route::get('/shop/filter-data', [App\Http\Controllers\Frontend\ShopController::class, 'fetchPagenateData'])->name('frontend.shop.filter-data');
 Route::post('/shop/filter', [App\Http\Controllers\Frontend\ShopController::class, 'filterIndex'])->name('frontend.shop.filter');
 Route::get('/shop/filter-paginate', [App\Http\Controllers\Frontend\ShopController::class, 'fetchFilterPagenateData'])->name('frontend.shop.filter-paginate');

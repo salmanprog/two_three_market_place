@@ -193,6 +193,38 @@ class ProductRepository
         }else{
             $data['slug'] = $this->productSlug($data['product_name']);
         }
+        
+        if(isset($data['state'])){
+            $data['location'] = $data['state'];
+        }
+        if(isset($data['art_services'])){
+            $data['art_services'] = $data['art_services'];
+        }
+        if(isset($data['category'])){
+            $data['category'] = $data['category'];
+        }
+        if(isset($data['style'])){
+            $data['style'] = $data['style'];
+        }
+        if(isset($data['subject'])){
+            $data['subject'] = $data['subject'];
+        }
+        if(isset($data['medium'])){
+            $data['medium'] = $data['medium'];
+        }
+        if(isset($data['material'])){
+            $data['material'] = $data['material'];
+        }
+        // if(isset($data['price'])){
+        //     $data['price_range'] = $data['price_range'];
+        // }
+        if(isset($data['palette_color'])){
+            $data['palette_color'] = $data['palette_color'];
+        }
+        if(isset($data['size'])){
+            $data['size'] = $data['size'];
+        }
+        
         $product->fill($data)->save();
         if(isset($data['meta_image'])){
             UsedMedia::create([

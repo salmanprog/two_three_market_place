@@ -226,249 +226,7 @@ $LanguageList = getLanguageList();
 
                                     </div>
                                     
-                                    <div class="col-lg-3">
-                                        <div class="primary_input mb-25">
-                                            <label class="primary_input_label">Location</label>
-
-                                            <select class="primary_select mb-25" name="state" id="state">
-                                                <option value="">Select State</option>
-                                                <option value="AL">Alabama</option>
-                                                <option value="AK">Alaska</option>
-                                                <option value="AZ">Arizona</option>
-                                                <option value="AR">Arkansas</option>
-                                                <option value="CA">California</option>
-                                                <option value="CO">Colorado</option>
-                                                <option value="CT">Connecticut</option>
-                                                <option value="DE">Delaware</option>
-                                                <option value="FL">Florida</option>
-                                                <option value="GA">Georgia</option>
-                                                <option value="HI">Hawaii</option>
-                                                <option value="ID">Idaho</option>
-                                                <option value="IL">Illinois</option>
-                                                <option value="IN">Indiana</option>
-                                                <option value="IA">Iowa</option>
-                                                <option value="KS">Kansas</option>
-                                                <option value="KY">Kentucky</option>
-                                                <option value="LA">Louisiana</option>
-                                                <option value="ME">Maine</option>
-                                                <option value="MD">Maryland</option>
-                                                <option value="MA">Massachusetts</option>
-                                                <option value="MI">Michigan</option>
-                                                <option value="MN">Minnesota</option>
-                                                <option value="MS">Mississippi</option>
-                                                <option value="MO">Missouri</option>
-                                                <option value="MT">Montana</option>
-                                                <option value="NE">Nebraska</option>
-                                                <option value="NV">Nevada</option>
-                                                <option value="NH">New Hampshire</option>
-                                                <option value="NJ">New Jersey</option>
-                                                <option value="NM">New Mexico</option>
-                                                <option value="NY">New York</option>
-                                                <option value="NC">North Carolina</option>
-                                                <option value="ND">North Dakota</option>
-                                                <option value="OH">Ohio</option>
-                                                <option value="OK">Oklahoma</option>
-                                                <option value="OR">Oregon</option>
-                                                <option value="PA">Pennsylvania</option>
-                                                <option value="RI">Rhode Island</option>
-                                                <option value="SC">South Carolina</option>
-                                                <option value="SD">South Dakota</option>
-                                                <option value="TN">Tennessee</option>
-                                                <option value="TX">Texas</option>
-                                                <option value="UT">Utah</option>
-                                                <option value="VT">Vermont</option>
-                                                <option value="VA">Virginia</option>
-                                                <option value="WA">Washington</option>
-                                                <option value="WV">West Virginia</option>
-                                                <option value="WI">Wisconsin</option>
-                                                <option value="WY">Wyoming</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-3">
-                                        <div class="primary_input mb-25">
-                                            <label class="primary_input_label">Art Services</label>
-
-                                            <select class="primary_select mb-25" name="art_services" id="art_services">
-                                                <option value="">Select Art Services</option>
-                                                <option value="Commissions">Commissions</option>
-                                                <option value="Murals">Murals</option>
-                                                <option value="Art Classes">Art Classes</option>
-                                                <option value="Live Art for Events">Live Art for Events</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-3">
-                                        <div class="primary_input mb-25">
-                                            <label class="primary_input_label">Category</label>
-
-                                            <select class="primary_select mb-25" name="category" id="category">
-                                                <option value="">Select Category</option>
-                                                <option value="All">All</option>
-                                                <option value="Paintings">Paintings</option>
-                                                <option value="Drawing">Drawing</option>
-                                                <option value="Mixed Media">Mixed Media</option>
-                                                <option value="Sculpture">Sculpture</option>
-                                                <option value="Other">Other</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="col-lg-3">
-                                        <div class="primary_input mb-25">
-                                            <label class="primary_input_label">Style</label>
-
-                                            <select class="primary_select mb-25" name="style" id="style">
-                                                <option value="">Select Style</option>
-
-                                                <option value="Abstract Art">Abstract Art</option>
-                                                <option value="Art Deco">Art Deco</option>
-                                                <option value="Art Nouveau">Art Nouveau</option>
-                                                <option value="Baroque">Baroque</option>
-                                                <option value="Bauhaus">Bauhaus</option>
-                                                <option value="Classicism">Classicism</option>
-                                                <option value="Contemporary Art">Contemporary Art</option>
-                                                <option value="Cubism">Cubism</option>
-                                                <option value="Dadaism">Dadaism</option>
-                                                <option value="Expressionism">Expressionism</option>
-                                                <option value="Fauvism">Fauvism</option>
-                                                <option value="Figurative">Figurative</option>
-                                                <option value="Harlem Renaissance">Harlem Renaissance</option>
-                                                <option value="Impressionism">Impressionism</option>
-                                                <option value="Minimalism">Minimalism</option>
-                                                <option value="Neoclassicism">Neoclassicism</option>
-                                                <option value="Neo-Impressionism">Neo-Impressionism</option>
-                                                <option value="Pop Art">Pop Art</option>
-                                                <option value="Post-Impressionism">Post-Impressionism</option>
-                                                <option value="Realism">Realism</option>
-                                                <option value="Surrealism">Surrealism</option>
-                                                <option value="Other">Other</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-3">
-                                        <div class="primary_input mb-25">
-                                            <label class="primary_input_label">Subject</label>
-
-                                            <select class="primary_select mb-25" name="subject" id="subject">
-                                                <option value="">Select Subject</option>
-
-                                                <option value="Abstract">Abstract</option>
-                                                <option value="Landscape">Landscape</option>
-                                                <option value="Pop Culture">Pop Culture</option>
-                                                <option value="People">People</option>
-                                                <option value="Animal">Animal</option>
-                                                <option value="Floral">Floral</option>
-                                                <option value="Nature">Nature</option>
-                                                <option value="Seascape">Seascape</option>
-                                                <option value="Dogs">Dogs</option>
-                                                <option value="Cats">Cats</option>
-                                                <option value="Religious">Religious</option>
-                                                <option value="Love">Love</option>
-                                                <option value="Nude">Nude</option>
-                                                <option value="Geometric">Geometric</option>
-                                                <option value="Music">Music</option>
-                                                <option value="Food/Drinks">Food/Drinks</option>
-                                                <option value="Medical">Medical</option>
-                                                <option value="Sports">Sports</option>
-                                                <option value="Men">Men</option>
-                                                <option value="Women">Women</option>
-                                                <option value="Buildings">Buildings</option>
-                                                <option value="Cartoon">Cartoon</option>
-                                                <option value="Other">Other</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-3">
-                                        <div class="primary_input mb-25">
-                                            <label class="primary_input_label">Medium</label>
-
-                                            <select class="primary_select mb-25" name="medium" id="medium">
-                                                <option value="">Select Medium</option>
-
-                                                <option value="Acrylic">Acrylic</option>
-                                                <option value="Oil">Oil</option>
-                                                <option value="Watercolor">Watercolor</option>
-                                                <option value="Ink">Ink</option>
-                                                <option value="Ceramic">Ceramic</option>
-                                                <option value="Other">Other</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-3">
-                                        <div class="primary_input mb-25">
-                                            <label class="primary_input_label">Material</label>
-
-                                            <select class="primary_select mb-25" name="material" id="material">
-                                                <option value="">Select Material</option>
-
-                                                <option value="Canvas">Canvas</option>
-                                                <option value="Paper">Paper</option>
-                                                <option value="Wood">Wood</option>
-                                                <option value="Metal">Metal</option>
-                                                <option value="Other">Other</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-3">
-                                        <div class="primary_input mb-25">
-                                            <label class="primary_input_label">Price</label>
-
-                                            <input 
-                                                type="range" 
-                                                class="primary_range"
-                                                id="price"
-                                                name="price"
-                                                min="0"
-                                                max="10000"
-                                                step="50"
-                                                value="5000"
-                                            >
-
-                                            <div class="mt-10">
-                                                Up to: <strong>$<span id="price_value">5000</span></strong>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3">
-                                        <div class="primary_input mb-25">
-                                            <label class="primary_input_label">Color Palette</label>
-
-                                            <!-- Single color selection -->
-                                            <input 
-                                                type="color" 
-                                                class="form-control"
-                                                name="palette_color"
-                                                id="palette_color"
-                                                value="#cccccc"
-                                            >
-
-                                            <small class="text-muted">
-                                                Select one color from the palette
-                                            </small>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3">
-                                        <div class="primary_input mb-25">
-                                            <label class="primary_input_label">Size</label>
-
-                                            <select class="primary_select mb-25" name="size" id="size">
-                                                <option value="">Select Size</option>
-
-                                                <option value="Small">Small (&lt; 20in)</option>
-                                                <option value="Medium">Med (20–38in)</option>
-                                                <option value="Large">Large (38–60in)</option>
-                                                <option value="X Large">X Large (&gt; 60in)</option>
-                                            </select>
-                                        </div>
-                                    </div>
+                                    
                                     <div class="col-lg-3">
                                         <div class="primary_input mb-15">
                                             <label class="primary_input_label" for="">
@@ -1068,7 +826,249 @@ $LanguageList = getLanguageList();
                                                 <div class="col-lg-6" id="gst_list_div">
                                                 </div>
                                             @endif
+                                            <div class="col-lg-3">
+                                            <div class="primary_input mb-25">
+                                                <label class="primary_input_label">Location</label>
 
+                                                <select class="primary_select mb-25" name="state" id="state">
+                                                    <option value="">Select State</option>
+                                                    <option value="AL">Alabama</option>
+                                                    <option value="AK">Alaska</option>
+                                                    <option value="AZ">Arizona</option>
+                                                    <option value="AR">Arkansas</option>
+                                                    <option value="CA">California</option>
+                                                    <option value="CO">Colorado</option>
+                                                    <option value="CT">Connecticut</option>
+                                                    <option value="DE">Delaware</option>
+                                                    <option value="FL">Florida</option>
+                                                    <option value="GA">Georgia</option>
+                                                    <option value="HI">Hawaii</option>
+                                                    <option value="ID">Idaho</option>
+                                                    <option value="IL">Illinois</option>
+                                                    <option value="IN">Indiana</option>
+                                                    <option value="IA">Iowa</option>
+                                                    <option value="KS">Kansas</option>
+                                                    <option value="KY">Kentucky</option>
+                                                    <option value="LA">Louisiana</option>
+                                                    <option value="ME">Maine</option>
+                                                    <option value="MD">Maryland</option>
+                                                    <option value="MA">Massachusetts</option>
+                                                    <option value="MI">Michigan</option>
+                                                    <option value="MN">Minnesota</option>
+                                                    <option value="MS">Mississippi</option>
+                                                    <option value="MO">Missouri</option>
+                                                    <option value="MT">Montana</option>
+                                                    <option value="NE">Nebraska</option>
+                                                    <option value="NV">Nevada</option>
+                                                    <option value="NH">New Hampshire</option>
+                                                    <option value="NJ">New Jersey</option>
+                                                    <option value="NM">New Mexico</option>
+                                                    <option value="NY">New York</option>
+                                                    <option value="NC">North Carolina</option>
+                                                    <option value="ND">North Dakota</option>
+                                                    <option value="OH">Ohio</option>
+                                                    <option value="OK">Oklahoma</option>
+                                                    <option value="OR">Oregon</option>
+                                                    <option value="PA">Pennsylvania</option>
+                                                    <option value="RI">Rhode Island</option>
+                                                    <option value="SC">South Carolina</option>
+                                                    <option value="SD">South Dakota</option>
+                                                    <option value="TN">Tennessee</option>
+                                                    <option value="TX">Texas</option>
+                                                    <option value="UT">Utah</option>
+                                                    <option value="VT">Vermont</option>
+                                                    <option value="VA">Virginia</option>
+                                                    <option value="WA">Washington</option>
+                                                    <option value="WV">West Virginia</option>
+                                                    <option value="WI">Wisconsin</option>
+                                                    <option value="WY">Wyoming</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3">
+                                            <div class="primary_input mb-25">
+                                                <label class="primary_input_label">Art Services</label>
+
+                                                <select class="primary_select mb-25" name="art_services" id="art_services">
+                                                    <option value="">Select Art Services</option>
+                                                    <option value="Commissions">Commissions</option>
+                                                    <option value="Murals">Murals</option>
+                                                    <option value="Art Classes">Art Classes</option>
+                                                    <option value="Live Art for Events">Live Art for Events</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3">
+                                            <div class="primary_input mb-25">
+                                                <label class="primary_input_label">Category</label>
+
+                                                <select class="primary_select mb-25" name="category" id="category">
+                                                    <option value="">Select Category</option>
+                                                    <option value="All">All</option>
+                                                    <option value="Paintings">Paintings</option>
+                                                    <option value="Drawing">Drawing</option>
+                                                    <option value="Mixed Media">Mixed Media</option>
+                                                    <option value="Sculpture">Sculpture</option>
+                                                    <option value="Other">Other</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-lg-3">
+                                            <div class="primary_input mb-25">
+                                                <label class="primary_input_label">Style</label>
+
+                                                <select class="primary_select mb-25" name="style" id="style">
+                                                    <option value="">Select Style</option>
+
+                                                    <option value="Abstract Art">Abstract Art</option>
+                                                    <option value="Art Deco">Art Deco</option>
+                                                    <option value="Art Nouveau">Art Nouveau</option>
+                                                    <option value="Baroque">Baroque</option>
+                                                    <option value="Bauhaus">Bauhaus</option>
+                                                    <option value="Classicism">Classicism</option>
+                                                    <option value="Contemporary Art">Contemporary Art</option>
+                                                    <option value="Cubism">Cubism</option>
+                                                    <option value="Dadaism">Dadaism</option>
+                                                    <option value="Expressionism">Expressionism</option>
+                                                    <option value="Fauvism">Fauvism</option>
+                                                    <option value="Figurative">Figurative</option>
+                                                    <option value="Harlem Renaissance">Harlem Renaissance</option>
+                                                    <option value="Impressionism">Impressionism</option>
+                                                    <option value="Minimalism">Minimalism</option>
+                                                    <option value="Neoclassicism">Neoclassicism</option>
+                                                    <option value="Neo-Impressionism">Neo-Impressionism</option>
+                                                    <option value="Pop Art">Pop Art</option>
+                                                    <option value="Post-Impressionism">Post-Impressionism</option>
+                                                    <option value="Realism">Realism</option>
+                                                    <option value="Surrealism">Surrealism</option>
+                                                    <option value="Other">Other</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3">
+                                            <div class="primary_input mb-25">
+                                                <label class="primary_input_label">Subject</label>
+
+                                                <select class="primary_select mb-25" name="subject" id="subject">
+                                                    <option value="">Select Subject</option>
+
+                                                    <option value="Abstract">Abstract</option>
+                                                    <option value="Landscape">Landscape</option>
+                                                    <option value="Pop Culture">Pop Culture</option>
+                                                    <option value="People">People</option>
+                                                    <option value="Animal">Animal</option>
+                                                    <option value="Floral">Floral</option>
+                                                    <option value="Nature">Nature</option>
+                                                    <option value="Seascape">Seascape</option>
+                                                    <option value="Dogs">Dogs</option>
+                                                    <option value="Cats">Cats</option>
+                                                    <option value="Religious">Religious</option>
+                                                    <option value="Love">Love</option>
+                                                    <option value="Nude">Nude</option>
+                                                    <option value="Geometric">Geometric</option>
+                                                    <option value="Music">Music</option>
+                                                    <option value="Food/Drinks">Food/Drinks</option>
+                                                    <option value="Medical">Medical</option>
+                                                    <option value="Sports">Sports</option>
+                                                    <option value="Men">Men</option>
+                                                    <option value="Women">Women</option>
+                                                    <option value="Buildings">Buildings</option>
+                                                    <option value="Cartoon">Cartoon</option>
+                                                    <option value="Other">Other</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3">
+                                            <div class="primary_input mb-25">
+                                                <label class="primary_input_label">Medium</label>
+
+                                                <select class="primary_select mb-25" name="medium" id="medium">
+                                                    <option value="">Select Medium</option>
+
+                                                    <option value="Acrylic">Acrylic</option>
+                                                    <option value="Oil">Oil</option>
+                                                    <option value="Watercolor">Watercolor</option>
+                                                    <option value="Ink">Ink</option>
+                                                    <option value="Ceramic">Ceramic</option>
+                                                    <option value="Other">Other</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3">
+                                            <div class="primary_input mb-25">
+                                                <label class="primary_input_label">Material</label>
+
+                                                <select class="primary_select mb-25" name="material" id="material">
+                                                    <option value="">Select Material</option>
+
+                                                    <option value="Canvas">Canvas</option>
+                                                    <option value="Paper">Paper</option>
+                                                    <option value="Wood">Wood</option>
+                                                    <option value="Metal">Metal</option>
+                                                    <option value="Other">Other</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3">
+                                            <div class="primary_input mb-25">
+                                                <label class="primary_input_label">Price</label>
+
+                                                <input 
+                                                    type="range" 
+                                                    class="primary_range"
+                                                    id="price"
+                                                    name="price"
+                                                    min="0"
+                                                    max="10000"
+                                                    step="50"
+                                                    value="5000"
+                                                >
+
+                                                <div class="mt-10">
+                                                    Up to: <strong>$<span id="price_value">5000</span></strong>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="primary_input mb-25">
+                                                <label class="primary_input_label">Color Palette</label>
+
+                                                <!-- Single color selection -->
+                                                <input 
+                                                    type="color" 
+                                                    class="form-control"
+                                                    name="palette_color"
+                                                    id="palette_color"
+                                                    value="#cccccc"
+                                                >
+
+                                                <small class="text-muted">
+                                                    Select one color from the palette
+                                                </small>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="primary_input mb-25">
+                                                <label class="primary_input_label">Size</label>
+
+                                                <select class="primary_select mb-25" name="size" id="size">
+                                                    <option value="">Select Size</option>
+
+                                                    <option value="Small">Small (&lt; 20in)</option>
+                                                    <option value="Medium">Med (20–38in)</option>
+                                                    <option value="Large">Large (38–60in)</option>
+                                                    <option value="X Large">X Large (&gt; 60in)</option>
+                                                </select>
+                                            </div>
+                                        </div>
                                             @if (isModuleActive('WholeSale'))
                                                 <div class="col-lg-12 whole_sale_info_add" id="whole_sale_info_add">
                                                     <h3 class="mb-2 mr-30">{{ __('wholesale.Wholesale Price') }}</h3>
@@ -1109,6 +1109,7 @@ $LanguageList = getLanguageList();
                                                             </li>
                                                         @endforeach
                                                     </ul>
+                                                    
                                                     <div class="tab-content">
                                                         @foreach ($LanguageList as $key => $language)
                                                             <div role="tabpanel" class="tab-pane fade @if (auth()->user()->lang_code == $language->code) show active @endif" id="pelement{{$language->code}}">

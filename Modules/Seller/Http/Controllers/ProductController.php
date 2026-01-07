@@ -277,6 +277,7 @@ class ProductController extends Controller
         try{
             $data['product'] = $this->productService->findBySellerProductId($id);
             $data['skus'] = $this->productService->getThisSKUProduct($id);
+            $data['product']['product'] = @$data['product']->product;
             $totalWholesalePrice = '';
             if(isModuleActive('WholeSale')){
                 if (@$data['product']->product->product_type ==1){
@@ -337,6 +338,35 @@ class ProductController extends Controller
         ]);
         try{
             $this->productService->update($request->except('_token'),$id);
+            $product = Product::where('id', $request->p_id)
+                ->where('created_by', auth()->id())
+                ->first();
+
+            if ($product) {
+                // Fields to update
+                $fields = [
+                    'state' => 'location',
+                    'art_services' => 'art_services',
+                    'category' => 'category',
+                    'style' => 'style',
+                    'subject' => 'subject',
+                    'medium' => 'medium',
+                    'material' => 'material',
+                    'palette_color' => 'palette_color',
+                    'size' => 'size',
+                    // Add more fields as needed
+                ];
+
+                // Loop through the fields and update the product if the field exists in the request
+                foreach ($fields as $requestField => $dataField) {
+                    if ($request->has($requestField)) {
+                        $product->$dataField = $request->input($requestField);
+                    }
+                }
+
+                // Save the updated product
+                $product->save();
+            }
             Toastr::success(__('common.updated_successfully'),__('common.success'));
             LogActivity::successLog('product updated.');
             return redirect()->route('seller.product.index');
