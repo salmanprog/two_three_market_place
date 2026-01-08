@@ -10,7 +10,7 @@
                 $old_categories = \DB::table('categories')->whereRaw("id in ('". implode("','",old('category_ids'))."')")->get();
             @endphp
             @foreach($old_categories as $category)
-                <option value="{{$category->id}}" selected>{{$category->name}}</option>
+                <option value="{{$category->id}}" selected>{{$category->name}} {{$category->id}}</option>
             @endforeach
         @elseif(isset($product_categories))
             @foreach($product_categories as $category)

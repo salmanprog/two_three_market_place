@@ -608,7 +608,16 @@
                                         </div>
                                         <div class="product_details_dec_body">
                                             <div class="single_desc style2 mb_20">
-                                                <p class="f_w_500 m-0">{{ __('common.brand') }}: {{@$product->product->brand->name}}</p>
+                                            <p class="f_w_500 m-0">{{ __('Location') }}: {{@$product->product->location}}</p>
+                                            <p class="f_w_500 m-0">{{ __('Art Services') }}: {{@$product->product->art_services}}</p>
+                                            <p class="f_w_500 m-0">{{ __('Category') }}: {{@$product->product->category}}</p>
+                                            <p class="f_w_500 m-0">{{ __('Style') }}: {{@$product->product->style}}</p>
+                                            <p class="f_w_500 m-0">{{ __('Subject') }}: {{@$product->product->subject}}</p>
+                                            <p class="f_w_500 m-0">{{ __('Medium') }}: {{@$product->product->medium}}</p>
+                                            <p class="f_w_500 m-0">{{ __('Material') }}: {{@$product->product->material}}</p>
+                                            <p class="f_w_500 m-0">{{ __('Color') }}: {{@$product->product->palette_color}}</p>
+                                            <p class="f_w_500 m-0">{{ __('Size') }}: {{@$product->product->size}}</p>
+                                                <!-- <p class="f_w_500 m-0">{{ __('common.brand') }}: {{@$product->product->brand->name}}</p>
                                                 <p class="f_w_500 m-0">{{ __('common.model_number') }}: {{@$product->product->model_number}}</p>
                                                 <p class="f_w_500 m-0">{{ __('common.availability') }}:
                                                     @if ($product->stock_manage == 1 && $product->skus->where('status',1)->first()->product_stock >= $product->product->minimum_order_qty)
@@ -621,7 +630,7 @@
                                                 </p>
                                                 <p class="f_w_500 m-0">{{ __('common.minimum_order_quantity') }}: {{getNumberTranslate(@$product->product->minimum_order_qty)}}</p>
                                                 <p class="f_w_500 m-0">{{ __('common.maximum_order_quantity') }}: {{getNumberTranslate(@$product->product->max_order_qty)}}</p>
-                                                <p class="f_w_500 m-0">{{ __('common.listed_date') }}: {{dateConvert(@$product->product->created_at)}}</p>
+                                                <p class="f_w_500 m-0">{{ __('common.listed_date') }}: {{dateConvert(@$product->product->created_at)}}</p> -->
                                             </div>
                                             @php
                                                 echo $product->product->specification;

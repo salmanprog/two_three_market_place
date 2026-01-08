@@ -343,7 +343,7 @@ $LanguageList = getLanguageList();
                                                         </h3>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-12">
+                                                <div class="col-lg-12" style="display:none">
                                                     <input type="hidden" value="1" id="product_type">
                                                     <div class="primary_input">
                                                         <label class="primary_input_label" for="">{{ __('common.type') }} <span
@@ -468,20 +468,20 @@ $LanguageList = getLanguageList();
                                                             class="text-danger">{{$errors->first('model_number')}}</span>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-3">
+                                                <div class="col-lg-3" style="display:none">
                                                     <div class="primary_input mb-25">
                                                         <label class="primary_input_label"
                                                             for="">{{ __('product.category') }} <span
                                                                 class="text-danger">*</span></label>
                                                         <select name="category_ids[]" id="category_id"
                                                             class="mb-15 category" @if(app('general_setting')->multi_category == 1) multiple @endif required="1">
-
+                                                            <option value="6">-Artists</option>    
                                                         </select>
                                                         <span class="text-danger" id="error_category_ids">{{$errors->first('category_id')}}</span>
                                                     </div>
                                                 </div>
 
-                                                <div class="col-lg-3">
+                                                <div class="col-lg-3" style="display:none">
                                                     <div class="primary_input mb-25">
                                                         <label class="primary_input_label"
                                                             for="">{{ __('product.brand') }}</label>
@@ -494,24 +494,25 @@ $LanguageList = getLanguageList();
                                                         <span class="text-danger">{{$errors->first('brand_id')}}</span>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-3">
+                                                <div class="col-lg-3" style="display:none">
                                                     <div class="primary_input mb-25">
                                                         <label class="primary_input_label"
                                                             for="">{{ __('product.unit') }} <span
                                                                 class="text-danger">*</span></label>
                                                         <select name="unit_type_id" id="unit_type_id"
                                                             class="primary_select mb-15 unit">
-                                                            <option disabled selected>{{__('product.select_unit')}}
+                                                            <option value="1">art</option>
+                                                            <!-- <option disabled selected>{{__('product.select_unit')}}
                                                             </option>
                                                             @foreach($units as $key => $unit)
                                                             <option value="{{$unit->id}}">{{$unit->name}}</option>
-                                                            @endforeach
+                                                            @endforeach -->
                                                         </select>
                                                         <span
                                                             class="text-danger" id="error_unit_type">{{$errors->first('unit_type_id')}}</span>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-3">
+                                                <div class="col-lg-3" style="display:none">
                                                     <div class="primary_input mb-15">
                                                         <label class="primary_input_label"
                                                             for="">{{__('product.barcode_type')}}</label>
@@ -644,7 +645,7 @@ $LanguageList = getLanguageList();
                                                     </div>
                                                 </div>
 
-                                                <div class="col-xl-12">
+                                                <div class="col-xl-12" style="display:none">
                                                     <div class="primary_input">
                                                         <ul id="theme_nav" class="permission_list sms_list ">
                                                             <li>
@@ -661,7 +662,7 @@ $LanguageList = getLanguageList();
                                                         </ul>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-12  weight_height_div">
+                                                <div class="col-lg-12  weight_height_div" style="display:none">
                                                     <div class="main-title d-flex">
                                                         <h3 class="mb-3 mr-30">{{ __('product.weight_height_info') }}</h3>
                                                     </div>
@@ -704,7 +705,7 @@ $LanguageList = getLanguageList();
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div id="phisical_shipping_div" class="col-lg-12">
+                                                <div id="phisical_shipping_div" class="col-lg-12" style="display:none">
                                                     <div class="row">
 
                                                         <div class="col-lg-12">
@@ -759,7 +760,7 @@ $LanguageList = getLanguageList();
                                                             class="text-danger" id="error_selling_price">{{$errors->first('selling_price')}}</span>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-3">
+                                                <div class="col-lg-3" style="display:none">
                                                     <div class="primary_input mb-15">
                                                         <label class="primary_input_label" for="">
                                                             {{__("product.discount")}} </label>
@@ -769,7 +770,7 @@ $LanguageList = getLanguageList();
                                                         <span class="text-danger" id="error_discunt">{{$errors->first('discount')}}</span>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-3">
+                                                <div class="col-lg-3" style="display:none">
                                                     <div class="primary_input mb-25">
                                                         <label class="primary_input_label"
                                                             for="">{{ __('product.discount_type') }}</label>
@@ -781,7 +782,7 @@ $LanguageList = getLanguageList();
                                                     </div>
                                                 </div>
 
-                                                <div class="col-lg-6" id="stock_manage_div">
+                                                <div class="col-lg-6" id="stock_manage_div" style="display:none">
                                                     <div class="primary_input mb-25">
                                                         <label class="primary_input_label" for="stock_manage">{{__('product.stock_manage') }}</label>
                                                         <select class="primary_select mb-25" name="stock_manage" id="stock_manage">
@@ -799,7 +800,7 @@ $LanguageList = getLanguageList();
                                                 </div>
 
                                                 @if (app('gst_config')['enable_gst'] == "only_tax")
-                                                <div class="col-lg-6">
+                                                <div class="col-lg-6" style="display:none">
                                                     <div class="primary_input mb-25">
                                                         <label class="primary_input_label" for="tax_id">{{ __('common.tax')}}</label>
                                                         <select class="primary_select mb-25" name="tax_id" id="tax_id">
@@ -811,7 +812,7 @@ $LanguageList = getLanguageList();
                                                     </div>
                                                 </div>
                                                 @else
-                                                <div class="col-lg-6">
+                                                <div class="col-lg-6" style="display:none">
                                                     <div class="primary_input mb-25">
                                                         <label class="primary_input_label" for="">{{ __('GST/TAX Group')
                                                             }}</label>
@@ -1238,13 +1239,13 @@ $LanguageList = getLanguageList();
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-lg-12">
+                                                <div class="col-lg-12" style="display:none">
                                                     <div class="main-title d-flex">
                                                         <h3 class="mb-3 mr-30">{{ __('product.pdf_specifications') }}
                                                         </h3>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-12">
+                                                <div class="col-lg-12" style="display:none">
                                                     <div class="primary_input mb-25">
                                                         <label class="primary_input_label" for="pdf_place">{{__('product.pdf_specifications')}}</label>
                                                         <div class="primary_file_uploader">
@@ -1257,13 +1258,13 @@ $LanguageList = getLanguageList();
                                                         <span class="text-danger">{{$errors->first('pdf_file')}}</span>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-12">
+                                                <div class="col-lg-12" style="display:none">
                                                     <div class="main-title d-flex">
                                                         <h3 class="mb-3 mr-30">{{ __('product.product_videos_info') }}
                                                         </h3>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-12">
+                                                <div class="col-lg-12" style="display:none">
                                                     <div class="primary_input mb-25">
                                                         <label class="primary_input_label" for="video_provider">{{ __('product.video_provider') }}</label>
                                                         <select class="primary_select mb-25" name="video_provider" id="video_provider">
@@ -1272,7 +1273,7 @@ $LanguageList = getLanguageList();
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-12">
+                                                <div class="col-lg-12" style="display:none">
                                                     <div class="primary_input mb-15">
                                                         <label class="primary_input_label" for="video_link">{{__("product.video_link")}}</label>
                                                         <input class="primary_input_field" id="video_link" name="video_link" placeholder="{{__("product.video_link")}}" type="text" value="{{old('video_link')}}">
@@ -1307,7 +1308,7 @@ $LanguageList = getLanguageList();
                                                         <span class="text-danger" id="status_error"></span>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-12">
+                                                <div class="col-lg-12" style="display:none">
                                                     <div class="primary_input">
                                                         <label class="primary_input_label" for="">{{ __('common.make_Display_in_details_page') }} <span class="text-danger">*</span></label>
                                                         <ul id="theme_nav" class="permission_list sms_list ">
@@ -2055,7 +2056,7 @@ $LanguageList = getLanguageList();
         });
 
         dynamicSelect2WithAjax("#brand_id", "{{route('product.brands.get-by-ajax')}}", "GET");
-        dynamicSelect2WithAjax("#category_id", "{{url('/products/get-category-data')}}", "GET");
+        //dynamicSelect2WithAjax("#category_id", "{{url('/products/get-category-data')}}", "GET");
         dynamicSelect2WithAjax("#main_product_for_select", "{{url('/products/get-by-ajax')}}", "GET");
 
         @if(isModuleActive('FrontendMultiLang'))
