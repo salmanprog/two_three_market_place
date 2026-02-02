@@ -417,6 +417,7 @@
             <div class="row row-gap-20">
               <!-- Artist Dropdown -->
               <div class="col-md-3">
+                <label class="fw-600 mb-2 text-uppercase" style="font-size: 12px;">Artist</label>
                 <div class="position-relative w-100">
                   <select class="filter-artist-select primary-font" name="artist" aria-label="Artist">
                     <option value="">Artist</option>
@@ -430,6 +431,7 @@
 
               <!-- Art Dropdown -->
               <div class="col-md-3">
+                <label class="fw-600 mb-2 text-uppercase" style="font-size: 12px;">Art</label>
                 <div class="position-relative w-100">
                   <select class="filter-artist-select primary-font" name="art" aria-label="Art">
                     <option value="">Art</option>
@@ -446,6 +448,7 @@
 
               <!-- Location - State -->
               <div class="col-md-3">
+                <label class="fw-600 mb-2 text-uppercase" style="font-size: 12px;">Location</label>
                 <div class="position-relative w-100">
                   <select class="filter-artist-select primary-font" name="state" id="state" aria-label="State">
                     <option value="">Select State</option>
@@ -506,6 +509,7 @@
 
               <!-- Type in your area -->
               <div class="col-md-3">
+                <label class="fw-600 mb-2 text-uppercase" style="font-size: 12px;">Area</label>
                 <div class="position-relative w-100">
                   <input type="text" name="area" class="primary-font filter-artist-select" placeholder="Type in your area">
                 </div>
@@ -513,6 +517,7 @@
 
               <!-- Art Services -->
               <div class="col-md-3">
+                <label class="fw-600 mb-2 text-uppercase" style="font-size: 12px;">Art Services</label>
                 <div class="position-relative w-100">
                   <select class="filter-artist-select primary-font" name="art_service" aria-label="Art Services">
                     <option value="">Art Services</option>
@@ -527,6 +532,7 @@
 
               <!-- Category -->
               <div class="col-md-3">
+                <label class="fw-600 mb-2 text-uppercase" style="font-size: 12px;">Category</label>
                 <div class="position-relative w-100">
                   <select class="filter-artist-select primary-font" name="category" aria-label="Category">
                     <option value="">Category</option>
@@ -543,6 +549,7 @@
 
               <!-- Style -->
               <div class="col-md-3">
+                <label class="fw-600 mb-2 text-uppercase" style="font-size: 12px;">Style</label>
                 <div class="position-relative w-100">
                   <select class="filter-artist-select primary-font" name="style" aria-label="Style">
                     <option value="">Style</option>
@@ -575,6 +582,7 @@
 
               <!-- Subject -->
               <div class="col-md-3">
+                <label class="fw-600 mb-2 text-uppercase" style="font-size: 12px;">Subject</label>
                 <div class="position-relative w-100">
                   <select class="filter-artist-select primary-font" name="subject" aria-label="Subject">
                     <option value="">Subject</option>
@@ -608,6 +616,7 @@
 
               <!-- Medium -->
               <div class="col-md-3">
+                <label class="fw-600 mb-2 text-uppercase" style="font-size: 12px;">Medium</label>
                 <div class="position-relative w-100">
                   <select class="filter-artist-select primary-font" name="medium" aria-label="Medium">
                     <option value="">Medium</option>
@@ -624,6 +633,7 @@
 
               <!-- Material -->
               <div class="col-md-3">
+                <label class="fw-600 mb-2 text-uppercase" style="font-size: 12px;">Material</label>
                 <div class="position-relative w-100">
                   <select class="filter-artist-select primary-font" name="material" aria-label="Material">
                     <option value="">Material</option>
@@ -638,6 +648,7 @@
               </div>
               <!-- Price -->
               <div class="col-md-3">
+                <label class="fw-600 mb-2 text-uppercase" style="font-size: 12px;">Price</label>
                 <div class="filter-artist-select primary-font">
 
                     <input 
@@ -649,13 +660,13 @@
                     value="2500"
                     id="priceRange"
                     >
-                    
                     <p class="mt-2 fw-semibold">
                         Up to: <span class="text-primary">$<span id="priceValue">2500</span></span>
                     </p>
                 </div>
               </div>
               <div class="col-md-3">
+                  <label class="fw-600 mb-2 text-uppercase" style="font-size: 12px;">Size</label>
                 <div class="position-relative w-100">
                   <select class="filter-artist-select primary-font" name="size" aria-label="Size">
                     <option value="small">Small (< 20in)</option>
@@ -667,8 +678,8 @@
                 </div>
               </div>
               <div class="col-md-3">
+                 <label class="fw-600 mb-2 text-uppercase" style="font-size: 12px;">Select Color</label>
                 <div class="filter-artist-select primary-font">
-                    <label for="" class="">Select Color</label>
                     <input type="color">
                 </div>
             </div>
