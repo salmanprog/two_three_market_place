@@ -128,7 +128,6 @@ Auction Product Gallery | {{ config('app.name') }}
             <div class="row align-items-center">
                 <div class="col-12 text-center">
                     <h1 class="title">Our Story</h1>
-                    
                 </div>
                 
                 <div class="col-lg-6 col-md-12 mb-5 mb-lg-0">
