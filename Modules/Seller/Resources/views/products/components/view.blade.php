@@ -28,12 +28,12 @@
                                         <span>{{__('product.SKU')}} </span>
                                         <span>: {{ $product->product->skus->first()->sku }}</span>
                                     </div>
-                                    <div class="products_details_single">
+                                    <div class="products_details_single" style="display:none">
                                         <span>{{__('product.product_type')}} </span>
                                         <span>: {{$product->product->product_type==1 ? __("product.physical_product"):__("product.digital_product")}}</span>
 
                                     </div>
-                                    <div class="products_details_single">
+                                    <div class="products_details_single" style="display:none">
                                         <span>{{__('product.category')}} </span>
                                         <span>:
                                             @foreach(@$product->product->categories as $category)
@@ -42,26 +42,30 @@
                                         </span>
                                     </div>
                                     <div class="products_details_single">
+                                        <span>{{__('Location')}}</span>
+                                        <span>: {{@$product->product->location}}</span>
+                                    </div>
+                                    <div class="products_details_single" style="display:none">
                                         <span>{{__('product.brand')}}</span>
                                         <span>: {{@$product->product->brand->name}}</span>
                                     </div>
-                                    <div class="products_details_single">
+                                    <div class="products_details_single" style="display:none">
                                         <span>{{__('product.barcode_type')}} </span>
                                         <span>: {{$product->product->barcode_type }}</span>
                                     </div>
-                                    <div class="products_details_single">
+                                    <div class="products_details_single" style="display:none">
                                         <span>{{__('product.unit')}} </span>
                                         <span>: {{@$product->product->unit_type->name}}</span>
                                     </div>
-                                    <div class="products_details_single">
+                                    <div class="products_details_single" style="display:none">
                                         <span>{{__('product.minimum_order_qty')}} </span>
                                         <span>: {{$product->product->minimum_order_qty}} <small>/{{@$product->productSKU->product->unit_type->name}}</small> </span>
                                     </div>
-                                    <div class="products_details_single">
+                                    <div class="products_details_single" style="display:none">
                                         <span>{{__('product.unit_cost')}} </span>
                                         <span>: {{single_price($product->purchase_price)}}</span>
                                     </div>
-                                    <div class="products_details_single">
+                                    <div class="products_details_single" style="display:none">
                                         <span>{{__('product.tax')}}  </span>
                                         <span>: {{ ($product->tax_type == 1) ? single_price($product->tax) : $product->tax. "%" }}</span>
                                     </div>
@@ -72,8 +76,39 @@
                                         <span>: {{ single_price($product->skus->first()->selling_price) }}</span>
                                     </div>
                                     @endif
-
                                     <div class="products_details_single">
+                                        <span>{{__('Art Services')}}</span>
+                                        <span>: {{@$product->product->art_services}}</span>
+                                    </div>
+                                    <div class="products_details_single">
+                                        <span>{{__('Category')}}</span>
+                                        <span>: {{@$product->product->category}}</span>
+                                    </div>
+                                    <div class="products_details_single">
+                                        <span>{{__('Style')}}</span>
+                                        <span>: {{@$product->product->style}}</span>
+                                    </div>
+                                    <div class="products_details_single">
+                                        <span>{{__('Subject')}}</span>
+                                        <span>: {{@$product->product->subject}}</span>
+                                    </div>
+                                    <div class="products_details_single">
+                                        <span>{{__('Medium')}}</span>
+                                        <span>: {{@$product->product->medium}}</span>
+                                    </div>
+                                    <div class="products_details_single">
+                                        <span>{{__('Meterial')}}</span>
+                                        <span>: {{@$product->product->material}}</span>
+                                    </div>
+                                    <div class="products_details_single" style="display:none">
+                                        <span>{{__('Color')}}</span>
+                                        <span>: {{@$product->product->pallete_color}}</span>
+                                    </div>
+                                    <div class="products_details_single">
+                                        <span>{{__('Size')}}</span>
+                                        <span>: {{@$product->product->size}}</span>
+                                    </div>
+                                    <div class="products_details_single" style="display:none">
                                         <span>{{__('product.discount')}}  </span>
                                         <span>: {{ ($product->discount_type == 1) ? single_price($product->discount) : $product->discount. "%" }}</span>
                                     </div>
@@ -99,7 +134,7 @@
                             </div>
                         @endif
                         @if (count($product->skus) > 0)
-                            <div class="col-12 mb-40">
+                            <div class="col-12 mb-40" style="display:none">
                                 <!-- content  -->
                                 <div class="QA_section3 QA_section_heading_custom">
                                     <div class="box_header m-0">

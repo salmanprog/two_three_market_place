@@ -340,6 +340,7 @@ Route::get('/translate', [DemoController::class, 'translate'])->name('translateD
 
 // Shop page routes
 Route::get('/shop', [App\Http\Controllers\Frontend\ShopController::class, 'index'])->name('frontend.shop');
+Route::get('/product-search', [App\Http\Controllers\Frontend\ShopController::class, 'productSearch'])->name('frontend.searchshop');
 Route::get('/shop/filter-data', [App\Http\Controllers\Frontend\ShopController::class, 'fetchPagenateData'])->name('frontend.shop.filter-data');
 Route::post('/shop/filter', [App\Http\Controllers\Frontend\ShopController::class, 'filterIndex'])->name('frontend.shop.filter');
 Route::get('/shop/filter-paginate', [App\Http\Controllers\Frontend\ShopController::class, 'fetchFilterPagenateData'])->name('frontend.shop.filter-paginate');
@@ -376,3 +377,42 @@ Route::get('buyer/faqs', function() {
 Route::get('/packages', function() {
     return view('frontend.amazy.pages.packages');
 })->name('frontend.packages');
+
+
+// menu dropdowns routes
+Route::get('art-services/commissions', function() {
+    return view('frontend.amazy.pages.drop-down-pages.art-services.commissions');
+});
+Route::get('art-services/murals', function() {
+    return view('frontend.amazy.pages.drop-down-pages.art-services.murals');
+});
+Route::get('art-services/live-art', function() {
+    return view('frontend.amazy.pages.drop-down-pages.art-services.live-art');
+});
+Route::get('art-services/art-shows', function() {
+    return view('frontend.amazy.pages.drop-down-pages.art-services.art-shows');
+});
+Route::get('art-services/art-classes', function() {
+    return view('frontend.amazy.pages.drop-down-pages.art-services.art-classes');
+});
+Route::get('locations/hospitality', function() {
+    return view('frontend.amazy.pages.drop-down-pages.locations.hospitality');
+});
+Route::get('locations/churches', function() {
+    return view('frontend.amazy.pages.drop-down-pages.locations.churches');
+});
+Route::get('locations/non-profits', function() {
+    return view('frontend.amazy.pages.drop-down-pages.locations.non-profits');
+});
+Route::get('locations/office-space', function() {
+    return view('frontend.amazy.pages.drop-down-pages.locations.office-space');
+});
+Route::get('locations/government', function() {
+    return view('frontend.amazy.pages.drop-down-pages.locations.government');
+});
+Route::get('locations/medical', function() {
+    return view('frontend.amazy.pages.drop-down-pages.locations.medical');
+});
+Route::get('locations/schools', function() {
+    return view('frontend.amazy.pages.drop-down-pages.locations.schools');
+});

@@ -245,7 +245,45 @@ class ShopController extends Controller
                     return $q;
                 });
             });*/
+            $searchQuery = $request->get('search', '');
+            $searchlocationQuery = $request->get('location', '');
+            $searchart_servicesQuery = $request->get('art_services', '');
+            $searchcategoryQuery = $request->get('category', '');
+            $searchstyleQuery = $request->get('style', '');
+            $searchsubjectQuery = $request->get('subject', '');
+            $searchmediumQuery = $request->get('medium', '');
+            $searchmaterialQuery = $request->get('material', '');
+            $searchsizeQuery = $request->get('size', '');
+            $searchpalette_colorQuery = $request->get('palette_color', '');
             $mainProducts = Product::query(); // or ->all() if you want all results immediately
+            
+            if ($searchQuery) {
+                $mainProducts->where('product_name', 'LIKE', $searchQuery . '%');
+            }
+            if ($searchlocationQuery) {
+                $mainProducts->where('location', '=', $searchlocationQuery);
+            }
+            if ($searchart_servicesQuery) {
+                $mainProducts->where('art_services', '=', $searchart_servicesQuery);
+            }
+            if ($searchcategoryQuery) {
+                $mainProducts->where('category', '=', $searchcategoryQuery);
+            }
+            if ($searchstyleQuery) {
+                $mainProducts->where('style', '=', $searchstyleQuery);
+            }
+            if ($searchsubjectQuery) {
+                $mainProducts->where('subject', '=', $searchsubjectQuery);
+            }
+            if ($searchmediumQuery) {
+                $mainProducts->where('medium', '=', $searchmediumQuery);
+            }
+            if ($searchsizeQuery) {
+                $mainProducts->where('size', '=', $searchsizeQuery);
+            }
+            // if ($searchpalette_colorQuery) {
+            //     $mainProducts->where('palettes_color', '=', $searchpalette_colorQuery);
+            // }
 
             $main_product_ids = $mainProducts->pluck('id')->toArray();
             $brand_ids = $mainProducts->distinct('brand_id')->pluck('brand_id')->toArray();
@@ -394,6 +432,121 @@ class ShopController extends Controller
             return view(theme('pages.shop'), $data);
         }
     }
+
+    public function productSearch(Request $request)
+    {
+        $slug = "all"; // Default slug
+        $sort_by = null;
+        $paginate = 180;
+        $data = [];
+        
+        if ($request->has('sort_by')) {
+            $sort_by = $request->sort_by;
+            $data['sort_by'] = $request->sort_by;
+        }
+        if ($request->has('paginate')) {
+            
+            $paginate = $request->paginate;
+            $data['paginate'] = $request->paginate;
+        }
+        $item = $request->item;
+
+        // Initialize the base query
+        $mainProducts = Product::query()->where('status','1'); // Only active products
+
+        // Array of filterable columns
+        $filters = [
+            'search' => 'product_name',
+            'location' => 'location',
+            'art_services' => 'art_services',
+            'category' => 'category',
+            'style' => 'style',
+            'subject' => 'subject',
+            'medium' => 'medium',
+            'size' => 'size',
+            //'palette_color' => 'palette_color',
+        ];
+
+        // Loop over the filters and apply them to the query if the parameters are provided
+        foreach ($filters as $key => $column) {
+            $queryValue = $request->get($key);
+            if ($queryValue) {
+                if ($key === 'search') {
+                    // For search, use LIKE for partial matching
+                    $mainProducts->where($column, 'LIKE', $queryValue . '%');
+                } else {
+                    // For others, use exact match
+                    $mainProducts->where($column, '=', $queryValue);
+                }
+            }
+        }
+
+        $data['filter_name'] = "Search Query : " . "\" " . $slug . " \" ";
+            $slugs = explode(' ', $slug);
+
+        $main_product_ids = $mainProducts->pluck('id')->toArray();
+        $brand_ids = $mainProducts->distinct('brand_id')->pluck('brand_id')->toArray();
+            $giftCards = GiftCard::where('status', 1)->whereHas('tags', function ($q) use ($slugs) {
+                return $q->where(function ($q) use ($slugs) {
+                    foreach ($slugs as $slug) {
+                        $q = $q->orWhere('name', 'LIKE', "%{$slug}%");
+                    }
+                    return $q;
+                });
+            })->select(['*', 'name as product_name', 'sku as slug'])->get();
+            // $digitalgiftCards = DigitalGiftCard::Where('gift_name', 'LIKE', "%{$slug}%")->select(['*', 'gift_name as product_name'])->get();
+            $category_ids = CategoryProduct::whereRaw("product_id in ('" . implode("','", $main_product_ids) . "')")->distinct()->pluck('category_id')->toArray();
+            $data['CategoryList'] = Category::whereRaw("id in ('" . implode("','", $category_ids) . "')")->where('status', 1)->take(20)->get();
+            $products = SellerProduct::with('product') // Eager load related 'product' data
+                        ->select('seller_products.*')
+                        ->join('products', 'seller_products.product_id', '=', 'products.id')
+                        ->whereIn('seller_products.product_id', $main_product_ids) // Use whereIn to prevent SQL injection
+                        ->where('seller_products.status','1')
+                        ->limit(100) // Limit the number of records to 100
+                        ->get();
+                            
+            $data['brandList'] = Brand::whereRaw("id in ('" . implode("','", $main_product_ids) . "')")->where('status', 1)->take(10)->get();
+            $attribute_ids = ProductVariations::whereRaw("product_id in ('" . implode("','", $main_product_ids) . "')")->distinct()->pluck('attribute_id')->toArray();
+            $data['attributeLists'] =  Attribute::with('values')->whereRaw("id in ('" . implode("','", $attribute_ids) . "')")->where('id', '>', 1)->where('status', 1)->take(2)->get();
+            $data['color'] = Attribute::with('values')->whereRaw("id in ('" . implode("','", $attribute_ids) . "')")->where('status', 1)->first();
+            $product_min_price = $this->filterService->filterProductMinPrice($products->pluck('id')->toArray());
+            $product_max_price = $this->filterService->filterProductMaxPrice($products->pluck('id')->toArray());
+            $giftcard_min_price = $giftCards->min('selling_price') ?? 0;
+            $giftcard_max_price = $giftCards->max('selling_price') ?? 0;
+            $min_price = $this->filterService->getConvertedMin(min($product_min_price, $giftcard_min_price));
+            $max_price = $this->filterService->getConvertedMax(max($product_max_price, $giftcard_max_price));
+            $data['min_price_lowest'] = $min_price;
+            $data['max_price_highest'] = $max_price;
+            $products = $products->merge($giftCards);
+            // $products = $products->merge($digitalgiftCards);
+           
+            $mainResellProducts = Product::query()->where('resell_product',1)->where('status','1'); 
+            $main_resell_product_ids = $mainResellProducts->pluck('id')->toArray();
+
+            $data['keyword'] = $slug;
+            $data['products'] = $this->filterService->sortAndPaginate($products, $sort_by, $paginate);
+            $data['seller'] = User::where('role_id', 5)
+        
+            ->where('is_active', 1)
+            ->with(['SellerAccount', 'SellerBusinessInformation'])
+            ->first();
+            if (!$request->has('page')) {
+
+                if (isset($data['products'])) {
+                    $data['products']->appends($request->except('page'));
+                }
+
+                if (session()->has('filterDataFromCat')) {
+                    session()->forget('filterDataFromCat');
+                }
+                
+                return view(theme('pages.shop'), $data);
+            } else {
+            
+                return view(theme('pages.shop'), $data);
+            }
+    }
+
 
     public function fetchPagenateData(Request $request)
     {

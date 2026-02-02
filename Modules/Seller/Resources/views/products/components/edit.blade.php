@@ -18,11 +18,13 @@ $LanguageList = getLanguageList();
                         </div>
                     </div>
                 </div>
+                <?php //print_r($product->product); die(); ?>
                 <div class="col-12">
                     <div class="white_box_50px box_shadow_white">
                         <form action="{{route('seller.product.update',$product->id)}}" method="POST" enctype="multipart/form-data">
                             @csrf
                             @method('POST')
+                            <input type="hidden" name="p_id" value="{{ $product->product->id}}">
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="primary_input mb-15">
@@ -193,6 +195,250 @@ $LanguageList = getLanguageList();
 
                                 </div>
                                 <div class="col-lg-3">
+                                        <div class="primary_input mb-25">
+                                            <label class="primary_input_label">Location {{ $product->location }}</label>
+
+                                            <select class="primary_select mb-25" name="state" id="state">
+                                                <option value="">Select State</option>
+                                                <option value="AL" {{ $product->product->location == 'AL' ? 'selected' : '' }}>Alabama</option>
+                                                <option value="AK" {{ $product->product->location == 'AK' ? 'selected' : '' }}>Alaska</option>
+                                                <option value="AZ" {{ $product->product->location == 'AZ' ? 'selected' : '' }}>Arizona</option>
+                                                <option value="AR" {{ $product->product->location == 'AR' ? 'selected' : '' }}>Arkansas</option>
+                                                <option value="CA" {{ $product->product->location == 'CA' ? 'selected' : '' }}>California</option>
+                                                <option value="CO" {{ $product->product->location == 'CO' ? 'selected' : '' }}>Colorado</option>
+                                                <option value="CT" {{ $product->product->location == 'CT' ? 'selected' : '' }}>Connecticut</option>
+                                                <option value="DE" {{ $product->product->location == 'DE' ? 'selected' : '' }}>Delaware</option>
+                                                <option value="FL" {{ $product->product->location == 'FL' ? 'selected' : '' }}>Florida</option>
+                                                <option value="GA" {{ $product->product->location == 'GA' ? 'selected' : '' }}>Georgia</option>
+                                                <option value="HI" {{ $product->product->location == 'HI' ? 'selected' : '' }}>Hawaii</option>
+                                                <option value="ID" {{ $product->product->location == 'ID' ? 'selected' : '' }}>Idaho</option>
+                                                <option value="IL" {{ $product->product->location == 'IL' ? 'selected' : '' }}>Illinois</option>
+                                                <option value="IN" {{ $product->product->location == 'IN' ? 'selected' : '' }}>Indiana</option>
+                                                <option value="IA" {{ $product->product->location == 'IA' ? 'selected' : '' }}>Iowa</option>
+                                                <option value="KS" {{ $product->product->location == 'KS' ? 'selected' : '' }}>Kansas</option>
+                                                <option value="KY" {{ $product->product->location == 'KY' ? 'selected' : '' }}>Kentucky</option>
+                                                <option value="LA" {{ $product->product->location == 'LA' ? 'selected' : '' }}>Louisiana</option>
+                                                <option value="ME" {{ $product->product->location == 'ME' ? 'selected' : '' }}>Maine</option>
+                                                <option value="MD" {{ $product->product->location == 'MD' ? 'selected' : '' }}>Maryland</option>
+                                                <option value="MA" {{ $product->product->location == 'MA' ? 'selected' : '' }}>Massachusetts</option>
+                                                <option value="MI" {{ $product->product->location == 'MI' ? 'selected' : '' }}>Michigan</option>
+                                                <option value="MN" {{ $product->product->location == 'MN' ? 'selected' : '' }}>Minnesota</option>
+                                                <option value="MS" {{ $product->product->location == 'MS' ? 'selected' : '' }}>Mississippi</option>
+                                                <option value="MO" {{ $product->product->location == 'MO' ? 'selected' : '' }}>Missouri</option>
+                                                <option value="MT" {{ $product->product->location == 'MT' ? 'selected' : '' }}>Montana</option>
+                                                <option value="NE" {{ $product->product->location == 'NE' ? 'selected' : '' }}>Nebraska</option>
+                                                <option value="NV" {{ $product->product->location == 'NV' ? 'selected' : '' }}>Nevada</option>
+                                                <option value="NH" {{ $product->product->location == 'NH' ? 'selected' : '' }}>New Hampshire</option>
+                                                <option value="NJ" {{ $product->product->location == 'NJ' ? 'selected' : '' }}>New Jersey</option>
+                                                <option value="NM" {{ $product->product->location == 'NM' ? 'selected' : '' }}>New Mexico</option>
+                                                <option value="NY" {{ $product->product->location == 'NY' ? 'selected' : '' }}>New York</option>
+                                                <option value="NC" {{ $product->product->location == 'NC' ? 'selected' : '' }}>North Carolina</option>
+                                                <option value="ND" {{ $product->product->location == 'ND' ? 'selected' : '' }}>North Dakota</option>
+                                                <option value="OH" {{ $product->product->location == 'OH' ? 'selected' : '' }}>Ohio</option>
+                                                <option value="OK" {{ $product->product->location == 'OK' ? 'selected' : '' }}>Oklahoma</option>
+                                                <option value="OR" {{ $product->product->location == 'OR' ? 'selected' : '' }}>Oregon</option>
+                                                <option value="PA" {{ $product->product->location == 'PA' ? 'selected' : '' }}>Pennsylvania</option>
+                                                <option value="RI" {{ $product->product->location == 'RI' ? 'selected' : '' }}>Rhode Island</option>
+                                                <option value="SC" {{ $product->product->location == 'SC' ? 'selected' : '' }}>South Carolina</option>
+                                                <option value="SD" {{ $product->product->location == 'SD' ? 'selected' : '' }}>South Dakota</option>
+                                                <option value="TN" {{ $product->product->location == 'TN' ? 'selected' : '' }}>Tennessee</option>
+                                                <option value="TX" {{ $product->product->location == 'TX' ? 'selected' : '' }}>Texas</option>
+                                                <option value="UT" {{ $product->product->location == 'UT' ? 'selected' : '' }}>Utah</option>
+                                                <option value="VT" {{ $product->product->location == 'VT' ? 'selected' : '' }}>Vermont</option>
+                                                <option value="VA" {{ $product->product->location == 'VA' ? 'selected' : '' }}>Virginia</option>
+                                                <option value="WA" {{ $product->product->location == 'WA' ? 'selected' : '' }}>Washington</option>
+                                                <option value="WV" {{ $product->product->location == 'WV' ? 'selected' : '' }}>West Virginia</option>
+                                                <option value="WI" {{ $product->product->location == 'WI' ? 'selected' : '' }}>Wisconsin</option>
+                                                <option value="WY" {{ $product->product->location == 'WY' ? 'selected' : '' }}>Wyoming</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3">
+                                        <div class="primary_input mb-25">
+                                            <label class="primary_input_label">Art Services</label>
+
+                                            <select class="primary_select mb-25" name="art_services" id="art_services">
+                                                <option value="">Select Art Services</option>
+                                                <option value="Commissions" {{ $product->product->art_services == 'Commissions' ? 'selected' : '' }}>Commissions</option>
+                                                <option value="Murals" {{ $product->product->art_services == 'Murals' ? 'selected' : '' }}>Murals</option>
+                                                <option value="Art Classes" {{ $product->product->art_services == 'Art Classes' ? 'selected' : '' }}>Art Classes</option>
+                                                <option value="Live Art for Events" {{ $product->product->art_services == 'Live Art for Events' ? 'selected' : '' }}>Live Art for Events</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3">
+                                        <div class="primary_input mb-25">
+                                            <label class="primary_input_label">Category</label>
+
+                                            <select class="primary_select mb-25" name="category" id="category">
+                                                <option value="">Select Category</option>
+                                                <option value="All" {{ $product->product->category == 'All' ? 'selected' : '' }}>All</option>
+                                                <option value="Paintings" {{ $product->product->category == 'Paintings' ? 'selected' : '' }}>Paintings</option>
+                                                <option value="Drawing" {{ $product->product->category == 'Drawing' ? 'selected' : '' }}>Drawing</option>
+                                                <option value="Mixed Media" {{ $product->product->category == 'Mixed Media' ? 'selected' : '' }}>Mixed Media</option>
+                                                <option value="Sculpture" {{ $product->product->category == 'Sculpture' ? 'selected' : '' }}>Sculpture</option>
+                                                <option value="Other" {{ $product->product->category == 'Other' ? 'selected' : '' }}>Other</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-lg-3">
+                                        <div class="primary_input mb-25">
+                                            <label class="primary_input_label">Style</label>
+
+                                            <select class="primary_select mb-25" name="style" id="style">
+                                                <option value="">Select Style</option>
+                                                
+                                                <option value="Abstract Art" {{ $product->product->style == 'Abstract Art' ? 'selected' : '' }}>Abstract Art</option>
+                                                <option value="Art Deco" {{ $product->product->style == 'Art Deco' ? 'selected' : '' }}>Art Deco</option>
+                                                <option value="Art Nouveau" {{ $product->product->style == 'Art Nouveau' ? 'selected' : '' }}>Art Nouveau</option>
+                                                <option value="Baroque" {{ $product->product->style == 'Baroque' ? 'selected' : '' }}>Baroque</option>
+                                                <option value="Bauhaus" {{ $product->product->style == 'Bauhaus' ? 'selected' : '' }}>Bauhaus</option>
+                                                <option value="Classicism" {{ $product->product->style == 'Classicism' ? 'selected' : '' }}>Classicism</option>
+                                                <option value="Contemporary Art" {{ $product->product->style == 'Contemporary Art' ? 'selected' : '' }}>Contemporary Art</option>
+                                                <option value="Cubism" {{ $product->product->style == 'Cubism' ? 'selected' : '' }}>Cubism</option>
+                                                <option value="Dadaism" {{ $product->product->style == 'Dadaism' ? 'selected' : '' }}>Dadaism</option>
+                                                <option value="Expressionism" {{ $product->product->style == 'Expressionism' ? 'selected' : '' }}>Expressionism</option>
+                                                <option value="Fauvism" {{ $product->product->style == 'Fauvism' ? 'selected' : '' }}>Fauvism</option>
+                                                <option value="Figurative" {{ $product->product->style == 'Figurative' ? 'selected' : '' }}>Figurative</option>
+                                                <option value="Harlem Renaissance" {{ $product->product->style == 'Harlem Renaissance' ? 'selected' : '' }}>Harlem Renaissance</option>
+                                                <option value="Impressionism" {{ $product->product->style == 'Impressionism' ? 'selected' : '' }}>Impressionism</option>
+                                                <option value="Minimalism" {{ $product->product->style == 'Minimalism' ? 'selected' : '' }}>Minimalism</option>
+                                                <option value="Neoclassicism" {{ $product->product->style == 'Neoclassicism' ? 'selected' : '' }}>Neoclassicism</option>
+                                                <option value="Neo-Impressionism" {{ $product->product->style == 'Neo-Impressionism' ? 'selected' : '' }}>Neo-Impressionism</option>
+                                                <option value="Pop Art" {{ $product->product->style == 'Pop Art' ? 'selected' : '' }}>Pop Art</option>
+                                                <option value="Post-Impressionism" {{ $product->product->style == 'Post-Impressionism' ? 'selected' : '' }}>Post-Impressionism</option>
+                                                <option value="Realism" {{ $product->product->style == 'Realism' ? 'selected' : '' }}>Realism</option>
+                                                <option value="Surrealism" {{ $product->product->style == 'Surrealism' ? 'selected' : '' }}>Surrealism</option>
+                                                <option value="Other" {{ $product->product->style == 'Other' ? 'selected' : '' }}>Other</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3">
+                                        <div class="primary_input mb-25">
+                                            <label class="primary_input_label">Subject</label>
+
+                                            <select class="primary_select mb-25" name="subject" id="subject">
+                                                <option value="">Select Subject</option>
+
+                                                <option value="Abstract" {{ $product->product->subject == 'Abstract' ? 'selected' : '' }}>Abstract</option>
+                                                <option value="Landscape" {{ $product->product->subject == 'Landscape' ? 'selected' : '' }}>Landscape</option>
+                                                <option value="Pop Culture" {{ $product->product->subject == 'Pop Culture' ? 'selected' : '' }}>Pop Culture</option>
+                                                <option value="People" {{ $product->product->subject == 'People' ? 'selected' : '' }}>People</option>
+                                                <option value="Animal" {{ $product->product->subject == 'Animal' ? 'selected' : '' }}>Animal</option>
+                                                <option value="Floral" {{ $product->product->subject == 'Floral' ? 'selected' : '' }}>Floral</option>
+                                                <option value="Nature" {{ $product->product->subject == 'Nature' ? 'selected' : '' }}>Nature</option>
+                                                <option value="Seascape" {{ $product->product->subject == 'Seascape' ? 'selected' : '' }}>Seascape</option>
+                                                <option value="Dogs" {{ $product->product->subject == 'Dogs' ? 'selected' : '' }}>Dogs</option>
+                                                <option value="Cats" {{ $product->product->subject == 'Cats' ? 'selected' : '' }}>Cats</option>
+                                                <option value="Religious" {{ $product->product->subject == 'Religious' ? 'selected' : '' }}>Religious</option>
+                                                <option value="Love" {{ $product->product->subject == 'Love' ? 'selected' : '' }}>Love</option>
+                                                <option value="Nude" {{ $product->product->subject == 'Nude' ? 'selected' : '' }}>Nude</option>
+                                                <option value="Geometric" {{ $product->product->subject == 'Geometric' ? 'selected' : '' }}>Geometric</option>
+                                                <option value="Music" {{ $product->product->subject == 'Music' ? 'selected' : '' }}>Music</option>
+                                                <option value="Food/Drinks" {{ $product->product->subject == 'Food/Drinks' ? 'selected' : '' }}>Food/Drinks</option>
+                                                <option value="Medical" {{ $product->product->subject == 'Medical' ? 'selected' : '' }}>Medical</option>
+                                                <option value="Sports" {{ $product->product->subject == 'Sports' ? 'selected' : '' }}>Sports</option>
+                                                <option value="Men" {{ $product->product->subject == 'Men' ? 'selected' : '' }}>Men</option>
+                                                <option value="Women" {{ $product->product->subject == 'Women' ? 'selected' : '' }}>Women</option>
+                                                <option value="Buildings" {{ $product->product->subject == 'Buildings' ? 'selected' : '' }}>Buildings</option>
+                                                <option value="Cartoon" {{ $product->product->subject == 'Cartoon' ? 'selected' : '' }}>Cartoon</option>
+                                                <option value="Other" {{ $product->product->subject == 'Other' ? 'selected' : '' }}>Other</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3">
+                                        <div class="primary_input mb-25">
+                                            <label class="primary_input_label">Medium</label>
+
+                                            <select class="primary_select mb-25" name="medium" id="medium">
+                                                <option value="">Select Medium</option>
+
+                                                <option value="Acrylic" {{ $product->product->medium == 'Acrylic' ? 'selected' : '' }}>Acrylic</option>
+                                                <option value="Oil" {{ $product->product->medium == 'Oil' ? 'selected' : '' }}>Oil</option>
+                                                <option value="Watercolor" {{ $product->product->medium == 'Watercolor' ? 'selected' : '' }}>Watercolor</option>
+                                                <option value="Ink" {{ $product->product->medium == 'Ink' ? 'selected' : '' }}>Ink</option>
+                                                <option value="Ceramic" {{ $product->product->medium == 'Ceramic' ? 'selected' : '' }}>Ceramic</option>
+                                                <option value="Other" {{ $product->product->medium == 'Other' ? 'selected' : '' }}>Other</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3">
+                                        <div class="primary_input mb-25">
+                                            <label class="primary_input_label">Material</label>
+
+                                            <select class="primary_select mb-25" name="material" id="material">
+                                                <option value="">Select Material</option>
+
+                                                <option value="Canvas" {{ $product->product->material == 'Canvas' ? 'selected' : '' }}>Canvas</option>
+                                                <option value="Paper" {{ $product->product->material == 'Paper' ? 'selected' : '' }}>Paper</option>
+                                                <option value="Wood" {{ $product->product->material == 'Wood' ? 'selected' : '' }}>Wood</option>
+                                                <option value="Metal" {{ $product->product->material == 'Metal' ? 'selected' : '' }}>Metal</option>
+                                                <option value="Other" {{ $product->product->material == 'Other' ? 'selected' : '' }}>Other</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3">
+                                        <div class="primary_input mb-25">
+                                            <label class="primary_input_label">Price</label>
+
+                                            <input 
+                                                type="range" 
+                                                class="primary_range"
+                                                id="price"
+                                                name="price"
+                                                min="0"
+                                                max="10000"
+                                                step="50"
+                                                value="5000"
+                                            >
+
+                                            <div class="mt-10">
+                                                Up to: <strong>$<span id="price_value">5000</span></strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="primary_input mb-25">
+                                            <label class="primary_input_label">Color Palette</label>
+
+                                            <!-- Single color selection -->
+                                            <input 
+                                                type="color" 
+                                                class="form-control"
+                                                name="palette_color"
+                                                id="palette_color"
+                                                value={{$product->product->palette_color}}
+                                            >
+
+                                            <small class="text-muted">
+                                                Select one color from the palette
+                                            </small>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="primary_input mb-25">
+                                            <label class="primary_input_label">Size</label>
+
+                                            <select class="primary_select mb-25" name="size" id="size">
+                                                <option value="">Select Size</option>
+
+                                                <option value="Small" {{ $product->product->size == 'Small' ? 'selected' : '' }}>Small (&lt; 20in)</option>
+                                                <option value="Medium" {{ $product->product->size == 'Medium' ? 'selected' : '' }}>Med (20–38in)</option>
+                                                <option value="Large" {{ $product->product->size == 'Large' ? 'selected' : '' }}>Large (38–60in)</option>
+                                                <option value="X Large" {{ $product->product->size == 'X Large' ? 'selected' : '' }}>X Large (&gt; 60in)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                <div class="col-lg-3" style="display:none">
                                     <div class="primary_input mb-15">
                                         <label class="primary_input_label" for=""> {{__("product.discount")}}</label>
                                         <input class="primary_input_field" name="discount" id="discount"
@@ -202,7 +448,7 @@ $LanguageList = getLanguageList();
                                         <span class="text-danger">{{$errors->first('discount')}}</span>
                                     </div>
                                 </div>
-                                <div class="col-lg-3">
+                                <div class="col-lg-3" style="display:none">
                                     <div class="primary_input mb-25">
                                         <label class="primary_input_label"
                                                for="">{{ __('product.discount_type') }}</label>
@@ -212,7 +458,7 @@ $LanguageList = getLanguageList();
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-lg-3">
+                                <div class="col-lg-3" style="display:none">
                                     <div class="primary_input mb-15">
                                         <label class="primary_input_label"
                                                for="startDate">{{__('product.discount_start_date')}}</label>
@@ -230,7 +476,7 @@ $LanguageList = getLanguageList();
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-3">
+                                <div class="col-lg-3" style="display:none">
                                     <div class="primary_input mb-15">
                                         <label class="primary_input_label"
                                                for="endDate">{{__('product.discount_end_date')}}</label>
@@ -248,9 +494,7 @@ $LanguageList = getLanguageList();
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
-                                    @include('seller::products.components._get_gst_list', ['product' => $product->product])
-                                </div>
+                                
                             </div>
                             @if($product->product->product_type ==2)
                                 <div class="row">
@@ -533,6 +777,12 @@ $LanguageList = getLanguageList();
 
 
             });
+            const priceSlider = document.getElementById('price');
+        const priceValue = document.getElementById('price_value');
+
+        priceSlider.addEventListener('input', () => {
+            priceValue.textContent = priceSlider.value;
+        });
         })(jQuery);
 
 

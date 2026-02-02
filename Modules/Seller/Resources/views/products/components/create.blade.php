@@ -225,7 +225,8 @@ $LanguageList = getLanguageList();
                                         </div>
 
                                     </div>
-
+                                    
+                                    
                                     <div class="col-lg-3">
                                         <div class="primary_input mb-15">
                                             <label class="primary_input_label" for="">
@@ -342,7 +343,7 @@ $LanguageList = getLanguageList();
                                                         </h3>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-12">
+                                                <div class="col-lg-12" style="display:none">
                                                     <input type="hidden" value="1" id="product_type">
                                                     <div class="primary_input">
                                                         <label class="primary_input_label" for="">{{ __('common.type') }} <span
@@ -467,20 +468,20 @@ $LanguageList = getLanguageList();
                                                             class="text-danger">{{$errors->first('model_number')}}</span>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-3">
+                                                <div class="col-lg-3" style="display:none">
                                                     <div class="primary_input mb-25">
                                                         <label class="primary_input_label"
                                                             for="">{{ __('product.category') }} <span
                                                                 class="text-danger">*</span></label>
                                                         <select name="category_ids[]" id="category_id"
                                                             class="mb-15 category" @if(app('general_setting')->multi_category == 1) multiple @endif required="1">
-
+                                                            <option value="6">-Artists</option>    
                                                         </select>
                                                         <span class="text-danger" id="error_category_ids">{{$errors->first('category_id')}}</span>
                                                     </div>
                                                 </div>
 
-                                                <div class="col-lg-3">
+                                                <div class="col-lg-3" style="display:none">
                                                     <div class="primary_input mb-25">
                                                         <label class="primary_input_label"
                                                             for="">{{ __('product.brand') }}</label>
@@ -493,24 +494,25 @@ $LanguageList = getLanguageList();
                                                         <span class="text-danger">{{$errors->first('brand_id')}}</span>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-3">
+                                                <div class="col-lg-3" style="display:none">
                                                     <div class="primary_input mb-25">
                                                         <label class="primary_input_label"
                                                             for="">{{ __('product.unit') }} <span
                                                                 class="text-danger">*</span></label>
                                                         <select name="unit_type_id" id="unit_type_id"
                                                             class="primary_select mb-15 unit">
-                                                            <option disabled selected>{{__('product.select_unit')}}
+                                                            <option value="1">art</option>
+                                                            <!-- <option disabled selected>{{__('product.select_unit')}}
                                                             </option>
                                                             @foreach($units as $key => $unit)
                                                             <option value="{{$unit->id}}">{{$unit->name}}</option>
-                                                            @endforeach
+                                                            @endforeach -->
                                                         </select>
                                                         <span
                                                             class="text-danger" id="error_unit_type">{{$errors->first('unit_type_id')}}</span>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-3">
+                                                <div class="col-lg-3" style="display:none">
                                                     <div class="primary_input mb-15">
                                                         <label class="primary_input_label"
                                                             for="">{{__('product.barcode_type')}}</label>
@@ -643,7 +645,7 @@ $LanguageList = getLanguageList();
                                                     </div>
                                                 </div>
 
-                                                <div class="col-xl-12">
+                                                <div class="col-xl-12" style="display:none">
                                                     <div class="primary_input">
                                                         <ul id="theme_nav" class="permission_list sms_list ">
                                                             <li>
@@ -660,7 +662,7 @@ $LanguageList = getLanguageList();
                                                         </ul>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-12  weight_height_div">
+                                                <div class="col-lg-12  weight_height_div" style="display:none">
                                                     <div class="main-title d-flex">
                                                         <h3 class="mb-3 mr-30">{{ __('product.weight_height_info') }}</h3>
                                                     </div>
@@ -703,7 +705,7 @@ $LanguageList = getLanguageList();
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div id="phisical_shipping_div" class="col-lg-12">
+                                                <div id="phisical_shipping_div" class="col-lg-12" style="display:none">
                                                     <div class="row">
 
                                                         <div class="col-lg-12">
@@ -758,7 +760,7 @@ $LanguageList = getLanguageList();
                                                             class="text-danger" id="error_selling_price">{{$errors->first('selling_price')}}</span>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-3">
+                                                <div class="col-lg-3" style="display:none">
                                                     <div class="primary_input mb-15">
                                                         <label class="primary_input_label" for="">
                                                             {{__("product.discount")}} </label>
@@ -768,7 +770,7 @@ $LanguageList = getLanguageList();
                                                         <span class="text-danger" id="error_discunt">{{$errors->first('discount')}}</span>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-3">
+                                                <div class="col-lg-3" style="display:none">
                                                     <div class="primary_input mb-25">
                                                         <label class="primary_input_label"
                                                             for="">{{ __('product.discount_type') }}</label>
@@ -780,7 +782,7 @@ $LanguageList = getLanguageList();
                                                     </div>
                                                 </div>
 
-                                                <div class="col-lg-6" id="stock_manage_div">
+                                                <div class="col-lg-6" id="stock_manage_div" style="display:none">
                                                     <div class="primary_input mb-25">
                                                         <label class="primary_input_label" for="stock_manage">{{__('product.stock_manage') }}</label>
                                                         <select class="primary_select mb-25" name="stock_manage" id="stock_manage">
@@ -798,7 +800,7 @@ $LanguageList = getLanguageList();
                                                 </div>
 
                                                 @if (app('gst_config')['enable_gst'] == "only_tax")
-                                                <div class="col-lg-6">
+                                                <div class="col-lg-6" style="display:none">
                                                     <div class="primary_input mb-25">
                                                         <label class="primary_input_label" for="tax_id">{{ __('common.tax')}}</label>
                                                         <select class="primary_select mb-25" name="tax_id" id="tax_id">
@@ -810,7 +812,7 @@ $LanguageList = getLanguageList();
                                                     </div>
                                                 </div>
                                                 @else
-                                                <div class="col-lg-6">
+                                                <div class="col-lg-6" style="display:none">
                                                     <div class="primary_input mb-25">
                                                         <label class="primary_input_label" for="">{{ __('GST/TAX Group')
                                                             }}</label>
@@ -825,7 +827,249 @@ $LanguageList = getLanguageList();
                                                 <div class="col-lg-6" id="gst_list_div">
                                                 </div>
                                             @endif
+                                            <div class="col-lg-3">
+                                            <div class="primary_input mb-25">
+                                                <label class="primary_input_label">Location</label>
 
+                                                <select class="primary_select mb-25" name="state" id="state">
+                                                    <option value="">Select State</option>
+                                                    <option value="AL">Alabama</option>
+                                                    <option value="AK">Alaska</option>
+                                                    <option value="AZ">Arizona</option>
+                                                    <option value="AR">Arkansas</option>
+                                                    <option value="CA">California</option>
+                                                    <option value="CO">Colorado</option>
+                                                    <option value="CT">Connecticut</option>
+                                                    <option value="DE">Delaware</option>
+                                                    <option value="FL">Florida</option>
+                                                    <option value="GA">Georgia</option>
+                                                    <option value="HI">Hawaii</option>
+                                                    <option value="ID">Idaho</option>
+                                                    <option value="IL">Illinois</option>
+                                                    <option value="IN">Indiana</option>
+                                                    <option value="IA">Iowa</option>
+                                                    <option value="KS">Kansas</option>
+                                                    <option value="KY">Kentucky</option>
+                                                    <option value="LA">Louisiana</option>
+                                                    <option value="ME">Maine</option>
+                                                    <option value="MD">Maryland</option>
+                                                    <option value="MA">Massachusetts</option>
+                                                    <option value="MI">Michigan</option>
+                                                    <option value="MN">Minnesota</option>
+                                                    <option value="MS">Mississippi</option>
+                                                    <option value="MO">Missouri</option>
+                                                    <option value="MT">Montana</option>
+                                                    <option value="NE">Nebraska</option>
+                                                    <option value="NV">Nevada</option>
+                                                    <option value="NH">New Hampshire</option>
+                                                    <option value="NJ">New Jersey</option>
+                                                    <option value="NM">New Mexico</option>
+                                                    <option value="NY">New York</option>
+                                                    <option value="NC">North Carolina</option>
+                                                    <option value="ND">North Dakota</option>
+                                                    <option value="OH">Ohio</option>
+                                                    <option value="OK">Oklahoma</option>
+                                                    <option value="OR">Oregon</option>
+                                                    <option value="PA">Pennsylvania</option>
+                                                    <option value="RI">Rhode Island</option>
+                                                    <option value="SC">South Carolina</option>
+                                                    <option value="SD">South Dakota</option>
+                                                    <option value="TN">Tennessee</option>
+                                                    <option value="TX">Texas</option>
+                                                    <option value="UT">Utah</option>
+                                                    <option value="VT">Vermont</option>
+                                                    <option value="VA">Virginia</option>
+                                                    <option value="WA">Washington</option>
+                                                    <option value="WV">West Virginia</option>
+                                                    <option value="WI">Wisconsin</option>
+                                                    <option value="WY">Wyoming</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3">
+                                            <div class="primary_input mb-25">
+                                                <label class="primary_input_label">Art Services</label>
+
+                                                <select class="primary_select mb-25" name="art_services" id="art_services">
+                                                    <option value="">Select Art Services</option>
+                                                    <option value="Commissions">Commissions</option>
+                                                    <option value="Murals">Murals</option>
+                                                    <option value="Art Classes">Art Classes</option>
+                                                    <option value="Live Art for Events">Live Art for Events</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3">
+                                            <div class="primary_input mb-25">
+                                                <label class="primary_input_label">Category</label>
+
+                                                <select class="primary_select mb-25" name="category" id="category">
+                                                    <option value="">Select Category</option>
+                                                    <option value="All">All</option>
+                                                    <option value="Paintings">Paintings</option>
+                                                    <option value="Drawing">Drawing</option>
+                                                    <option value="Mixed Media">Mixed Media</option>
+                                                    <option value="Sculpture">Sculpture</option>
+                                                    <option value="Other">Other</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-lg-3">
+                                            <div class="primary_input mb-25">
+                                                <label class="primary_input_label">Style</label>
+
+                                                <select class="primary_select mb-25" name="style" id="style">
+                                                    <option value="">Select Style</option>
+
+                                                    <option value="Abstract Art">Abstract Art</option>
+                                                    <option value="Art Deco">Art Deco</option>
+                                                    <option value="Art Nouveau">Art Nouveau</option>
+                                                    <option value="Baroque">Baroque</option>
+                                                    <option value="Bauhaus">Bauhaus</option>
+                                                    <option value="Classicism">Classicism</option>
+                                                    <option value="Contemporary Art">Contemporary Art</option>
+                                                    <option value="Cubism">Cubism</option>
+                                                    <option value="Dadaism">Dadaism</option>
+                                                    <option value="Expressionism">Expressionism</option>
+                                                    <option value="Fauvism">Fauvism</option>
+                                                    <option value="Figurative">Figurative</option>
+                                                    <option value="Harlem Renaissance">Harlem Renaissance</option>
+                                                    <option value="Impressionism">Impressionism</option>
+                                                    <option value="Minimalism">Minimalism</option>
+                                                    <option value="Neoclassicism">Neoclassicism</option>
+                                                    <option value="Neo-Impressionism">Neo-Impressionism</option>
+                                                    <option value="Pop Art">Pop Art</option>
+                                                    <option value="Post-Impressionism">Post-Impressionism</option>
+                                                    <option value="Realism">Realism</option>
+                                                    <option value="Surrealism">Surrealism</option>
+                                                    <option value="Other">Other</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3">
+                                            <div class="primary_input mb-25">
+                                                <label class="primary_input_label">Subject</label>
+
+                                                <select class="primary_select mb-25" name="subject" id="subject">
+                                                    <option value="">Select Subject</option>
+
+                                                    <option value="Abstract">Abstract</option>
+                                                    <option value="Landscape">Landscape</option>
+                                                    <option value="Pop Culture">Pop Culture</option>
+                                                    <option value="People">People</option>
+                                                    <option value="Animal">Animal</option>
+                                                    <option value="Floral">Floral</option>
+                                                    <option value="Nature">Nature</option>
+                                                    <option value="Seascape">Seascape</option>
+                                                    <option value="Dogs">Dogs</option>
+                                                    <option value="Cats">Cats</option>
+                                                    <option value="Religious">Religious</option>
+                                                    <option value="Love">Love</option>
+                                                    <option value="Nude">Nude</option>
+                                                    <option value="Geometric">Geometric</option>
+                                                    <option value="Music">Music</option>
+                                                    <option value="Food/Drinks">Food/Drinks</option>
+                                                    <option value="Medical">Medical</option>
+                                                    <option value="Sports">Sports</option>
+                                                    <option value="Men">Men</option>
+                                                    <option value="Women">Women</option>
+                                                    <option value="Buildings">Buildings</option>
+                                                    <option value="Cartoon">Cartoon</option>
+                                                    <option value="Other">Other</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3">
+                                            <div class="primary_input mb-25">
+                                                <label class="primary_input_label">Medium</label>
+
+                                                <select class="primary_select mb-25" name="medium" id="medium">
+                                                    <option value="">Select Medium</option>
+
+                                                    <option value="Acrylic">Acrylic</option>
+                                                    <option value="Oil">Oil</option>
+                                                    <option value="Watercolor">Watercolor</option>
+                                                    <option value="Ink">Ink</option>
+                                                    <option value="Ceramic">Ceramic</option>
+                                                    <option value="Other">Other</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3">
+                                            <div class="primary_input mb-25">
+                                                <label class="primary_input_label">Material</label>
+
+                                                <select class="primary_select mb-25" name="material" id="material">
+                                                    <option value="">Select Material</option>
+
+                                                    <option value="Canvas">Canvas</option>
+                                                    <option value="Paper">Paper</option>
+                                                    <option value="Wood">Wood</option>
+                                                    <option value="Metal">Metal</option>
+                                                    <option value="Other">Other</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3">
+                                            <div class="primary_input mb-25">
+                                                <label class="primary_input_label">Price</label>
+
+                                                <input 
+                                                    type="range" 
+                                                    class="primary_range"
+                                                    id="price"
+                                                    name="price"
+                                                    min="0"
+                                                    max="10000"
+                                                    step="50"
+                                                    value="5000"
+                                                >
+
+                                                <div class="mt-10">
+                                                    Up to: <strong>$<span id="price_value">5000</span></strong>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="primary_input mb-25">
+                                                <label class="primary_input_label">Color Palette</label>
+
+                                                <!-- Single color selection -->
+                                                <input 
+                                                    type="color" 
+                                                    class="form-control"
+                                                    name="palette_color"
+                                                    id="palette_color"
+                                                    value="#cccccc"
+                                                >
+
+                                                <small class="text-muted">
+                                                    Select one color from the palette
+                                                </small>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="primary_input mb-25">
+                                                <label class="primary_input_label">Size</label>
+
+                                                <select class="primary_select mb-25" name="size" id="size">
+                                                    <option value="">Select Size</option>
+
+                                                    <option value="Small">Small (&lt; 20in)</option>
+                                                    <option value="Medium">Med (20–38in)</option>
+                                                    <option value="Large">Large (38–60in)</option>
+                                                    <option value="X Large">X Large (&gt; 60in)</option>
+                                                </select>
+                                            </div>
+                                        </div>
                                             @if (isModuleActive('WholeSale'))
                                                 <div class="col-lg-12 whole_sale_info_add" id="whole_sale_info_add">
                                                     <h3 class="mb-2 mr-30">{{ __('wholesale.Wholesale Price') }}</h3>
@@ -866,6 +1110,7 @@ $LanguageList = getLanguageList();
                                                             </li>
                                                         @endforeach
                                                     </ul>
+                                                    
                                                     <div class="tab-content">
                                                         @foreach ($LanguageList as $key => $language)
                                                             <div role="tabpanel" class="tab-pane fade @if (auth()->user()->lang_code == $language->code) show active @endif" id="pelement{{$language->code}}">
@@ -994,13 +1239,13 @@ $LanguageList = getLanguageList();
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-lg-12">
+                                                <div class="col-lg-12" style="display:none">
                                                     <div class="main-title d-flex">
                                                         <h3 class="mb-3 mr-30">{{ __('product.pdf_specifications') }}
                                                         </h3>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-12">
+                                                <div class="col-lg-12" style="display:none">
                                                     <div class="primary_input mb-25">
                                                         <label class="primary_input_label" for="pdf_place">{{__('product.pdf_specifications')}}</label>
                                                         <div class="primary_file_uploader">
@@ -1013,13 +1258,13 @@ $LanguageList = getLanguageList();
                                                         <span class="text-danger">{{$errors->first('pdf_file')}}</span>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-12">
+                                                <div class="col-lg-12" style="display:none">
                                                     <div class="main-title d-flex">
                                                         <h3 class="mb-3 mr-30">{{ __('product.product_videos_info') }}
                                                         </h3>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-12">
+                                                <div class="col-lg-12" style="display:none">
                                                     <div class="primary_input mb-25">
                                                         <label class="primary_input_label" for="video_provider">{{ __('product.video_provider') }}</label>
                                                         <select class="primary_select mb-25" name="video_provider" id="video_provider">
@@ -1028,7 +1273,7 @@ $LanguageList = getLanguageList();
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-12">
+                                                <div class="col-lg-12" style="display:none">
                                                     <div class="primary_input mb-15">
                                                         <label class="primary_input_label" for="video_link">{{__("product.video_link")}}</label>
                                                         <input class="primary_input_field" id="video_link" name="video_link" placeholder="{{__("product.video_link")}}" type="text" value="{{old('video_link')}}">
@@ -1063,7 +1308,7 @@ $LanguageList = getLanguageList();
                                                         <span class="text-danger" id="status_error"></span>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-12">
+                                                <div class="col-lg-12" style="display:none">
                                                     <div class="primary_input">
                                                         <label class="primary_input_label" for="">{{ __('common.make_Display_in_details_page') }} <span class="text-danger">*</span></label>
                                                         <ul id="theme_nav" class="permission_list sms_list ">
@@ -1811,7 +2056,7 @@ $LanguageList = getLanguageList();
         });
 
         dynamicSelect2WithAjax("#brand_id", "{{route('product.brands.get-by-ajax')}}", "GET");
-        dynamicSelect2WithAjax("#category_id", "{{url('/products/get-category-data')}}", "GET");
+        //dynamicSelect2WithAjax("#category_id", "{{url('/products/get-category-data')}}", "GET");
         dynamicSelect2WithAjax("#main_product_for_select", "{{url('/products/get-by-ajax')}}", "GET");
 
         @if(isModuleActive('FrontendMultiLang'))
@@ -1864,7 +2109,12 @@ $LanguageList = getLanguageList();
         }
 
 
+        const priceSlider = document.getElementById('price');
+        const priceValue = document.getElementById('price_value');
 
+        priceSlider.addEventListener('input', () => {
+            priceValue.textContent = priceSlider.value;
+        });
     })(jQuery);
 
 </script>

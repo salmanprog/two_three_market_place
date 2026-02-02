@@ -389,10 +389,10 @@
           </div>
 
         </div>
-        <div class="d-flex justify-content-center mt-45 mx-auto">
+        <!-- <div class="d-flex justify-content-center mt-45 mx-auto">
             <button type="submit" class="btn bg-black text-white primary-font py-10 px-50">Find Artists</button>
             </div>
-            <i class="fa-solid fa-magnifying-glass position-absolute fs-20 text-gray-400 pe-none" style="left: 10px; top: 50%; transform: translateY(-50%);"></i>
+            <i class="fa-solid fa-magnifying-glass position-absolute fs-20 text-gray-400 pe-none" style="left: 10px; top: 50%; transform: translateY(-50%);"></i> -->
       </form>
     </div>
   </div>
@@ -403,8 +403,7 @@
   <div class="container">
     <div class="bg-light-gray-filter py-70">
       <h2 class="fs-55 fw-700 text-center text-black mb-40 secondry-font">Filter Artist Profiles</h2>
-      <form action="{{ route('frontend.artists') }}" method="GET">
-        <input type="hidden" name="search_artist" id="search_artist" value="1">
+      <form action="{{ route('frontend.searchshop') }}" method="GET">
         <div class="row row-gap-20">
           <!-- Search By Name -->
           <div class="col-md-12">
@@ -416,8 +415,7 @@
           <div class="col-md-12">
             <div class="row row-gap-20">
               <!-- Artist Dropdown -->
-              <div class="col-md-3">
-                <label class="fw-600 mb-2 text-uppercase" style="font-size: 12px;">Artist</label>
+              <!-- <div class="col-md-3">
                 <div class="position-relative w-100">
                   <select class="filter-artist-select primary-font" name="artist" aria-label="Artist">
                     <option value="">Artist</option>
@@ -427,11 +425,10 @@
                   </select>
                   <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-12 text-gray-400 me-3 pe-none"></i>
                 </div>
-              </div>
+              </div> -->
 
               <!-- Art Dropdown -->
-              <div class="col-md-3">
-                <label class="fw-600 mb-2 text-uppercase" style="font-size: 12px;">Art</label>
+              <!-- <div class="col-md-3">
                 <div class="position-relative w-100">
                   <select class="filter-artist-select primary-font" name="art" aria-label="Art">
                     <option value="">Art</option>
@@ -444,14 +441,14 @@
                   </select>
                   <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-12 text-gray-400 me-3 pe-none"></i>
                 </div>
-              </div>
+              </div> -->
 
               <!-- Location - State -->
               <div class="col-md-3">
                 <label class="fw-600 mb-2 text-uppercase" style="font-size: 12px;">Location</label>
                 <div class="position-relative w-100">
-                  <select class="filter-artist-select primary-font" name="state" id="state" aria-label="State">
-                    <option value="">Select State</option>
+                  <select class="filter-artist-select primary-font" name="location" id="location" aria-label="State">
+                    <option value="">Select Location</option>
                     <option value="AL">Alabama</option>
                     <option value="AK">Alaska</option>
                     <option value="AZ">Arizona</option>
@@ -508,19 +505,18 @@
               </div>
 
               <!-- Type in your area -->
-              <div class="col-md-3">
-                <label class="fw-600 mb-2 text-uppercase" style="font-size: 12px;">Area</label>
+              <!-- <div class="col-md-3">
                 <div class="position-relative w-100">
                   <input type="text" name="area" class="primary-font filter-artist-select" placeholder="Type in your area">
                 </div>
-              </div>
+              </div> -->
 
               <!-- Art Services -->
               <div class="col-md-3">
                 <label class="fw-600 mb-2 text-uppercase" style="font-size: 12px;">Art Services</label>
                 <div class="position-relative w-100">
-                  <select class="filter-artist-select primary-font" name="art_service" aria-label="Art Services">
-                    <option value="">Art Services</option>
+                  <select class="filter-artist-select primary-font" name="art_services" aria-label="Art Services">
+                    <option value="">Select Art Services</option>
                     <option value="commissions">Commissions</option>
                     <option value="murals">Murals</option>
                     <option value="art_classes">Art Classes</option>
@@ -535,7 +531,7 @@
                 <label class="fw-600 mb-2 text-uppercase" style="font-size: 12px;">Category</label>
                 <div class="position-relative w-100">
                   <select class="filter-artist-select primary-font" name="category" aria-label="Category">
-                    <option value="">Category</option>
+                    <option value="">Select Category</option>
                     <option value="all">All</option>
                     <option value="paintings">Paintings</option>
                     <option value="drawing">Drawing</option>
@@ -552,7 +548,7 @@
                 <label class="fw-600 mb-2 text-uppercase" style="font-size: 12px;">Style</label>
                 <div class="position-relative w-100">
                   <select class="filter-artist-select primary-font" name="style" aria-label="Style">
-                    <option value="">Style</option>
+                    <option value="">Select Style</option>
                     <option value="abstract_art">Abstract Art</option>
                     <option value="art_deco">Art Deco</option>
                     <option value="art_nouveau">Art Nouveau</option>
@@ -585,7 +581,7 @@
                 <label class="fw-600 mb-2 text-uppercase" style="font-size: 12px;">Subject</label>
                 <div class="position-relative w-100">
                   <select class="filter-artist-select primary-font" name="subject" aria-label="Subject">
-                    <option value="">Subject</option>
+                    <option value="">Select Subject</option>
                     <option value="abstract">Abstract</option>
                     <option value="landscape">Landscape</option>
                     <option value="pop_culture">Pop Culture</option>
@@ -619,7 +615,7 @@
                 <label class="fw-600 mb-2 text-uppercase" style="font-size: 12px;">Medium</label>
                 <div class="position-relative w-100">
                   <select class="filter-artist-select primary-font" name="medium" aria-label="Medium">
-                    <option value="">Medium</option>
+                    <option value="">Select Medium</option>
                     <option value="acrylic">Acrylic</option>
                     <option value="oil">Oil</option>
                     <option value="watercolor">Watercolor</option>
@@ -636,7 +632,7 @@
                 <label class="fw-600 mb-2 text-uppercase" style="font-size: 12px;">Material</label>
                 <div class="position-relative w-100">
                   <select class="filter-artist-select primary-font" name="material" aria-label="Material">
-                    <option value="">Material</option>
+                    <option value="">Select Material</option>
                     <option value="canvas">Canvas</option>
                     <option value="paper">Paper</option>
                     <option value="wood">Wood</option>
@@ -669,6 +665,7 @@
                   <label class="fw-600 mb-2 text-uppercase" style="font-size: 12px;">Size</label>
                 <div class="position-relative w-100">
                   <select class="filter-artist-select primary-font" name="size" aria-label="Size">
+                    <option value="">Select Size</option>
                     <option value="small">Small (< 20in)</option>
                     <option value="med">Med (20-38in)</option>
                     <option value="large">Large (38-60in)</option>
@@ -680,7 +677,8 @@
               <div class="col-md-3">
                  <label class="fw-600 mb-2 text-uppercase" style="font-size: 12px;">Select Color</label>
                 <div class="filter-artist-select primary-font">
-                    <input type="color">
+                    <label for="" class="">Select Color</label>
+                    <input type="color" name="palette_color" value="">
                 </div>
             </div>
             </div>
