@@ -10,7 +10,7 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="nav-dp-img-wrapper">
-                        <img src="../public/images/locations/schools.png" alt="schools">
+                        <img src="../public/images/locations/schools.jpg" alt="schools">
                     </div>
                 </div>
                 <div class="col-lg-6">

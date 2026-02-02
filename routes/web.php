@@ -416,3 +416,21 @@ Route::get('locations/medical', function() {
 Route::get('locations/schools', function() {
     return view('frontend.amazy.pages.drop-down-pages.locations.schools');
 });
+Route::get('art-galleries/how-we-partner', function() {
+    return view('frontend.amazy.pages.drop-down-pages.art-galleries.how-we-partner');
+});
+Route::get('art-galleries/why-23-ld', function() {
+    return view('frontend.amazy.pages.drop-down-pages.art-galleries.why-23-ld');
+});
+Route::get('interior-designers/how-we-partner', function() {
+    return view('frontend.amazy.pages.drop-down-pages.interior-designers.how-we-partner');
+});
+Route::get('interior-designers/why-23-ld', function() {
+    return view('frontend.amazy.pages.drop-down-pages.interior-designers.why-23-ld');
+});
+Route::get('interior-designers/find-local-art-shows', function() {
+    return view('frontend.amazy.pages.drop-down-pages.interior-designers.find-local-art-shows');
+});
+Route::get('interior-designers/find-an-artist-for-your-event', function() {
+    return view('frontend.amazy.pages.drop-down-pages.interior-designers.find-an-artist-for-your-event');
+});

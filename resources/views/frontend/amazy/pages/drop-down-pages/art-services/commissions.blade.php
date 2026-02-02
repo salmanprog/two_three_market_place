@@ -10,7 +10,7 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="nav-dp-img-wrapper">
-                        <img src="../public/images/art-services/commissions.avif" alt="commissions">
+                        <img src="../public/images/art-services/commissions.png" alt="commissions">
                     </div>
                 </div>
                 <div class="col-lg-6">
