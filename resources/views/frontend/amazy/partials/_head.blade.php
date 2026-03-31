@@ -212,11 +212,30 @@
         @endif
         <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">           
+        <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
     <link rel="stylesheet" href="{{asset(asset_path('css/custom.css'))}}">
     <link rel="stylesheet" href="{{asset(asset_path('css/utilities.css'))}}">
     <link rel="stylesheet" href="{{asset(asset_path('css/style.css'))}}">
+    <script defer src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
     <script>
         const _config = {!!  json_encode(collect(app('general_setting'))->only(['currency_symbol','decimal_limit','currency_symbol_position']))  !!};
         const _user_currency = {!!  json_encode(collect(app('user_currency'))->only(['symbol','convert_rate']))  !!};
+
+        document.addEventListener('DOMContentLoaded', function () {
+            if (typeof AOS !== 'undefined') {
+                AOS.init({
+                    duration: 1500,
+                    once: false,
+                    mirror: false,
+                    offset: 60,
+                    anchorPlacement: 'top-bottom'
+                });
+            }
+        });
+        window.addEventListener('load', function () {
+            if (typeof AOS !== 'undefined') {
+                AOS.refresh();
+            }
+        });
     </script>
 </head>

@@ -1,4 +1,50 @@
 <style>
+    .header-auth-wrap {
+        gap: 0.5rem;
+    }
+    .header-auth-pills {
+        gap: 0.5rem;
+    }
+    .header-pill-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem 1.2rem;
+        border-radius: 9999px;
+        font-size: 0.9375rem;
+        font-weight: 500;
+        line-height: 1.2;
+        text-decoration: none !important;
+        transition: opacity 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+        white-space: nowrap;
+    }
+    .header-pill-btn:hover {
+        opacity: 0.92;
+    }
+    .header-pill-btn--outline {
+        background: #fff;
+        color: #000 !important;
+        border: 1px solid #000;
+    }
+    .header-pill-btn--outline:hover {
+        background: #f7f7f7;
+        color: #000 !important;
+    }
+    .header-pill-btn--solid {
+        background: #000;
+        color: #fff !important;
+        border: 1px solid #000;
+    }
+    .header-pill-btn--solid:hover {
+        background: #1a1a1a;
+        color: #fff !important;
+    }
+    @media (max-width: 575.98px) {
+        .header-pill-btn {
+            padding: 0.4rem 0.75rem;
+            font-size: 0.8125rem;
+        }
+    }
     @media (max-width: 991px){
         .mobile_menu {
             top: 54px;
@@ -22,7 +68,7 @@
                 <div class="header__wrapper">
                     <!-- header__left__start  -->
                     <div class="header__left d-flex align-items-center">
-                        <div class="logo_img">
+                        <div class="logo_img" data-aos="fade-down" data-aos-duration="1500" data-aos-delay="0">
                             <a href="{{ url('/') }}">
                                 <img src="{{ showImage(app('general_setting')->logo) }}" alt="{{ app('general_setting')->company_name }}" title="{{ app('general_setting')->company_name }}">
                             </a>
@@ -37,40 +83,28 @@
                     <!-- header__right_start  -->
                     <div class="header_top_area_right">
                         <div class="wish_cart">
-                            <div class="single_wishcart_lists" >
-                                <div class="icon d-inline-block lh-1 dynamic_svg">
-
-                                    <svg  width="16.5" height="16.5" viewBox="0 0 16.5 16.5">
-                                        <g id="user" transform="translate(0.25 0.25)">
-                                          <g id="Group_1602" data-name="Group 1602" transform="translate(0)">
-                                            <path id="Path_1911" data-name="Path 1911" d="M13.657,10.343a7.969,7.969,0,0,0-3.04-1.907,4.625,4.625,0,1,0-5.234,0A8.013,8.013,0,0,0,0,16H1.25a6.75,6.75,0,0,1,13.5,0H16A7.948,7.948,0,0,0,13.657,10.343ZM8,8a3.375,3.375,0,1,1,3.375-3.375A3.379,3.379,0,0,1,8,8Z" transform="translate(0)" fill="#fd4949" stroke-width="0.5"/>
-                                            <path id="Path_1912" data-name="Path 1912" d="M13.657,10.343a7.969,7.969,0,0,0-3.04-1.907,4.625,4.625,0,1,0-5.234,0A8.013,8.013,0,0,0,0,16H1.25a6.75,6.75,0,0,1,13.5,0H16A7.948,7.948,0,0,0,13.657,10.343ZM8,8a3.375,3.375,0,1,1,3.375-3.375A3.379,3.379,0,0,1,8,8Z" transform="translate(0)" fill="#fd4949" stroke-width="0.5"/>
-                                          </g>
-                                        </g>
-                                      </svg>
-                                </div>
+                            <div class="single_wishcart_lists d-flex align-items-center flex-nowrap header-auth-wrap" data-aos="fade-down" data-aos-duration="1500" data-aos-delay="1000">
                                 @guest
-                                    <span class="d-inline-block lh-1 ">
-                                        <a href="{{route('frontend.account.signin')}}">{{ __('defaultTheme.login') }}</a>
-                                        <a href="{{route('frontend.account.signup')}}">/ {{ __('defaultTheme.register') }}</a>
-                                    </span>
+                                    <div class="header-auth-pills d-flex align-items-center flex-nowrap">
+                                        <a href="{{ route('frontend.account.signin') }}" class="header-pill-btn header-pill-btn--outline primary-font">{{ __('defaultTheme.login') }}</a>
+                                        <a href="{{ route('frontend.account.signup') }}" class="header-pill-btn header-pill-btn--solid primary-font">{{ __('defaultTheme.register') }}</a>
+                                    </div>
                                 @else
-                                    <span class="d-inline-block lh-1 ">
+                                    <div class="header-auth-pills d-flex align-items-center flex-nowrap">
                                         @if (auth()->check() && auth()->user()->role->type == "superadmin" || auth()->check() && auth()->user()->role->type == "admin" || auth()->check() && auth()->user()->role->type == "staff")
-                                            <a href="{{ route('admin.dashboard') }}">{{ __('common.dashboard') }}</a>
+                                            <a href="{{ route('admin.dashboard') }}" class="header-pill-btn header-pill-btn--outline primary-font">{{ __('common.dashboard') }}</a>
                                         @elseif (auth()->check() && auth()->user()->role->type == "seller" && isModuleActive('MultiVendor'))
-                                            <a href="{{ route('seller.dashboard') }}">{{ __('common.dashboard') }}</a>
+                                            <a href="{{ route('seller.dashboard') }}" class="header-pill-btn header-pill-btn--outline primary-font">{{ __('common.dashboard') }}</a>
                                         @elseif (auth()->check() && auth()->user()->role->type == "affiliate")
-                                            <a href="{{ route('affiliate.my_affiliate.index') }}">{{ __('common.dashboard') }}</a>
+                                            <a href="{{ route('affiliate.my_affiliate.index') }}" class="header-pill-btn header-pill-btn--outline primary-font">{{ __('common.dashboard') }}</a>
                                         @else
-                                            <a href="{{ route('frontend.dashboard') }}">{{ __('common.dashboard') }}</a>
+                                            <a href="{{ route('frontend.dashboard') }}" class="header-pill-btn header-pill-btn--outline primary-font">{{ __('common.dashboard') }}</a>
                                         @endif
-
-                                        <a href="{{ route('logout') }}" class="log_out">/ {{ __('defaultTheme.log_out') }}</a>
+                                        <a href="{{ route('logout') }}" class="header-pill-btn header-pill-btn--solid primary-font log_out">{{ __('defaultTheme.log_out') }}</a>
                                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                             @csrf
                                         </form>
-                                    </span>
+                                    </div>
                                 @endguest
                             </div>
                         </div>

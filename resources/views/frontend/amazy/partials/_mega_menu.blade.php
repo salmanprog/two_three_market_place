@@ -117,6 +117,7 @@
 
                             <ul id="mobile-menu">
                                 @if($main_menu)
+                                    @php $aosNavI = 0; @endphp
                                     @foreach($main_menu->elements as $element)
                                         @if($element->type == 'page')
                                             @if(!isModuleActive('Lead') && $element->page->module == 'Lead')
@@ -126,64 +127,64 @@
                                                 @continue
                                             @endif
                                             @if($element->childs->count() > 0)
-                                                <li class="submenu_active"><a href="{{ (strtolower(trim($element->title)) == 'interior designers') ? route('frontend.packages') : url(@$element->page->slug) }}" {{$element->is_newtab == 1? 'target="_blank"':''}}>{{ ucfirst(textLimit($element->title, 20)) }}  <i class="ti-angle-down"></i></a>
+                                                <li class="submenu_active" data-aos="fade-down" data-aos-duration="1500" data-aos-delay="{{ 40 + $aosNavI * 65 }}">@php $aosNavI++; @endphp<a href="{{ (strtolower(trim($element->title)) == 'interior designers') ? route('frontend.packages') : url(@$element->page->slug) }}" {{$element->is_newtab == 1? 'target="_blank"':''}}>{{ ucfirst(textLimit($element->title, 20)) }}  <i class="ti-angle-down"></i></a>
                                                     @include(theme('partials._menu_chield'), ['element' => $element])
                                                 </li>
                                             @else
-                                                <li class="">
+                                                <li class="" data-aos="fade-down" data-aos-duration="1500" data-aos-delay="{{ 40 + $aosNavI * 65 }}">@php $aosNavI++; @endphp
                                                     <a href="{{ (strtolower(trim($element->title)) == 'interior designers') ? route('frontend.packages') : url(@$element->page->slug) }}" {{$element->is_newtab == 1? 'target="_blank"':''}}>{{ ucfirst(textLimit($element->title, 20)) }}</a>
                                                 </li>
                                             @endif
                                         @elseif($element->type == 'category')
                                             @if($element->childs->count() > 0)
-                                                <li class="submenu_active"><a href="{{route('frontend.category-product',['slug' => $element->category->slug, 'item' =>'category'])}}" {{$element->is_newtab == 1? 'target="_blank"':''}}>{{textLimit($element->title,20)}} <i class="ti-angle-down"></i></a>
+                                                <li class="submenu_active" data-aos="fade-down" data-aos-duration="1500" data-aos-delay="{{ 40 + $aosNavI * 65 }}">@php $aosNavI++; @endphp<a href="{{route('frontend.category-product',['slug' => $element->category->slug, 'item' =>'category'])}}" {{$element->is_newtab == 1? 'target="_blank"':''}}>{{textLimit($element->title,20)}} <i class="ti-angle-down"></i></a>
                                                     @include(theme('partials._menu_chield'), ['element' => $element])
                                                 </li>
                                             @else
-                                                <li class="">
+                                                <li class="" data-aos="fade-down" data-aos-duration="1500" data-aos-delay="{{ 40 + $aosNavI * 65 }}">@php $aosNavI++; @endphp
                                                     <a href="{{route('frontend.category-product',['slug' => $element->category->slug, 'item' =>'category'])}}" {{$element->is_newtab == 1? 'target="_blank"':''}}>{{textLimit($element->title,20)}}</a>
                                                 </li>
                                             @endif
                                         @elseif($element->type == 'brand')
                                             @if($element->childs->count() > 0)
-                                                <li class="submenu_active"><a href="{{route('frontend.category-product',['slug' => $element->brand->slug, 'item' =>'brand'])}}" {{$element->is_newtab == 1? 'target="_blank"':''}}>{{textLimit($element->title,20)}} <i class="ti-angle-down"></i></a>
+                                                <li class="submenu_active" data-aos="fade-down" data-aos-duration="1500" data-aos-delay="{{ 40 + $aosNavI * 65 }}">@php $aosNavI++; @endphp<a href="{{route('frontend.category-product',['slug' => $element->brand->slug, 'item' =>'brand'])}}" {{$element->is_newtab == 1? 'target="_blank"':''}}>{{textLimit($element->title,20)}} <i class="ti-angle-down"></i></a>
                                                     @include(theme('partials._menu_chield'), ['element' => $element])
                                                 </li>
                                             @else
-                                                <li class="">
+                                                <li class="" data-aos="fade-down" data-aos-duration="1500" data-aos-delay="{{ 40 + $aosNavI * 65 }}">@php $aosNavI++; @endphp
                                                     <a href="{{route('frontend.category-product',['slug' => $element->brand->slug, 'item' =>'brand'])}}" {{$element->is_newtab == 1? 'target="_blank"':''}}>{{textLimit($element->title,20)}}</a>
                                                 </li>
                                             @endif
 
                                         @elseif($element->type == 'tag')
                                             @if($element->childs->count() > 0)
-                                                <li class="submenu_active"><a href="{{route('frontend.category-product',['slug' => $element->tag->name, 'item' =>'tag'])}}" {{$element->is_newtab == 1? 'target="_blank"':''}}>{{textLimit($element->title,20)}} <i class="ti-angle-down"></i></a>
+                                                <li class="submenu_active" data-aos="fade-down" data-aos-duration="1500" data-aos-delay="{{ 40 + $aosNavI * 65 }}">@php $aosNavI++; @endphp<a href="{{route('frontend.category-product',['slug' => $element->tag->name, 'item' =>'tag'])}}" {{$element->is_newtab == 1? 'target="_blank"':''}}>{{textLimit($element->title,20)}} <i class="ti-angle-down"></i></a>
                                                     @include(theme('partials._menu_chield'), ['element' => $element])
                                                 </li>
                                             @else
-                                                <li class="">
+                                                <li class="" data-aos="fade-down" data-aos-duration="1500" data-aos-delay="{{ 40 + $aosNavI * 65 }}">@php $aosNavI++; @endphp
                                                     <a href="{{route('frontend.category-product',['slug' => $element->tag->name, 'item' =>'tag'])}}" {{$element->is_newtab == 1? 'target="_blank"':''}}>{{textLimit($element->title,20)}}</a>
                                                 </li>
                                             @endif
                                         @elseif($element->type == 'product' && @$element->product)
                                             @if($element->childs->count() > 0)
-                                            <li class="submenu_active">
+                                            <li class="submenu_active" data-aos="fade-down" data-aos-duration="1500" data-aos-delay="{{ 40 + $aosNavI * 65 }}">@php $aosNavI++; @endphp
                                                 <a href="{{singleProductURL(@$element->product->seller->slug, @$element->product->slug)}}" {{$element->is_newtab == 1? 'target="_blank"':''}}>{{textLimit($element->title,20)}} <i class="ti-angle-down"></i></a>
                                                 @include(theme('partials._menu_chield'), ['element' => $element])
                                             </li>
                                             @else
-                                                <li class="">
+                                                <li class="" data-aos="fade-down" data-aos-duration="1500" data-aos-delay="{{ 40 + $aosNavI * 65 }}">@php $aosNavI++; @endphp
                                                     <a href="{{singleProductURL(@$element->product->seller->slug, @$element->product->slug)}}" {{$element->is_newtab == 1? 'target="_blank"':''}}>{{textLimit($element->title,20)}}</a>
                                                 </li>
                                             @endif
                                         @elseif($element->type == 'link')
                                             @if($element->childs->count() > 0)
-                                                <li class="submenu_active">
+                                                <li class="submenu_active" data-aos="fade-down" data-aos-duration="1500" data-aos-delay="{{ 40 + $aosNavI * 65 }}">@php $aosNavI++; @endphp
                                                     <a href="{{ (strtolower(trim($element->title)) == 'interior designers') ? route('frontend.packages') : $element->link }}" {{$element->is_newtab == 1? 'target="_blank"':''}}>{{textLimit($element->title,20)}} <i class="ti-angle-down"></i></a>
                                                     @include(theme('partials._menu_chield'), ['element' => $element])
                                                 </li>
                                             @else
-                                                <li class="">
+                                                <li class="" data-aos="fade-down" data-aos-duration="1500" data-aos-delay="{{ 40 + $aosNavI * 65 }}">@php $aosNavI++; @endphp
                                                     <a href="{{ (strtolower(trim($element->title)) == 'interior designers') ? route('frontend.packages') : $element->link }}" {{$element->is_newtab == 1? 'target="_blank"':''}}>{{textLimit($element->title,20)}}</a>
                                                 </li>
                                             @endif
@@ -196,7 +197,7 @@
                                     @endforeach
 
                                     @if(isModuleActive('AuctionProducts'))
-                                    <li class="">
+                                    <li class="" data-aos="fade-down" data-aos-duration="1500" data-aos-delay="{{ 40 + $aosNavI * 65 }}">@php $aosNavI++; @endphp
                                         <a href="{{route('frontend.auctionproducts.gallary')}}" >{{__('auctionproduct.auction')}}</a>
                                     </li>
                                     @endif

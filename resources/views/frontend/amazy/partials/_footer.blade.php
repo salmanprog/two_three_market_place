@@ -124,58 +124,62 @@
             </div>
         </div>
     </footer>-->
-    <footer class="bg-black pt-65 pb-150">
+    <footer class="bg-black pt-65 pb-150 overflow-visible">
   <div class="container">
-    <ul class="d-flex justify-content-between mx-auto footer-navs" style="max-width: 790px;">
-      <li><a href="/" class="text-white fs-22 primary-font">Market Place</a></li>
-      <li><a href="/" class="text-white fs-22 primary-font">Community Partners</a></li>
-      <li><a href="/" class="text-white fs-22 primary-font">About us</a></li>
-      <li><a href="/" class="text-white fs-22 primary-font">Work with Us</a></li>
-    </ul>
-    <div class="border-bottom mb-100 border-white w-100 mx-auto mt-45 mb-170" style="max-width: 1050px;"></div>
-    <div class="row justify-content-between">
-      <div class="col-12 col-md-4">
+    <div class="row justify-content-between g-4 g-lg-5">
+      <div class="col-12 col-lg-4 col-xl-3" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="0" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
         <div class="logo" style="max-width: 250px;">
-          <img src="{{ asset('public/uploads/all/68534b76c74ba.png') }}" alt="logo" class="mb-20">
+          <img src="{{ asset('public/uploads/all/68534b76c74ba.png') }}" alt="23LD" class="mb-20">
         </div>
-        <!-- <p class="text-white fs-22 mb-30 primary-font">Join us and get 10% off your first order!</p> -->
         <p class="text-white fs-22 mb-20 primary-font" style="max-width: 410px;">Stay inspired with fresh artwork and curated collections added weekly.</p>
-        <ul class="d-flex gap-20 ps-0">
-          <li><a href="/" class="text-white fs-25"><i class="fa-brands fa-facebook-f"></i></a></li>
-          <li><a href="/" class="text-white fs-25"><i class="fa-brands fa-instagram"></i></a></li>
-          <li><a href="/" class="text-white fs-25"><i class="fa-brands fa-linkedin-in"></i></a></li>
+        <ul class="d-flex gap-20 ps-0 list-unstyled mb-0">
+          <li><a href="/" class="text-white fs-25" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a></li>
+          <li><a href="/" class="text-white fs-25" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a></li>
+          <li><a href="/" class="text-white fs-25" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a></li>
         </ul>
       </div>
-      <div class="col-12 col-md-2">
-        <ul class="footer-links">
-          <li class="text-white fs-22 mb-20 fw-700 primary-font">For Art Collectors</li>
-          <li class="mb-10"><a href="{{ route('frontend.artists') }}" class="fs-22 primary-font">Artists</a></li>
-          <li class="mb-10"><a href="{{ route('frontend.shop') }}" class="fs-22 primary-font">Shop</a></li>
-          <li class="mb-10"><a href="/" class=" fs-22 primary-font">Gallery</a></li>
-        </ul>
-      </div>
-      <div class="col-12 col-md-2">
-        <ul class="footer-links">
-          <li class="text-white fs-22 mb-20 fw-700 primary-font">For Artists</li>
-          <li class="mb-10"><a href="/" class="text-white fs-22 primary-font">Private Workshops</a></li>
-          <li class="mb-10"><a href="/" class="text-white fs-22 primary-font">Our Quiz</a></li>
-          <li class="mb-10"><a href="/" class="text-white fs-22 primary-font">Our Team</a></li>
-        </ul>
-      </div>
-      <div class="col-12 col-md-4">
-        <ul class="footer-links">
-          <li class="text-white fs-22 mb-20 fw-700 primary-font">Contact Us</li>
-          <li class="mb-10"><a href="tel:9548500145" class="text-white fs-22 d-flex gap-10 primary-font"> <i class="fa-solid fa-phone"></i> 954 850 0145</a></li>
-          <li class="mb-10"><a href="tel:2057778284" class="text-white fs-22 d-flex gap-10 primary-font"> <i class="fa-solid fa-phone"></i> 205 777 8284</a></li>
-          <!-- <li class="mb-10"><a href="mailto:alexsoto.23ld@gmail.com" class="text-white fs-22 d-flex gap-10 primary-font"> <i class="fa-solid fa-envelope d-flex align-items-center"></i> alexsoto.23ld@gmail.com</a></li>
-          <li class="mb-10"><a href="mailto:devinpughsley.23ld@gmail.com" class="text-white fs-22 d-flex gap-10 primary-font"> <i class="fa-solid fa-envelope d-flex align-items-center"></i> devinpughsley.23ld@gmail.com</a></li> -->
-        </ul>
-        <form action="">
-          <div class="d-flex align-items-center mt-40">
-            <input type="email" placeholder="Email" class="footer-input" name="email" style="border-top-right-radius: 0; border-bottom-right-radius: 0;">
-            <button type="submit" class="btn btn-primary footer-submit-btn bg-white text-black fs-16 py-15 px-20 border border-white primary-font" style="border-top-left-radius: 0; border-bottom-left-radius: 0;">Submit</button>
+      <div class="col-12 col-lg-8 col-xl-9">
+        <div class="row g-4">
+          <div class="col-12 col-md-6 col-lg-3" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="80" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
+            <ul class="footer-links list-unstyled ps-0 mb-0">
+              <li class="text-white fs-22 mb-20 fw-700 primary-font">Resources</li>
+              <li class="mb-10"><a href="{{ route('frontend.about-us') }}" class="fs-22 primary-font">About Us</a></li>
+              <li class="mb-10"><a href="{{ url('artists/faqs') }}" class="fs-22 primary-font">FAQ for Artists</a></li>
+              <li class="mb-10"><a href="{{ url('locations/faqs') }}" class="fs-22 primary-font">FAQ for Locations</a></li>
+              <li class="mb-10"><a href="{{ url('interior-designers/faqs') }}" class="fs-22 primary-font">FAQ for Interior Designers</a></li>
+              <li class="mb-10"><a href="{{ url('art-galleries/faqs') }}" class="fs-22 primary-font">FAQ for Art Galleries</a></li>
+              <li class="mb-10"><a href="{{ url('buyer/faqs') }}" class="fs-22 primary-font">FAQ for Collectors</a></li>
+            </ul>
           </div>
-        </form>
+          <div class="col-12 col-md-6 col-lg-3" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="160" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
+            <ul class="footer-links list-unstyled ps-0 mb-0">
+              <li class="text-white fs-22 mb-20 fw-700 primary-font">Art</li>
+              <li class="mb-10"><a href="{{ route('frontend.artists') }}" class="fs-22 primary-font">Find Local Artists</a></li>
+              <li class="mb-10"><a href="{{ route('frontend.organiser-events') }}" class="fs-22 primary-font">Find Local Events</a></li>
+              <li class="mb-10"><a href="{{ url('art-services/commissions') }}" class="fs-22 primary-font">Find Local Art Services</a></li>
+              <li class="mb-10"><a href="{{ route('frontend.shop') }}" class="fs-22 primary-font">Find Consignment Art</a></li>
+            </ul>
+          </div>
+          <div class="col-12 col-md-6 col-lg-3" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="240" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
+            <ul class="footer-links list-unstyled ps-0 mb-0">
+              <li class="text-white fs-22 mb-20 fw-700 primary-font">Partnerships</li>
+              <li class="mb-10"><a href="{{ route('frontend.merchant-register-step-first') }}" class="fs-22 primary-font">23LD for Artists</a></li>
+              <li class="mb-10"><a href="{{ url('art-services/commissions') }}" class="fs-22 primary-font">23LD for Art Services</a></li>
+              <li class="mb-10"><a href="{{ url('locations/hospitality') }}" class="fs-22 primary-font">23LD for Locations</a></li>
+              <li class="mb-10"><a href="{{ url('art-galleries/how-we-partner') }}" class="fs-22 primary-font">23LD for Art Galleries</a></li>
+              <li class="mb-10"><a href="{{ url('interior-designers/why-23-ld') }}" class="fs-22 primary-font">23LD for Interior Designers</a></li>
+              <li class="mb-10"><a href="{{ route('frontend.event-organiser-subscription-type') }}" class="fs-22 primary-font">23LD for Events</a></li>
+            </ul>
+          </div>
+          <div class="col-12 col-md-6 col-lg-3" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="320" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
+            <ul class="footer-links list-unstyled ps-0 mb-0">
+              <li class="text-white fs-22 mb-20 fw-700 primary-font">Support</li>
+              <li class="mb-10"><a href="{{ route('frontend.contact-us') }}" class="fs-22 primary-font">Customer Service</a></li>
+              <li class="mb-10"><a href="{{ url('art-services/commissions') }}" class="fs-22 primary-font">Commission a Painting</a></li>
+              <li class="mb-10"><a href="{{ route('frontend.contact-us') }}" class="fs-22 primary-font">Contact Us</a></li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </div>

@@ -25,8 +25,8 @@
                 " {{$slider->is_newtab == 1?'target="_blank"':''}}>
                 <div class="banner_content" style="background-image: url({{showImage($slider->slider_image)}}); background-size: cover; background-position: center; height: 500px; width: 100%;">
                     <div class="banner_content_text">
-                        <h3 class="slider_heading text-white text-center">{{@$slider->heading}}</h3>
-                        <p class="slider_sub_heading text-white text-center">{{@$slider->sub_heading}}</p>
+                        <h3 class="slider_heading text-white text-center" data-aos="fade-down" data-aos-duration="1500">{{@$slider->heading}}</h3>
+                        <p class="slider_sub_heading text-white text-center" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="300">{{@$slider->sub_heading}}</p>
                     </div>
                 </div>
                 </a>

@@ -1,6 +1,8 @@
 @extends('frontend.amazy.layouts.app')
 @push('styles')
 @endpush
+
+
 @section('content')
     <section class="nav-dp-wrapper">
         <div class="container">

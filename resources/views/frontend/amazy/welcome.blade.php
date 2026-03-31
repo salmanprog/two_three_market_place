@@ -2,6 +2,10 @@
 
 @push('styles')
 <style>
+    /* Allow hero text AOS (fade-up) to show outside slide box */
+    .bannerUi_active.owl-carousel > .banner_img {
+        overflow: visible;
+    }
     .banner_img {
     width: 100%;
     position: relative;
@@ -40,6 +44,116 @@
 .ratio-540-192 { aspect-ratio: 45 / 16; }    /* fourth */
 .ratio-265-192 { aspect-ratio: 265 / 192; }  /* fifth */
 .ratio-265-196 { aspect-ratio: 265 / 196; }  /* sixth */
+
+/* Filter Artist section — layout polish (functionality unchanged) */
+.filter-artist-sec .filter-artist-panel {
+    border-radius: 1rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+}
+.filter-artist-sec .filter-artist-label {
+    font-size: 11px;
+    letter-spacing: 0.085em;
+    color: #2a2a2a;
+    margin-bottom: 0.45rem;
+    display: block;
+}
+.filter-artist-sec .filter-artist-input,
+.filter-artist-sec .filter-artist-select {
+    border-radius: 0.5rem !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.filter-artist-sec .filter-artist-input:focus,
+.filter-artist-sec .filter-artist-select:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
+}
+.filter-artist-sec .filter-artist-color-input {
+    width: 100%;
+    height: 46px;
+    padding: 4px;
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    background: #fff;
+    cursor: pointer;
+}
+.filter-artist-sec .filter-artist-price-box {
+    padding: 0.35rem 0.25rem 0.15rem;
+}
+.filter-artist-sec .filter-artist-price-box .form-range {
+    cursor: pointer;
+}
+/* Same row as Price stretches column height; without this, the select wrapper grows and the chevron centers in empty space below the field. */
+.filter-artist-sec .d-flex.flex-column > .position-relative.w-100 {
+    align-self: flex-start;
+    width: 100%;
+}
+.filter-artist-sec .position-relative.w-100 > .filter-artist-select {
+    padding-right: 2.25rem;
+}
+/* Love Art section center alignment */
+.love-art-sec .love-art-grid {
+    max-width: 1180px;
+    margin-inline: auto;
+    justify-content: center;
+}
+.love-art-sec .love-art-card {
+    max-width: 560px;
+    margin-inline: auto;
+}
+.love-art-sec .love-art-card .d-flex.gap-5.mb-10 {
+    justify-content: center;
+}
+/* Related Products carousel — nav top-right */
+.related-products-sec .related-products-nav button {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid #000;
+    background: #fff;
+    color: #000;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, color 0.2s ease;
+    padding: 0;
+    line-height: 1;
+}
+.related-products-sec .related-products-nav button:hover {
+    background: #000;
+    color: #fff;
+}
+.related-products-sec .related-products-slider .product_widget5 {
+    margin-bottom: 0;
+}
+.related-products-sec .related-products-slider .owl-stage-outer {
+    padding-bottom: 8px;
+}
+.related-products-sec__head {
+    padding-right: 0;
+    padding-left: 0;
+}
+.related-products-sec__head .related-products-heading {
+    text-align: center;
+    width: 100%;
+    max-width: 100%;
+    padding-inline: 5.5rem; /* room for absolute nav so title stays visually centered */
+}
+@media (max-width: 767.98px) {
+    .related-products-sec__head .related-products-heading {
+        padding-inline: 0;
+        padding-top: 0;
+    }
+    .related-products-sec__head .related-products-nav {
+        position: static !important;
+        justify-content: center;
+        width: 100%;
+        margin-top: 1rem;
+    }
+    .email-address-link {
+      font-size: 15px !important;
+    }
+}
 </style>
 @endpush
 
@@ -205,14 +319,22 @@
 
 <!-- love art section -->  
 @if(count($sellers) > 0) 
-<section class="love-art-sec py-50">
+@php
+    $loveArtCardStagger = 320;
+    $loveArtCardBaseDelay = 380;
+@endphp
+<section class="love-art-sec py-50 overflow-visible">
   <div class="container">
-    <h2 class="fs-55 fw-700 text-center text-black mb-40 secondry-font text-center mx-auto max-w-1020px">Love Art? Connect with an artist and their work</h2>
-    <p class="primary-font text-black fs-20 mb-30 mx-auto text-center max-w-540px">Each 23LD artist is unique in their own way just like art. Learn their story and their life's work</p>
-    <div class="row row-gap-30">
+    <h2 class="fs-55 fw-700 text-center text-black mb-40 secondry-font mx-auto max-w-1020px" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="0">Love Art? Connect with an artist and their work</h2>
+    <p class="primary-font text-black fs-20 mb-30 mx-auto text-center max-w-540px" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="180">Each 23LD artist is unique in their own way just like art. Learn their story and their life's work</p>
+    <div class="row row-gap-30 love-art-grid">
         @foreach($sellers as $seller)
+            @php
+                $loveArtCardDelay = $loveArtCardBaseDelay + ($loop->index * $loveArtCardStagger);
+                $loveArtCardAos = 'fade-up';
+            @endphp
             <div class="col-12 col-md-6">
-                <div class="love-art-card">
+                <div class="love-art-card h-100" data-aos="{{ $loveArtCardAos }}" data-aos-duration="1500" data-aos-delay="{{ $loveArtCardDelay }}" data-aos-easing="ease-out-cubic">
                 <div class="d-flex gap-5 mb-10">
                     <div>
                     <img src="{{ showImage($seller->avatar != null?$seller->avatar: 'frontend/default/img/avatar.png') }}" alt="" class="" height="335px" width="386px">
@@ -225,7 +347,7 @@
                         @endif
                     </div>
                 </div>
-                <h4 class="secondry-font text-start fs-40 fw-700">{{ $seller->first_name }} {{ $seller->last_name }}</h4>
+                <h4 class=" secondry-font text-start fs-40 fw-700" style="line-height: 1;">{{ $seller->first_name }} {{ $seller->last_name }}</h4>
                 <p class="primary-font text-start mb-10">Portraits &amp; Wildlife</p>
                 <a href="{{ route('frontend.seller', $seller->slug ?? base64_encode($seller->id)) }}" class="btn btn-secondary">View Profile</a>
                 </div>
@@ -304,7 +426,7 @@
         </div>
       </div>
     </div> -->
-    <div class="d-flex justify-content-center mt-45 mx-auto">
+    <div class="d-flex justify-content-center mt-45 mx-auto" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="{{ $loveArtCardBaseDelay + (count($sellers) * $loveArtCardStagger) + 200 }}">
       <a href="{{ route('frontend.artists') }}" class="btn bg-black text-white primary-font py-10 px-50">View All Artists</a>
     </div>
   </div>
@@ -399,21 +521,21 @@
 </section> 
 <!-- filter artist section -->  
 <!-- New Filter Artist Section -->
-<section class="filter-artist-sec pb-40">
+<section class="filter-artist-sec pb-40 overflow-visible">
   <div class="container">
-    <div class="bg-light-gray-filter py-70">
-      <h2 class="fs-55 fw-700 text-center text-black mb-40 secondry-font">Filter Artist Profiles</h2>
+    <div class="bg-light-gray-filter py-70  px-md-4 px-xl-5 filter-artist-panel">
+      <h2 class="fs-55 fw-700 text-center text-black mb-35 mb-md-40 secondry-font" data-aos="fade-down" data-aos-duration="1500" data-aos-easing="ease-out-cubic">Filter Artist Profiles</h2>
       <form action="{{ route('frontend.searchshop') }}" method="GET">
-        <div class="row row-gap-20">
+        <div class="row row-gap-20 g-3">
           <!-- Search By Name -->
-          <div class="col-md-12">
+          <div class="col-md-12" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="160" data-aos-easing="ease-out-cubic">
             <div class="position-relative w-100">
               <input type="text" name="search" class="primary-font filter-artist-input" placeholder="Search By Name" value="{{ request('search') }}">
             </div>
           </div>
           
           <div class="col-md-12">
-            <div class="row row-gap-20">
+            <div class="row row-gap-20 g-3 g-lg-4">
               <!-- Artist Dropdown -->
               <!-- <div class="col-md-3">
                 <div class="position-relative w-100">
@@ -444,8 +566,8 @@
               </div> -->
 
               <!-- Location - State -->
-              <div class="col-md-3">
-                <label class="fw-600 mb-2 text-uppercase" style="font-size: 12px;">Location</label>
+              <div class="col-12 col-sm-6 col-lg-3 d-flex flex-column" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="220" data-aos-easing="ease-out-cubic">
+                <label class="filter-artist-label fw-600 text-uppercase">Location</label>
                 <div class="position-relative w-100">
                   <select class="filter-artist-select primary-font" name="location" id="location" aria-label="State">
                     <option value="">Select Location</option>
@@ -512,8 +634,8 @@
               </div> -->
 
               <!-- Art Services -->
-              <div class="col-md-3">
-                <label class="fw-600 mb-2 text-uppercase" style="font-size: 12px;">Art Services</label>
+              <div class="col-12 col-sm-6 col-lg-3 d-flex flex-column" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="300" data-aos-easing="ease-out-cubic">
+                <label class="filter-artist-label fw-600 text-uppercase">Art Services</label>
                 <div class="position-relative w-100">
                   <select class="filter-artist-select primary-font" name="art_services" aria-label="Art Services">
                     <option value="">Select Art Services</option>
@@ -527,8 +649,8 @@
               </div>
 
               <!-- Category -->
-              <div class="col-md-3">
-                <label class="fw-600 mb-2 text-uppercase" style="font-size: 12px;">Category</label>
+              <div class="col-12 col-sm-6 col-lg-3 d-flex flex-column" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="380" data-aos-easing="ease-out-cubic">
+                <label class="filter-artist-label fw-600 text-uppercase">Category</label>
                 <div class="position-relative w-100">
                   <select class="filter-artist-select primary-font" name="category" aria-label="Category">
                     <option value="">Select Category</option>
@@ -544,8 +666,8 @@
               </div>
 
               <!-- Style -->
-              <div class="col-md-3">
-                <label class="fw-600 mb-2 text-uppercase" style="font-size: 12px;">Style</label>
+              <div class="col-12 col-sm-6 col-lg-3 d-flex flex-column" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="460" data-aos-easing="ease-out-cubic">
+                <label class="filter-artist-label fw-600 text-uppercase">Style</label>
                 <div class="position-relative w-100">
                   <select class="filter-artist-select primary-font" name="style" aria-label="Style">
                     <option value="">Select Style</option>
@@ -577,8 +699,8 @@
               </div>
 
               <!-- Subject -->
-              <div class="col-md-3">
-                <label class="fw-600 mb-2 text-uppercase" style="font-size: 12px;">Subject</label>
+              <div class="col-12 col-sm-6 col-lg-3 d-flex flex-column" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="540" data-aos-easing="ease-out-cubic">
+                <label class="filter-artist-label fw-600 text-uppercase">Subject</label>
                 <div class="position-relative w-100">
                   <select class="filter-artist-select primary-font" name="subject" aria-label="Subject">
                     <option value="">Select Subject</option>
@@ -611,8 +733,8 @@
               </div>
 
               <!-- Medium -->
-              <div class="col-md-3">
-                <label class="fw-600 mb-2 text-uppercase" style="font-size: 12px;">Medium</label>
+              <div class="col-12 col-sm-6 col-lg-3 d-flex flex-column" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="620" data-aos-easing="ease-out-cubic">
+                <label class="filter-artist-label fw-600 text-uppercase">Medium</label>
                 <div class="position-relative w-100">
                   <select class="filter-artist-select primary-font" name="medium" aria-label="Medium">
                     <option value="">Select Medium</option>
@@ -628,8 +750,8 @@
               </div>
 
               <!-- Material -->
-              <div class="col-md-3">
-                <label class="fw-600 mb-2 text-uppercase" style="font-size: 12px;">Material</label>
+              <div class="col-12 col-sm-6 col-lg-3 d-flex flex-column" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="700" data-aos-easing="ease-out-cubic">
+                <label class="filter-artist-label fw-600 text-uppercase">Material</label>
                 <div class="position-relative w-100">
                   <select class="filter-artist-select primary-font" name="material" aria-label="Material">
                     <option value="">Select Material</option>
@@ -643,9 +765,9 @@
                 </div>
               </div>
               <!-- Price -->
-              <div class="col-md-3">
-                <label class="fw-600 mb-2 text-uppercase" style="font-size: 12px;">Price</label>
-                <div class="filter-artist-select primary-font">
+              <div class="col-12 col-sm-6 col-lg-3 d-flex flex-column" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="780" data-aos-easing="ease-out-cubic">
+                <label class="filter-artist-label fw-600 text-uppercase">Price</label>
+                <div class="filter-artist-select primary-font filter-artist-price-box flex-grow-1 d-flex flex-column justify-content-center">
 
                     <input 
                     type="range" 
@@ -656,13 +778,15 @@
                     value="2500"
                     id="priceRange"
                     >
-                    <p class="mt-2 fw-semibold">
+                    <p class="mt-2 mb-0 fw-semibold small">
                         Up to: <span class="text-primary">$<span id="priceValue">2500</span></span>
                     </p>
                 </div>
               </div>
-              <div class="col-md-3">
-                  <label class="fw-600 mb-2 text-uppercase" style="font-size: 12px;">Size</label>
+            </div>
+            <div class="row row-gap-20 g-3 g-lg-4 justify-content-center mt-1">
+              <div class="col-12 col-sm-6 col-lg-4 d-flex flex-column" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="880" data-aos-easing="ease-out-cubic">
+                  <label class="filter-artist-label fw-600 text-uppercase">Size</label>
                 <div class="position-relative w-100">
                   <select class="filter-artist-select primary-font" name="size" aria-label="Size">
                     <option value="">Select Size</option>
@@ -674,18 +798,17 @@
                   <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-12 text-gray-400 me-3 pe-none"></i>
                 </div>
               </div>
-              <div class="col-md-3">
-                 <label class="fw-600 mb-2 text-uppercase" style="font-size: 12px;">Select Color</label>
-                <div class="filter-artist-select primary-font">
-                    <label for="" class="">Select Color</label>
-                    <input type="color" name="palette_color" value="">
+              <div class="col-12 col-sm-6 col-lg-4 d-flex flex-column" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="960" data-aos-easing="ease-out-cubic">
+                 <label class="filter-artist-label fw-600 text-uppercase">Select Color</label>
+                <div class="position-relative w-100">
+                    <input type="color" name="palette_color" value="" class="filter-artist-color-input" title="Select color">
                 </div>
             </div>
             </div>
           </div>
 
         </div>
-        <div class="d-flex justify-content-center mt-45 mx-auto">
+        <div class="d-flex justify-content-center mt-45 mx-auto" data-aos="zoom-in" data-aos-duration="1500" data-aos-delay="1040" data-aos-easing="ease-out-cubic">
           <button type="submit" class="btn bg-black text-white primary-font py-10 px-50">Find Artists</button>
         </div>
       </form>
@@ -695,12 +818,12 @@
 <!-- filter artist section -->  
 <!-- love art section -->  
 <!-- Slider section -->
- <section class="categories-sec pb-60">
+ <section class="categories-sec pb-60 overflow-visible">
   <div class="container">
-    <h2 class="fs-55 fw-700 text-center text-black mx-auto mb-30 line-height-1-2 secondry-font" style="max-width: 990px;">We provide specialized service to these categories</h2>
+    <h2 class="fs-55 fw-700 text-center text-black mx-auto mb-30 line-height-1-2 secondry-font" style="max-width: 990px;" data-aos="fade-down" data-aos-duration="1500" data-aos-easing="ease-out-cubic">We provide specialized service to these categories</h2>
     <div class="row row-gap-40 row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-5 justify-content-center">
       <div class="col">
-        <div class="categories-card mx-auto">
+        <div class="categories-card mx-auto" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="200" data-aos-easing="ease-out-cubic">
             <img src="{{ showImage('uploads/images/16-06-2025/6850494d1cc2c.png') }}" alt="Interior Designers" class="mb-20">
           <h3 class="text-start fw-700 text-black fs-18 secondry-font">Interior Designers</h3>
           <p class="mb-10 primary-font">Source art for your clients</p>
@@ -708,7 +831,7 @@
         </div>
       </div>
       <div class="col">
-        <div class="categories-card mx-auto">
+        <div class="categories-card mx-auto" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="380" data-aos-easing="ease-out-cubic">
             <img src="{{ showImage('uploads/images/16-06-2025/685068899e6ec.png') }}" alt="Artists" class="mb-20">
           <h3 class="text-start fw-700 text-black fs-18 secondry-font">Artists</h3>
           <p class="mb-10 primary-font">Join our team</p>
@@ -716,7 +839,7 @@
         </div>
       </div>
       <div class="col">
-        <div class="categories-card mx-auto">
+        <div class="categories-card mx-auto" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="560" data-aos-easing="ease-out-cubic">
             <img src="{{ showImage('uploads/images/16-06-2025/6850681225004.png') }}" alt="Artists" class="mb-20">
           <h3 class="text-start fw-700 text-black fs-18 secondry-font">Organiser</h3>
           <p class="mb-10 primary-font">Join Organiser account</p>
@@ -740,21 +863,21 @@
     </div>
   </div>
 </section>
-<section class="market-place-sec d-none d-md-block position-relative pb-35 mb-35">
+<section class="market-place-sec d-none d-md-block position-relative pb-35 mb-35 overflow-visible">
   <div class="row">
     <div class="col-md-3 pl-50">
       <div class="text-white pt-custom pb-custom ps-4 position-relative">
-        <h2 class="text-uppercase fw-bold secondary-font mb-3" style="font-size: 55px;">
+        <h2 class="text-uppercase fw-bold secondary-font mb-3" style="font-size: 55px;" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="0" data-aos-easing="ease-out-cubic">
           23LD MARKETPLACE
         </h2>
-        <p class="fs-6 lh-base" style="max-width: 209px;">
+        <p class="fs-6 lh-base" style="max-width: 209px;" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="120" data-aos-easing="ease-out-cubic">
           Find your next work of art or design piece and connect with the community of 23LD buyers and sellers.
         </p>
       </div>
     </div>
     <!-- Slider Section -->
     <div class="col-md-9">
-      <div class="position-relative w-66 mt-custom flex-grow-1">
+      <div class="position-relative w-66 mt-custom flex-grow-1" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="200" data-aos-easing="ease-out-cubic">
         <!-- Custom Arrows -->
         <div class="position-absolute top-0 end-0 start-0">
          
@@ -813,13 +936,13 @@
 @endif
 <!-- Slider section -->
 <!-- newsletter section -->
-<section class="newsletter-sec pb-40">
+<section class="newsletter-sec pb-40 overflow-visible">
   <div class="container">
-    <div class="newsletter-card py-62 radius-44 bg-white">
-      <h2 class="fs-55 fw-700 text-center text-black mb-40 secondry-font">Subscribe Our Newsletter</h2>
-      <p class="primary-font text-black text-center fs-25 mx-auto mb-30" style="max-width: 863px;">Be the first to learn about new collections, new artists, local events, and special offers just for art lovers.</p>
+    <div class="newsletter-card py-62 radius-44 bg-white overflow-visible">
+      <h2 class="fs-55 fw-700 text-center text-black mb-40 secondry-font" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="0" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">Subscribe Our Newsletter</h2>
+      <p class="primary-font text-black text-center fs-25 mx-auto mb-30" style="max-width: 863px;" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="110" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">Be the first to learn about new collections, new artists, local events, and special offers just for art lovers.</p>
       <form action="">
-        <div class="position-relative mx-auto" style="max-width: 830px;">
+        <div class="position-relative mx-auto overflow-visible" style="max-width: 830px;" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="220" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
           <input type="email" class="bg-white border-gray-light fs-16 px-16 py-18 primary-font" placeholder="Email">
           <button type="submit" class="position-absolute end-0 top-0 text-black-bg text-white primary-font py-17 px-30 fs-16">Subscribe</button>
         </div>
@@ -832,17 +955,179 @@
 @php
     // get all parent categories
     use Modules\Product\Entities\Category;
+    use Modules\Seller\Entities\SellerProduct;
     $parent_categories = Category::where('parent_id', 0)->where('status', 1)->take(5)->orderby('id','desc')->get();
     $peoples_choice = $widgets->where('section_name','people_choices')->first();
+    $related_home_products = SellerProduct::with(['seller', 'product', 'skus', 'reviews'])
+        ->where('status', 1)
+        ->whereHas('product', function ($q) {
+            $q->where('status', 1)->where('is_approved', 1);
+        })
+        ->latest('id')
+        ->take(24)
+        ->get();
 @endphp
 
+<!-- Related Products section -->
+@if ($related_home_products->count() > 0)
+<section class="related-products-sec py-60 overflow-visible">
+    <div class="container">
+        <div class="related-products-sec__head position-relative mb-30">
+            <h2 class="related-products-heading fs-55 fw-700 text-black mb-0 secondry-font mx-auto" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="0" data-aos-easing="ease-out-cubic">{{ __('defaultTheme.related_products') }}</h2>
+            <div class="related-products-nav position-absolute top-0 end-0 d-flex gap-2 align-items-center flex-shrink-0" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="100" data-aos-easing="ease-out-cubic">
+                <button type="button" class="related-products-prev" aria-label="Previous">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <button type="button" class="related-products-next" aria-label="Next">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+        <div class="related-products-slider owl-carousel owl-theme" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="180" data-aos-easing="ease-out-cubic">
+            @foreach ($related_home_products as $product)
+                <div class="item">
+                    <div class="product_widget5 style5 w-100">
+                        <div class="product_thumb_upper">
+                            @php
+                                if (@$product->thum_img != null) {
+                                    $rp_thumbnail = showImage(@$product->thum_img);
+                                } else {
+                                    $rp_thumbnail = showImage(@$product->product->thumbnail_image_source);
+                                }
+                                $rp_price_qty = getProductDiscountedPrice(@$product);
+                                $rp_showData = [
+                                    'name' => @$product->product_name,
+                                    'url' => singleProductURL(@$product->seller->slug, @$product->slug),
+                                    'price' => $rp_price_qty,
+                                    'thumbnail' => $rp_thumbnail,
+                                ];
+                            @endphp
+                            <a href="{{ singleProductURL($product->seller->slug, $product->slug) }}" class="thumb">
+                                @if (app('general_setting')->lazyload == 1)
+                                    <img data-src="{{ $rp_thumbnail }}" src="{{ showImage(themeDefaultImg()) }}" alt="{{ @$product->product_name }}" title="{{ @$product->product_name }}" class="lazyload">
+                                @else
+                                    <img src="{{ $rp_thumbnail }}" alt="{{ @$product->product_name }}" title="{{ @$product->product_name }}">
+                                @endif
+                            </a>
+                            @if (isGuestAddtoCart() == true)
+                                <div class="product_action">
+                                    <a href="javascript:void(0)" class="addToCompareFromThumnail"
+                                        data-producttype="{{ @$product->product->product_type }}"
+                                        data-seller="{{ $product->user_id }}"
+                                        data-product-sku="{{ @$product->skus->first()->id }}"
+                                        data-product-id="{{ $product->id }}">
+                                        <i class="ti-control-shuffle" title="{{ __('defaultTheme.compare') }}"></i>
+                                    </a>
+                                    <a href="javascript:void(0)" class="add_to_wishlist {{ $product->is_wishlist() == 1 ? 'is_wishlist' : '' }}"
+                                        id="wishlistbtn_{{ $product->id }}"
+                                        data-product_id="{{ $product->id }}"
+                                        data-seller_id="{{ $product->user_id }}">
+                                        <i class="far fa-heart" title="{{ __('defaultTheme.wishlist') }}"></i>
+                                    </a>
+                                    <a class="quickView" data-product_id="{{ $product->id }}" data-type="product">
+                                        <i class="ti-eye" title="{{ __('defaultTheme.quick_view') }}"></i>
+                                    </a>
+                                </div>
+                            @endif
+                            <div class="product_badge">
+                                @if (isGuestAddtoCart() == true)
+                                    @if ($product->hasDeal)
+                                        @if ($product->hasDeal->discount > 0)
+                                            <span class="d-flex align-items-center discount">
+                                                @if ($product->hasDeal->discount_type == 0)
+                                                    {{ getNumberTranslate($product->hasDeal->discount) }} % {{ __('common.off') }}
+                                                @else
+                                                    {{ single_price($product->hasDeal->discount) }} {{ __('common.off') }}
+                                                @endif
+                                            </span>
+                                        @endif
+                                    @else
+                                        @if ($product->hasDiscount == 'yes')
+                                            @if ($product->discount > 0)
+                                                <span class="d-flex align-items-center discount">
+                                                    @if ($product->discount_type == 0)
+                                                        {{ getNumberTranslate($product->discount) }} % {{ __('common.off') }}
+                                                    @else
+                                                        {{ single_price($product->discount) }} {{ __('common.off') }}
+                                                    @endif
+                                                </span>
+                                            @endif
+                                        @endif
+                                    @endif
+                                @endif
+                            </div>
+                        </div>
+                        <div class="product_star mx-auto">
+                            @php
+                                $rp_reviews = @$product->reviews->where('status', 1)->pluck('rating');
+                                if (count($rp_reviews) > 0) {
+                                    $rp_val = 0;
+                                    foreach ($rp_reviews as $rv) {
+                                        $rp_val += $rv;
+                                    }
+                                    $rp_rating = $rp_val / count($rp_reviews);
+                                } else {
+                                    $rp_rating = 0;
+                                }
+                            @endphp
+                            <x-rating :rating="$rp_rating" />
+                        </div>
+                        <div class="product__meta text-center">
+                            <span class="product_banding ">{{ @$product->brand->name ?? ' ' }}</span>
+                            <a href="{{ singleProductURL(@$product->seller->slug, $product->slug) }}">
+                                <h4>@if ($product->product_name){{ textLimit(@$product->product_name, 50) }}@else{{ textLimit(@$product->product->product_name, 50) }}@endif</h4>
+                            </a>
+                            @if (isGuestAddtoCart() == true)
+                                <div class="product_price d-flex align-items-center justify-content-between flex-wrap">
+                                    <a class="amaz_primary_btn addToCartFromThumnail" data-producttype="{{ @$product->product->product_type }}" data-seller="{{ $product->user_id }}" data-product-sku="{{ @$product->skus->first()->id }}"
+                                        @if (@$product->hasDeal)
+                                            data-base-price="{{ selling_price(@$product->skus->first()->sell_price, @$product->hasDeal->discount_type, @$product->hasDeal->discount) }}"
+                                        @else
+                                            @if (@$product->hasDiscount == 'yes')
+                                                data-base-price="{{ selling_price(@$product->skus->first()->sell_price, @$product->discount_type, @$product->discount) }}"
+                                            @else
+                                                data-base-price="{{ @$product->skus->first()->sell_price }}"
+                                            @endif
+                                        @endif
+                                        data-shipping-method="0"
+                                        data-product-id="{{ $product->id }}"
+                                        data-stock_manage="{{ $product->stock_manage }}"
+                                        data-stock="{{ @$product->skus->first()->product_stock }}"
+                                        data-min_qty="{{ @$product->product->minimum_order_qty }}"
+                                        data-prod_info="{{ json_encode($rp_showData) }}">
+                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                            <path d="M0.464844 1.14286C0.464844 0.78782 0.751726 0.5 1.10561 0.5H1.58256C2.39459 0.5 2.88079 1.04771 3.15883 1.55685C3.34414 1.89623 3.47821 2.28987 3.58307 2.64624C3.61147 2.64401 3.64024 2.64286 3.66934 2.64286H14.3464C15.0557 2.64286 15.5679 3.32379 15.3734 4.00811L13.8119 9.50163C13.5241 10.5142 12.6019 11.2124 11.5525 11.2124H6.47073C5.41263 11.2124 4.48508 10.5028 4.20505 9.47909L3.55532 7.10386L2.48004 3.4621L2.47829 3.45572C2.34527 2.96901 2.22042 2.51433 2.03491 2.1746C1.85475 1.84469 1.71115 1.78571 1.58256 1.78571H1.10561C0.751726 1.78571 0.464844 1.49789 0.464844 1.14286ZM4.79882 6.79169L5.44087 9.1388C5.56816 9.60414 5.98978 9.92669 6.47073 9.92669H11.5525C12.0295 9.92669 12.4487 9.60929 12.5795 9.14909L14.0634 3.92857H3.95529L4.78706 6.74583C4.79157 6.76109 4.79548 6.77634 4.79882 6.79169ZM7.72683 13.7857C7.72683 14.7325 6.96184 15.5 6.01812 15.5C5.07443 15.5 4.30942 14.7325 4.30942 13.7857C4.30942 12.8389 5.07443 12.0714 6.01812 12.0714C6.96184 12.0714 7.72683 12.8389 7.72683 13.7857ZM6.4453 13.7857C6.4453 13.5491 6.25405 13.3571 6.01812 13.3571C5.7822 13.3571 5.59095 13.5491 5.59095 13.7857C5.59095 14.0224 5.7822 14.2143 6.01812 14.2143C6.25405 14.2143 6.4453 14.0224 6.4453 13.7857ZM13.7073 13.7857C13.7073 14.7325 12.9423 15.5 11.9986 15.5C11.0549 15.5 10.2899 14.7325 10.2899 13.7857C10.2899 12.8389 11.0549 12.0714 11.9986 12.0714C12.9423 12.0714 13.7073 12.8389 13.7073 13.7857ZM12.4258 13.7857C12.4258 13.5491 12.2345 13.3571 11.9986 13.3571C11.7627 13.3571 11.5714 13.5491 11.5714 13.7857C11.5714 14.0224 11.7627 14.2143 11.9986 14.2143C12.2345 14.2143 12.4258 14.0224 12.4258 13.7857Z" fill="currentColor"/>
+                                        </svg>
+                                        {{ __('defaultTheme.add_to_cart') }}
+                                    </a>
+                                    <p>
+                                        @if (getProductwitoutDiscountPrice(@$product) != single_price(0))
+                                            <del>{{ getProductwitoutDiscountPrice(@$product) }}</del>
+                                        @endif
+                                        <strong>{{ getProductDiscountedPrice(@$product) }}</strong>
+                                    </p>
+                                </div>
+                            @else
+                                <div class="product_price d-flex align-items-center justify-content-between flex-wrap">
+                                    <a class="amaz_primary_btn w-100" href="{{ url('/login') }}" style="text-indent: 0;">{{ __('defaultTheme.login_to_order') }}</a>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+@endif
+
 <!-- category section -->
-<!-- how it works section -->
-<section class="how-it-works-sec py-100 bg-black">
+<!-- how it works — fade-up only (horizontal AOS + overflow clipping caused hidden blocks) -->
+<section class="how-it-works-sec py-100 bg-black overflow-visible">
   <div class="container">
-    <h2 class="fs-55 fw-700 text-center text-white mx-auto secondry-font mb-40">Connect your business with local artists</h2>
+    <h2 class="fs-55 fw-700 text-center text-white mx-auto secondry-font mb-40" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="0" data-aos-easing="ease-out-cubic">Connect your business with location artists</h2>
     <div class="row justify-content-center align-items-center row-gap-30">
-      <div class="col-md-6 col-lg-4">
+      <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="100" data-aos-easing="ease-out-cubic">
         <div class="d-flex gap-30 flex-column flex-md-row align-items-center align-items-md-start text-center text-md-start  ">
           <div class="w-100 text-center text-md-start">
             <img src="{{ asset('public/uploads/all/685340c7f1013.png') }}" alt="Vision Casting" class="mb-20 mx-auto" style="max-width: 140px;">
@@ -858,7 +1143,7 @@
           </div>
         </div>
       </div>
-      <div class="col-md-6 col-lg-4">
+      <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="220" data-aos-easing="ease-out-cubic">
         <div class="d-flex gap-30 flex-column flex-md-row align-items-center align-items-md-start text-center text-md-start ">
           <div class=" w-100">
             <img src="{{ asset('public/uploads/all/685340c820468.png') }}" alt="Fine Art Matching &amp; Acquisition" class="mb-20 mx-auto" style="max-width: 140px;">
@@ -874,7 +1159,7 @@
           </div>
         </div>
       </div>
-      <div class="col-md-6 col-lg-4">
+      <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="340" data-aos-easing="ease-out-cubic">
         <div class="d-flex gap-30 flex-column flex-md-row align-items-center align-items-md-start text-center text-md-start ">
           <div class=" w-100">
             <img src="{{ asset('public/uploads/all/685340c81c9f6.png') }}" alt="Installation" class="mb-20 mx-auto" style="max-width: 140px;">
@@ -896,26 +1181,26 @@
 </section>
 <!-- how it works section -->
 <!-- partners section -->
-<section class="partners-sec py-100">
+<section class="partners-sec py-100 overflow-visible">
   <div class="container">
-    <h2 class="fs-55 fw-700 text-center text-black mx-auto secondry-font mb-40">Partners we've helped</h2>
-    <div class="row text-center g-4">
-      <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+    <h2 class="fs-55 fw-700 text-center text-black mx-auto secondry-font mb-40" data-aos="fade-up" data-aos-duration="1500" data-aos-easing="ease-out-cubic">Partners we've helped</h2>
+    <div class="row text-center g-4 justify-content-center">
+      <div class="col-12 col-sm-6 col-md-4 col-lg-2" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="0" data-aos-easing="ease-out-cubic">
         <img src="{{ asset('public/uploads/all/68530cd015b84.png') }}" alt="Partner 1" class="img-fluid mx-auto d-block">
       </div>
-      <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+      <div class="col-12 col-sm-6 col-md-4 col-lg-2" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="80" data-aos-easing="ease-out-cubic">
         <img src="{{ asset('public/uploads/all/68530cd037c1b.png') }}" alt="Partner 2" class="img-fluid mx-auto d-block">
       </div>
-      <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+      <div class="col-12 col-sm-6 col-md-4 col-lg-2" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="160" data-aos-easing="ease-out-cubic">
         <img src="{{ asset('public/uploads/all/68530cd00c595.png') }}" alt="Partner 3" class="img-fluid mx-auto d-block">
       </div>
-      <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+      <div class="col-12 col-sm-6 col-md-4 col-lg-2" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="240" data-aos-easing="ease-out-cubic">
         <img src="{{ asset('public/uploads/all/68530cd32bf88.png') }}" alt="Partner 4" class="img-fluid mx-auto d-block">
       </div>
-      <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+      <div class="col-12 col-sm-6 col-md-4 col-lg-2" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="320" data-aos-easing="ease-out-cubic">
         <img src="{{ asset('public/uploads/all/68530cd32bb2f.png') }}" alt="Partner 5" class="img-fluid mx-auto d-block">
       </div>
-      <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+      <div class="col-12 col-sm-6 col-md-4 col-lg-2" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="400" data-aos-easing="ease-out-cubic">
         <img src="{{ asset('public/uploads/all/68530cd32b92c.png') }}" alt="Partner 6" class="img-fluid mx-auto d-block">
       </div>
     </div>
@@ -923,12 +1208,12 @@
 </section>
 <!-- partners section -->
 <!-- contact us section -->
-<section class="contact-us-sec pb-100">
+<section class="contact-us-sec pb-100 overflow-visible">
   <div class="container">
     <div class="row align-items-center row-gap-40">
       <div class="col-12 col-md-6">
-        <h2 class="secondry-font text-center text-md-start fs-55 fw-400 mb-20">Connect with us</h2>
-        <div class="d-flex align-items-center flex-column flex-md-row gap-20 mb-20">
+        <h2 class="secondry-font text-center text-md-start fs-55 fw-400 mb-20" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="0" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">Connect with us</h2>
+        <div class="d-flex align-items-center flex-column flex-md-row gap-20 mb-20" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="90" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
           <div>
             <img src="{{ asset('public/uploads/all/68530cdb43d0e.png') }}" alt="profile">
           </div>
@@ -941,12 +1226,12 @@
               </div>
               <div class="d-flex align-items-center gap-20">
                 <i class="fa-solid fa-envelope fs-20 text-black"></i>
-                <a href="mailto:alexsoto.23ld@gmail.com" class="fs-24 p-0 text-black primary-font">alexsoto.23ld@gmail.com</a>
+                <a href="mailto:alexsoto.23ld@gmail.com" class="email-address-link fs-24 p-0 text-black primary-font">alexsoto.23ld@gmail.com</a>
               </div>
             </div>
           </div>
         </div>
-        <div class="d-flex align-items-center flex-column flex-md-row gap-20 mb-20">
+        <div class="d-flex align-items-center flex-column flex-md-row gap-20 mb-20" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="180" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
           <div>
             <img src="{{ asset('public/uploads/all/68530cde80b1c.png') }}" alt="profile">
           </div>
@@ -959,23 +1244,23 @@
               </div>
               <div class="d-flex align-items-center gap-20">
                 <i class="fa-solid fa-envelope fs-20 text-black"></i>
-                <a href="mailto:devinpughsley.23ld@gmail.com" class="fs-20 p-0 text-black primary-font">devinpughsley.23ld@gmail.com</a>
+                <a href="mailto:devinpughsley.23ld@gmail.com" class="email-address-link fs-24 p-0 text-black primary-font">devinpughsley.23ld@gmail.com</a>
               </div>
             </div>
           </div>
         </div>
       </div>
       <div class="col-12 col-md-6">
-        <h2 class="secondry-font text-start fs-55 fw-400 mb-20">Contact Us</h2>
+        <h2 class="secondry-font text-start fs-55 fw-400 mb-20" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="0" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">Contact Us</h2>
         @if (session('success'))
-            <div class="alert alert-success mb-3">
+            <div class="alert alert-success mb-3" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="70" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
                 {{ session('success') }}
             </div>
         @endif
         <form action="{{ route('frontend.contact.us') }}" method="POST">
             @csrf
           <div class="row row-gap-20">
-            <div class="col-12 col-sm-6">
+            <div class="col-12 col-sm-6" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="110" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
                 <input type="text"
                     name="first_name"
                     value="{{ old('first_name') }}"
@@ -985,7 +1270,7 @@
                     <small class="text-danger d-block mt-1">{{ $message }}</small>
                 @enderror
             </div>
-            <div class="col-12 col-sm-6">
+            <div class="col-12 col-sm-6" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="200" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
                 <input type="text"
                     name="last_name"
                     value="{{ old('last_name') }}"
@@ -995,7 +1280,7 @@
                     <small class="text-danger d-block mt-1">{{ $message }}</small>
                 @enderror
             </div>
-            <div class="col-12 col-sm-6">
+            <div class="col-12 col-sm-6" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="290" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
                 <input type="email"
                     name="email"
                     value="{{ old('email') }}"
@@ -1005,7 +1290,7 @@
                     <small class="text-danger d-block mt-1">{{ $message }}</small>
                 @enderror
             </div>
-            <div class="col-12 col-sm-6">
+            <div class="col-12 col-sm-6" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="380" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
                 <input type="tel"
                     name="phone"
                     value="{{ old('phone') }}"
@@ -1015,7 +1300,7 @@
                     <small class="text-danger d-block mt-1">{{ $message }}</small>
                 @enderror
             </div>
-            <div class="col-12">
+            <div class="col-12" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="470" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
                 <textarea name="message"
                         rows="5"
                         placeholder="Message"
@@ -1024,7 +1309,7 @@
                     <small class="text-danger d-block mt-1">{{ $message }}</small>
                 @enderror
             </div>
-            <div class="col-12">
+            <div class="col-12" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="560" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
               <div class="position-relative w-100">
                 <select class="primary-font border-gray-light fs-16 px-16 py-18 input-field" id="serviceSelect" name="service">
                   <option selected="" disabled="">Which service are you interested in?</option>
@@ -1036,7 +1321,7 @@
                 <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-17 text-black me-3 pe-none"></i>
               </div>
             </div>
-            <div class="col-12 text-end">
+            <div class="col-12 text-end" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="650" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
               <button type="submit" class="btn btn-primary radius-60 bg-black text-white primary-font py-17 px-30 fs-16">Submit</button>
             </div>
           </div>
@@ -3258,9 +3543,36 @@ $(document).on('change', '#state', function(event){
 
 const range = document.getElementById("priceRange");
     const priceValue = document.getElementById("priceValue");
+    if (range && priceValue) {
+      range.addEventListener("input", function () {
+        priceValue.textContent = this.value;
+      });
+    }
 
-    range.addEventListener("input", function () {
-      priceValue.textContent = this.value;
-    });
+    var $relatedProductsSlider = $(".related-products-slider");
+    if ($relatedProductsSlider.length) {
+        $relatedProductsSlider.owlCarousel({
+            loop: true,
+            margin: 24,
+            nav: false,
+            dots: false,
+            autoplay: true,
+            autoplayTimeout: 4500,
+            autoplayHoverPause: true,
+            responsiveClass: true,
+            responsive: {
+                0: { items: 1 },
+                576: { items: 2 },
+                992: { items: 3 },
+                1200: { items: 4 }
+            }
+        });
+        $(".related-products-prev").on("click", function () {
+            $relatedProductsSlider.trigger("prev.owl.carousel");
+        });
+        $(".related-products-next").on("click", function () {
+            $relatedProductsSlider.trigger("next.owl.carousel");
+        });
+    }
 </script>
 @endpush
