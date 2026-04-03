@@ -45,51 +45,193 @@
 .ratio-265-192 { aspect-ratio: 265 / 192; }  /* fifth */
 .ratio-265-196 { aspect-ratio: 265 / 196; }  /* sixth */
 
-/* Filter Artist section — layout polish (functionality unchanged) */
-.filter-artist-sec .filter-artist-panel {
-    border-radius: 1rem;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
-    border: 1px solid rgba(0, 0, 0, 0.06);
+/* Filter Artist Section — Final High-End Redesign (Strict Palette) */
+.filter-artist-sec {
+    position: relative;
+    padding: 50px 0;
+    background: radial-gradient(circle at top right, rgba(0, 0, 0, 0.02), transparent 70%);
 }
-.filter-artist-sec .filter-artist-label {
-    font-size: 11px;
-    letter-spacing: 0.085em;
-    color: #2a2a2a;
-    margin-bottom: 0.45rem;
+
+.filter-artist-sec .premium-luxury-panel {
+    background: #ffffff;
+    border-radius: 1.5rem;
+    /* Soft multi-layered "compact luxury" shadow */
+    box-shadow: 
+        0 4px 6px -1px rgba(0, 0, 0, 0.02), 
+        0 10px 15px -3px rgba(0, 0, 0, 0.03),
+        0 30px 50px -12px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 3rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.filter-artist-sec .luxury-heading {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1.1;
+    color: #000;
+    margin-bottom: 2.5rem;
+    text-align: center;
+}
+
+.filter-artist-sec .minimal-label {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: #888;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    font-weight: 700;
     display: block;
 }
-.filter-artist-sec .filter-artist-input,
-.filter-artist-sec .filter-artist-select {
-    border-radius: 0.5rem !important;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+/* Compact Base styling (48px height) */
+.filter-artist-sec .compact-input,
+.filter-artist-sec .compact-select {
+    height: 48px;
+    width: 100%;
+    border: 1px solid #f0f0f0 !important;
+    border-radius: 12px !important;
+    padding: 0 1.2rem;
+    background-color: #fafafa;
+    color: #111;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.filter-artist-sec .filter-artist-input:focus,
-.filter-artist-sec .filter-artist-select:focus {
+
+.filter-artist-sec .compact-input:hover,
+.filter-artist-sec .compact-select:hover {
+    background-color: #fff;
+    border-color: #ddd !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.filter-artist-sec .compact-input:focus,
+.filter-artist-sec .compact-select:focus {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
+    background-color: #fff;
+    border-color: #000 !important;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    transform: translateY(-1px);
 }
-.filter-artist-sec .filter-artist-color-input {
+
+/* Search Bar (Compact Luxury) */
+.filter-artist-sec .search-compact-wrapper {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.filter-artist-sec .search-compact-wrapper input {
+    padding-left: 2.8rem;
+    font-size: 15px;
+}
+
+.filter-artist-sec .search-compact-icon {
+    position: absolute;
+    left: 1.1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #bbb;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.filter-artist-sec .search-compact-wrapper input:focus + .search-compact-icon {
+    color: #000;
+}
+
+/* Custom Compact Range Slider */
+.filter-artist-sec .slider-compact-container {
+    height: 48px;
+    border: 1px solid #f0f0f0;
+    border-radius: 12px;
+    padding: 0 1.2rem;
+    background-color: #fafafa;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.filter-artist-sec .compact-range {
+    -webkit-appearance: none;
     width: 100%;
-    height: 46px;
-    padding: 4px;
-    border: 1px solid #ddd;
-    border-radius: 0.5rem;
-    background: #fff;
+    height: 3px;
+    background: #e0e0e0;
+    border-radius: 10px;
+    outline: none;
+    margin: 8px 0;
+}
+
+.filter-artist-sec .compact-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    background: #000;
+    border: 2px solid #fff;
+    border-radius: 50%;
     cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
-.filter-artist-sec .filter-artist-price-box {
-    padding: 0.35rem 0.25rem 0.15rem;
+
+.filter-artist-sec .compact-range::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
 }
-.filter-artist-sec .filter-artist-price-box .form-range {
-    cursor: pointer;
+
+/* Custom Color Picker (Circular Compact) */
+.filter-artist-sec .color-compact-wrapper {
+    position: relative;
+    height: 48px;
 }
-/* Same row as Price stretches column height; without this, the select wrapper grows and the chevron centers in empty space below the field. */
-.filter-artist-sec .d-flex.flex-column > .position-relative.w-100 {
-    align-self: flex-start;
+
+.filter-artist-sec .compact-color-input {
     width: 100%;
+    height: 100%;
+    border: 1px solid #f0f0f0;
+    border-radius: 12px;
+    padding: 5px;
+    background-color: #fafafa;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
-.filter-artist-sec .position-relative.w-100 > .filter-artist-select {
-    padding-right: 2.25rem;
+
+.filter-artist-sec .compact-color-input:hover {
+    border-color: #000;
+}
+
+/* Action Button: Luxury Black Pill */
+.filter-artist-sec .btn-compact-black {
+    background: #000;
+    color: #fff !important;
+    border: none;
+    border-radius: 50px;
+    padding: 1rem 3.5rem;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.04em;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.filter-artist-sec .btn-compact-black:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    background: #111;
+}
+
+.filter-artist-sec .btn-compact-black:active {
+    transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+    .filter-artist-sec .premium-luxury-panel {
+        padding: 2rem 1.2rem;
+    }
 }
 /* Love Art section center alignment */
 .love-art-sec .love-art-grid {
@@ -520,56 +662,29 @@
   </div>
 </section> 
 <!-- filter artist section -->  
-<!-- New Filter Artist Section -->
-<section class="filter-artist-sec pb-40 overflow-visible">
+<!-- Filter Artist Section — Final High-End Overhaul -->
+<section class="filter-artist-sec overflow-visible">
   <div class="container">
-    <div class="bg-light-gray-filter py-70  px-md-4 px-xl-5 filter-artist-panel">
-      <h2 class="fs-55 fw-700 text-center text-black mb-35 mb-md-40 secondry-font" data-aos="fade-down" data-aos-duration="1500" data-aos-easing="ease-out-cubic">Filter Artist Profiles</h2>
+    <div class="premium-luxury-panel" data-aos="fade-up" data-aos-duration="1200">
+      <h2 class="luxury-heading secondry-font">Filter Artist Profiles</h2>
+      
       <form action="{{ route('frontend.searchshop') }}" method="GET">
-        <div class="row row-gap-20 g-3">
-          <!-- Search By Name -->
-          <div class="col-md-12" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="160" data-aos-easing="ease-out-cubic">
-            <div class="position-relative w-100">
-              <input type="text" name="search" class="primary-font filter-artist-input" placeholder="Search By Name" value="{{ request('search') }}">
+        <div class="row g-3">
+          <!-- Compact Luxury Search Bar -->
+          <div class="col-12" data-aos="fade-up" data-aos-delay="100">
+            <div class="search-compact-wrapper">
+              <input type="text" name="search" class="primary-font compact-input" placeholder="Search by Artist Name or Theme..." value="{{ request('search') }}">
+              <i class="fa-solid fa-magnifying-glass search-compact-icon"></i>
             </div>
           </div>
           
-          <div class="col-md-12">
-            <div class="row row-gap-20 g-3 g-lg-4">
-              <!-- Artist Dropdown -->
-              <!-- <div class="col-md-3">
+          <div class="col-12">
+            <div class="row g-3 g-lg-4">
+              <!-- Location -->
+              <div class="col-12 col-md-6 col-lg-3 d-flex flex-column" data-aos="fade-up" data-aos-delay="150">
+                <label class="minimal-label">Region Name</label>
                 <div class="position-relative w-100">
-                  <select class="filter-artist-select primary-font" name="artist" aria-label="Artist">
-                    <option value="">Artist</option>
-                    @foreach($sellers as $seller)
-                      <option value="{{ $seller->id }}">{{ $seller->first_name }} {{ $seller->last_name }}</option>
-                    @endforeach
-                  </select>
-                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-12 text-gray-400 me-3 pe-none"></i>
-                </div>
-              </div> -->
-
-              <!-- Art Dropdown -->
-              <!-- <div class="col-md-3">
-                <div class="position-relative w-100">
-                  <select class="filter-artist-select primary-font" name="art" aria-label="Art">
-                    <option value="">Art</option>
-                    @php
-                      $parent_categories = \Modules\Product\Entities\Category::where('parent_id', 0)->where('status', 1)->get();
-                    @endphp
-                    @foreach($parent_categories as $category)
-                      <option value="{{ $category->id }}">{{ $category->name }}</option>
-                    @endforeach
-                  </select>
-                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-12 text-gray-400 me-3 pe-none"></i>
-                </div>
-              </div> -->
-
-              <!-- Location - State -->
-              <div class="col-12 col-sm-6 col-lg-3 d-flex flex-column" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="220" data-aos-easing="ease-out-cubic">
-                <label class="filter-artist-label fw-600 text-uppercase">Location</label>
-                <div class="position-relative w-100">
-                  <select class="filter-artist-select primary-font" name="location" id="location" aria-label="State">
+                  <select class="compact-select primary-font" name="location" id="location">
                     <option value="">Select Location</option>
                     <option value="AL">Alabama</option>
                     <option value="AK">Alaska</option>
@@ -622,37 +737,30 @@
                     <option value="WI">Wisconsin</option>
                     <option value="WY">Wyoming</option>
                   </select>
-                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-12 text-gray-400 me-3 pe-none"></i>
+                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-11 text-gray-400 me-3 pe-none"></i>
                 </div>
               </div>
 
-              <!-- Type in your area -->
-              <!-- <div class="col-md-3">
-                <div class="position-relative w-100">
-                  <input type="text" name="area" class="primary-font filter-artist-select" placeholder="Type in your area">
-                </div>
-              </div> -->
-
               <!-- Art Services -->
-              <div class="col-12 col-sm-6 col-lg-3 d-flex flex-column" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="300" data-aos-easing="ease-out-cubic">
-                <label class="filter-artist-label fw-600 text-uppercase">Art Services</label>
+              <div class="col-12 col-md-6 col-lg-3 d-flex flex-column" data-aos="fade-up" data-aos-delay="200">
+                <label class="minimal-label">Services</label>
                 <div class="position-relative w-100">
-                  <select class="filter-artist-select primary-font" name="art_services" aria-label="Art Services">
+                  <select class="compact-select primary-font" name="art_services">
                     <option value="">Select Art Services</option>
                     <option value="commissions">Commissions</option>
                     <option value="murals">Murals</option>
                     <option value="art_classes">Art Classes</option>
                     <option value="live_art">Live Art for Events</option>
                   </select>
-                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-12 text-gray-400 me-3 pe-none"></i>
+                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-11 text-gray-400 me-3 pe-none"></i>
                 </div>
               </div>
 
               <!-- Category -->
-              <div class="col-12 col-sm-6 col-lg-3 d-flex flex-column" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="380" data-aos-easing="ease-out-cubic">
-                <label class="filter-artist-label fw-600 text-uppercase">Category</label>
+              <div class="col-12 col-md-6 col-lg-3 d-flex flex-column" data-aos="fade-up" data-aos-delay="250">
+                <label class="minimal-label">Category</label>
                 <div class="position-relative w-100">
-                  <select class="filter-artist-select primary-font" name="category" aria-label="Category">
+                  <select class="compact-select primary-font" name="category">
                     <option value="">Select Category</option>
                     <option value="all">All</option>
                     <option value="paintings">Paintings</option>
@@ -661,15 +769,15 @@
                     <option value="sculpture">Sculpture</option>
                     <option value="other">Other</option>
                   </select>
-                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-12 text-gray-400 me-3 pe-none"></i>
+                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-11 text-gray-400 me-3 pe-none"></i>
                 </div>
               </div>
 
               <!-- Style -->
-              <div class="col-12 col-sm-6 col-lg-3 d-flex flex-column" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="460" data-aos-easing="ease-out-cubic">
-                <label class="filter-artist-label fw-600 text-uppercase">Style</label>
+              <div class="col-12 col-md-6 col-lg-3 d-flex flex-column" data-aos="fade-up" data-aos-delay="300">
+                <label class="minimal-label">Style</label>
                 <div class="position-relative w-100">
-                  <select class="filter-artist-select primary-font" name="style" aria-label="Style">
+                  <select class="compact-select primary-font" name="style">
                     <option value="">Select Style</option>
                     <option value="abstract_art">Abstract Art</option>
                     <option value="art_deco">Art Deco</option>
@@ -694,15 +802,15 @@
                     <option value="surrealism">Surrealism</option>
                     <option value="other">Other</option>
                   </select>
-                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-12 text-gray-400 me-3 pe-none"></i>
+                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-11 text-gray-400 me-3 pe-none"></i>
                 </div>
               </div>
 
-              <!-- Subject -->
-              <div class="col-12 col-sm-6 col-lg-3 d-flex flex-column" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="540" data-aos-easing="ease-out-cubic">
-                <label class="filter-artist-label fw-600 text-uppercase">Subject</label>
+              <!-- Subject Matter -->
+              <div class="col-12 col-md-6 col-lg-3 d-flex flex-column" data-aos="fade-up" data-aos-delay="350">
+                <label class="minimal-label">Subject Matter</label>
                 <div class="position-relative w-100">
-                  <select class="filter-artist-select primary-font" name="subject" aria-label="Subject">
+                  <select class="compact-select primary-font" name="subject">
                     <option value="">Select Subject</option>
                     <option value="abstract">Abstract</option>
                     <option value="landscape">Landscape</option>
@@ -728,15 +836,15 @@
                     <option value="cartoon">Cartoon</option>
                     <option value="other">Other</option>
                   </select>
-                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-12 text-gray-400 me-3 pe-none"></i>
+                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-11 text-gray-400 me-3 pe-none"></i>
                 </div>
               </div>
 
               <!-- Medium -->
-              <div class="col-12 col-sm-6 col-lg-3 d-flex flex-column" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="620" data-aos-easing="ease-out-cubic">
-                <label class="filter-artist-label fw-600 text-uppercase">Medium</label>
+              <div class="col-12 col-md-6 col-lg-3 d-flex flex-column" data-aos="fade-up" data-aos-delay="400">
+                <label class="minimal-label">Medium</label>
                 <div class="position-relative w-100">
-                  <select class="filter-artist-select primary-font" name="medium" aria-label="Medium">
+                  <select class="compact-select primary-font" name="medium">
                     <option value="">Select Medium</option>
                     <option value="acrylic">Acrylic</option>
                     <option value="oil">Oil</option>
@@ -745,15 +853,15 @@
                     <option value="ceramic">Ceramic</option>
                     <option value="other">Other</option>
                   </select>
-                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-12 text-gray-400 me-3 pe-none"></i>
+                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-11 text-gray-400 me-3 pe-none"></i>
                 </div>
               </div>
 
               <!-- Material -->
-              <div class="col-12 col-sm-6 col-lg-3 d-flex flex-column" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="700" data-aos-easing="ease-out-cubic">
-                <label class="filter-artist-label fw-600 text-uppercase">Material</label>
+              <div class="col-12 col-md-6 col-lg-3 d-flex flex-column" data-aos="fade-up" data-aos-delay="450">
+                <label class="minimal-label">Product Material</label>
                 <div class="position-relative w-100">
-                  <select class="filter-artist-select primary-font" name="material" aria-label="Material">
+                  <select class="compact-select primary-font" name="material">
                     <option value="">Select Material</option>
                     <option value="canvas">Canvas</option>
                     <option value="paper">Paper</option>
@@ -761,55 +869,65 @@
                     <option value="metal">Metal</option>
                     <option value="other">Other</option>
                   </select>
-                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-12 text-gray-400 me-3 pe-none"></i>
+                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-11 text-gray-400 me-3 pe-none"></i>
                 </div>
               </div>
-              <!-- Price -->
-              <div class="col-12 col-sm-6 col-lg-3 d-flex flex-column" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="780" data-aos-easing="ease-out-cubic">
-                <label class="filter-artist-label fw-600 text-uppercase">Price</label>
-                <div class="filter-artist-select primary-font filter-artist-price-box flex-grow-1 d-flex flex-column justify-content-center">
 
+              <!-- Price Box -->
+              <div class="col-12 col-md-6 col-lg-3 d-flex flex-column" data-aos="fade-up" data-aos-delay="500">
+                <label class="minimal-label">Price Range</label>
+                <div class="slider-compact-container primary-font">
                     <input 
-                    type="range" 
-                    class="form-range" 
-                    min="0" 
-                    max="5000" 
-                    step="100" 
-                    value="2500"
-                    id="priceRange"
+                      type="range" 
+                      class="compact-range" 
+                      min="0" 
+                      max="5000" 
+                      step="100" 
+                      value="2500"
+                      id="priceRange"
                     >
-                    <p class="mt-2 mb-0 fw-semibold small">
-                        Up to: <span class="text-primary">$<span id="priceValue">2500</span></span>
-                    </p>
+                    <div class="d-flex justify-content-between align-items-center mt-1">
+                      <span class="small fw-800 opacity-50 px-none">$0</span>
+                      <p class="mb-0 fw-bold fs-12">
+                          Up to: <span class="text-dark">$<span id="priceValue">2500</span></span>
+                      </p>
+                      <span class="small fw-800 opacity-50">$5k</span>
+                    </div>
                 </div>
               </div>
             </div>
-            <div class="row row-gap-20 g-3 g-lg-4 justify-content-center mt-1">
-              <div class="col-12 col-sm-6 col-lg-4 d-flex flex-column" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="880" data-aos-easing="ease-out-cubic">
-                  <label class="filter-artist-label fw-600 text-uppercase">Size</label>
+
+            <div class="row g-3 justify-content-center mt-2">
+              <!-- Size -->
+              <div class="col-12 col-md-6 col-lg-4 d-flex flex-column" data-aos="fade-up" data-aos-delay="550">
+                <label class="minimal-label">Item Dimensions</label>
                 <div class="position-relative w-100">
-                  <select class="filter-artist-select primary-font" name="size" aria-label="Size">
+                  <select class="compact-select primary-font" name="size">
                     <option value="">Select Size</option>
                     <option value="small">Small (< 20in)</option>
                     <option value="med">Med (20-38in)</option>
                     <option value="large">Large (38-60in)</option>
                     <option value="xlarge">X Large (>60in)</option>
                   </select>
-                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-12 text-gray-400 me-3 pe-none"></i>
+                  <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-11 text-gray-400 me-3 pe-none"></i>
                 </div>
               </div>
-              <div class="col-12 col-sm-6 col-lg-4 d-flex flex-column" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="960" data-aos-easing="ease-out-cubic">
-                 <label class="filter-artist-label fw-600 text-uppercase">Select Color</label>
-                <div class="position-relative w-100">
-                    <input type="color" name="palette_color" value="" class="filter-artist-color-input" title="Select color">
-                </div>
-            </div>
+
+              <!-- Color -->
+              <div class="col-12 col-md-6 col-lg-4 d-flex flex-column" data-aos="fade-up" data-aos-delay="600">
+                 <label class="minimal-label">Palette Orientation</label>
+                 <div class="color-compact-wrapper">
+                    <input type="color" name="palette_color" value="#000000" class="compact-color-input" title="Custom color picker">
+                 </div>
+              </div>
             </div>
           </div>
-
         </div>
-        <div class="d-flex justify-content-center mt-45 mx-auto" data-aos="zoom-in" data-aos-duration="1500" data-aos-delay="1040" data-aos-easing="ease-out-cubic">
-          <button type="submit" class="btn bg-black text-white primary-font py-10 px-50">Find Artists</button>
+
+        <div class="text-center mt-45" data-aos="zoom-in" data-aos-delay="700">
+          <button type="submit" class="btn btn-compact-black primary-font">
+             Find Artists <i class="fa-solid fa-arrow-right-long fs-12"></i>
+          </button>
         </div>
       </form>
     </div>
