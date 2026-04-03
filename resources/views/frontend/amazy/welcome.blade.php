@@ -669,9 +669,9 @@
       <h2 class="luxury-heading secondry-font">Filter Artist Profiles</h2>
       
       <form action="{{ route('frontend.searchshop') }}" method="GET">
-        <div class="row g-3">
+        <div class="row g-3 justify-content-center">
           <!-- Compact Luxury Search Bar -->
-          <div class="col-12" data-aos="fade-up" data-aos-delay="100">
+          <div class="col-6" data-aos="fade-up" data-aos-delay="100">
             <div class="search-compact-wrapper">
               <input type="text" name="search" class="primary-font compact-input" placeholder="Search by Artist Name or Theme..." value="{{ request('search') }}">
               <i class="fa-solid fa-magnifying-glass search-compact-icon"></i>
