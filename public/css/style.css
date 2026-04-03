@@ -989,3 +989,137 @@ input {
     padding: 15px 0;
   }
 }
+
+/* =============================================================================
+   Account signup / sign-in choice cards (wrap section with .account-signup-sec)
+   Used on: new_register, new_login, buyer_register, and similar gateways.
+   ============================================================================= */
+.account-signup-sec {
+  position: relative;
+  padding: clamp(40px, 5vw, 72px) 0 clamp(48px, 6vw, 80px);
+  background: radial-gradient(circle at 20% 0%, rgba(0, 0, 0, 0.03), transparent 55%),
+    radial-gradient(circle at 100% 40%, rgba(0, 0, 0, 0.02), transparent 50%);
+}
+
+.account-signup-sec > .container {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+@media (min-width: 576px) {
+  .account-signup-sec > .container {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+
+.account-signup-sec .account-signup-grid {
+  --bs-gutter-x: 24px;
+  --bs-gutter-y: 24px;
+}
+
+.account-signup-sec .account-signup-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.04),
+    0 12px 24px -8px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.35s ease,
+    border-color 0.25s ease;
+}
+
+.account-signup-sec .account-signup-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0, 0, 0, 0.1);
+  box-shadow:
+    0 12px 24px -6px rgba(0, 0, 0, 0.1),
+    0 24px 48px -12px rgba(0, 0, 0, 0.08);
+}
+
+.account-signup-sec .account-signup-card:focus-within {
+  outline: 2px solid #000;
+  outline-offset: 3px;
+}
+
+.account-signup-sec .account-signup-card__media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: #f3f3f3;
+  overflow: hidden;
+}
+
+.account-signup-sec .account-signup-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.account-signup-sec .account-signup-card:hover .account-signup-card__media img {
+  transform: scale(1.04);
+}
+
+.account-signup-sec .account-signup-card__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  padding: clamp(18px, 3vw, 22px) clamp(16px, 3vw, 20px) clamp(20px, 3vw, 24px);
+  text-align: center;
+}
+
+.account-signup-sec .account-signup-card__text {
+  font-size: 14px;
+  line-height: 1.55;
+  color: #444;
+  margin-bottom: 18px;
+  flex: 1 1 auto;
+}
+
+.account-signup-sec .account-signup-card__action {
+  margin-top: auto;
+  padding-top: 16px;
+}
+
+.account-signup-sec .account-signup-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #fff !important;
+  background: #000;
+  border: none;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.account-signup-sec .account-signup-btn:hover {
+  background: #1a1a1a;
+  color: #fff !important;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.16);
+}
+
+.account-signup-sec .account-signup-btn:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 575.98px) {
+  .account-signup-sec .account-signup-card__media {
+    aspect-ratio: 16 / 10;
+  }
+}

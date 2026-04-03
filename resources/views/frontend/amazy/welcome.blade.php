@@ -99,6 +99,7 @@
     font-size: 14px;
     font-weight: 500;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
 }
 
 .filter-artist-sec .compact-input:hover,
@@ -106,6 +107,7 @@
     background-color: #fff;
     border-color: #ddd !important;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    
 }
 
 .filter-artist-sec .compact-input:focus,

@@ -1,84 +1,105 @@
 @extends(theme('layouts.app'))
-@section('styles')
-    <link rel="stylesheet" type="text/css" href="{{asset('Modules/PageBuilder/Resources/assets/css/affiliate.css')}}">
-    <style>
-        .row{
-            margin: 0!important;
-        }
-    </style>
+
+@section('title')
+    {{ __('Sign In') }}
 @endsection
 
 @section('content')
+    <section class="account-signup-sec">
+        <div class="container">
+            <div class="row account-signup-grid justify-content-center">
+                <div class="col-12 col-sm-6 col-lg-3 d-flex" data-aos="fade-up" data-aos-duration="700" data-aos-delay="80">
+                    <article class="account-signup-card w-100">
+                        <div class="account-signup-card__media">
+                            <img
+                                src="{{ asset('') }}Modules/PageBuilder/Resources/assets/keditor/snippets/img/buyer_login.jfif"
+                                alt=""
+                                width="600"
+                                height="450"
+                                loading="lazy"
+                                decoding="async">
+                        </div>
+                        <div class="account-signup-card__body">
+                            <p class="account-signup-card__text primary-font mb-0">Create your buyer account to explore products, connect with sellers, and start purchasing.</p>
+                            <div class="account-signup-card__action">
+                                <a href="{{ URL('/login') }}" class="account-signup-btn primary-font">
+                                    Login as Buyer
+                                    <i class="fa-solid fa-arrow-right-long fs-12" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
 
+                <div class="col-12 col-sm-6 col-lg-3 d-flex" data-aos="fade-up" data-aos-duration="700" data-aos-delay="140">
+                    <article class="account-signup-card w-100">
+                        <div class="account-signup-card__media">
+                            <img
+                                src="{{ asset('') }}Modules/PageBuilder/Resources/assets/keditor/snippets/img/artist_login.jfif"
+                                alt=""
+                                width="600"
+                                height="450"
+                                loading="lazy"
+                                decoding="async">
+                        </div>
+                        <div class="account-signup-card__body">
+                            <p class="account-signup-card__text primary-font mb-0">Create your Artist account to upload your artwork and start selling your paintings today.</p>
+                            <div class="account-signup-card__action">
+                                <a href="{{ route('seller.login') }}" class="account-signup-btn primary-font">
+                                    Login as Artist
+                                    <i class="fa-solid fa-arrow-right-long fs-12" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
 
-<div class="row">
-    <div class="container mt_30 mb_30">
-        <div data-type="container" data-preview="{{asset('')}}Modules/PageBuilder/Resources/assets/keditor/snippets/preview/articles_list.png" data-keditor-title="Articles List" data-keditor-categories="Text;Heading;Photo">
-            <div class="row">
-                <div class="col-sm-3 ui-resizable" data-type="container-content">
-                    <div data-type="component-photo">
-                        <div class="photo-panel">
-                            <img src="{{asset('')}}Modules/PageBuilder/Resources/assets/keditor/snippets/img/buyer_login.jfif" width="100%" height="334px" style="display: inline-block;" class="img-circle">
+                <div class="col-12 col-sm-6 col-lg-3 d-flex" data-aos="fade-up" data-aos-duration="700" data-aos-delay="200">
+                    <article class="account-signup-card w-100">
+                        <div class="account-signup-card__media">
+                            <img
+                                src="{{ asset('') }}Modules/PageBuilder/Resources/assets/keditor/snippets/img/event_login.jpg"
+                                alt=""
+                                width="600"
+                                height="450"
+                                loading="lazy"
+                                decoding="async">
                         </div>
-                    </div>
-                    <div data-type="component-text">
-                        <p style="text-align: center;">Create your buyer account to explore products, connect with sellers, and start purchasing.</p>
-                        <div style="text-align:center;">
-                            <a href="{{URL('/login')}}" class="home10_primary_btn2 gj-cursor-pointer mb-0 small_btn">
-                                Login as Buyer
-                            </a>
+                        <div class="account-signup-card__body">
+                            <p class="account-signup-card__text primary-font mb-0">Create your Organizer account to start hosting and managing events today.</p>
+                            <div class="account-signup-card__action">
+                                <a href="{{ route('event.login') }}" class="account-signup-btn primary-font">
+                                    Login as Organiser
+                                    <i class="fa-solid fa-arrow-right-long fs-12" aria-hidden="true"></i>
+                                </a>
+                            </div>
                         </div>
-                    </div>
+                    </article>
                 </div>
-                <div class="col-sm-3 ui-resizable" data-type="container-content">
-                    <div data-type="component-photo">
-                        <div class="photo-panel">
-                            <img src="{{asset('')}}Modules/PageBuilder/Resources/assets/keditor/snippets/img/artist_login.jfif" width="100%" height="334px" style="display: inline-block;" class="img-circle">
+
+                <div class="col-12 col-sm-6 col-lg-3 d-flex" data-aos="fade-up" data-aos-duration="700" data-aos-delay="260">
+                    <article class="account-signup-card w-100">
+                        <div class="account-signup-card__media">
+                            <img
+                                src="{{ asset('') }}Modules/PageBuilder/Resources/assets/keditor/snippets/img/interior_designer.jpg"
+                                alt=""
+                                width="600"
+                                height="450"
+                                loading="lazy"
+                                decoding="async">
                         </div>
-                    </div>
-                    <div data-type="component-text">
-                        <p style="text-align: center;">Create your Artist account to upload your artwork and start selling your paintings today.</p>
-                        <div style="text-align:center;">
-                            <a href="{{route('seller.login')}}" class="home10_primary_btn2 gj-cursor-pointer mb-0 small_btn">
-                                Login as Artist
-                            </a>
+                        <div class="account-signup-card__body">
+                            <p class="account-signup-card__text primary-font mb-0">Create your Interior designers account transform spaces by planning layouts.</p>
+                            <div class="account-signup-card__action">
+                                <a href="{{ URL('/login') }}" class="account-signup-btn primary-font">
+                                    Login as Interior Designers
+                                    <i class="fa-solid fa-arrow-right-long fs-12" aria-hidden="true"></i>
+                                </a>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-sm-3 ui-resizable" data-type="container-content">
-                    <div data-type="component-photo">
-                        <div class="photo-panel">
-                            <img src="{{asset('')}}Modules/PageBuilder/Resources/assets/keditor/snippets/img/event_login.jpg" width="100%" height="334px" style="display: inline-block;" class="img-circle">
-                        </div>
-                    </div>
-                    <div data-type="component-text">
-                        <p style="text-align: center;">Create your Organizer account to start hosting and managing events today.</p>
-                        <div style="text-align:center;">
-                            <a href="{{route('event.login')}}" class="home10_primary_btn2 gj-cursor-pointer mb-0 small_btn">
-                                Login as Organiser
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3 ui-resizable" data-type="container-content">
-                    <div data-type="component-photo">
-                        <div class="photo-panel">
-                            <img src="{{asset('')}}Modules/PageBuilder/Resources/assets/keditor/snippets/img/interior_designer.jpg" width="100%" height="334px" style="display: inline-block;" class="img-circle">
-                        </div>
-                    </div>
-                    <div data-type="component-text">
-                        <p style="text-align: center;">Create your Interior designers account transform spaces by planning layouts.</p>
-                        <div style="text-align:center;">
-                            <a href="{{URL('/login')}}" class="home10_primary_btn2 gj-cursor-pointer mb-0 small_btn">
-                                Login as Interior Designers
-                            </a>
-                        </div>
-                    </div>
+                    </article>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+    </section>
 @endsection
-
-

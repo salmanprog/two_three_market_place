@@ -124,7 +124,7 @@
             </div>
         </div>
     </footer>-->
-    <footer class="bg-black pt-65 pb-150 overflow-visible">
+    <footer class="bg-black pt-65 pb-50 overflow-visible">
   <div class="container">
     <div class="row justify-content-between g-4 g-lg-5">
       <div class="col-12 col-lg-4 col-xl-3" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="0" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
