@@ -575,6 +575,8 @@
     </div>
   </div>
 </section>
+@endif
+{{-- @endif must follow only the Love Art block; filter / categories / marketplace must always render --}}
 <!-- filter artist section --> 
 <!-- <section class="filter-artist-sec pb-40">
   <div class="container">
@@ -1053,7 +1055,6 @@
   </div>
   
 </section>
-@endif
 <!-- Slider section -->
 <!-- newsletter section -->
 <section class="newsletter-sec pb-40 overflow-visible">
@@ -1346,7 +1347,7 @@
               </div>
               <div class="d-flex align-items-center gap-20">
                 <i class="fa-solid fa-envelope fs-20 text-black"></i>
-                <a href="mailto:alexsoto.23ld@gmail.com" class="email-address-link fs-24 p-0 text-black primary-font">alexsoto.23ld@gmail.com</a>
+                <a href="mailto:alexsoto.23ld@gmail.com" class="email-address-link fs-20 p-0 text-black primary-font">alexsoto.23ld@gmail.com</a>
               </div>
             </div>
           </div>
@@ -1364,7 +1365,7 @@
               </div>
               <div class="d-flex align-items-center gap-20">
                 <i class="fa-solid fa-envelope fs-20 text-black"></i>
-                <a href="mailto:devinpughsley.23ld@gmail.com" class="email-address-link fs-24 p-0 text-black primary-font">devinpughsley.23ld@gmail.com</a>
+                <a href="mailto:devinpughsley.23ld@gmail.com" class="email-address-link fs-20 p-0 text-black primary-font">devinpughsley.23ld@gmail.com</a>
               </div>
             </div>
           </div>
@@ -3693,6 +3694,32 @@ const range = document.getElementById("priceRange");
         $(".related-products-next").on("click", function () {
             $relatedProductsSlider.trigger("next.owl.carousel");
         });
+        $relatedProductsSlider.on("initialized.owl.carousel", function () {
+            if (typeof AOS !== "undefined") { AOS.refresh(); }
+        });
     }
+
+    var $marketplaceSlider = $(".marketplace-slider");
+    if ($marketplaceSlider.length && typeof $marketplaceSlider.owlCarousel === "function") {
+        $marketplaceSlider.owlCarousel({
+            loop: true,
+            margin: 16,
+            nav: false,
+            dots: true,
+            autoplay: true,
+            autoplayTimeout: 5000,
+            responsive: { 0: { items: 1 }, 768: { items: 2 } }
+        });
+        $marketplaceSlider.on("initialized.owl.carousel resized.owl.carousel", function () {
+            if (typeof AOS !== "undefined") { AOS.refresh(); }
+        });
+    }
+
+    function welcomePageAosRefresh() {
+        if (typeof AOS !== "undefined") { AOS.refresh(); }
+    }
+    window.addEventListener("load", welcomePageAosRefresh);
+    setTimeout(welcomePageAosRefresh, 300);
+    setTimeout(welcomePageAosRefresh, 900);
 </script>
 @endpush
