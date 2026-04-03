@@ -11,3 +11,4 @@
 # Ignore compiled CSS, JS, etc.
 # Ignore ZIP files
 *.zip
+*.sql 
