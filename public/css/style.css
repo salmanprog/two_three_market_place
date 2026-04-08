@@ -1123,3 +1123,224 @@ input {
     aspect-ratio: 16 / 10;
   }
 }
+
+/* =============================================================================
+   Inner / dropdown pages: “How we partner”, “Why 23LD”, interior-designers, locations (office-space), art-services, etc.
+   Wrap page in .how-partner-page → .how-partner-section → .how-partner-media / .how-partner-prose
+   ============================================================================= */
+.how-partner-page {
+  --hp-prose: #3a3a3a;
+  --hp-heading: #0a0a0a;
+  --hp-radius: 1.25rem;
+  --hp-shadow: 0 24px 48px rgba(0, 0, 0, 0.08), 0 8px 16px rgba(0, 0, 0, 0.04);
+  background: #f4f7f9;
+}
+
+.how-partner-section {
+  position: relative;
+}
+
+.how-partner-media {
+  border-radius: var(--hp-radius);
+  overflow: hidden;
+  box-shadow: var(--hp-shadow);
+  background: #e8e8ea;
+  margin: 0;
+}
+
+.how-partner-media img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  vertical-align: middle;
+}
+
+@media (min-width: 992px) {
+  .how-partner-media img {
+    min-height: 380px;
+    max-height: 560px;
+  }
+}
+
+.how-partner-prose {
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--hp-prose);
+}
+
+.how-partner-prose p {
+  margin-bottom: 1.25rem;
+}
+
+.how-partner-prose p:last-child {
+  margin-bottom: 0;
+}
+
+.how-partner-prose > ul {
+  margin: 0 0 1.25rem 0;
+  padding-left: 1.35rem;
+  color: var(--hp-prose);
+}
+
+.how-partner-prose > ul:last-child {
+  margin-bottom: 0;
+}
+
+.how-partner-prose > ul li {
+  margin-bottom: 0.5rem;
+  list-style: disc;
+}
+
+.how-partner-prose > ul li:last-child {
+  margin-bottom: 0;
+}
+
+.how-partner-lead {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--hp-heading);
+  margin-bottom: 1.25rem;
+
+}
+
+@media (max-width: 991.98px) {
+  .how-partner-section {
+    padding-top: 2.5rem !important;
+    padding-bottom: 2.5rem !important;
+  }
+}
+
+/* =============================================================================
+   Artists listing (/artists — merchants.blade.php) — 3 cards per row on lg+
+   ============================================================================= */
+.artists-list-page {
+  background: #f4f7f9;
+  padding-top: 32px;
+  padding-bottom: 48px;
+}
+
+.artists-list-section .artists-list-title {
+  letter-spacing: 0.04em;
+}
+
+.artists-list-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.artists-list-card:hover {
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.artists-list-card__media {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 92px;
+  gap: 10px;
+  align-items: stretch;
+  min-height: 220px;
+  margin-bottom: 16px;
+}
+
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .artists-list-card__media {
+    grid-template-columns: minmax(0, 1fr) 88px;
+    min-height: 210px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .artists-list-card__media {
+    grid-template-columns: minmax(0, 1fr) 80px;
+    min-height: 200px;
+  }
+}
+
+.artists-list-card__portrait {
+  border-radius: 12px;
+  overflow: hidden;
+  background: #ececee;
+  min-height: 200px;
+}
+
+.artists-list-card__portrait img {
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.artists-list-card__thumbs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 200px;
+}
+
+.artists-list-card__thumb-slot {
+  flex: 1 1 0;
+  min-height: 58px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f0f0f2;
+}
+
+.artists-list-card__thumb-slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.artists-list-card__thumb-slot--empty {
+  background: #fafafa;
+  border: 1px dashed #ddd;
+  min-height: 58px;
+}
+
+.artists-list-card__body {
+  margin-top: auto;
+}
+
+.artists-list-card__name {
+  font-size: clamp(1.2rem, 1.8vw, 1.65rem);
+  line-height: 1.2;
+  margin-bottom: 6px;
+}
+
+.artists-list-card__tagline {
+  color: #555;
+  font-size: 0.9rem;
+  margin-bottom: 12px;
+}
+
+.artists-list-card .btn-artists-profile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 10px 16px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 999px;
+  background: #000;
+  color: #fff !important;
+  border: 1px solid #000;
+  text-decoration: none !important;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.artists-list-card .btn-artists-profile:hover {
+  background: #1a1a1a;
+  color: #fff !important;
+}

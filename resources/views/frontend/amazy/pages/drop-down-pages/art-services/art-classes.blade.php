@@ -6,7 +6,7 @@
         <div class="container">
             <div class="row align-items-center g-5">
                 <div class="col-12 text-center">
-                    <h1 class="nav-dp-title">Art Classes</h1>
+                <h1 class="secondry-font fs-55 fw-700 text-center text-black m mx-auto" style="max-width: 920px;" data-aos="fade-up" data-aos-duration="1000" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">Art Classes</h1>
                 </div>
                 <div class="col-lg-6">
                     <div class="nav-dp-content-wrapper">

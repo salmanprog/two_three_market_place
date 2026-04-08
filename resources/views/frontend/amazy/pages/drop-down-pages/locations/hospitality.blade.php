@@ -6,7 +6,7 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-12 text-center">
-                    <h1 class="nav-dp-title">Hospitality</h1>
+                <h1 class="secondry-font fs-55 fw-700 text-center text-black mb-40 line-height-1-2 mx-auto" style="max-width: 920px;" data-aos="fade-up" data-aos-duration="1000" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">Hospitality</h1>
                 </div>
                 <div class="col-lg-4">
                     <div class="nav-dp-img-wrapper">
