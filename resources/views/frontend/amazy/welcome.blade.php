@@ -1077,16 +1077,69 @@
     // get all parent categories
     use Modules\Product\Entities\Category;
     use Modules\Seller\Entities\SellerProduct;
+    use App\Models\SuggestColors;
     $parent_categories = Category::where('parent_id', 0)->where('status', 1)->take(5)->orderby('id','desc')->get();
     $peoples_choice = $widgets->where('section_name','people_choices')->first();
-    $related_home_products = SellerProduct::with(['seller', 'product', 'skus', 'reviews'])
-        ->where('status', 1)
-        ->whereHas('product', function ($q) {
-            $q->where('status', 1)->where('is_approved', 1);
-        })
-        ->latest('id')
-        ->take(24)
-        ->get();
+    $current_user_suggest_color = auth()->check()
+        ? SuggestColors::where('user_id', auth()->id())->get()
+        : null;
+
+    $user_palette_hexes = $current_user_suggest_color instanceof \Illuminate\Support\Collection
+        ? $current_user_suggest_color->pluck('colors')->filter()->unique()->values()->all()
+        : [];
+
+    $normalized = ! empty($user_palette_hexes)
+        ? collect($user_palette_hexes)->map(fn ($c) => strtolower(trim((string) $c)))->unique()->values()->all()
+        : [];
+
+    $relatedLimit = 24;
+    $relatedWith = ['seller', 'product', 'skus', 'reviews'];
+
+    if (empty($normalized)) {
+        $related_home_products = SellerProduct::with($relatedWith)
+            ->where('status', 1)
+            ->whereHas('product', function ($q) {
+                $q->where('status', 1)->where('is_approved', 1);
+            })
+            ->inRandomOrder()
+            ->take($relatedLimit)
+            ->get();
+    } else {
+        $placeholders = implode(',', array_fill(0, count($normalized), '?'));
+
+        $matchedProducts = SellerProduct::with($relatedWith)
+            ->where('status', 1)
+            ->whereHas('product', function ($q) use ($normalized, $placeholders) {
+                $q->where('status', 1)->where('is_approved', 1);
+                $q->whereRaw('LOWER(TRIM(`palette_color`)) IN (' . $placeholders . ')', $normalized);
+            })
+            ->inRandomOrder()
+            ->take($relatedLimit)
+            ->get();
+
+        $matchedIds = $matchedProducts->pluck('id')->all();
+        $needOthers = $relatedLimit - $matchedProducts->count();
+
+        $otherProducts = collect();
+        if ($needOthers > 0) {
+            $otherProducts = SellerProduct::with($relatedWith)
+                ->where('status', 1)
+                ->whereNotIn('id', $matchedIds)
+                ->whereHas('product', function ($q) use ($normalized, $placeholders) {
+                    $q->where('status', 1)->where('is_approved', 1);
+                    $q->where(function ($sub) use ($normalized, $placeholders) {
+                        $sub->whereNull('palette_color')
+                            ->orWhere('palette_color', '')
+                            ->orWhereRaw('LOWER(TRIM(`palette_color`)) NOT IN (' . $placeholders . ')', $normalized);
+                    });
+                })
+                ->inRandomOrder()
+                ->take($needOthers)
+                ->get();
+        }
+
+        $related_home_products = $matchedProducts->merge($otherProducts);
+    }
 @endphp
 
 <!-- Related Products section -->
@@ -1094,7 +1147,7 @@
 <section class="related-products-sec py-60 overflow-visible">
     <div class="container">
         <div class="related-products-sec__head position-relative mb-30">
-            <h2 class="related-products-heading fs-55 fw-700 text-black mb-0 secondry-font mx-auto" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="0" data-aos-easing="ease-out-cubic">{{ __('defaultTheme.related_products') }}</h2>
+            <h2 class="related-products-heading fs-55 fw-700 text-black mb-0 secondry-font mx-auto" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="0" data-aos-easing="ease-out-cubic">{{ __('Recomended Products') }}</h2>
             <div class="related-products-nav position-absolute top-0 end-0 d-flex gap-2 align-items-center flex-shrink-0" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="100" data-aos-easing="ease-out-cubic">
                 <button type="button" class="related-products-prev" aria-label="Previous">
                     <i class="fa-solid fa-chevron-left"></i>

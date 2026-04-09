@@ -41,6 +41,7 @@ use App\Http\Controllers\DemoController;
 use App\Http\Controllers\Frontend\NotificationController;
 use App\Http\Controllers\Frontend\ProductReviewController;
 use App\Http\Controllers\Frontend\SupportTicketController;
+use App\Http\Controllers\Frontend\SuggestColorsController;
 use App\Http\Controllers\Frontend\FollowCustomerController;
 use App\Http\Controllers\Frontend\ReturnExchangeController;
 use App\Http\Controllers\Frontend\DigitalGiftCardController;
@@ -296,6 +297,13 @@ Route::group(['middleware' => ['auth', 'customer'], 'prefix' => 'profile'], func
     Route::post('/product-review', [ProductReviewController::class, 'store'])->name('frontend.profile.review.store');
     Route::post('/user-notification-read', [NotificationController::class, 'read'])->name('user_notification_read');
     Route::get('/follow-customer', [FollowCustomerController::class, 'follow_customer'])->name('frontend.profile.follow-customer');
+
+    Route::get('/suggest-colors', [SuggestColorsController::class, 'index'])->name('frontend.suggest-colors.index');
+    Route::get('/suggest-colors/create', [SuggestColorsController::class, 'create'])->name('frontend.suggest-colors.create');
+    Route::post('/suggest-colors', [SuggestColorsController::class, 'store'])->name('frontend.suggest-colors.store')->middleware('prohibited_demo_mode');
+    Route::get('/suggest-colors/{suggestColor}/edit', [SuggestColorsController::class, 'edit'])->name('frontend.suggest-colors.edit');
+    Route::post('/suggest-colors/{suggestColor}', [SuggestColorsController::class, 'update'])->name('frontend.suggest-colors.update')->middleware('prohibited_demo_mode');
+    Route::post('/suggest-colors/{suggestColor}/destroy', [SuggestColorsController::class, 'destroy'])->name('frontend.suggest-colors.destroy')->middleware('prohibited_demo_mode');
 });
 
 Route::get('product-review/filter', [ProductReviewController::class, 'filterReview'])->name('filterReview');

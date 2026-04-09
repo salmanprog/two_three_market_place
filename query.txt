@@ -1,0 +1,18 @@
+CREATE TABLE `user_suggest_colors` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `colors` varchar(191) NOT NULL,
+  `slug` varchar(191) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+
+ALTER TABLE `user_suggest_colors`
+  ADD PRIMARY KEY (`id`);
+
+
+53191
+  ALTER TABLE `user_suggest_colors`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
