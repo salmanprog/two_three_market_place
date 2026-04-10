@@ -1,7 +1,40 @@
 @extends('backEnd.master')
+@php
+    $eventMapsEnabled = config('app.map_api_status') == 'true' && filled(config('app.map_api_key'));
+@endphp
 @section('styles')
 
 <link rel="stylesheet" href="{{asset(asset_path('modules/attendance/css/style.css'))}}" />
+<style>
+    .event-address-wrap { position: relative; }
+    .event-address-suggestions {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 100%;
+        z-index: 1050;
+        max-height: 240px;
+        overflow-y: auto;
+        background: var(--bg_white, #fff);
+        border: 1px solid var(--border_color, #e2e6ef);
+        border-radius: 4px;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+        list-style: none;
+        margin: 2px 0 0;
+        padding: 0;
+    }
+    .event-address-suggestions li {
+        padding: 10px 14px;
+        cursor: pointer;
+        font-size: 13px;
+        line-height: 1.35;
+        border-bottom: 1px solid var(--border_color, #eef0f7);
+    }
+    .event-address-suggestions li:last-child { border-bottom: 0; }
+    .event-address-suggestions li:hover,
+    .event-address-suggestions li.is-active { background: var(--input__bg, #f5f7fb); }
+    .pac-container { z-index: 10000 !important; }
+</style>
 @endsection
 @section('mainContent')
 
@@ -81,13 +114,19 @@
                                             </div>
                                         </div>
                                         <div class="col-lg-12">
-                                            <div class="primary_input mb-25">
-                                                <label class="primary_input_label" for="">{{ __('common.location') }}
+                                            <div class="primary_input mb-25 event-address-wrap">
+                                                <label class="primary_input_label" for="current_address">{{ __('common.location') }}
                                                     <span class="text-danger">*</span></label>
                                                 <input name="location" id="current_address"
                                                        class="primary_input_field name"
                                                        placeholder="{{ __('common.location') }}"
-                                                       value="{{isset($editData) ? $editData->location : old('location') }}" type="text">
+                                                       value="{{isset($editData) ? $editData->location : old('location') }}" type="text" autocomplete="off">
+                                                <ul id="event_address_suggestions" class="event-address-suggestions d-none" role="listbox" aria-label="{{ __('common.location') }}"></ul>
+                                                <input type="hidden" name="current_latitude" id="current_latitude"
+                                                       value="{{ isset($editData) ? $editData->current_latitude : old('current_latitude') }}">
+                                                <input type="hidden" name="current_longitude" id="current_longitude"
+                                                       value="{{ isset($editData) ? $editData->current_longitude : old('current_longitude') }}">
+                                                <small class="text-muted d-block mt-1" id="event_geocode_status"></small>
                                                 <span class="text-danger">{{$errors->first('location')}}</span>
                                             </div>
                                         </div>
@@ -319,10 +358,113 @@
     </section>
     @include('backEnd.partials.delete_modal')
 @endsection
+@if($eventMapsEnabled)
+<script src="https://maps.googleapis.com/maps/api/js?key={{ config('app.map_api_key') }}&callback=initEventLocationAutocomplete&libraries=places&v=weekly" defer></script>
+@endif
 @push('scripts')
     <script>
         (function($){
             "use strict";
+            var eventMapsEnabled = @json($eventMapsEnabled);
+
+            function geocodeEventLocation(address) {
+                var $status = $('#event_geocode_status');
+                if (!address || String(address).trim().length < 2) {
+                    $('#current_latitude').val('');
+                    $('#current_longitude').val('');
+                    $status.text('');
+                    return $.Deferred().resolve(false).promise();
+                }
+                $status.text('…');
+                return $.getJSON('https://geocoding-api.open-meteo.com/v1/search', {
+                    name: String(address).trim(),
+                    count: 1,
+                    language: 'en',
+                    format: 'json'
+                }).then(function (data) {
+                    if (data.results && data.results[0]) {
+                        var r = data.results[0];
+                        $('#current_latitude').val(r.latitude);
+                        $('#current_longitude').val(r.longitude);
+                        $status.text('');
+                        return true;
+                    }
+                    $('#current_latitude').val('');
+                    $('#current_longitude').val('');
+                    $status.text('');
+                    return false;
+                }).fail(function () {
+                    $status.text('');
+                });
+            }
+
+            function photonLabel(f) {
+                var p = f.properties || {};
+                var parts = [p.name, p.street, p.city, p.state, p.country].filter(Boolean);
+                return parts.length ? parts.join(', ') : (p.name || '');
+            }
+
+            function showPhotonSuggestions(features) {
+                var $ul = $('#event_address_suggestions');
+                $ul.empty();
+                if (!features || !features.length) {
+                    $ul.addClass('d-none');
+                    return;
+                }
+                features.forEach(function (f, i) {
+                    var coords = f.geometry && f.geometry.coordinates;
+                    if (!coords || coords.length < 2) return;
+                    var lon = coords[0], lat = coords[1];
+                    var label = photonLabel(f);
+                    if (!label) return;
+                    $('<li role="option" tabindex="-1"></li>')
+                        .text(label)
+                        .attr('data-lat', lat)
+                        .attr('data-lon', lon)
+                        .attr('data-label', label)
+                        .appendTo($ul);
+                });
+                if ($ul.children().length) {
+                    $ul.removeClass('d-none');
+                } else {
+                    $ul.addClass('d-none');
+                }
+            }
+
+            function hidePhotonSuggestions() {
+                $('#event_address_suggestions').addClass('d-none').empty();
+            }
+
+            window.initEventLocationAutocomplete = function () {
+                if (!eventMapsEnabled) return;
+                var input = document.getElementById('current_address');
+                if (!input || !window.google || !google.maps || !google.maps.places) return;
+                var opts = {
+                    fields: ['formatted_address', 'geometry', 'name'],
+                    types: ['geocode'],
+                };
+                @if(config('app.map_api_country_1') != '')
+                opts.componentRestrictions = { country: [
+                    @if(config('app.map_api_country_1') != '') "{{ config('app.map_api_country_1') }}" @endif
+                    @if(config('app.map_api_country_2') != '') ,"{{ config('app.map_api_country_2') }}" @endif
+                    @if(config('app.map_api_country_3') != '') ,"{{ config('app.map_api_country_3') }}" @endif
+                    @if(config('app.map_api_country_4') != '') ,"{{ config('app.map_api_country_4') }}" @endif
+                    @if(config('app.map_api_country_5') != '') ,"{{ config('app.map_api_country_5') }}" @endif
+                ]};
+                @endif
+                var ac = new google.maps.places.Autocomplete(input, opts);
+                ac.addListener('place_changed', function () {
+                    var place = ac.getPlace();
+                    if (!place.geometry || !place.geometry.location) return;
+                    input.value = place.formatted_address || place.name || input.value;
+                    $('#current_latitude').val(place.geometry.location.lat());
+                    $('#current_longitude').val(place.geometry.location.lng());
+                    $(input).closest('form').removeData('eventGeocodeSubmitted');
+                });
+            };
+
+            var geocodeTimer;
+            var photonTimer;
             $(document).ready(function(){
                 $(document).on('click', '.delete_event', function(event){
                     let url = $(this).data('value');
@@ -331,6 +473,64 @@
                 $(document).on('change', '#document_file_1', function(event){
                     getFileName($(this).val(),'#placeholderFileOneName');
                     imageChangeWithFile($(this)[0],'#img');
+                });
+
+                if (!eventMapsEnabled) {
+                    $(document).on('input', '#current_address', function () {
+                        $(this).closest('form').removeData('eventGeocodeSubmitted');
+                        clearTimeout(photonTimer);
+                        clearTimeout(geocodeTimer);
+                        var q = $.trim($(this).val());
+                        if (q.length < 3) {
+                            hidePhotonSuggestions();
+                            return;
+                        }
+                        photonTimer = setTimeout(function () {
+                            $.getJSON('https://photon.komoot.io/api/', { q: q, limit: 8 })
+                                .done(function (data) {
+                                    showPhotonSuggestions(data.features || []);
+                                })
+                                .fail(function () { hidePhotonSuggestions(); });
+                        }, 350);
+                    });
+                    $(document).on('mousedown', '#event_address_suggestions li', function (e) {
+                        e.preventDefault();
+                        var $li = $(this);
+                        $('#current_address').val($li.data('label'));
+                        $('#current_latitude').val($li.data('lat'));
+                        $('#current_longitude').val($li.data('lon'));
+                        hidePhotonSuggestions();
+                        $('#current_address').closest('form').removeData('eventGeocodeSubmitted');
+                    });
+                    $(document).on('blur', '#current_address', function () {
+                        setTimeout(hidePhotonSuggestions, 200);
+                        clearTimeout(geocodeTimer);
+                        var addr = $(this).val();
+                        geocodeTimer = setTimeout(function () {
+                            if ($.trim($('#current_latitude').val()) === '') {
+                                geocodeEventLocation(addr);
+                            }
+                        }, 400);
+                    });
+                }
+
+                $('#current_address').closest('form').on('submit', function (e) {
+                    var $form = $(this);
+                    if ($form.data('eventGeocodeSubmitted')) {
+                        return;
+                    }
+                    var loc = $.trim($('#current_address').val());
+                    var lat = $.trim($('#current_latitude').val());
+                    if (!loc || lat !== '') {
+                        return;
+                    }
+                    e.preventDefault();
+                    geocodeEventLocation(loc).always(function () {
+                        $form.data('eventGeocodeSubmitted', true);
+                        if ($form[0]) {
+                            HTMLFormElement.prototype.submit.call($form[0]);
+                        }
+                    });
                 });
             });
         })(jQuery);

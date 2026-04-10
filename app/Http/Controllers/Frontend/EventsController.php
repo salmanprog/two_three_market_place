@@ -29,8 +29,77 @@ class EventsController extends Controller
 
     public function index(Request $request)
     {
-        $data['events'] = Event::latest()->get();
+        $events = Event::latest()->get();
+
+        $userLat = $request->query('lat');
+        $userLng = $request->query('lng');
+
+        if ($this->isValidCoordinatePair($userLat, $userLng)) {
+            $request->session()->put('organiser_events_lat', (float) $userLat);
+            $request->session()->put('organiser_events_lng', (float) $userLng);
+        } else {
+            $userLat = $request->session()->get('organiser_events_lat');
+            $userLng = $request->session()->get('organiser_events_lng');
+        }
+
+        $sortedByLocation = false;
+        if ($this->isValidCoordinatePair($userLat, $userLng)) {
+            $lat = (float) $userLat;
+            $lng = (float) $userLng;
+            $sortedByLocation = true;
+
+            $withCoords = $events->filter(function (Event $e) {
+                return $e->current_latitude !== null && $e->current_latitude !== ''
+                    && $e->current_longitude !== null && $e->current_longitude !== '';
+            });
+
+            $withoutCoords = $events->filter(function (Event $e) {
+                return $e->current_latitude === null || $e->current_latitude === ''
+                    || $e->current_longitude === null || $e->current_longitude === '';
+            });
+
+            $withCoords = $withCoords->map(function (Event $e) use ($lat, $lng) {
+                $e->setAttribute(
+                    'distance_km',
+                    $this->haversineKm($lat, $lng, (float) $e->current_latitude, (float) $e->current_longitude)
+                );
+
+                return $e;
+            })->sortBy('distance_km')->values();
+
+            $data['events'] = $withCoords->merge($withoutCoords->values());
+        } else {
+            $data['events'] = $events;
+        }
+
+        $data['eventsSortedByLocation'] = $sortedByLocation;
+
         return view(theme('pages.events'), $data);
+    }
+
+    protected function isValidCoordinatePair($lat, $lng): bool
+    {
+        if ($lat === null || $lng === null || $lat === '' || $lng === '') {
+            return false;
+        }
+        if (! is_numeric($lat) || ! is_numeric($lng)) {
+            return false;
+        }
+        $lat = (float) $lat;
+        $lng = (float) $lng;
+
+        return $lat >= -90 && $lat <= 90 && $lng >= -180 && $lng <= 180;
+    }
+
+    protected function haversineKm(float $lat1, float $lon1, float $lat2, float $lon2): float
+    {
+        $earthKm = 6371;
+        $dLat = deg2rad($lat2 - $lat1);
+        $dLon = deg2rad($lon2 - $lon1);
+        $a = sin($dLat / 2) ** 2
+            + cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * sin($dLon / 2) ** 2;
+
+        return $earthKm * 2 * atan2(sqrt($a), sqrt(1 - $a));
     }
 
     public function show($id)

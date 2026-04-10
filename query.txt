@@ -16,3 +16,6 @@ ALTER TABLE `user_suggest_colors`
 53191
   ALTER TABLE `user_suggest_colors`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+  ALTER TABLE `events` ADD `current_latitude` VARCHAR(255) NULL DEFAULT NULL AFTER `location`;
+  ALTER TABLE `events` ADD `current_longitude` VARCHAR(255) NULL DEFAULT NULL AFTER `current_latitude`;

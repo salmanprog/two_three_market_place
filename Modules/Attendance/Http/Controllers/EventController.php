@@ -49,6 +49,8 @@ class EventController extends Controller
             'title' => 'required',
             'for_whom' => 'required',
             'location' => 'required',
+            'current_latitude' => 'nullable|numeric|between:-90,90',
+            'current_longitude' => 'nullable|numeric|between:-180,180',
             'from_date' => 'required',
             'to_date' => 'required',
             'image' => 'nullable|mimes:jpg,png,jpeg,bmp',
@@ -99,6 +101,8 @@ class EventController extends Controller
             'title' => 'required',
             'for_whom' => 'required',
             'location' => 'required',
+            'current_latitude' => 'nullable|numeric|between:-90,90',
+            'current_longitude' => 'nullable|numeric|between:-180,180',
             'from_date' => 'required',
             'to_date' => 'required',
             'image' => 'nullable|mimes:jpg,png,jpeg,bmp'
