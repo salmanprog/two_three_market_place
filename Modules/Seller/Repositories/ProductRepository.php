@@ -35,7 +35,7 @@ class ProductRepository {
         $seller_id = getParentSellerId();
         if($seller_id){
             return $this->product::with(['product' => function($q1){
-                $q1->select('id','product_name','thumbnail_image_source','brand_id','subtitle_1','subtitle_2');
+                $q1->select('id','product_name','thumbnail_image_source','brand_id','subtitle_1','subtitle_2','location');
             },'product.brand' => function($q2){
                 $q2->select('id','name');
             },'skus'])->where('user_id',$seller_id);
@@ -83,7 +83,7 @@ class ProductRepository {
             return $this->product::where('stock_manage',1)->where('user_id',$seller_id)->whereHas('skus', function($query){
                 return $query->select(DB::raw('SUM(product_stock) as sum_colum'))->having('sum_colum', '<=', 10);
             })->with(['product' => function($q1){
-                $q1->select('id','product_name','brand_id','thumbnail_image_source','subtitle_1','subtitle_2');
+                $q1->select('id','product_name','brand_id','thumbnail_image_source','subtitle_1','subtitle_2','location');
             },'product.brand' => function($q2){
                 $q2->select('id','name');
             }]);
@@ -92,14 +92,14 @@ class ProductRepository {
             return $this->product::where('stock_manage',1)->where('user_id',$seller_id)->whereHas('skus', function($query){
                 return $query->select(DB::raw('SUM(product_stock) as sum_colum'))->having('sum_colum', '<', 1);
             })->with(['product' => function($q1){
-                $q1->select('id','product_name','brand_id','thumbnail_image_source','subtitle_1','subtitle_2');
+                $q1->select('id','product_name','brand_id','thumbnail_image_source','subtitle_1','subtitle_2','location');
             },'product.brand' => function($q2){
                 $q2->select('id','name');
             }]);
         }
         if($data['table'] == 'disable'){
             return $this->product::where('status',0)->where('user_id',$seller_id)->with(['product' => function($q1){
-                $q1->select('id','product_name','brand_id','thumbnail_image_source','subtitle_1','subtitle_2');
+                $q1->select('id','product_name','brand_id','thumbnail_image_source','subtitle_1','subtitle_2','location');
             },'product.brand' => function($q2){
                 $q2->select('id','name');
             }]);

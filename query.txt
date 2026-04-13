@@ -19,3 +19,9 @@ ALTER TABLE `user_suggest_colors`
 
   ALTER TABLE `events` ADD `current_latitude` VARCHAR(255) NULL DEFAULT NULL AFTER `location`;
   ALTER TABLE `events` ADD `current_longitude` VARCHAR(255) NULL DEFAULT NULL AFTER `current_latitude`;
+
+  ALTER TABLE `products` ADD `city` VARCHAR(255) NULL DEFAULT NULL AFTER `location`;
+  ALTER TABLE `products` ADD `state` VARCHAR(255) NULL DEFAULT NULL AFTER `city`;
+  ALTER TABLE `products` ADD `zip_code` VARCHAR(255) NULL DEFAULT NULL AFTER `state`;
+  ALTER TABLE `products` ADD `latitude` VARCHAR(255) NULL DEFAULT NULL AFTER `zip_code`;
+  ALTER TABLE `products` ADD `longitude` VARCHAR(255) NULL DEFAULT NULL AFTER `latitude`;

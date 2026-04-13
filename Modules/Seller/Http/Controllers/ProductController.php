@@ -61,6 +61,9 @@ class ProductController extends Controller
         ->editColumn('brand', function($products){
             return @$products->product->brand->name;
         })
+        ->addColumn('location', function($products){
+            return e(optional($products->product)->location ?? '');
+        })
         ->addColumn('logo', function($products){
             return view('seller::products.components.product._logo_td',compact('products'));
         })
@@ -345,7 +348,12 @@ class ProductController extends Controller
             if ($product) {
                 // Fields to update
                 $fields = [
-                    'state' => 'location',
+                    'location' => 'location',
+                    'city' => 'city',
+                    'state' => 'state',
+                    'zip_code' => 'zip_code',
+                    'latitude' => 'latitude',
+                    'longitude' => 'longitude',
                     'art_services' => 'art_services',
                     'category' => 'category',
                     'style' => 'style',

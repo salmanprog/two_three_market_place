@@ -191,6 +191,8 @@
                                             @elseif(auth()->user()->role->type == 'seller')
                                                 @if($section->backendMenu?->name == 'common.user_manages')
                                                     <span class="jhs">{{__('Event Bookings')}}</span>
+                                                @elseif($section->backendMenu?->name == 'product.product_manage')    
+                                                    <span class="jhs">{{__('Inventory')}}</span>
                                                 @else
                                                     <span class="jhs">{{__($menu->backendMenu->name)}} </span>    
                                                 @endif
@@ -300,6 +302,9 @@
                                                                     javascript:void(0)
                                                                 @endif"
                                                                 class="{{spn_active_link(childrenRoute($submenu), 'active')}} @if(@$submenu->children->count()) has-arrow @endif">{{__('All Buyer')}} </a>
+                                                            @elseif(auth()->user()->role->type == 'seller' && $submenu->backendMenu->name == 'product.my_product_list')
+                                                            <a href="{{route(@$submenu->backendMenu->route, 'seller')}}"
+                                                                class="{{spn_active_link(childrenRoute($submenu), 'active')}} @if(@$submenu->children->count()) has-arrow @endif">{{__('Inventory List')}}</a>
                                                             @elseif(auth()->user()->role->type == 'admin'  && $submenu->backendMenu->name == 'common.bulk_customer_upload') 
                                                             @elseif(auth()->user()->role->type == 'admin'  && $submenu->backendMenu->name == 'list.Income')
                                                             @elseif(auth()->user()->role->type == 'admin'  && $submenu->backendMenu->name == 'review.company_review')  

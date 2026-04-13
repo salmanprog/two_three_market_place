@@ -1,6 +1,10 @@
 @extends('backEnd.master')
+@php
+    $sellerMapsEnabled = config('app.map_api_status') == 'true' && filled(config('app.map_api_key'));
+@endphp
 @section('styles')
 <link rel="stylesheet" href="{{asset(asset_path('modules/seller/css/create.css'))}}" />
+@include('seller::products.partials.product_address_styles')
 @endsection
 @section('mainContent')
 @if(isModuleActive('FrontendMultiLang'))
@@ -827,65 +831,7 @@ $LanguageList = getLanguageList();
                                                 <div class="col-lg-6" id="gst_list_div">
                                                 </div>
                                             @endif
-                                            <div class="col-lg-3">
-                                            <div class="primary_input mb-25">
-                                                <label class="primary_input_label">Location</label>
-
-                                                <select class="primary_select mb-25" name="state" id="state">
-                                                    <option value="">Select State</option>
-                                                    <option value="AL">Alabama</option>
-                                                    <option value="AK">Alaska</option>
-                                                    <option value="AZ">Arizona</option>
-                                                    <option value="AR">Arkansas</option>
-                                                    <option value="CA">California</option>
-                                                    <option value="CO">Colorado</option>
-                                                    <option value="CT">Connecticut</option>
-                                                    <option value="DE">Delaware</option>
-                                                    <option value="FL">Florida</option>
-                                                    <option value="GA">Georgia</option>
-                                                    <option value="HI">Hawaii</option>
-                                                    <option value="ID">Idaho</option>
-                                                    <option value="IL">Illinois</option>
-                                                    <option value="IN">Indiana</option>
-                                                    <option value="IA">Iowa</option>
-                                                    <option value="KS">Kansas</option>
-                                                    <option value="KY">Kentucky</option>
-                                                    <option value="LA">Louisiana</option>
-                                                    <option value="ME">Maine</option>
-                                                    <option value="MD">Maryland</option>
-                                                    <option value="MA">Massachusetts</option>
-                                                    <option value="MI">Michigan</option>
-                                                    <option value="MN">Minnesota</option>
-                                                    <option value="MS">Mississippi</option>
-                                                    <option value="MO">Missouri</option>
-                                                    <option value="MT">Montana</option>
-                                                    <option value="NE">Nebraska</option>
-                                                    <option value="NV">Nevada</option>
-                                                    <option value="NH">New Hampshire</option>
-                                                    <option value="NJ">New Jersey</option>
-                                                    <option value="NM">New Mexico</option>
-                                                    <option value="NY">New York</option>
-                                                    <option value="NC">North Carolina</option>
-                                                    <option value="ND">North Dakota</option>
-                                                    <option value="OH">Ohio</option>
-                                                    <option value="OK">Oklahoma</option>
-                                                    <option value="OR">Oregon</option>
-                                                    <option value="PA">Pennsylvania</option>
-                                                    <option value="RI">Rhode Island</option>
-                                                    <option value="SC">South Carolina</option>
-                                                    <option value="SD">South Dakota</option>
-                                                    <option value="TN">Tennessee</option>
-                                                    <option value="TX">Texas</option>
-                                                    <option value="UT">Utah</option>
-                                                    <option value="VT">Vermont</option>
-                                                    <option value="VA">Virginia</option>
-                                                    <option value="WA">Washington</option>
-                                                    <option value="WV">West Virginia</option>
-                                                    <option value="WI">Wisconsin</option>
-                                                    <option value="WY">Wyoming</option>
-                                                </select>
-                                            </div>
-                                        </div>
+                                            @include('seller::products.partials.product_address_fields', ['productForAddress' => null])
 
                                         <div class="col-lg-3">
                                             <div class="primary_input mb-25">
@@ -895,8 +841,8 @@ $LanguageList = getLanguageList();
                                                     <option value="">Select Art Services</option>
                                                     <option value="Commissions">Commissions</option>
                                                     <option value="Murals">Murals</option>
-                                                    <option value="Art Classes">Art Classes</option>
-                                                    <option value="Live Art for Events">Live Art for Events</option>
+                                                    <option value="Live Art">Live Art</option>
+                                                    <option value="Art Shows">Art Shows</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -1357,6 +1303,10 @@ $LanguageList = getLanguageList();
 
 
 @endsection
+
+@if($sellerMapsEnabled)
+<script src="https://maps.googleapis.com/maps/api/js?key={{ config('app.map_api_key') }}&callback=initSellerProductAddressAutocomplete&libraries=places&v=weekly" defer></script>
+@endif
 
 @push('scripts')
 
@@ -2118,5 +2068,6 @@ $LanguageList = getLanguageList();
     })(jQuery);
 
 </script>
+@include('seller::products.partials.product_address_scripts', ['sellerMapsEnabled' => $sellerMapsEnabled])
 
 @endpush
