@@ -47,6 +47,7 @@ use App\Http\Controllers\Frontend\ReturnExchangeController;
 use App\Http\Controllers\Frontend\DigitalGiftCardController;
 use App\Http\Controllers\ResellProduct;
 use Modules\OrderManage\Http\Controllers\OrderManageController;
+use Modules\Customer\Http\Controllers\ChatMessageController;
 
 Route::post('/locale', [LanguageController::class, 'locale'])->name('frontend.locale')->middleware('prohibited_demo_mode');
 Auth::routes(['verify' => true]);
@@ -304,6 +305,10 @@ Route::group(['middleware' => ['auth', 'customer'], 'prefix' => 'profile'], func
     Route::get('/suggest-colors/{suggestColor}/edit', [SuggestColorsController::class, 'edit'])->name('frontend.suggest-colors.edit');
     Route::post('/suggest-colors/{suggestColor}', [SuggestColorsController::class, 'update'])->name('frontend.suggest-colors.update')->middleware('prohibited_demo_mode');
     Route::post('/suggest-colors/{suggestColor}/destroy', [SuggestColorsController::class, 'destroy'])->name('frontend.suggest-colors.destroy')->middleware('prohibited_demo_mode');
+
+    Route::get('/messages', [ChatMessageController::class, 'customerIndex'])->name('frontend.profile.messages');
+    Route::get('/messages/fetch', [ChatMessageController::class, 'messages'])->name('frontend.profile.messages.fetch');
+    Route::post('/messages/send', [ChatMessageController::class, 'store'])->name('frontend.profile.messages.store')->middleware('prohibited_demo_mode');
 });
 
 Route::get('product-review/filter', [ProductReviewController::class, 'filterReview'])->name('filterReview');
@@ -317,7 +322,7 @@ Route::get('/send-mail/send-mail-with-queue', [WelcomeController::class, 'sendEm
 Route::post('summer-note-file-upload', [UploadFileController::class, 'upload_image'])->name('summerNoteFileUpload')->middleware('auth');
 
 Route::get('customer-chat', function () {
-    return view('customer_chat');
+    return redirect()->route('frontend.profile.messages');
 })->middleware(['auth', 'customer']);
 
 Route::get('admin-chat', function () {

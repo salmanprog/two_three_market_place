@@ -138,6 +138,16 @@
                         </svg>
                     {{__('common.dashboard')}}</a>
                 </li>
+                <li>
+                    <a class="position-relative d-flex align-items-center {{ request()->routeIs('frontend.profile.messages') ? 'active' : '' }}" href="{{ route('frontend.profile.messages') }}">
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 4.5C3 3.67157 3.67157 3 4.5 3H13.5C14.3284 3 15 3.67157 15 4.5V10.5C15 11.3284 14.3284 12 13.5 12H6L3 15V4.5Z" stroke="#00124e" stroke-width="1.2" stroke-linejoin="round"/>
+                            <circle cx="6.5" cy="7.5" r="0.75" fill="#00124e"/>
+                            <circle cx="9" cy="7.5" r="0.75" fill="#00124e"/>
+                            <circle cx="11.5" cy="7.5" r="0.75" fill="#00124e"/>
+                        </svg>
+                    {{ __('Chat Messages') }}</a>
+                </li>
               @if(auth()->user()->role_id == 4)
                 <li>
                     <a class="position-relative d-flex align-items-center" href="{{route('frontend.bank')}}">

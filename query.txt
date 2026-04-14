@@ -25,3 +25,20 @@ ALTER TABLE `user_suggest_colors`
   ALTER TABLE `products` ADD `zip_code` VARCHAR(255) NULL DEFAULT NULL AFTER `state`;
   ALTER TABLE `products` ADD `latitude` VARCHAR(255) NULL DEFAULT NULL AFTER `zip_code`;
   ALTER TABLE `products` ADD `longitude` VARCHAR(255) NULL DEFAULT NULL AFTER `latitude`;
+
+
+CREATE TABLE `chat` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `slug` varchar(191) NOT NULL,
+  `senderId` bigint(20) UNSIGNED DEFAULT NULL,
+  `receiverId` bigint(20) UNSIGNED DEFAULT NULL,
+  `message` Text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+ALTER TABLE `chat`
+  ADD PRIMARY KEY (`id`);
+ALTER TABLE `chat`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;

@@ -10,6 +10,8 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\View;
+use Modules\Customer\Entities\Chat;
 use Laravel\Scout\Console\ImportCommand;
 
 class AppServiceProvider extends ServiceProvider
@@ -69,5 +71,18 @@ class AppServiceProvider extends ServiceProvider
 
         Paginator::useBootstrap();
 
+        View::composer('backEnd.partials._menu', function ($view) {
+            if (! auth()->check()) {
+                $view->with('chatUnreadCount', 0);
+
+                return;
+            }
+            if (! Schema::hasColumn('chat', 'is_read')) {
+                $view->with('chatUnreadCount', 0);
+
+                return;
+            }
+            $view->with('chatUnreadCount', Chat::unreadCountForUser((int) auth()->id()));
+        });
     }
 }

@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('customer')->group(function() {
     Route::get('/active-customer-list', 'CustomerController@customer_index')->name('cusotmer.list_active')->middleware(['auth','admin','permission']);
     Route::get('/active-interior-designer-list', 'CustomerController@interior_designer_index')->name('interior-designer.list_active')->middleware(['auth','admin']);
+    Route::get('/chat-messages', 'ChatMessageController@index')->name('chat.messages.index')->middleware(['auth']);
+    Route::get('/chat-messages/messages', 'ChatMessageController@messages')->name('chat.messages.fetch')->middleware(['auth']);
+    Route::post('/chat-messages/send', 'ChatMessageController@store')->name('chat.messages.store')->middleware(['auth','prohibited_demo_mode']);
     Route::get('/customer-list/get-data', 'CustomerController@customer_index_get_data')->name('cusotmer.list.get-data')->middleware(['auth','admin']);
     Route::get('/interior-designer-list/get-data', 'CustomerController@interior_designer_get_data')->name('interior-designer.list.get-data')->middleware(['auth','admin']);
     Route::post('/is-active/update','CustomerController@update_active_status')->name('customer.update_active_status')->middleware(['auth','admin','permission','prohibited_demo_mode']);
