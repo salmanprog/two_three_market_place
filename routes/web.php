@@ -48,6 +48,7 @@ use App\Http\Controllers\Frontend\DigitalGiftCardController;
 use App\Http\Controllers\ResellProduct;
 use Modules\OrderManage\Http\Controllers\OrderManageController;
 use Modules\Customer\Http\Controllers\ChatMessageController;
+use App\Http\Controllers\AdminNotificationController;
 
 Route::post('/locale', [LanguageController::class, 'locale'])->name('frontend.locale')->middleware('prohibited_demo_mode');
 Auth::routes(['verify' => true]);
@@ -73,6 +74,10 @@ Route::get('/account-signin', [WelcomeController::class, 'newLogin'])->name('fro
 Route::middleware(['admin'])->group(function () {
     Route::get('/admin-dashboard', [ProfileController::class, 'dashboard'])->name('admin.dashboard')->middleware('permission');
     Route::get('/dashboard-cards-info/{type}', [ProfileController::class, 'dashboardCards'])->name('dashboard.card.info');
+});
+
+Route::middleware(['auth', 'admin', 'maintenance_mode'])->group(function () {
+    Route::get('/admin-notifications', [AdminNotificationController::class, 'index'])->name('admin.notifications.index');
 });
 Route::post('search', [SearchController::class, 'search'])->name('routeSearch');
 //for category page

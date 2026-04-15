@@ -12,10 +12,12 @@
             margin-top: -50px;
             z-index: 2;
             position: relative;
+            align-items: flex-start;
         }
         .profile_content{
             max-width: calc(100% - var(--userProfile));
-            flex: 0 0 100%;
+            flex: 1 1 auto;
+            min-width: 0;
         }
         .profile_img_div {
             height: var(--userProfile);
@@ -99,6 +101,76 @@
             }
 
         }
+        .seller_about_panel {
+            background: #fff;
+            border: 1px solid #e8eaf0;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(65, 80, 148, 0.07);
+            padding: 22px 24px 24px;
+            margin-top: 4px;
+        }
+        .seller_about_panel_wrap {
+            width: 100%;
+        }
+        .seller_about_panel .seller_about_block + .seller_about_block {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eef0f4;
+        }
+        .seller_about_panel .seller_about_block--text {
+            background: #f8f9fc;
+            border-radius: 10px;
+            padding: 16px 18px;
+            border: 1px solid #eef0f4;
+        }
+        .seller_about_panel .seller_about_block--video {
+            text-align: center;
+        }
+        .seller_about_panel .seller_about_block--video .seller_about_title {
+            text-align: left;
+        }
+        .seller_about_panel .seller_about_title {
+            font-size: 15px;
+            font-weight: 600;
+            margin: 0 0 12px;
+            color: #415094;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: -0.02em;
+        }
+        .seller_about_panel .seller_about_title::before {
+            content: '';
+            flex-shrink: 0;
+            width: 4px;
+            height: 18px;
+            border-radius: 3px;
+            background: linear-gradient(180deg, #7c32ff 0%, #c738d8 100%);
+        }
+        .seller_about_panel .seller_about_body {
+            font-size: 14px;
+            line-height: 1.65;
+            color: #676b84;
+            margin: 0;
+        }
+        .seller_about_panel .seller_about_video_wrap {
+            max-width: 720px;
+            margin: 0 auto;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #0f0f12;
+            border: 1px solid #e8eaf0;
+        }
+        .seller_about_panel .seller_about_video_wrap video {
+            display: block;
+            width: 100%;
+            max-height: min(52vh, 380px);
+        }
+        @media (max-width: 767px) {
+            .seller_about_panel {
+                padding: 18px 16px 20px;
+            }
+        }
     </style>
 @endpush
 @section('content')
@@ -113,7 +185,7 @@
     <div class="container">
         <div class="row justify-content-center mb_60">
             <div class="col-xl-10 col-md-12 member_info">
-                <div class="member_info_iner d-flex align-items-center w-100">
+                <div class="member_info_iner d-flex align-items-start w-100">
                     <div class="profile_img_div">
                       @if ($seller->role->type == "superadmin")
                       <img src="{{showImage(app('general_setting')->logo)}}" alt="@if(@$seller->role->type == 'seller') {{@$seller->SellerAccount->seller_shop_display_name}} @else {{app('general_setting')->company_name}} @endif" title="@if(@$seller->role->type == 'seller') {{@$seller->SellerAccount->seller_shop_display_name}} @else {{app('general_setting')->company_name}} @endif">
@@ -179,6 +251,32 @@
                         </div> -->
                     </div>
                 </div>
+                @if(!empty($seller->accolades) || !empty($seller->description) || !empty($seller->video))
+                <div class="seller_about_panel_wrap seller_profile_bio_video mt_25">
+                    <div class="seller_about_panel">
+                        @if(!empty($seller->accolades))
+                        <div class="seller_about_block seller_about_block--text">
+                            <h5 class="seller_about_title">{{ __('Accolades') }}</h5>
+                            <div class="seller_about_body">{!! nl2br(e($seller->accolades)) !!}</div>
+                        </div>
+                        @endif
+                        @if(!empty($seller->description))
+                        <div class="seller_about_block seller_about_block--text">
+                            <h5 class="seller_about_title">{{ __('Biography') }}</h5>
+                            <div class="seller_about_body">{!! nl2br(e($seller->description)) !!}</div>
+                        </div>
+                        @endif
+                        @if(!empty($seller->video))
+                        <div class="seller_about_block seller_about_block--video">
+                            <h5 class="seller_about_title">{{ __('common.video') }}</h5>
+                            <div class="seller_about_video_wrap">
+                                <video controls playsinline preload="metadata" src="{{ showImage($seller->video) }}">{{ __('common.video') }}</video>
+                            </div>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+                @endif
             </div>
         </div>
         <div class="prodcuts_area ">

@@ -61,6 +61,14 @@
                                 <span class="chat_unread_badge">{{ $chatUnreadCount > 99 ? getNumberTranslate(99).'+' : getNumberTranslate($chatUnreadCount) }}</span>
                             @endif
                         </a>
+                        @if(auth()->user()->role->type == 'admin')
+                        <a href="{{ route('admin.notifications.index') }}" class="primary-btn white mr-10 position-relative d-inline-flex align-items-center">
+                            {{ __('common.notification') }}
+                            @if(!empty($adminNotificationUnreadCount) && (int) $adminNotificationUnreadCount > 0)
+                                <span class="chat_unread_badge">{{ $adminNotificationUnreadCount > 99 ? getNumberTranslate(99).'+' : getNumberTranslate($adminNotificationUnreadCount) }}</span>
+                            @endif
+                        </a>
+                        @endif
                         <div class="border_1px tab_hide"></div>
                         <select name="#" class="nice_Select bgLess mb-0" id="language_select">
                             @foreach($langs as $key => $lang)

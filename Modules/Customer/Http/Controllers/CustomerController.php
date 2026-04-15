@@ -18,7 +18,9 @@ use App\Repositories\UserRepository;
 use Brian2694\Toastr\Facades\Toastr;
 use Modules\Setup\Entities\Country;
 use Exception;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Validation\Rule;
 use Modules\UserActivityLog\Traits\LogActivity;
 use Yajra\DataTables\Facades\DataTables;
@@ -369,7 +371,9 @@ class CustomerController extends Controller
             'first_name' => 'required',
             'email' => $email,
             'avatar' => 'nullable|mimes:jpeg,jpg,png,bmp',
-            'phone' => $phone
+            'video' => 'nullable|file|mimes:mp4,mov,webm,ogg,avi,mkv,mpeg|max:51200',
+            'phone' => $phone,
+            'accolades' => 'nullable|string',
         ],[
             "phone.min" => "Minimum ".app('general_setting')->min_digit." digits required on phone number"
         ]);
@@ -382,7 +386,8 @@ class CustomerController extends Controller
                 'phone'      => $request->phone,
                 'username'      => $request->phone,
                 'date_of_birth' => $request->date_of_birth?date('Y-m-d',strtotime($request->date_of_birth)):null,
-                'description'  => $request->description
+                'description'  => $request->description,
+                'accolades' => $request->accolades,
              ];
 
              $file = $request->file('avatar');
@@ -391,6 +396,23 @@ class CustomerController extends Controller
                      $this->deleteImage($user->avatar);
                  }
                  $data['avatar']=$this->saveImage($file,200,200);
+            }
+
+            if ($request->hasFile('video')) {
+                if ($user->video) {
+                    $this->deleteImage($user->video);
+                }
+                $videoFile = $request->file('video');
+                $currentDate = Carbon::now()->format('d-m-Y');
+                $relativeDir = 'uploads/videos/'.$currentDate;
+                $absoluteDir = asset_path($relativeDir);
+                if (! File::isDirectory($absoluteDir)) {
+                    File::makeDirectory($absoluteDir, 0777, true, true);
+                }
+                $extension = strtolower($videoFile->getClientOriginalExtension() ?: 'mp4');
+                $fileName = uniqid('', true).'.'.$extension;
+                $videoFile->move($absoluteDir, $fileName);
+                $data['video'] = $relativeDir.'/'.$fileName;
             }
 
             $user->update($data);

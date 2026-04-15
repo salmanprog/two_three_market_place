@@ -18,7 +18,7 @@ class ChatMessageController extends Controller
         $this->middleware(['auth', 'maintenance_mode']);
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $userId = auth()->id();
 
@@ -28,9 +28,18 @@ class ChatMessageController extends Controller
             [$conversations, $usersForNew] = $this->participantInboxPayload($userId);
         }
 
+        $prefillReceiverId = null;
+        if ($request->filled('receiver_id')) {
+            $rid = (int) $request->query('receiver_id');
+            if ($rid > 0 && $rid !== $userId && User::query()->whereKey($rid)->exists()) {
+                $prefillReceiverId = $rid;
+            }
+        }
+
         return view('customer::chat.index', [
             'conversations' => $conversations,
             'usersForNew' => $usersForNew,
+            'prefillReceiverId' => $prefillReceiverId,
         ]);
     }
 

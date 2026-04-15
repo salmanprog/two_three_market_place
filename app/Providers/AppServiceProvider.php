@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
+use App\Models\AdminNotification;
 use Modules\Customer\Entities\Chat;
 use Laravel\Scout\Console\ImportCommand;
 
@@ -74,15 +75,22 @@ class AppServiceProvider extends ServiceProvider
         View::composer('backEnd.partials._menu', function ($view) {
             if (! auth()->check()) {
                 $view->with('chatUnreadCount', 0);
+                $view->with('adminNotificationUnreadCount', 0);
 
                 return;
             }
             if (! Schema::hasColumn('chat', 'is_read')) {
                 $view->with('chatUnreadCount', 0);
-
-                return;
+            } else {
+                $view->with('chatUnreadCount', Chat::unreadCountForUser((int) auth()->id()));
             }
-            $view->with('chatUnreadCount', Chat::unreadCountForUser((int) auth()->id()));
+
+            $roleType = auth()->user()->role->type ?? null;
+            if (in_array($roleType, ['superadmin', 'admin', 'staff'], true)) {
+                $view->with('adminNotificationUnreadCount', AdminNotification::unreadCountForAdminPanel());
+            } else {
+                $view->with('adminNotificationUnreadCount', 0);
+            }
         });
     }
 }

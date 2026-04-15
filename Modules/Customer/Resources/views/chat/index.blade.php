@@ -416,6 +416,19 @@
             elSend.click();
         }
     });
+
+    (function bootstrapPrefillReceiver() {
+        var prefill = @json($prefillReceiverId ?? null);
+        if (!prefill) return;
+        if (!elNewUser) return;
+        for (var i = 0; i < elNewUser.options.length; i++) {
+            if (parseInt(elNewUser.options[i].value, 10) === prefill) {
+                elNewUser.selectedIndex = i;
+                document.getElementById('admin-chat-btn-compose')?.click();
+                return;
+            }
+        }
+    })();
 })();
 </script>
 @endpush

@@ -13,6 +13,7 @@ use Brian2694\Toastr\Facades\Toastr;
 use Modules\UserActivityLog\Traits\LogActivity;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use App\Models\User;
 use Modules\Reseller\Entities\ResellRequest;
 
 
@@ -135,7 +136,7 @@ class ResellProduct extends Controller
             'new_price' => 'required|numeric|min:0',
             'customer_note' => 'nullable|string|max:1000',
         ]);
-
+        
         try {
             DB::beginTransaction();
 
@@ -240,6 +241,30 @@ class ResellProduct extends Controller
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
+
+            // Admin Notification: one row per backend recipient (not the customer who submitted)
+            $adminUserIds = User::query()
+                ->whereHas('role', function ($q) {
+                    $q->whereIn('type', ['superadmin', 'admin', 'staff']);
+                })
+                ->pluck('id');
+
+            $now = now();
+            $notificationRows = $adminUserIds->map(function ($adminId) use ($resellProduct, $now) {
+                return [
+                    'slug' => 'product-resell-request-'.$resellProduct->id,
+                    'user_id' => $adminId,
+                    'refrence_id' => $resellProduct->id,
+                    'message' => $resellProduct->product_name.' Product marked for resale by '.auth()->user()->first_name.' '.auth()->user()->last_name,
+                    'is_read' => '0',
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
+            })->all();
+
+            if ($notificationRows !== []) {
+                DB::table('admin_notifications')->insert($notificationRows);
+            }
 
             DB::commit();
             
