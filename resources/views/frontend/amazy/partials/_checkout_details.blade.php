@@ -13,6 +13,25 @@
             padding: 10px
         }
     }
+    .checkout_shipping_notice_wrap {
+        margin-top: 4px;
+    }
+    .checkout_shipping_notice_wrap .checkout_shipping_notice_heading {
+        margin: 0 0 12px;
+    }
+    .checkout_shipping_notice_body {
+        background: #f9fafb;
+        border: 1px solid #e8eaf0;
+        border-radius: 5px;
+        padding: 18px 22px 20px;
+    }
+    .checkout_shipping_notice_text {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.65;
+        font-weight: 400;
+        color: #676b84;
+    }
 </style>
 <form action="{{route('frontend.checkout')}}" method="GET" enctype="multipart/form-data" id="mainOrderForm">
     <div class="checkout_v3_area">
@@ -737,6 +756,42 @@
                                     <span id="error_term_check" class="text-danger"></span>
                                 </label>
                             </div>
+                            @php
+                                $showShippingQuoteNotice = false;
+                                if (!empty($cartData)) {
+                                    if (isModuleActive('MultiVendor')) {
+                                        foreach ($cartData as $packages) {
+                                            foreach ($packages as $item) {
+                                                if (($item->product_type ?? '') === 'product') {
+                                                    $cartSize = data_get($item, 'product.product.product.size');
+                                                    if ($cartSize !== null && $cartSize !== '' && strcasecmp(trim((string) $cartSize), 'xlarge') === 0) {
+                                                        $showShippingQuoteNotice = true;
+                                                        break 2;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        foreach ($cartData as $item) {
+                                            if (($item->product_type ?? '') === 'product') {
+                                                $cartSize = data_get($item, 'product.product.product.product.size');
+                                                if ($cartSize !== null && $cartSize !== '' && strcasecmp(trim((string) $cartSize), 'xlarge') === 0) {
+                                                    $showShippingQuoteNotice = true;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            @endphp
+                            @if($showShippingQuoteNotice)
+                            <div class="col-12 mb_30 checkout_shipping_notice_wrap">
+                                <label class="primary_label2 style2 checkout_shipping_notice_heading d-block">{{ __('defaultTheme.shipping_quote_notice_heading') }}</label>
+                                <div class="checkout_shipping_notice_body">
+                                    <p class="checkout_shipping_notice_text">{!! nl2br(e(__('defaultTheme.shipping_quote_checkout_notice'))) !!}</p>
+                                </div>
+                            </div>
+                            @endif
                             <div class="col-12">
                                 <div class="check_v3_btns flex-wrap d-flex align-items-center">
                                     @if(isModuleActive('MultiVendor'))
