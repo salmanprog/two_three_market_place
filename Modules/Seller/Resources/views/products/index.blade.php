@@ -18,7 +18,7 @@
                                 @endif
                                 @if (permissionCheck('seller_own_product') && auth()->user()->role->type != 'superadmin')
                                     <li class="nav-item" id="my_product_list_li">
-                                        <a class="nav-link active show" href="#my_product_data" role="tab" data-toggle="tab" id="1" aria-selected="true">{{ __('product.my_product_list') }}</a>
+                                        <a class="nav-link active show" href="#my_product_data" role="tab" data-toggle="tab" id="1" aria-selected="true">{{ __('Inventory List') }}</a>
                                     </li>
                                 @endif
                                 @if (permissionCheck('seller_alert_product'))
@@ -39,7 +39,7 @@
                                 @if (auth()->user()->role->type == "seller")
                                     @if (permissionCheck('seller.product.create'))
                                         <li class="nav-item">
-                                            <a class="primary-btn radius_30px mr-10 fix-gr-bg add_new_product" href="{{ route('seller.product.create') }}"><i class="ti-plus"></i>{{ __('product.add_new_product') }}</a>
+                                            <a class="primary-btn radius_30px mr-10 fix-gr-bg add_new_product" href="{{ route('seller.product.create') }}"><i class="ti-plus"></i>{{ __('Add New Inventory') }}</a>
                                         </li>
                                     @endif
                                 @else
@@ -60,7 +60,7 @@
                                 <div role="tabpanel" class="tab-pane fade active show" id="product_list">
                                     <div class="box_header common_table_header ">
                                         <div class="main-title d-md-flex">
-                                            <h3 class="mb-0 mr-30 mb_xs_15px mb_sm_20px">{{__('product.product_list')}}</h3>
+                                            <h3 class="mb-0 mr-30 mb_xs_15px mb_sm_20px">{{__('Inventory List')}}</h3>
                                         </div>
                                     </div>
                                     <div class="QA_section QA_section_heading_custom check_box_table">

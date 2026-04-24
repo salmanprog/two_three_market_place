@@ -29,6 +29,12 @@ class CreateProductRequest extends FormRequest
                 'height' => 'nullable',
                 'subtitle_1' => 'nullable|max:190',
                 'subtitle_2' => 'nullable|max:190',
+                'location' => 'nullable|string|max:500',
+                'city' => 'nullable|string|max:191',
+                'state' => 'nullable|string|max:191',
+                'zip_code' => 'nullable|string|max:32',
+                'latitude' => 'nullable|numeric|between:-90,90',
+                'longitude' => 'nullable|numeric|between:-180,180',
                 'auction_product'=> 'nullable',
                 'pdf_file'=> 'nullable|mimes:pdf',
                 'date_range'=> 'nullable',
@@ -52,6 +58,12 @@ class CreateProductRequest extends FormRequest
                 'height' => 'nullable',
                 'subtitle_1' => 'nullable|max:190',
                 'subtitle_2' => 'nullable|max:190',
+                'location' => 'nullable|string|max:500',
+                'city' => 'nullable|string|max:191',
+                'state' => 'nullable|string|max:191',
+                'zip_code' => 'nullable|string|max:32',
+                'latitude' => 'nullable|numeric|between:-90,90',
+                'longitude' => 'nullable|numeric|between:-180,180',
                 'auction_product'=> 'nullable',
                 'date_range'=> 'nullable',
                 'variant_sku_prefix'=> 'nullable|required_if:product_type,==,2',
@@ -62,7 +74,7 @@ class CreateProductRequest extends FormRequest
                     return $q->where('product_id','!=',$this->id);
                 })]
             ];
-    }
+        }
     }
     /**
      * Determine if the user is authorized to make this request.

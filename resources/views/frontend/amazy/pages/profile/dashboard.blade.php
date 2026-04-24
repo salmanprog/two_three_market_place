@@ -16,6 +16,14 @@
                 <div class="col-xl-9 col-lg-8">
                     <div class="row">
                         <div class="col-12">
+                            <ul class="nav profile_tabs mb_25" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link {{ request()->routeIs('frontend.dashboard') ? 'active' : '' }}" href="{{ route('frontend.dashboard') }}">{{ __('common.dashboard') }}</a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link {{ request()->routeIs('frontend.profile.messages') ? 'active' : '' }}" href="{{ route('frontend.profile.messages') }}">{{ __('Chat Messages') }}</a>
+                                </li>
+                            </ul>
                             <div class="dashBoard_cart_boxs mb_25 dynamic_svg">
                                 <!-- single_items -->
                                 <div class="single_cart_box d-flex align-items-center justify-content-center text-center flex-column">

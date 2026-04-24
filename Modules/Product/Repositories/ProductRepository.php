@@ -194,8 +194,10 @@ class ProductRepository
             $data['slug'] = $this->productSlug($data['product_name']);
         }
         
-        if(isset($data['state'])){
-            $data['location'] = $data['state'];
+        foreach (['location', 'city', 'state', 'zip_code', 'latitude', 'longitude'] as $addrKey) {
+            if (array_key_exists($addrKey, $data)) {
+                $data[$addrKey] = $data[$addrKey] === '' ? null : $data[$addrKey];
+            }
         }
         if(isset($data['art_services'])){
             $data['art_services'] = $data['art_services'];

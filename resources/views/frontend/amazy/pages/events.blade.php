@@ -353,6 +353,29 @@
         (function($) {
             "use strict";
             $(document).ready(function() {
+                @if(empty($eventsSortedByLocation))
+                (function trySortEventsByLocation() {
+                    if (!('geolocation' in navigator)) {
+                        return;
+                    }
+                    var search = window.location.search || '';
+                    if (/[?&]lat=/.test(search) && /[?&]lng=/.test(search)) {
+                        return;
+                    }
+                    navigator.geolocation.getCurrentPosition(
+                        function (pos) {
+                            var params = new URLSearchParams(window.location.search);
+                            params.set('lat', String(pos.coords.latitude));
+                            params.set('lng', String(pos.coords.longitude));
+                            var q = params.toString();
+                            window.location.replace(window.location.pathname + (q ? '?' + q : ''));
+                        },
+                        function () {},
+                        { enableHighAccuracy: false, timeout: 10000, maximumAge: 600000 }
+                    );
+                })();
+                @endif
+
                 // Pricing toggle functionality (keeping existing code)
                 $('#pricingToggle').on('change', function() {
                     this.value = this.checked ? 1 : 0;

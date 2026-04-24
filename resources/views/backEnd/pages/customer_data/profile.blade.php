@@ -140,12 +140,47 @@
 
                                     <div class="col-xl-6">
                                         <div class="primary_input mb-25">
-                                            <label class="primary_input_label" for="">{{ __('common.description')
+                                            <label class="primary_input_label" for="">{{ __('Biography')
                                                 }}</label>
                                             <textarea class="primary_textarea height_112 description"
-                                                placeholder="{{ __('common.description') }}" name="description"
+                                                id="description"
+                                                placeholder="{{ __('Biography') }}" name="description"
                                                 spellcheck="false">{{$user_info->description}}</textarea>
                                             <span class="text-danger">{{$errors->first('description')}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6">
+                                        <div class="primary_input mb-25">
+                                            <label class="primary_input_label" for="">{{ __('Accolades')
+                                                }}</label>
+                                            <textarea class="primary_textarea height_112 description"
+                                                id="accolades"
+                                                placeholder="{{ __('Accolades') }}" name="accolades"
+                                                spellcheck="false">{{ $user_info->accolades ?? '' }}</textarea>
+                                            <span class="text-danger" id="error_accolades">{{ $errors->first('accolades') }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="primary_input mb-15">
+                                            <label class="primary_input_label" for="">{{ __('common.video') }}</label>
+                                            <div class="primary_file_uploader">
+                                                <input class="primary-input" type="text" id="video_placeholder"
+                                                    placeholder="{{ __('common.video') }}" readonly="">
+                                                <button class="" type="button">
+                                                    <label class="primary-btn small fix-gr-bg" for="video_file">{{
+                                                        __('common.video') }}</label>
+                                                    <input type="file" class="d-none" id="video_file"
+                                                        accept="video/*">
+                                                </button>
+                                                <span class="text-danger" id="error_video"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div id="video_preview_div" class="mb-15">
+                                            <video id="profile_video" controls class="w-100 @if(empty($user_info->video)) d-none @endif"
+                                                style="max-height: 220px; border-radius: 8px;"
+                                                src="{{ !empty($user_info->video) ? showImage($user_info->video) : '' }}"></video>
                                         </div>
                                     </div>
 
@@ -292,6 +327,11 @@
                         formData.append('avatar', avatar)
                     }
 
+                    let profileVideo = $('#video_file')[0].files[0];
+                    if (profileVideo) {
+                        formData.append('video', profileVideo);
+                    }
+
                     basic_info_remove_validate_error();
                     $.ajax({
                         url: "{{route('customer.update.info')}}",
@@ -306,7 +346,8 @@
                             $('#last_name').val(response.last_name);
                             $('#email').val(response.email);
                             $('#phone').val(response.phone);
-                            $('#description').text(response.description);
+                            $('#description').val(response.description);
+                            $('#accolades').val(response.accolades);
                             var image_path='{{asset(asset_path(''))}}'+response.avatar;
                             $('.customer_img img').attr('src',image_path);
                             $('#avatar_file').val('');
@@ -316,6 +357,17 @@
                             $('#profile_pic').attr('src',asset_path+response.avatar);
                             $('#avatar_preview').attr('src',asset_path+response.avatar);
                             $('#avatar_placeholder').attr('placeholder', "{{__('common.avatar')}}");
+                            $('#video_file').val('');
+                            $('#video_placeholder').attr('placeholder', "{{ __('common.video') }}");
+                            var pv = $('#profile_video');
+                            if (response.video) {
+                                pv.removeClass('d-none').attr('src', asset_path + response.video);
+                                if (pv[0] && pv[0].load) {
+                                    pv[0].load();
+                                }
+                            } else {
+                                pv.addClass('d-none').attr('src', '');
+                            }
                         },
                         error: function(response) {
                             if(response.responseJSON.error){
@@ -338,6 +390,8 @@
                     $('#error_phone').text(response.responseJSON.errors.phone);
                     $('#error_date_of_birth').text(response.responseJSON.errors.date_of_birth);
                     $('#error_avatar').text(response.responseJSON.errors.avatar);
+                    $('#error_accolades').text(response.responseJSON.errors.accolades);
+                    $('#error_video').text(response.responseJSON.errors.video);
                 }
 
                 function basic_info_remove_validate_error(){
@@ -346,6 +400,8 @@
                     $('#error_phone').text('');
                     $('#error_date_of_birth').text('');
                     $('#error_avatar').text('');
+                    $('#error_accolades').text('');
+                    $('#error_video').text('');
                 }
 
                 $(document).on('click','.change_password', function(e){

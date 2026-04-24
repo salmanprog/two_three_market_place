@@ -1,0 +1,25 @@
+CREATE TABLE `admin_notifications` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `slug` varchar(191) NOT NULL,
+  `user_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `refrence_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `message` Text NOT NULL,
+  `is_read` ENUM('0','1') NOT NULL DEFAULT '0'
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+
+ALTER TABLE `admin_notifications`
+  ADD PRIMARY KEY (`id`);
+
+  ALTER TABLE `admin_notifications`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+  ALTER TABLE `admin_notifications` ADD `is_read` ENUM('0','1') NOT NULL DEFAULT '0' AFTER `message`;
+
+
+
+ALTER TABLE `users` ADD `accolades` TEXT NULL DEFAULT NULL AFTER `description`;
+ALTER TABLE `users` ADD `video` VARCHAR(255) NULL DEFAULT NULL AFTER `avatar`;

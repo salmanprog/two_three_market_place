@@ -153,7 +153,7 @@
                             return numbertrans(data)
                         }},
                         { data: 'product_name', name: 'product_name' },
-                        { data: 'brand', name: 'brand',searchable:false,orderable:false},
+                        { data: 'location', name: 'location', searchable:false, orderable:false },
                         { data: 'logo', name: 'logo' },
                         { data: 'stock', name: 'stock' },
                         { data: 'status', name: 'status' },

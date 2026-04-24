@@ -42,6 +42,8 @@ class EventRepository implements EventRepositoryInterface
         $event->title = $data['title'];
         $event->for_whom = $data['for_whom'];
         $event->location = $data['location'];
+        $event->current_latitude = isset($data['current_latitude']) && $data['current_latitude'] !== '' ? $data['current_latitude'] : null;
+        $event->current_longitude = isset($data['current_longitude']) && $data['current_longitude'] !== '' ? $data['current_longitude'] : null;
         $event->description = $data['description'];
         $event->price = $data['price'];
         $event->total_ticket = $data['total_ticket'];
@@ -76,6 +78,8 @@ class EventRepository implements EventRepositoryInterface
         $event->title = $data['title'];
         $event->for_whom = $data['for_whom'];
         $event->location = $data['location'];
+        $event->current_latitude = isset($data['current_latitude']) && $data['current_latitude'] !== '' ? $data['current_latitude'] : null;
+        $event->current_longitude = isset($data['current_longitude']) && $data['current_longitude'] !== '' ? $data['current_longitude'] : null;
         $event->description = $data['description'];
         $event->price = $data['price'];
         $event->total_ticket = $data['total_ticket'];

@@ -184,6 +184,12 @@ return [
 
 "read_all" => "قراءة كل",
 
+"mark_read" => "تعليم كمقروء",
+
+"chat" => "محادثة",
+
+"video" => "فيديو",
+
 "put_your_password" => "وضع كلمة السرية",
 
 "select_type" => "اختيار النوع",

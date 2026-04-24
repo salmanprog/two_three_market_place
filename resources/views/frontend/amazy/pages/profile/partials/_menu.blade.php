@@ -138,6 +138,16 @@
                         </svg>
                     {{__('common.dashboard')}}</a>
                 </li>
+                <li>
+                    <a class="position-relative d-flex align-items-center {{ request()->routeIs('frontend.profile.messages') ? 'active' : '' }}" href="{{ route('frontend.profile.messages') }}">
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 4.5C3 3.67157 3.67157 3 4.5 3H13.5C14.3284 3 15 3.67157 15 4.5V10.5C15 11.3284 14.3284 12 13.5 12H6L3 15V4.5Z" stroke="#00124e" stroke-width="1.2" stroke-linejoin="round"/>
+                            <circle cx="6.5" cy="7.5" r="0.75" fill="#00124e"/>
+                            <circle cx="9" cy="7.5" r="0.75" fill="#00124e"/>
+                            <circle cx="11.5" cy="7.5" r="0.75" fill="#00124e"/>
+                        </svg>
+                    {{ __('Chat Messages') }}</a>
+                </li>
               @if(auth()->user()->role_id == 4)
                 <li>
                     <a class="position-relative d-flex align-items-center" href="{{route('frontend.bank')}}">
@@ -268,8 +278,8 @@
                     </svg>
                     {{__('customer_panel.my_coupons')}}</a>
                 </li> -->
-                <!-- <li>
-                    <a class="position-relative d-flex align-items-center" href="{{route('refund.frontend.index')}}">
+                <li>
+                    <a class="position-relative d-flex align-items-center" href="{{route('frontend.suggest-colors.index')}}">
                         <svg  width="18" height="18.002" viewBox="0 0 18 18.002">
                         <g  transform="translate(-1.25 -1.254)">
                             <path  data-name="Path 4166" d="M14.436,20.068H6.064A4.558,4.558,0,0,1,1.25,15.253V11.065A4.518,4.518,0,0,1,5.31,6.309a5.391,5.391,0,0,1,.753-.059h8.372a4.764,4.764,0,0,1,.728.05,4.514,4.514,0,0,1,4.086,4.765v4.187A4.558,4.558,0,0,1,14.436,20.068ZM6.064,7.506a4.489,4.489,0,0,0-.586.042,3.286,3.286,0,0,0-2.972,3.517v4.187a3.336,3.336,0,0,0,3.558,3.559h8.372a3.336,3.336,0,0,0,3.558-3.559V11.065A3.288,3.288,0,0,0,14.989,7.54a3.2,3.2,0,0,0-.553-.034Z" transform="translate(0 -0.812)" fill="#00124e"/>
@@ -277,8 +287,8 @@
                             <path  data-name="Path 4168" d="M21.065,16.356H18.553a2.3,2.3,0,0,1,0-4.606h2.512a.628.628,0,1,1,0,1.256H18.553a1.047,1.047,0,0,0,0,2.094h2.512a.628.628,0,1,1,0,1.256Z" transform="translate(-2.443 -1.706)" fill="#00124e"/>
                         </g>
                         </svg>
-                        {{__('customer_panel.refund_dispute')}}</a>
-                </li> -->
+                        {{__('Suggest Artwork')}}</a>
+                </li>
                 <li>
                     <a class="position-relative d-flex align-items-center" href="{{url('/profile')}}">
                     <svg  width="18.005" height="18" viewBox="0 0 18.005 18">

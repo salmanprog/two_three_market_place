@@ -1,6 +1,10 @@
 @extends('backEnd.master')
+@php
+    $sellerMapsEnabled = config('app.map_api_status') == 'true' && filled(config('app.map_api_key'));
+@endphp
 @section('styles')
 <link rel="stylesheet" href="{{asset(asset_path('modules/seller/css/edit.css'))}}"/>
+@include('seller::products.partials.product_address_styles')
 @endsection
 @section('mainContent')
 @if(isModuleActive('FrontendMultiLang'))
@@ -194,65 +198,7 @@ $LanguageList = getLanguageList();
                                     </div>
 
                                 </div>
-                                <div class="col-lg-3">
-                                        <div class="primary_input mb-25">
-                                            <label class="primary_input_label">Location {{ $product->location }}</label>
-
-                                            <select class="primary_select mb-25" name="state" id="state">
-                                                <option value="">Select State</option>
-                                                <option value="AL" {{ $product->product->location == 'AL' ? 'selected' : '' }}>Alabama</option>
-                                                <option value="AK" {{ $product->product->location == 'AK' ? 'selected' : '' }}>Alaska</option>
-                                                <option value="AZ" {{ $product->product->location == 'AZ' ? 'selected' : '' }}>Arizona</option>
-                                                <option value="AR" {{ $product->product->location == 'AR' ? 'selected' : '' }}>Arkansas</option>
-                                                <option value="CA" {{ $product->product->location == 'CA' ? 'selected' : '' }}>California</option>
-                                                <option value="CO" {{ $product->product->location == 'CO' ? 'selected' : '' }}>Colorado</option>
-                                                <option value="CT" {{ $product->product->location == 'CT' ? 'selected' : '' }}>Connecticut</option>
-                                                <option value="DE" {{ $product->product->location == 'DE' ? 'selected' : '' }}>Delaware</option>
-                                                <option value="FL" {{ $product->product->location == 'FL' ? 'selected' : '' }}>Florida</option>
-                                                <option value="GA" {{ $product->product->location == 'GA' ? 'selected' : '' }}>Georgia</option>
-                                                <option value="HI" {{ $product->product->location == 'HI' ? 'selected' : '' }}>Hawaii</option>
-                                                <option value="ID" {{ $product->product->location == 'ID' ? 'selected' : '' }}>Idaho</option>
-                                                <option value="IL" {{ $product->product->location == 'IL' ? 'selected' : '' }}>Illinois</option>
-                                                <option value="IN" {{ $product->product->location == 'IN' ? 'selected' : '' }}>Indiana</option>
-                                                <option value="IA" {{ $product->product->location == 'IA' ? 'selected' : '' }}>Iowa</option>
-                                                <option value="KS" {{ $product->product->location == 'KS' ? 'selected' : '' }}>Kansas</option>
-                                                <option value="KY" {{ $product->product->location == 'KY' ? 'selected' : '' }}>Kentucky</option>
-                                                <option value="LA" {{ $product->product->location == 'LA' ? 'selected' : '' }}>Louisiana</option>
-                                                <option value="ME" {{ $product->product->location == 'ME' ? 'selected' : '' }}>Maine</option>
-                                                <option value="MD" {{ $product->product->location == 'MD' ? 'selected' : '' }}>Maryland</option>
-                                                <option value="MA" {{ $product->product->location == 'MA' ? 'selected' : '' }}>Massachusetts</option>
-                                                <option value="MI" {{ $product->product->location == 'MI' ? 'selected' : '' }}>Michigan</option>
-                                                <option value="MN" {{ $product->product->location == 'MN' ? 'selected' : '' }}>Minnesota</option>
-                                                <option value="MS" {{ $product->product->location == 'MS' ? 'selected' : '' }}>Mississippi</option>
-                                                <option value="MO" {{ $product->product->location == 'MO' ? 'selected' : '' }}>Missouri</option>
-                                                <option value="MT" {{ $product->product->location == 'MT' ? 'selected' : '' }}>Montana</option>
-                                                <option value="NE" {{ $product->product->location == 'NE' ? 'selected' : '' }}>Nebraska</option>
-                                                <option value="NV" {{ $product->product->location == 'NV' ? 'selected' : '' }}>Nevada</option>
-                                                <option value="NH" {{ $product->product->location == 'NH' ? 'selected' : '' }}>New Hampshire</option>
-                                                <option value="NJ" {{ $product->product->location == 'NJ' ? 'selected' : '' }}>New Jersey</option>
-                                                <option value="NM" {{ $product->product->location == 'NM' ? 'selected' : '' }}>New Mexico</option>
-                                                <option value="NY" {{ $product->product->location == 'NY' ? 'selected' : '' }}>New York</option>
-                                                <option value="NC" {{ $product->product->location == 'NC' ? 'selected' : '' }}>North Carolina</option>
-                                                <option value="ND" {{ $product->product->location == 'ND' ? 'selected' : '' }}>North Dakota</option>
-                                                <option value="OH" {{ $product->product->location == 'OH' ? 'selected' : '' }}>Ohio</option>
-                                                <option value="OK" {{ $product->product->location == 'OK' ? 'selected' : '' }}>Oklahoma</option>
-                                                <option value="OR" {{ $product->product->location == 'OR' ? 'selected' : '' }}>Oregon</option>
-                                                <option value="PA" {{ $product->product->location == 'PA' ? 'selected' : '' }}>Pennsylvania</option>
-                                                <option value="RI" {{ $product->product->location == 'RI' ? 'selected' : '' }}>Rhode Island</option>
-                                                <option value="SC" {{ $product->product->location == 'SC' ? 'selected' : '' }}>South Carolina</option>
-                                                <option value="SD" {{ $product->product->location == 'SD' ? 'selected' : '' }}>South Dakota</option>
-                                                <option value="TN" {{ $product->product->location == 'TN' ? 'selected' : '' }}>Tennessee</option>
-                                                <option value="TX" {{ $product->product->location == 'TX' ? 'selected' : '' }}>Texas</option>
-                                                <option value="UT" {{ $product->product->location == 'UT' ? 'selected' : '' }}>Utah</option>
-                                                <option value="VT" {{ $product->product->location == 'VT' ? 'selected' : '' }}>Vermont</option>
-                                                <option value="VA" {{ $product->product->location == 'VA' ? 'selected' : '' }}>Virginia</option>
-                                                <option value="WA" {{ $product->product->location == 'WA' ? 'selected' : '' }}>Washington</option>
-                                                <option value="WV" {{ $product->product->location == 'WV' ? 'selected' : '' }}>West Virginia</option>
-                                                <option value="WI" {{ $product->product->location == 'WI' ? 'selected' : '' }}>Wisconsin</option>
-                                                <option value="WY" {{ $product->product->location == 'WY' ? 'selected' : '' }}>Wyoming</option>
-                                            </select>
-                                        </div>
-                                    </div>
+                                @include('seller::products.partials.product_address_fields', ['productForAddress' => $product->product])
 
                                     <div class="col-lg-3">
                                         <div class="primary_input mb-25">
@@ -262,8 +208,8 @@ $LanguageList = getLanguageList();
                                                 <option value="">Select Art Services</option>
                                                 <option value="Commissions" {{ $product->product->art_services == 'Commissions' ? 'selected' : '' }}>Commissions</option>
                                                 <option value="Murals" {{ $product->product->art_services == 'Murals' ? 'selected' : '' }}>Murals</option>
-                                                <option value="Art Classes" {{ $product->product->art_services == 'Art Classes' ? 'selected' : '' }}>Art Classes</option>
-                                                <option value="Live Art for Events" {{ $product->product->art_services == 'Live Art for Events' ? 'selected' : '' }}>Live Art for Events</option>
+                                                <option value="Live Art" {{ $product->product->art_services == 'Live Art' ? 'selected' : '' }}>Live Art</option>
+                                                <option value="Art Shows" {{ $product->product->art_services == 'Art Shows' ? 'selected' : '' }}>Art Shows</option>
                                             </select>
                                         </div>
                                     </div>
@@ -598,6 +544,10 @@ $LanguageList = getLanguageList();
     </section>
 @endsection
 
+@if($sellerMapsEnabled)
+<script src="https://maps.googleapis.com/maps/api/js?key={{ config('app.map_api_key') }}&callback=initSellerProductAddressAutocomplete&libraries=places&v=weekly" defer></script>
+@endif
+
 @push('scripts')
     <script>
 
@@ -787,4 +737,5 @@ $LanguageList = getLanguageList();
 
 
     </script>
+@include('seller::products.partials.product_address_scripts', ['sellerMapsEnabled' => $sellerMapsEnabled])
 @endpush
