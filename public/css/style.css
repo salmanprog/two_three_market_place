@@ -406,6 +406,15 @@ input {
   color: var(--default-color);
 }
 
+.footer-links a.footer-support-signup-btn,
+.footer-links a.footer-support-signup-btn:hover {
+  color: #000 !important;
+}
+
+.footer-links a.footer-support-signup-btn:hover {
+  background-color: #e8e8e8 !important;
+}
+
 .footer-input {
   color: var(--default-color);
   border: 2px solid var(--default-color);

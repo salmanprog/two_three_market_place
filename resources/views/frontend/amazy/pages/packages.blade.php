@@ -134,7 +134,7 @@
     <div class="container">
         <div class="row justify-content-center py-30">
             <div class="col-lg-12">
-                <h2 class="faq-heading text-center">Interior Designers <br> Profile Tries</h2>
+                <h2 class="faq-heading text-center">Interior Designers <br> Profile Tiers</h2>
                 
                 <section class="pricing_part">
                     <div class="row justify-content-center">
@@ -157,8 +157,8 @@
                                     </div>
                                 </div>
 
-                                <a class="cta_btn select_btn_price cursor_pointer" data-id="1">
-                                Choose Plan
+                                <a href="{{ route('interiorregister') }}" class="cta_btn cursor_pointer">
+                                    Sign up
                                 </a>
 
                                 <div class="feature_divider"></div>
@@ -189,10 +189,9 @@
                                     </div>
                                 </div>
 
-                                <a class="cta_btn select_btn_price cursor_pointer" data-id="2">
-                                Choose Plan
+                                <a href="{{ route('interiorregister') }}" class="cta_btn cursor_pointer">
+                                    Sign up
                                 </a>
-
                                 <div class="feature_divider"></div>
 
                                 <ul class="feature_list">
@@ -222,8 +221,8 @@
                                     </div>
                                 </div>
 
-                                <a class="cta_btn select_btn_price cursor_pointer" data-id="3">
-                                Choose Plan
+                                <a href="{{ route('interiorregister') }}" class="cta_btn cursor_pointer">
+                                    Sign up
                                 </a>
 
                                 <div class="feature_divider"></div>

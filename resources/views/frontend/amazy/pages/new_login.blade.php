@@ -69,7 +69,7 @@
                             <p class="account-signup-card__text primary-font mb-0">Create your Organizer account to start hosting and managing events today.</p>
                             <div class="account-signup-card__action">
                                 <a href="{{ route('event.login') }}" class="account-signup-btn primary-font">
-                                    Login as Organiser
+                                    Login as Location
                                     <i class="fa-solid fa-arrow-right-long fs-12" aria-hidden="true"></i>
                                 </a>
                             </div>

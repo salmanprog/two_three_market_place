@@ -46,7 +46,7 @@
                             <p class="account-signup-card__text primary-font mb-0">Create your Artist account to upload your artwork and start selling your paintings today.</p>
                             <div class="account-signup-card__action">
                                 <a href="{{ route('frontend.merchant-register','subscription') }}" class="account-signup-btn primary-font">
-                                    Become a Artist
+                                Partner as an Artist
                                     <i class="fa-solid fa-arrow-right-long fs-12" aria-hidden="true"></i>
                                 </a>
                             </div>
@@ -69,7 +69,7 @@
                             <p class="account-signup-card__text primary-font mb-0">Create your Organizer account to start hosting and managing events today.</p>
                             <div class="account-signup-card__action">
                                 <a href="{{ route('frontend.event-organiser-register','subscription') }}" class="account-signup-btn primary-font">
-                                    Become a Organiser
+                                Partner as a Location
                                     <i class="fa-solid fa-arrow-right-long fs-12" aria-hidden="true"></i>
                                 </a>
                             </div>

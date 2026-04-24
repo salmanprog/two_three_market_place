@@ -670,7 +670,7 @@
 <section class="filter-artist-sec overflow-visible">
   <div class="container">
     <div class="premium-luxury-panel" data-aos="fade-up" data-aos-duration="1200">
-      <h2 class="luxury-heading secondry-font">Filter Artist Profiles</h2>
+      <h2 class="luxury-heading secondry-font">Filter Arts</h2>
       
       <form action="{{ route('frontend.searchshop') }}" method="GET">
         <div class="row g-3 justify-content-center">
@@ -1010,9 +1010,9 @@
                 <div class="position-relative overflow-hidden rounded-custom">
                     <img src="{{ asset('public/uploads/all/68530cd031e6b.png') }}" class="img-fluid" alt="Slide 2">
                     <div class="marketplace-card-content">
-                        <h3 class="fw-bold secondry-font mb-20 fs-55">Sell</h3>
-                        <p class="mb-30 fs-20">Join our seller community.</p>
-                        <button class="btn btn-light text-black">See Ads</button>
+                        <h3 class="fw-bold secondry-font mb-20 fs-55">Collect</h3>
+                        <p class="mb-30 fs-20">Buy local art</p>
+                        <a href="{{route('frontend.buyer.signup')}}" class="btn btn-light text-black">Sign up as a Buyer</a>
                     </div>
                 </div>
             </div>
@@ -1021,9 +1021,9 @@
                 <div class="position-relative overflow-hidden rounded-custom">
                     <img src="{{ asset('public/uploads/all/68530cd031e6b.png') }}" class="img-fluid" alt="Slide 1">
                     <div class="marketplace-card-content">
-                        <h3 class="fw-bold secondry-font mb-20 fs-55">Collect</h3>
-                        <p class="mb-30 fs-20">Explore more than 70,000 works available on the Artprice Marketplace and expand your collection.</p>
-                        <button class="btn btn-light text-black">See Ads</button>
+                        <h3 class="fw-bold secondry-font mb-20 fs-55">Sell</h3>
+                        <p class="mb-30 fs-20">Join our artist community</p>
+                        <a href="{{route('frontend.merchant-register','subscription')}}" class="btn btn-light text-black">Sign up as a Artist</a>
                     </div>
                 </div>
             </div>
@@ -1032,13 +1032,13 @@
                 <div class="position-relative overflow-hidden rounded-custom">
                     <img src="{{ asset('public/uploads/all/68530cd031e6b.png') }}" class="img-fluid" alt="Slide 2">
                     <div class="marketplace-card-content">
-                        <h3 class="fw-bold secondry-font mb-20 fs-55">Sell</h3>
-                        <p class="mb-30 fs-20">Join our seller community.</p>
-                        <button class="btn btn-light text-black">See Ads</button>
+                        <h3 class="fw-bold secondry-font mb-20 fs-55">Service</h3>
+                        <p class="mb-30 fs-20">Art Services in your Neighborhood</p>
+                        <a href="{{route('frontend.artists')}}" class="btn btn-light text-black">Art Services</a>
                     </div>
                 </div>
             </div>
-
+<!-- 
             <div class="marketplace-card">
                 <div class="position-relative overflow-hidden rounded-custom">
                     <img src="{{ asset('public/uploads/all/68530cd031e6b.png') }}" class="img-fluid" alt="Slide 1">
@@ -1048,7 +1048,7 @@
                         <button class="btn btn-light text-black">See Ads</button>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
       </div>
     </div>
@@ -1060,7 +1060,7 @@
 <section class="newsletter-sec pb-40 overflow-visible">
   <div class="container">
     <div class="newsletter-card py-62 radius-44 bg-white overflow-visible">
-      <h2 class="fs-55 fw-700 text-center text-black mb-40 secondry-font" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="0" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">Subscribe Our Newsletter</h2>
+      <h2 class="fs-55 fw-700 text-center text-black mb-40 secondry-font" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="0" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">Subscribe to Our Newsletter</h2>
       <p class="primary-font text-black text-center fs-25 mx-auto mb-30" style="max-width: 863px;" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="110" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">Be the first to learn about new collections, new artists, local events, and special offers just for art lovers.</p>
       <form action="">
         <div class="position-relative mx-auto overflow-visible" style="max-width: 830px;" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="220" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
@@ -1090,7 +1090,8 @@
 @endphp
 
 <!-- Related Products section -->
-@if ($related_home_products->count() > 0)
+ 
+<!-- @if ($related_home_products->count() > 0)
 <section class="related-products-sec py-60 overflow-visible">
     <div class="container">
         <div class="related-products-sec__head position-relative mb-30">
@@ -1240,7 +1241,7 @@
         </div>
     </div>
 </section>
-@endif
+@endif -->
 
 <!-- category section -->
 <!-- how it works — fade-up only (horizontal AOS + overflow clipping caused hidden blocks) -->
@@ -1436,8 +1437,10 @@
                   <option selected="" disabled="">Which service are you interested in?</option>
                   <option value="interior_designers">Interior Designers</option>
                   <option value="artists">Artists</option>
-                  <option value="organiser">Organiser</option>
-                  <option value="other">Other</option>
+                  <option value="organiser">Location</option>
+                  <option value="art_galleries">Art Galleries</option>
+                  <option value="art_sourcing_purchase">Art Sourcing/Purchase</option>
+                  <!-- <option value="other">Other</option> -->
                 </select>
                 <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-17 text-black me-3 pe-none"></i>
               </div>

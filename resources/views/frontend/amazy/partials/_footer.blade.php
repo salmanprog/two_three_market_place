@@ -133,9 +133,9 @@
         </div>
         <p class="text-white fs-22 mb-20 primary-font" style="max-width: 410px;">Stay inspired with fresh artwork and curated collections added weekly.</p>
         <ul class="d-flex gap-20 ps-0 list-unstyled mb-0">
-          <li><a href="/" class="text-white fs-25" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a></li>
-          <li><a href="/" class="text-white fs-25" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a></li>
-          <li><a href="/" class="text-white fs-25" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a></li>
+          <li><a href="https://www.facebook.com/TwoThreeLeggedDogs" target="_blank" class="text-white fs-25" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a></li>
+          <li><a href="https://www.instagram.com/twothree_leggeddogs/" target="_blank" class="text-white fs-25" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a></li>
+          <li><a href="https://www.linkedin.com/company/two-three-legged-dogs-llc/?viewAsMember=true" target="_blank" class="text-white fs-25" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a></li>
         </ul>
       </div>
       <div class="col-12 col-lg-8 col-xl-9">
@@ -157,26 +157,33 @@
               <li class="mb-10"><a href="{{ route('frontend.artists') }}" class="fs-22 primary-font">Find Local Artists</a></li>
               <li class="mb-10"><a href="{{ route('frontend.organiser-events') }}" class="fs-22 primary-font">Find Local Events</a></li>
               <li class="mb-10"><a href="{{ url('art-services/commissions') }}" class="fs-22 primary-font">Find Local Art Services</a></li>
-              <li class="mb-10"><a href="{{ route('frontend.shop') }}" class="fs-22 primary-font">Find Consignment Art</a></li>
+              <li class="mb-10"><a href="#" class="fs-22 primary-font">Find Art Galleries</a></li>
+              <li class="mb-10"><a href="#" class="fs-22 primary-font">Find Local Locations</a></li>
+              <li class="mb-10"><a href="{{ url('art-services/commissions') }}" class="fs-22 primary-font">Commission a Painting</a></li>
+             
             </ul>
           </div>
           <div class="col-12 col-md-6 col-lg-3" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="240" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
             <ul class="footer-links list-unstyled ps-0 mb-0">
               <li class="text-white fs-22 mb-20 fw-700 primary-font">Partnerships</li>
-              <li class="mb-10"><a href="{{ route('frontend.merchant-register-step-first') }}" class="fs-22 primary-font">23LD for Artists</a></li>
-              <li class="mb-10"><a href="{{ url('art-services/commissions') }}" class="fs-22 primary-font">23LD for Art Services</a></li>
-              <li class="mb-10"><a href="{{ url('locations/hospitality') }}" class="fs-22 primary-font">23LD for Locations</a></li>
-              <li class="mb-10"><a href="{{ url('art-galleries/how-we-partner') }}" class="fs-22 primary-font">23LD for Art Galleries</a></li>
-              <li class="mb-10"><a href="{{ url('interior-designers/why-23-ld') }}" class="fs-22 primary-font">23LD for Interior Designers</a></li>
-              <li class="mb-10"><a href="{{ route('frontend.event-organiser-subscription-type') }}" class="fs-22 primary-font">23LD for Events</a></li>
+              <li class="mb-10"><a href="{{ route('frontend.merchant-register-step-first') }}" class="fs-22 primary-font">Artists</a></li>
+              <li class="mb-10"><a href="{{ url('art-services/commissions') }}" class="fs-22 primary-font">Art Services</a></li>
+              <li class="mb-10"><a href="{{ url('locations/hospitality') }}" class="fs-22 primary-font">Locations</a></li>
+              <li class="mb-10"><a href="{{ url('art-galleries/how-we-partner') }}" class="fs-22 primary-font">Art Galleries</a></li>
+              <li class="mb-10"><a href="{{ url('interior-designers/why-23-ld') }}" class="fs-22 primary-font">Interior Designers</a></li>
+              <li class="mb-10"><a href="{{ route('frontend.event-organiser-subscription-type') }}" class="fs-22 primary-font">Events</a></li>
+            
             </ul>
           </div>
           <div class="col-12 col-md-6 col-lg-3" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="320" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
             <ul class="footer-links list-unstyled ps-0 mb-0">
               <li class="text-white fs-22 mb-20 fw-700 primary-font">Support</li>
               <li class="mb-10"><a href="{{ route('frontend.contact-us') }}" class="fs-22 primary-font">Customer Service</a></li>
-              <li class="mb-10"><a href="{{ url('art-services/commissions') }}" class="fs-22 primary-font">Commission a Painting</a></li>
+           
               <li class="mb-10"><a href="{{ route('frontend.contact-us') }}" class="fs-22 primary-font">Contact Us</a></li>
+              <li class="mb-0">
+                <a href="{{ route('frontend.account.signup') }}" class="footer-support-signup-btn btn btn-light text-black primary-font fw-600 fs-18 px-4 py-2 rounded-pill text-decoration-none d-inline-flex align-items-center">{{ __('defaultTheme.register') }}</a>
+              </li>
             </ul>
           </div>
         </div>
