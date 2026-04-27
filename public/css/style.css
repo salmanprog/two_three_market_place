@@ -1234,6 +1234,208 @@ input {
   letter-spacing: 0.04em;
 }
 
+/* Artist listing — filter bar (client-side only) */
+.artists-filter-bar {
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.artists-filter-bar__scroll {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: #c4c4c4 #f0f0f0;
+}
+
+.artists-filter-bar__scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.artists-filter-bar__scroll::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 6px;
+}
+
+.artists-filter-bar__scroll::-webkit-scrollbar-thumb {
+  background: #c4c4c4;
+  border-radius: 6px;
+}
+
+.artists-filter-bar__row {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 8px 12px;
+  min-width: min-content;
+}
+
+.artists-filter-field {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 146px;
+}
+
+.artists-filter-field--actions {
+  flex: 0 0 auto;
+  max-width: none;
+  min-width: 0;
+  align-items: stretch;
+}
+
+.artists-filter-field__label {
+  display: block;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #222;
+  line-height: 1.15;
+  font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+.artists-filter-field__label--spacer {
+  visibility: hidden;
+  min-height: 0.95em;
+  user-select: none;
+}
+
+.artists-filter-select {
+  display: block;
+  width: 100%;
+  min-width: 108px;
+  padding: 6px 26px 6px 10px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.3;
+  color: #111;
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.18);
+  border-radius: 8px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12'%3E%3Cpath fill='%23000' d='M2.5 4.5L6 8l3.5-3.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 10px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.artists-filter-select:hover {
+  border-color: rgba(0, 0, 0, 0.35);
+}
+
+.artists-filter-select:focus {
+  outline: none;
+  border-color: #000;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+.artists-filter-actions {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.artists-filter-search {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 18px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #fff;
+  background: #000;
+  border: 1px solid #000;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.artists-filter-search:hover {
+  background: #222;
+  border-color: #222;
+  color: #fff;
+}
+
+.artists-filter-reset {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 16px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #111;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.artists-filter-reset:hover {
+  background: #000;
+  border-color: #000;
+  color: #fff;
+}
+
+.artists-filter-empty {
+  text-align: center;
+  font-size: 0.95rem;
+  color: #555;
+  padding-top: 12px;
+}
+
+@media (min-width: 992px) {
+  .artists-filter-field {
+    max-width: 158px;
+    flex: 0 1 158px;
+  }
+
+  .artists-filter-field--actions {
+    flex: 0 0 auto;
+    max-width: none;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .artists-filter-bar__row {
+    justify-content: flex-start;
+    padding-bottom: 2px;
+  }
+
+  .artists-filter-field {
+    max-width: 120px;
+    flex: 0 0 auto;
+  }
+
+  .artists-filter-field__label {
+    font-size: 0.58rem;
+  }
+
+  .artists-filter-actions {
+    flex-wrap: wrap;
+    max-width: 140px;
+  }
+}
+
 .artists-list-card {
   height: 100%;
   display: flex;
