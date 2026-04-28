@@ -7,7 +7,6 @@
 @section('content')
     @php
         $artistFilterCategories = ['Portraits & Wildlife', 'Abstract Expressionism', 'Landscapes', 'Contemporary', 'Mixed Media'];
-        $artistFilterLocations = ['New York', 'Los Angeles', 'Chicago', 'Miami', 'Austin', 'Seattle'];
         $artistFilterMediums = ['Oil', 'Acrylic', 'Digital', 'Watercolor', 'Charcoal', 'Mixed'];
     @endphp
     <div class="artists-list-page amazy_section_padding">
@@ -18,57 +17,51 @@
                 </h1>
 
                 @if ($sellers->isNotEmpty())
-                    <div class="artists-filter-bar primary-font mb-40" id="artists-filter-bar" data-aos="fade-up" data-aos-duration="700">
+                    <form class="artists-filter-bar primary-font mb-40" id="artists-filter-bar" data-aos="fade-up" data-aos-duration="700" method="GET" action="{{ route('frontend.artists') }}">
                         <div class="artists-filter-bar__scroll">
                             <div class="artists-filter-bar__row">
                                 <div class="artists-filter-field">
-                                    <label class="artists-filter-field__label" for="artists-filter-category">Category</label>
-                                    <select id="artists-filter-category" class="artists-filter-select" data-artists-filter="category" autocomplete="off">
-                                        <option value="">All categories</option>
-                                        @foreach ($artistFilterCategories as $fc)
-                                            <option value="{{ $fc }}">{{ $fc }}</option>
+                                    <label class="artists-filter-field__label" for="artists-filter-category">Name</label>
+                                    <input type="text" id="artists-filter-name" class="artists-filter-input" data-artists-filter="name" name="name" value="{{ request('name') }}" autocomplete="off">
+                                </div>
+                                <div class="artists-filter-field">
+                                    <label class="artists-filter-field__label" for="artists-filter-location">{{ __('Country') }}</label>
+                                    <select id="artists-filter-location" class="artists-filter-select" data-artists-filter="location" name="country" autocomplete="off">
+                                        <option value="">{{ __('Choose Country') }}</option>
+                                        @foreach($countries as $key => $country)
+                                            <option value="{{ $country->id }}" @selected((string)request('country') === (string)$country->id)>{{ $country->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="artists-filter-field">
-                                    <label class="artists-filter-field__label" for="artists-filter-location">Location</label>
-                                    <select id="artists-filter-location" class="artists-filter-select" data-artists-filter="location" autocomplete="off">
-                                        <option value="">All locations</option>
-                                        @foreach ($artistFilterLocations as $fl)
-                                            <option value="{{ $fl }}">{{ $fl }}</option>
+                                    <label class="artists-filter-field__label" for="artists-filter-state">{{ __('State') }}</label>
+                                    <select id="artists-filter-state" class="artists-filter-select" data-artists-filter="state" name="state" autocomplete="off">
+                                        <option value="">{{ __('Choose State') }}</option>
+                                        @foreach($states as $key => $state)
+                                            <option value="{{ $state->id }}" @selected((string)request('state') === (string)$state->id)>{{ $state->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="artists-filter-field">
-                                    <label class="artists-filter-field__label" for="artists-filter-medium">Medium</label>
-                                    <select id="artists-filter-medium" class="artists-filter-select" data-artists-filter="medium" autocomplete="off">
-                                        <option value="">All mediums</option>
-                                        @foreach ($artistFilterMediums as $fm)
-                                            <option value="{{ $fm }}">{{ $fm }}</option>
+                                    <label class="artists-filter-field__label" for="artists-filter-city">{{ __('City') }}</label>
+                                    <select id="artists-filter-city" class="artists-filter-select" data-artists-filter="city" name="city" autocomplete="off">
+                                        <option value="">{{ __('Choose City') }}</option>
+                                        @foreach($cities as $key => $city)
+                                            <option value="{{ $city->id }}" @selected((string)request('city') === (string)$city->id)>{{ $city->name }}</option>
                                         @endforeach
-                                    </select>
-                                </div>
-                                <div class="artists-filter-field">
-                                    <label class="artists-filter-field__label" for="artists-filter-focus">Focus</label>
-                                    <select id="artists-filter-focus" class="artists-filter-select" data-artists-filter="focus" autocomplete="off">
-                                        <option value="">All focus areas</option>
-                                        <option value="Commissions">Commissions</option>
-                                        <option value="Original work">Original work</option>
-                                        <option value="Prints">Prints</option>
-                                        <option value="Teaching">Teaching</option>
                                     </select>
                                 </div>
                                 <div class="artists-filter-field artists-filter-field--actions">
                                     <span class="artists-filter-field__label artists-filter-field__label--spacer" aria-hidden="true">&nbsp;</span>
                                     <div class="artists-filter-actions primary-font">
-                                        <button type="button" class="artists-filter-search" id="artists-filter-search" aria-label="Apply filters">Search</button>
+                                        <button type="submit" class="artists-filter-search" id="artists-filter-search" aria-label="Apply filters">Search</button>
                                         <button type="button" class="artists-filter-reset" id="artists-filter-reset" aria-label="Clear filters">Reset</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <p class="artists-filter-empty mb-0 primary-font" id="artists-filter-empty" hidden>No artists match these filters.</p>
-                    </div>
+                    </form>
 
                     {{-- 1 col mobile, 2 cols tablet, 3 cols desktop --}}
                     <div class="row g-4 row-cols-1 row-cols-md-2 row-cols-lg-3" id="artists-filter-grid">
@@ -78,7 +71,9 @@
                                 $thumbProducts = $seller->seller_products ? $seller->seller_products->take(3)->values() : collect();
                                 $seed = abs((int) crc32((string) ($seller->id ?? $loop->index)));
                                 $filterCategory = $artistFilterCategories[$seed % count($artistFilterCategories)];
-                                $filterLocation = $artistFilterLocations[($seed >> 5) % count($artistFilterLocations)];
+                                $filterLocation = (string) (data_get($seller, 'SellerBusinessInformation.country') ?? '');
+                                $filterState = (string) (data_get($seller, 'SellerBusinessInformation.state') ?? '');
+                                $filterCity = (string) (data_get($seller, 'SellerBusinessInformation.city') ?? '');
                                 $filterMedium = $artistFilterMediums[($seed >> 10) % count($artistFilterMediums)];
                                 $focusOptions = ['Commissions', 'Original work', 'Prints', 'Teaching'];
                                 $filterFocus = $focusOptions[($seed >> 14) % count($focusOptions)];
@@ -90,8 +85,11 @@
                                     data-aos-duration="900"
                                     data-aos-delay="{{ min($loop->index * 80, 480) }}"
                                     data-aos-easing="ease-out-cubic"
+                                    data-filter-name="{{ strtolower($artistName) }}"
                                     data-filter-category="{{ $filterCategory }}"
                                     data-filter-location="{{ $filterLocation }}"
+                                    data-filter-state="{{ $filterState }}"
+                                    data-filter-city="{{ $filterCity }}"
                                     data-filter-medium="{{ $filterMedium }}"
                                     data-filter-focus="{{ $filterFocus }}">
                                     <div class="artists-list-card__media">
@@ -157,9 +155,14 @@
             var emptyMsg = document.getElementById('artists-filter-empty');
             if (!grid) return;
 
-            var selects = document.querySelectorAll('[data-artists-filter]');
+            var filterFields = document.querySelectorAll('[data-artists-filter]');
             var resetBtn = document.getElementById('artists-filter-reset');
             var searchBtn = document.getElementById('artists-filter-search');
+            var nameInput = document.getElementById('artists-filter-name');
+            var countrySelect = document.getElementById('artists-filter-location');
+            var stateSelect = document.getElementById('artists-filter-state');
+            var citySelect = document.getElementById('artists-filter-city');
+            var baseUrl = @json(url('/'));
 
             function getVal(key) {
                 var el = document.querySelector('[data-artists-filter="' + key + '"]');
@@ -167,21 +170,27 @@
             }
 
             function applyFilter() {
-                var cat = getVal('category');
+                var name = (getVal('name') || '').toLowerCase().trim();
                 var loc = getVal('location');
+                var st = getVal('state');
+                var ct = getVal('city');
                 var med = getVal('medium');
                 var foc = getVal('focus');
                 var cards = grid.querySelectorAll('article.artists-list-card');
                 var visible = 0;
 
                 cards.forEach(function (card) {
-                    var c = card.getAttribute('data-filter-category') || '';
+                    var n = (card.getAttribute('data-filter-name') || '').toLowerCase();
                     var l = card.getAttribute('data-filter-location') || '';
+                    var s = card.getAttribute('data-filter-state') || '';
+                    var ci = card.getAttribute('data-filter-city') || '';
                     var m = card.getAttribute('data-filter-medium') || '';
                     var f = card.getAttribute('data-filter-focus') || '';
                     var show =
-                        (!cat || c === cat) &&
+                        (!name || n.indexOf(name) !== -1) &&
                         (!loc || l === loc) &&
+                        (!st || s === st) &&
+                        (!ct || ci === ct) &&
                         (!med || m === med) &&
                         (!foc || f === foc);
                     var col = card.closest('.artists-filter-col');
@@ -204,24 +213,76 @@
                     applyFilter();
                 }
                 if (searchBtn) searchBtn.addEventListener('click', runSearch);
-                selects.forEach(function (sel) {
-                    sel.addEventListener('keydown', function (ev) {
+                filterFields.forEach(function (field) {
+                    field.addEventListener('keydown', function (ev) {
                         if (ev.key === 'Enter') {
                             ev.preventDefault();
                             runSearch();
                         }
                     });
                 });
+                if (nameInput) {
+                    nameInput.addEventListener('input', runSearch);
+                }
             }
 
             bindSearchTriggers();
 
+            function resetSelectWithPlaceholder(selectEl, placeholder) {
+                if (!selectEl) return;
+                selectEl.innerHTML = '';
+                var opt = document.createElement('option');
+                opt.value = '';
+                opt.textContent = placeholder;
+                selectEl.appendChild(opt);
+            }
+
+            if (countrySelect) {
+                countrySelect.addEventListener('change', function () {
+                    var countryId = countrySelect.value || '';
+                    resetSelectWithPlaceholder(stateSelect, @json(__('Choose State')));
+                    resetSelectWithPlaceholder(citySelect, @json(__('Choose City')));
+                    if (!countryId) return;
+                    fetch(baseUrl + '/get-state?country_id=' + encodeURIComponent(countryId), {
+                        headers: { 'Accept': 'application/json' }
+                    })
+                    .then(function (r) { return r.ok ? r.json() : []; })
+                    .then(function (states) {
+                        (states || []).forEach(function (stateObj) {
+                            var opt = document.createElement('option');
+                            opt.value = stateObj.id;
+                            opt.textContent = stateObj.name;
+                            stateSelect.appendChild(opt);
+                        });
+                    })
+                    .catch(function () {});
+                });
+            }
+
+            if (stateSelect) {
+                stateSelect.addEventListener('change', function () {
+                    var stateId = stateSelect.value || '';
+                    resetSelectWithPlaceholder(citySelect, @json(__('Choose City')));
+                    if (!stateId) return;
+                    fetch(baseUrl + '/get-city?state_id=' + encodeURIComponent(stateId), {
+                        headers: { 'Accept': 'application/json' }
+                    })
+                    .then(function (r) { return r.ok ? r.json() : []; })
+                    .then(function (cities) {
+                        (cities || []).forEach(function (cityObj) {
+                            var opt = document.createElement('option');
+                            opt.value = cityObj.id;
+                            opt.textContent = cityObj.name;
+                            citySelect.appendChild(opt);
+                        });
+                    })
+                    .catch(function () {});
+                });
+            }
+
             if (resetBtn) {
                 resetBtn.addEventListener('click', function () {
-                    selects.forEach(function (sel) {
-                        sel.selectedIndex = 0;
-                    });
-                    applyFilter();
+                    window.location.href = @json(route('frontend.artists'));
                 });
             }
 

@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Modules\Setup\Entities\City;
+use Modules\Setup\Entities\Country;
+use Modules\Setup\Entities\State;
 
 class MerchantsListController extends Controller
 {
@@ -23,31 +26,41 @@ class MerchantsListController extends Controller
             ->with(['SellerAccount', 'SellerBusinessInformation', 'seller_products'])
             ->orderBy('created_at', 'desc');
 
-        // Apply search filter if search keyword exists
-        if (!empty($request->input('search_artist'))) {
-        $users = DB::table('customer_addresses')
-            ->when($request->input('search'), function ($q, $value) {
-                $q->where('name', $value);
-            })
-            ->when($request->input('city'), function ($q, $value) {
-                $q->orWhere('city', $value);
-            })
-            ->when($request->input('state'), function ($q, $value) {
-                $q->orWhere('state', $value);
-            })
-            ->when($request->input('country'), function ($q, $value) {
-                $q->orWhere('country', $value);
-            })
-            ->when($request->input('postal_code'), function ($q, $value) {
-                $q->orWhere('postal_code', $value);
-            })
-            ->pluck('customer_id')
-            ->toArray();
+        // Search sellers by name
+        if ($request->filled('name')) {
+            $keyword = trim((string) $request->input('name'));
+            $query->where(function ($q) use ($keyword) {
+                $q->where('first_name', 'like', '%'.$keyword.'%')
+                    ->orWhere('last_name', 'like', '%'.$keyword.'%')
+                    ->orWhereRaw("TRIM(CONCAT(COALESCE(first_name,''), ' ', COALESCE(last_name,''))) like ?", ['%'.$keyword.'%'])
+                    ->orWhereHas('SellerAccount', function ($sq) use ($keyword) {
+                        $sq->where('seller_shop_display_name', 'like', '%'.$keyword.'%');
+                    });
+            });
+        }
 
-        if (!empty($users)) {
-            $query->whereIn('id', $users);
+        // Search sellers by business address fields
+        $countryId = $request->input('country');
+        $stateId = $request->input('state');
+        $cityId = $request->input('city');
+        if ($countryId || $stateId || $cityId) {
+            $query->whereHas('SellerBusinessInformation', function ($q) use ($countryId, $stateId, $cityId) {
+                if ($countryId) {
+                    $q->where('business_country', $countryId);
+                }
+                if ($stateId) {
+                    $q->where('business_state', $stateId);
+                }
+                if ($cityId) {
+                    $q->where('business_city', $cityId);
+                }
+            });
         }
-        }
+
+        // country options for filter dropdown (same structure as merchant step two)
+        $data['countries'] = Country::where('status', 1)->orderBy('name')->get(['id', 'name']);
+        $data['states'] = State::orderBy('name')->get(['id', 'name']);
+        $data['cities'] = City::orderBy('name')->get(['id', 'name']);
 
         // paginate result
         $data['sellers'] = $query->paginate(12);
