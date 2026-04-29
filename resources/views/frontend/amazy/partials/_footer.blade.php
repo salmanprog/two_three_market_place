@@ -181,8 +181,8 @@
               <li class="mb-10"><a href="{{ route('frontend.contact-us') }}" class="fs-22 primary-font">Customer Service</a></li>
            
               <li class="mb-10"><a href="{{ route('frontend.contact-us') }}" class="fs-22 primary-font">Contact Us</a></li>
-              <li class="mb-0">
-                <a href="{{ route('frontend.account.signup') }}" class="footer-support-signup-btn btn btn-light text-black primary-font fw-600 fs-18 px-4 py-2 rounded-pill text-decoration-none d-inline-flex align-items-center">{{ __('defaultTheme.register') }}</a>
+              <li class="mb-0 pt-1">
+                <a href="{{ route('frontend.account.signup') }}" class="footer-support-signup-btn btn btn-light text-black primary-font fw-600 fs-18 px-5 py-16 rounded-pill text-decoration-none d-inline-flex align-items-center justify-content-center border-0 shadow-sm" style="min-width: 150px; line-height: 1; letter-spacing: .2px; transition: all .25s ease;">{{ __('defaultTheme.register') }}</a>
               </li>
             </ul>
           </div>

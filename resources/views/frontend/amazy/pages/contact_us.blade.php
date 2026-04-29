@@ -48,17 +48,20 @@
                                     <div class="contact_wiz_box">
                                         <span class="contact_box_title font_16 f_w_500 d-block lh-1 ">{{__('amazy.Social Media')}}:</span>
                                         <div class="contact_link">
-                                            <a href="{{ app('general_setting')->facebook }}">
+                                            <a href="https://www.facebook.com/TwoThreeLeggedDogs" target="_blank">
                                                 <i class="fab fa-facebook"></i>
                                             </a>
                                             <a href="{{ app('general_setting')->twitter }}">
                                                 <i class="fab fa-twitter"></i>
                                             </a>
-                                            <a href="{{ app('general_setting')->linkedin }}">
+                                            <a href="https://www.linkedin.com/company/two-three-legged-dogs-llc/?viewAsMember=true">
                                                 <i class="fab fa-linkedin-in"></i>
                                             </a>
-                                            <a href="{{ app('general_setting')->instagram }}">
+                                            <a href="https://www.instagram.com/twothree_leggeddogs/">
                                                 <i class="fab fa-instagram"></i>
+                                            </a>
+                                            <a href="#">
+                                                <i class="fab fa-tiktok"></i>
                                             </a>
                                         </div>
                                     </div>

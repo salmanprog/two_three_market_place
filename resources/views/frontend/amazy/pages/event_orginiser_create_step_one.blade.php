@@ -13,7 +13,7 @@
                 <a href="{{url('/')}}" class="logo mb_50 d-block">
                     <img src="{{showImage(app('general_setting')->logo)}}" alt="{{app('general_setting')->company_name}}" title="{{app('general_setting')->company_name}}">
                 </a>
-                <h3 class="m-0">Organizer {{__('auth.Sign Up')}}</h3>
+                <h3 class="m-0">location {{__('auth.Sign Up')}}</h3>
                 <p class="support_text">{{__('auth.See your growth and get consulting support!')}}</p>
                 <form id="registerForm" action="{{route('frontend.event.organiser.store')}}" method="POST" class="register_form">
                     @csrf
@@ -188,7 +188,7 @@
                                 <label class="primary_checkbox d-flex">
                                     <input checked="" type="checkbox" id="termCheck" checked value="1">
                                     <span class="checkmark mr_15"></span>
-                                    <span class="label_name f_w_400 ">{{ __('defaultTheme.by_signing_up_you_agree_to_terms_of_service_and_privacy_policy') }}</span>
+                                    <span class="label_name f_w_400 ">By signing up, you agree to <a href="{{ route('terms-of-use') }}">Terms of Service</a>, <a href="{{ route('privacy-policy') }}">Privacy Policy</a>, and <a href="https://development.americanbranddesigner.com/23-ld/locations/location-agreement">Location Agreement</a>.</span>
                                 </label>
                             </div>
                             
@@ -240,6 +240,7 @@
     (function($){
         "use strict";
         $(document).ready(function(){
+            $('#pre-loader').hide();
             $(document).on('click','#termCheck',function(event){
 
                 if($("#termCheck").prop('checked') == true){

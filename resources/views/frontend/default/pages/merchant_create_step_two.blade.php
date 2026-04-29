@@ -231,7 +231,7 @@
                                             <input type="checkbox" id="termCheck" checked value="1">
                                             <span class="checkmark"></span>
                                         </label>
-                                        <p>{{ __('defaultTheme.by_signing_up_you_agree_to_terms_of_service_and_privacy_policy') }}</p>
+                                        <p>By signing up, you agree to <a href="{{route('terms-of-use')}}">Terms of Service</a> and <a href="{{route('privacy-policy')}}">Privacy Policy</a></p>
                                     </div>
                                 </div>
 

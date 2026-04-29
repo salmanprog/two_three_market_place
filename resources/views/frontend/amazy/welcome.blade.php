@@ -283,6 +283,110 @@
     max-width: 100%;
     padding-inline: 5.5rem; /* room for absolute nav so title stays visually centered */
 }
+/* Marketplace static cards layout */
+.market-place-sec {
+    padding: 0 0 36px;
+}
+.market-place-sec .marketplace-shell {
+    background: #000;
+    border-radius: 50px;
+    padding: 52px 38px 44px;
+}
+.market-place-sec .marketplace-top {
+    margin-bottom: 28px;
+    text-align: center;
+}
+.market-place-sec .marketplace-intro-text {
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.market-place-sec .marketplace-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+.market-place-sec .marketplace-card {
+    min-width: 0;
+}
+.market-place-sec .marketplace-card-media {
+    position: relative;
+    border-radius: 30px;
+    overflow: hidden;
+    min-height: 250px;
+}
+.market-place-sec .marketplace-card-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.market-place-sec .marketplace-card-media::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, .25) 0%, rgba(0, 0, 0, .58) 100%);
+}
+.market-place-sec .marketplace-card-content {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    color: #fff;
+    text-align: center;
+    padding: 0px 16px 20px;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: flex-end; */
+
+}
+.market-place-sec .marketplace-card-title {
+    font-size: clamp(34px, 2.2vw, 52px);
+    line-height: 1;
+    margin-bottom: 10px;
+}
+.market-place-sec .marketplace-card-desc {
+    font-size: clamp(18px, 1.05vw, 24px);
+    line-height: 1.25;
+    margin-bottom: 14px;
+}
+.market-place-sec .marketplace-card-content .btn {
+    border-radius: 999px;
+    padding: 10px 20px;
+    font-size: 16px;
+    white-space: nowrap;
+}
+@media (max-width: 1199.98px) {
+    .market-place-sec .marketplace-shell {
+        border-radius: 0 60px 60px 0;
+        padding: 44px 24px 38px;
+    }
+    .market-place-sec .marketplace-cards-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+@media (max-width: 767.98px) {
+    .market-place-sec .marketplace-intro-text {
+        max-width: 100%;
+    }
+    .market-place-sec .marketplace-shell {
+        border-radius: 0 30px 30px 0;
+        padding: 36px 16px 30px;
+    }
+    .market-place-sec .marketplace-cards-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 14px;
+    }
+    .market-place-sec .marketplace-card-media {
+        min-height: 220px;
+        border-radius: 24px;
+    }
+    .market-place-sec .marketplace-card-desc {
+        margin-bottom: 10px;
+    }
+    .market-place-sec .marketplace-card-content .btn {
+        padding: 9px 16px;
+        font-size: 14px;
+    }
+}
 @media (max-width: 767.98px) {
     .related-products-sec__head .related-products-heading {
         padding-inline: 0;
@@ -296,6 +400,12 @@
     }
     .email-address-link {
       font-size: 15px !important;
+    }
+}
+
+@media (max-width: 350px) {
+    .market-place-sec .marketplace-card-content {
+        padding: 0px 16px 60px;
     }
 }
 </style>
@@ -985,71 +1095,50 @@
     </div>
   </div>
 </section>
-<section class="market-place-sec d-none d-md-block position-relative pb-35 mb-35 overflow-visible">
-  <div class="row">
-    <div class="col-md-3 pl-50">
-      <div class="text-white pt-custom pb-custom ps-4 position-relative">
-        <h2 class="text-uppercase fw-bold secondary-font mb-3" style="font-size: 55px;" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="0" data-aos-easing="ease-out-cubic">
+<section class="market-place-sec position-relative mb-35 overflow-visible">
+  <div class="container-fluid px-0">
+    <div class="marketplace-shell">
+      <div class="marketplace-top text-white position-relative">
+        <h2 class="text-uppercase fw-bold secondary-font mb-3" style="font-size: clamp(36px, 4vw, 55px);" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="0" data-aos-easing="ease-out-cubic">
           23LD MARKETPLACE
         </h2>
-        <p class="fs-6 lh-base" style="max-width: 209px;" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="120" data-aos-easing="ease-out-cubic">
+        <p class="fs-6 lh-base marketplace-intro-text" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="120" data-aos-easing="ease-out-cubic">
           Find your next work of art or design piece and connect with the community of 23LD buyers and sellers.
         </p>
       </div>
-    </div>
-    <!-- Slider Section -->
-    <div class="col-md-9">
-      <div class="position-relative w-66 mt-custom flex-grow-1" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="200" data-aos-easing="ease-out-cubic">
-        <!-- Custom Arrows -->
-        <div class="position-absolute top-0 end-0 start-0">
-         
-        </div>
-        <!-- owl Slider -->
-        <div class="marketplace-slider owl-carousel owl-theme">
+      <div class="marketplace-cards-grid" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="200" data-aos-easing="ease-out-cubic">
             <div class="marketplace-card">
-                <div class="position-relative overflow-hidden rounded-custom">
+                <div class="marketplace-card-media">
                     <img src="{{ asset('public/uploads/all/68530cd031e6b.png') }}" class="img-fluid" alt="Slide 2">
                     <div class="marketplace-card-content">
-                        <h3 class="fw-bold secondry-font mb-20 fs-55">Collect</h3>
-                        <p class="mb-30 fs-20">Buy local art</p>
+                        <h3 class="fw-bold secondry-font marketplace-card-title">Collect</h3>
+                        <p class="marketplace-card-desc">Buy local art</p>
                         <a href="{{route('frontend.buyer.signup')}}" class="btn btn-light text-black">Sign up as a Buyer</a>
                     </div>
                 </div>
             </div>
 
             <div class="marketplace-card">
-                <div class="position-relative overflow-hidden rounded-custom">
+                <div class="marketplace-card-media">
                     <img src="{{ asset('public/uploads/all/68530cd031e6b.png') }}" class="img-fluid" alt="Slide 1">
                     <div class="marketplace-card-content">
-                        <h3 class="fw-bold secondry-font mb-20 fs-55">Sell</h3>
-                        <p class="mb-30 fs-20">Join our artist community</p>
+                        <h3 class="fw-bold secondry-font marketplace-card-title">Sell</h3>
+                        <p class="marketplace-card-desc">Join our artist community</p>
                         <a href="{{route('frontend.merchant-register','subscription')}}" class="btn btn-light text-black">Sign up as a Artist</a>
                     </div>
                 </div>
             </div>
 
             <div class="marketplace-card">
-                <div class="position-relative overflow-hidden rounded-custom">
+                <div class="marketplace-card-media">
                     <img src="{{ asset('public/uploads/all/68530cd031e6b.png') }}" class="img-fluid" alt="Slide 2">
                     <div class="marketplace-card-content">
-                        <h3 class="fw-bold secondry-font mb-20 fs-55">Service</h3>
-                        <p class="mb-30 fs-20">Art Services in your Neighborhood</p>
+                        <h3 class="fw-bold secondry-font marketplace-card-title">Service</h3>
+                        <p class="marketplace-card-desc">Art Services in your Neighborhood</p>
                         <a href="{{route('frontend.artists')}}" class="btn btn-light text-black">Art Services</a>
                     </div>
                 </div>
             </div>
-<!-- 
-            <div class="marketplace-card">
-                <div class="position-relative overflow-hidden rounded-custom">
-                    <img src="{{ asset('public/uploads/all/68530cd031e6b.png') }}" class="img-fluid" alt="Slide 1">
-                    <div class="marketplace-card-content">
-                        <h3 class="fw-bold secondry-font mb-20 fs-55">Collect</h3>
-                        <p class="mb-30 fs-20">Explore more than 70,000 works available on the Artprice Marketplace and expand your collection.</p>
-                        <button class="btn btn-light text-black">See Ads</button>
-                    </div>
-                </div>
-            </div> -->
-        </div>
       </div>
     </div>
   </div>
@@ -3751,22 +3840,6 @@ const range = document.getElementById("priceRange");
             $relatedProductsSlider.trigger("next.owl.carousel");
         });
         $relatedProductsSlider.on("initialized.owl.carousel", function () {
-            if (typeof AOS !== "undefined") { AOS.refresh(); }
-        });
-    }
-
-    var $marketplaceSlider = $(".marketplace-slider");
-    if ($marketplaceSlider.length && typeof $marketplaceSlider.owlCarousel === "function") {
-        $marketplaceSlider.owlCarousel({
-            loop: true,
-            margin: 16,
-            nav: false,
-            dots: true,
-            autoplay: true,
-            autoplayTimeout: 5000,
-            responsive: { 0: { items: 1 }, 768: { items: 2 } }
-        });
-        $marketplaceSlider.on("initialized.owl.carousel resized.owl.carousel", function () {
             if (typeof AOS !== "undefined") { AOS.refresh(); }
         });
     }

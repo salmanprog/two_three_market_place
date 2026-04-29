@@ -431,7 +431,7 @@ input {
   padding: 16px 40px;
 }
 
-.market-place-sec::before {
+/* .market-place-sec::before {
   content: '';
   position: absolute;
   top: 0;
@@ -442,7 +442,7 @@ input {
   background-color: black;
   border-top-right-radius: 160px;
   border-bottom-left-radius: 100px;
-}
+} */
 
 .pt-custom {
   padding-top: 70px;
@@ -1239,6 +1239,7 @@ input {
   max-width: 1100px;
   margin-left: auto;
   margin-right: auto;
+  z-index: 5;
 }
 
 .artists-filter-bar__scroll {
@@ -1554,4 +1555,46 @@ input {
 .artists-list-card .btn-artists-profile:hover {
   background: #1a1a1a;
   color: #fff !important;
+}
+
+.padding-class {
+  padding: 16px 24px;
+}
+
+/* Artist agreement responsive line fix */
+.artist-agreement-page .agreement-line {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  line-height: 1.35;
+}
+
+.location-agreement-page .agreement-line {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  line-height: 1.35;
+}
+
+.artist-agreement-page .padding-class {
+  overflow: hidden;
+}
+
+.location-agreement-page .padding-class {
+  overflow: hidden;
+}
+
+@media (max-width: 991.98px) {
+  .artist-agreement-page .padding-class {
+    padding: 14px 16px;
+  }
+  .location-agreement-page .padding-class {
+    padding: 14px 16px;
+  }
+  .artist-agreement-page .agreement-line {
+    font-size: 15px !important;
+  }
+  .location-agreement-page .agreement-line {
+    font-size: 15px !important;
+  }
 }

@@ -233,7 +233,7 @@
                                 <label class="primary_checkbox d-flex">
                                     <input checked="" type="checkbox" id="termCheck" checked value="1">
                                     <span class="checkmark mr_15"></span>
-                                    <span class="label_name f_w_400 ">{{ __('defaultTheme.by_signing_up_you_agree_to_terms_of_service_and_privacy_policy') }}</span>
+                                    <span class="label_name f_w_400 ">By signing up, you agree to <a href="{{ route('terms-of-use') }}">Terms of Service</a>, <a href="{{ route('privacy-policy') }}">Privacy Policy</a>, and <a href="https://development.americanbranddesigner.com/23-ld/art/artist-agreement">Artist Agreement</a>.</span>
                                 </label>
                             </div>
                             

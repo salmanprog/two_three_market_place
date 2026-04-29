@@ -207,7 +207,7 @@
                             <label class="primary_checkbox d-flex">
                                 <input id="policyCheck" type="checkbox" checked>
                                 <span class="checkmark mr_15"></span>
-                                <p class="label_name f_w_400">{{ __('defaultTheme.by_signing_up_you_agree_to_terms_of_service_and_privacy_policy') }}</p>
+                                <p class="label_name f_w_400">By signing up, you agree to <a href="{{route('terms-of-use')}}">Terms of Service</a> and <a href="{{route('privacy-policy')}}">Privacy Policy</a></p>
                             </label>
                         </div>
                     @endif

@@ -452,3 +452,17 @@ Route::get('interior-designers/find-local-art-shows', function() {
 Route::get('interior-designers/find-an-artist-for-your-event', function() {
     return view('frontend.amazy.pages.drop-down-pages.interior-designers.find-an-artist-for-your-event');
 });
+// terms and conditions routes
+
+Route::get('art/artist-agreement', function() {
+    return view('frontend.amazy.pages.drop-down-pages.art.artist-agreement');
+})->name('artist-agreement');
+Route::get('locations/location-agreement', function() {
+    return view('frontend.amazy.pages.drop-down-pages.locations.location-agreement');
+})->name('location-agreement');
+Route::get('terms-of-use', function() {
+    return view('frontend.terms-of-use');
+})->name('terms-of-use');
+Route::get('privacy-policy', function() {
+    return view('frontend.privacy-policy');
+})->name('privacy-policy');
