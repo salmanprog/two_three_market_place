@@ -130,7 +130,7 @@
         <div class="row justify-content-center text-center">
             <div class="col-lg-6 col-md-10 mb_50">
                 <div class="section__title">
-                    <h3 class="mb_40">Event Organiser Subscription</h3>
+                    <h3 class="mb_40">Locations Subscription</h3>
                     Event organizing involves the planning, coordination, and execution of events such as conferences, festivals, corporate functions, weddings, and more. Event organizers handle everything from venue selection and vendor management to scheduling, booking, and on-site.
                 </div>
             </div>

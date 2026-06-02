@@ -165,7 +165,7 @@
             <div class="row align-items-center g-4 g-lg-5">
                 <div class="col-12 col-lg-6">
                     <figure class="about-page-media about-page-media--tall mb-0" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="80" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
-                        <img src="https://images.unsplash.com/photo-1564399580075-5dfe19c205f3?q=80&amp;w=1170&amp;auto=format&amp;fit=crop&amp;ixlib=rb-4.1.0&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="img-fluid" alt="Our Story — art gallery interior" width="1170" height="780" loading="lazy" decoding="async">
+                        <img src="{{('public/images/about-us-media.png')}}" class="img-fluid" alt="Our Story — art gallery interior" width="1170" height="780" loading="lazy" decoding="async">
                     </figure>
                 </div>
 
@@ -249,7 +249,7 @@
 
                 <div class="col-12 col-lg-6 order-lg-2">
                     <figure class="about-page-media about-page-media--tall mb-0" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="140" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
-                        <img src="https://images.unsplash.com/photo-1569084024058-1632922a4e1d?q=80&amp;w=719&amp;auto=format&amp;fit=crop&amp;ixlib=rb-4.1.0&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="img-fluid" alt="What We Do — art gallery interior" width="719" height="480" loading="lazy" decoding="async">
+                        <img src="{{('public/images/about-us-media-02.png')}}" class="img-fluid" alt="What We Do — art gallery interior" width="719" height="480" loading="lazy" decoding="async">
                     </figure>
                 </div>
             </div>

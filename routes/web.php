@@ -399,22 +399,15 @@ Route::get('/packages', function() {
 })->name('frontend.packages');
 
 
-// menu dropdowns routes
-Route::get('art-services/commissions', function() {
-    return view('frontend.amazy.pages.drop-down-pages.art-services.commissions');
-});
-Route::get('art-services/murals', function() {
-    return view('frontend.amazy.pages.drop-down-pages.art-services.murals');
-});
-Route::get('art-services/live-art', function() {
-    return view('frontend.amazy.pages.drop-down-pages.art-services.live-art');
-});
-Route::get('art-services/art-shows', function() {
-    return view('frontend.amazy.pages.drop-down-pages.art-services.art-shows');
-});
-Route::get('art-services/art-classes', function() {
-    return view('frontend.amazy.pages.drop-down-pages.art-services.art-classes');
-});
+// menu dropdowns routes — art-services sections live on one page with hash anchors
+$artServicesSectionRedirect = function (string $section) {
+    return redirect(url('art-services') . '#' . $section);
+};
+Route::get('art-services/commissions', fn () => $artServicesSectionRedirect('commissions'));
+Route::get('art-services/murals', fn () => $artServicesSectionRedirect('murals'));
+Route::get('art-services/live-art', fn () => $artServicesSectionRedirect('live-art'));
+Route::get('art-services/art-shows', fn () => $artServicesSectionRedirect('art-shows'));
+Route::get('art-services/art-classes', fn () => $artServicesSectionRedirect('art-classes'));
 Route::get('locations/hospitality', function() {
     return view('frontend.amazy.pages.drop-down-pages.locations.hospitality');
 });
@@ -436,12 +429,8 @@ Route::get('locations/medical', function() {
 Route::get('locations/schools', function() {
     return view('frontend.amazy.pages.drop-down-pages.locations.schools');
 });
-Route::get('art-galleries/how-we-partner', function() {
-    return view('frontend.amazy.pages.drop-down-pages.art-galleries.how-we-partner');
-});
-Route::get('art-galleries/why-23-ld', function() {
-    return view('frontend.amazy.pages.drop-down-pages.art-galleries.why-23-ld');
-});
+Route::get('art-galleries/how-we-partner', fn () => redirect(url('art-galleries') . '#how-we-partner'));
+Route::get('art-galleries/why-23-ld', fn () => redirect(url('art-galleries') . '#why-23-ld'));
 Route::get('interior-designers/how-we-partner', function() {
     return view('frontend.amazy.pages.drop-down-pages.interior-designers.how-we-partner');
 });
@@ -454,6 +443,25 @@ Route::get('interior-designers/find-local-art-shows', function() {
 Route::get('interior-designers/find-an-artist-for-your-event', function() {
     return view('frontend.amazy.pages.drop-down-pages.interior-designers.find-an-artist-for-your-event');
 });
+Route::get('/art-services', function() {
+    return view('frontend.amazy.pages.drop-down-pages.art-services.index');
+});
+
+Route::get('/locations', function() {
+    return view('frontend.amazy.pages.drop-down-pages.locations.index');
+});
+
+Route::get('/interior-designers', function() {
+    return view('frontend.amazy.pages.drop-down-pages.events.index');
+});
+
+Route::get('/art-galleries', function() {
+    return view('frontend.amazy.pages.drop-down-pages.art-galleries.index');
+})->name('frontend.art-galleries');
+
+Route::get('/interior-designers', function() {
+    return view('frontend.amazy.pages.drop-down-pages.interior-designers.index');
+})->name('frontend.interior-designers');
 
 Route::get('/test', [MainPageController::class, 'index'])->name('frontend.new-shop');
 

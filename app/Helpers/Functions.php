@@ -643,9 +643,44 @@ if (!function_exists('textLimit')) {
         return null;
     }
 }
+if (!function_exists('menuResolveHref')) {
+    /**
+     * Turn dashboard menu paths into full app URLs (fixes /art-services going to localhost root).
+     * Supports: art-services#commissions, /art-services#commissions, https://...
+     */
+    function menuResolveHref(string $link): string
+    {
+        $link = trim($link);
+
+        if ($link === '' || $link === 'javascript:void(0)') {
+            return 'javascript:void(0)';
+        }
+
+        if (preg_match('#^https?://#i', $link)) {
+            return $link;
+        }
+
+        if (str_starts_with($link, '#')) {
+            return request()->url() . $link;
+        }
+
+        if (str_starts_with($link, '/')) {
+            $link = ltrim($link, '/');
+        }
+
+        if (str_contains($link, '#')) {
+            [$path, $hash] = explode('#', $link, 2);
+
+            return url($path) . '#' . $hash;
+        }
+
+        return url($link);
+    }
+}
 if (!function_exists('menuElementAnchor')) {
     /**
      * Dashboard link: "#art_modal" or "art_modal" opens a Bootstrap modal.
+     * Normal links use menuResolveHref() so /art-services#commissions works in subfolders.
      *
      * @return array{href: string, extra: string}
      */
@@ -662,7 +697,7 @@ if (!function_exists('menuElementAnchor')) {
         if ($link !== '') {
             $modalTarget = null;
 
-            if (str_starts_with($link, '#')) {
+            if (str_starts_with($link, '#') && !str_contains($link, '/')) {
                 $modalTarget = $link;
             } elseif (preg_match('/^[a-z0-9_-]+_modal$/i', $link)) {
                 $modalTarget = '#' . ltrim($link, '#');
@@ -677,7 +712,7 @@ if (!function_exists('menuElementAnchor')) {
         }
 
         return [
-            'href' => $link !== '' ? $link : 'javascript:void(0)',
+            'href' => menuResolveHref($link),
             'extra' => '',
         ];
     }

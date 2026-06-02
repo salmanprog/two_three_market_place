@@ -34,8 +34,9 @@
                 <a href="{{singleProductURL(@$element->product->seller->slug, @$element->product->slug)}}" {{$element->is_newtab == 1? 'target="_blank"':''}}>{{textLimit($element->title,20)}}</a>
             </li>
         @elseif($element->type == 'link')
+            @php $menuAnchor = menuElementAnchor($element); @endphp
             <li class="">
-                <a href="{{ $element->link }}" {{$element->is_newtab == 1? 'target="_blank"':''}}>{{textLimit($element->title,20)}}</a>
+                <a href="{{ $menuAnchor['href'] }}" {!! $menuAnchor['extra'] !!} {{$element->is_newtab == 1 && $menuAnchor['extra'] === '' ? 'target="_blank"':''}}>{{textLimit($element->title,20)}}</a>
             </li>
         @endif
     @endforeach

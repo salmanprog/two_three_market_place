@@ -656,7 +656,7 @@
       </div>
       <div class="col">
         <div class="categories-card mx-auto" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="380" data-aos-easing="ease-out-cubic">
-            <img src="{{ showImage('uploads/images/16-06-2025/685068899e6ec.png') }}" alt="Artists" class="mb-20">
+            <img src="{{('public/images/artist-cat.png')}}" alt="Artists" class="mb-20">
           <h3 class="text-start fw-700 text-black fs-18 secondry-font">Artists</h3>
           <p class="mb-10 primary-font">Join our team</p>
           <a href="{{route('frontend.merchant-register','subscription')}}" class="btn btn-secondary pri mary-font border-gray-light text-gray-400 px-44 py-10">View More</a>
