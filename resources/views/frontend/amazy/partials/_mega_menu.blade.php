@@ -178,14 +178,15 @@
                                                 </li>
                                             @endif
                                         @elseif($element->type == 'link')
+                                            @php $menuAnchor = menuElementAnchor($element); @endphp
                                             @if($element->childs->count() > 0)
                                                 <li class="submenu_active" data-aos="fade-down" data-aos-duration="1500" data-aos-delay="{{ 40 + $aosNavI * 65 }}">@php $aosNavI++; @endphp
-                                                    <a href="{{ (strtolower(trim($element->title)) == 'interior designers') ? route('frontend.packages') : $element->link }}" {{$element->is_newtab == 1? 'target="_blank"':''}}>{{textLimit($element->title,20)}} <i class="ti-angle-down"></i></a>
+                                                    <a href="{{ $menuAnchor['href'] }}" {!! $menuAnchor['extra'] !!} {{$element->is_newtab == 1 && $menuAnchor['extra'] === '' ? 'target="_blank"':''}}>{{textLimit($element->title,20)}} <i class="ti-angle-down"></i></a>
                                                     @include(theme('partials._menu_chield'), ['element' => $element])
                                                 </li>
                                             @else
                                                 <li class="" data-aos="fade-down" data-aos-duration="1500" data-aos-delay="{{ 40 + $aosNavI * 65 }}">@php $aosNavI++; @endphp
-                                                    <a href="{{ (strtolower(trim($element->title)) == 'interior designers') ? route('frontend.packages') : $element->link }}" {{$element->is_newtab == 1? 'target="_blank"':''}}>{{textLimit($element->title,20)}}</a>
+                                                    <a href="{{ $menuAnchor['href'] }}" {!! $menuAnchor['extra'] !!} {{$element->is_newtab == 1 && $menuAnchor['extra'] === '' ? 'target="_blank"':''}}>{{textLimit($element->title,20)}}</a>
                                                 </li>
                                             @endif
                                         @elseif($element->type == 'function' & $element->element_id == 1)

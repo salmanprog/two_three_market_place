@@ -136,6 +136,8 @@
           <li><a href="https://www.facebook.com/TwoThreeLeggedDogs" target="_blank" class="text-white fs-25" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a></li>
           <li><a href="https://www.instagram.com/twothree_leggeddogs/" target="_blank" class="text-white fs-25" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a></li>
           <li><a href="https://www.linkedin.com/company/two-three-legged-dogs-llc/?viewAsMember=true" target="_blank" class="text-white fs-25" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a></li>
+          <li><a href="" target="_blank" class="text-white fs-25" aria-label="tiktok"><i class="fa-brands fa-tiktok"></i></a></li>
+          <li><a href="" target="_blank" class="text-white fs-25" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a></li>
         </ul>
       </div>
       <div class="col-12 col-lg-8 col-xl-9">

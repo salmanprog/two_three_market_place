@@ -49,6 +49,7 @@ use App\Http\Controllers\ResellProduct;
 use Modules\OrderManage\Http\Controllers\OrderManageController;
 use Modules\Customer\Http\Controllers\ChatMessageController;
 use App\Http\Controllers\AdminNotificationController;
+use App\Http\Controllers\MainPageController;
 
 Route::post('/locale', [LanguageController::class, 'locale'])->name('frontend.locale')->middleware('prohibited_demo_mode');
 Auth::routes(['verify' => true]);
@@ -96,6 +97,7 @@ Route::get('/contact-us', [ContactUsController::class, 'index'])->name('frontend
 Route::get('/about-us', [AboutUsController::class, 'index'])->name('frontend.about-us');
 Route::get('/merchant', [MerchantController::class, 'index'])->name('frontend.merchant');
 Route::get('/return-exchange', [ReturnExchangeController::class, 'index'])->name('frontend.return-exchange');
+
 //cart
 Route::get('/cart', [CartController::class, 'index'])->name('frontend.cart')->middleware('customer');
 Route::post('/cart/store', [CartController::class, 'store'])->name('frontend.cart.store');
@@ -452,6 +454,9 @@ Route::get('interior-designers/find-local-art-shows', function() {
 Route::get('interior-designers/find-an-artist-for-your-event', function() {
     return view('frontend.amazy.pages.drop-down-pages.interior-designers.find-an-artist-for-your-event');
 });
+
+Route::get('/test', [MainPageController::class, 'index'])->name('frontend.new-shop');
+
 // terms and conditions routes
 
 Route::get('art/artist-agreement', function() {

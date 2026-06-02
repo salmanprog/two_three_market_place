@@ -643,6 +643,45 @@ if (!function_exists('textLimit')) {
         return null;
     }
 }
+if (!function_exists('menuElementAnchor')) {
+    /**
+     * Dashboard link: "#art_modal" or "art_modal" opens a Bootstrap modal.
+     *
+     * @return array{href: string, extra: string}
+     */
+    function menuElementAnchor($element): array
+    {
+        $title = strtolower(trim($element->title ?? ''));
+
+        if ($title === 'interior designers') {
+            return ['href' => route('frontend.packages'), 'extra' => ''];
+        }
+
+        $link = trim((string) ($element->link ?? ''));
+
+        if ($link !== '') {
+            $modalTarget = null;
+
+            if (str_starts_with($link, '#')) {
+                $modalTarget = $link;
+            } elseif (preg_match('/^[a-z0-9_-]+_modal$/i', $link)) {
+                $modalTarget = '#' . ltrim($link, '#');
+            }
+
+            if ($modalTarget !== null) {
+                return [
+                    'href' => 'javascript:void(0)',
+                    'extra' => 'data-bs-toggle="modal" data-bs-target="' . e($modalTarget) . '"',
+                ];
+            }
+        }
+
+        return [
+            'href' => $link !== '' ? $link : 'javascript:void(0)',
+            'extra' => '',
+        ];
+    }
+}
 if (!function_exists('checkTableJoin')) {
     function checkTableJoin($query, $table) {
         $joins = $query->getQuery()->joins;

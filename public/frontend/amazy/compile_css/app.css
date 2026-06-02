@@ -94,6 +94,43 @@ h1 {
   font-size: calc(1.375rem + 1.5vw)
 }
 
+.art-modal {
+  z-index: 2;
+}
+.modal-backdrop.show {
+  z-index: 1;
+}
+.filter-artist-sec.art-modal-content {
+  padding: 0;
+}
+.filter-artist-sec.art-modal-content .premium-luxury-panel {
+  box-shadow: none;
+  border: none;
+  background: transparent;
+}
+.art-modal .modal-content {
+  background: #ffffff;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 10px 15px -3px rgba(0, 0, 0, 0.03), 0 30px 50px -12px rgba(0, 0, 0, 0.05);
+}
+.art-modal .close_modal i {
+  border: 1px solid var(--black);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--black);
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  &:hover {
+    background-color: var(--black);
+    color: #fff;
+  }
+}
+/* responsive */
 @media (min-width:1200px) {
 
   .h1,
