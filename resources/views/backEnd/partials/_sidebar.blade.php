@@ -63,6 +63,7 @@
                     </a>
                 </li>
             @endif
+           
             @foreach($sidebars as $key => $section)
 
                 @if($section->children->count() > 0)
@@ -143,6 +144,22 @@
                                     </li>
                                 </ul>
                             </li>
+                            <li class="{{spn_active_link(childrenRoute($menu))}}">
+                                <a href="{{route('art-gallery.list_active')}}" class="has-arrow" aria-expanded="false">
+                                    <div class="nav_icon_small">
+                                        <span class="fas fa-users"></span>
+                                    </div>
+                                    <div class="nav_title">
+                                        Art Galleries
+                                    </div>
+                                </a>
+                                <ul class="mm-collapse">
+                                    <li>
+                                        <a href="{{route('art-gallery.list_active')}}"
+                                            class="{{spn_active_link(['art-gallery.list_active'], 'active')}}">{{__('All Art Galleries')}}</a>
+                                    </li>
+                                </ul>
+                            </li>
                         @endif
                     @endif
                     @foreach($section->children as $menu)
@@ -186,7 +203,7 @@
                                                 @if($section->backendMenu?->name == 'common.user_manages')
                                                     <span class="abc">Event Managment</span>
                                                 @else
-                                                    <span class="jhs">{{__($menu->backendMenu->name)}}  </span>    
+                                                    <span class="jhs">{{__($menu->backendMenu->name)}} </span>    
                                                 @endif
                                             @elseif(auth()->user()->role->type == 'seller')
                                                 @if($section->backendMenu?->name == 'common.user_manages')
@@ -245,6 +262,8 @@
                                                             @if(auth()->user()->role->type == 'staff' && $submenu->backendMenu->id == 12 && $submenu->backendMenu->name == 'hr.holiday_setup' && $submenu->backendMenu->route == 'holidays.index' )
                                                             <a href="{{route('booking.events')}}"
                                                                 class="{{spn_active_link(['booking.events'], 'active')}} @if(@$submenu->children->count()) has-arrow @endif">{{__('Event Bookings')}}</a>
+                                                                <a href="{{route('booking.art_galleries')}}"
+                                                                class="{{spn_active_link(['booking.art_galleries', 'booking.art_galleries.edit'], 'active')}} @if(@$submenu->children->count()) has-arrow @endif">{{__('Art Gallery')}}</a>
                                                             @elseif(auth()->user()->role->type == 'staff' &&$submenu->backendMenu->name == 'order.total_order' )
                                                             <a href="{{route('frontend.orders_manage')}}"
                                                                 class="{{spn_active_link(['order.total_order'], 'active')}} @if(@$submenu->children->count()) has-arrow @endif">{{__('Total Order')}}</a>
@@ -362,6 +381,14 @@
                     @endforeach
                 @endif
             @endforeach
+             @if(auth()->user()->role->type == 'staff')
+                <li class="{{ spn_active_link(['event.my-wishlist'], 'active') }}">
+                    <a href="{{ route('event.my-wishlist') }}" aria-expanded="false">
+                        <div class="nav_icon_small"><span class="far fa-heart"></span></div>
+                        <div class="nav_title"><span>{{ __('customer_panel.my_wishlist') }}</span></div>
+                    </a>
+                </li>
+            @endif
         </ul>
     @endif
 </nav>

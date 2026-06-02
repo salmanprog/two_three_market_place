@@ -6,6 +6,8 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
 use Modules\Attendance\Repositories\AttendanceRepository;
 use Modules\Attendance\Repositories\AttendanceRepositoryInterface;
+use Modules\Attendance\Repositories\ArtGalleryRepository;
+use Modules\Attendance\Repositories\ArtGalleryRepositoryInterface;
 use Modules\Attendance\Repositories\EventRepository;
 use Modules\Attendance\Repositories\EventRepositoryInterface;
 use Modules\Attendance\Repositories\HolidayRepository;
@@ -47,6 +49,7 @@ class AttendanceServiceProvider extends ServiceProvider
         $this->app->bind(HolidayRepositoryInterface::class,HolidayRepository::class);
         $this->app->bind(AttendanceRepositoryInterface::class,AttendanceRepository::class);
         $this->app->bind(EventRepositoryInterface::class,EventRepository::class);
+        $this->app->bind(ArtGalleryRepositoryInterface::class,ArtGalleryRepository::class);
     }
 
     /**

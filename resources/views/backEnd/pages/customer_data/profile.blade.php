@@ -1,6 +1,17 @@
 @extends('backEnd.master')
 @section('styles')
 <link rel="stylesheet" href="{{asset(asset_path('backend/css/backend_page_css/profile.css'))}}" />
+<style>
+    .artist-services-checkboxes .primary_checkbox {
+        align-items: center;
+        min-height: 36px;
+        margin-bottom: 0;
+    }
+    .artist-services-checkboxes .label_name {
+        line-height: 1.3;
+        margin-bottom: 0;
+    }
+</style>
 @endsection
 @section('mainContent')
 <!--  dashboard part css here -->
@@ -137,11 +148,49 @@
                                                 alt="">
                                         </div>
                                     </div>
-
+                                    @if(auth()->user()->role->type == 'seller')
+                                    <div class="col-xl-6">
+                                        <div class="primary_input mb-25">
+                                            <label class="primary_input_label" for="">{{ __('Art Services') }}</label>
+                                            <div class="artist-services-checkboxes">
+                                                <div class="row">
+                                                    <div class="col-sm-6 mb_15">
+                                                        <label class="primary_checkbox d-flex align-items-center">
+                                                            <input type="checkbox" name="live_art" value="1">
+                                                            <span class="checkmark mr_15"></span>
+                                                            <span class="label_name f_w_400">Live Art</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-sm-6 mb_15">
+                                                        <label class="primary_checkbox d-flex align-items-center">
+                                                            <input type="checkbox" name="art_shows" value="1">
+                                                            <span class="checkmark mr_15"></span>
+                                                            <span class="label_name f_w_400">Art Shows</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-sm-6 mb_15">
+                                                        <label class="primary_checkbox d-flex align-items-center">
+                                                            <input type="checkbox" name="murals" value="1">
+                                                            <span class="checkmark mr_15"></span>
+                                                            <span class="label_name f_w_400">Murals</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-sm-6 mb_15">
+                                                        <label class="primary_checkbox d-flex align-items-center">
+                                                            <input type="checkbox" name="commissions" value="1">
+                                                            <span class="checkmark mr_15"></span>
+                                                            <span class="label_name f_w_400">Commissions</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endif
                                     <div class="col-xl-6">
                                         <div class="primary_input mb-25">
                                             <label class="primary_input_label" for="">{{ __('Biography')
-                                                }}</label>
+                                                }} </label>
                                             <textarea class="primary_textarea height_112 description"
                                                 id="description"
                                                 placeholder="{{ __('Biography') }}" name="description"

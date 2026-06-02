@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Staff\StaffWishlistController;
 use Illuminate\Support\Facades\Route;
 use Modules\Product\Http\Controllers\ProductController;
 
@@ -13,6 +14,11 @@ Route::get('/event/login', [LoginController::class, 'showOrganiserLoginForm'])->
 Route::post('/event/login', [LoginController::class, 'organiserLogin'])->name('event.login_submit');
 Route::get('/event', function(){
     return redirect(url('/event/login'));
+});
+Route::get('/art-gallery/login', [LoginController::class, 'showArtGalleryLoginForm'])->name('art-gallery.login');
+Route::post('/art-gallery/login', [LoginController::class, 'artGalleryLogin'])->name('art-gallery.login_submit');
+Route::get('/art-gallery', function(){
+    return redirect(url('/art-gallery/login'));
 });
 Route::middleware(['auth','admin'])->prefix('admin')->group(function() {
     Route::get('/merchants', 'MerchantController@index')->name('admin.merchants_list');
@@ -57,6 +63,16 @@ Route::prefix('event')->as('event.')->group(function() {
     Route::post('/event-organisers-subscription-payment', 'EventController@subscriptionPayment')->name('event_organisers_subscription_payment');
     Route::get('booking/payment/{id}/{userid}','EventController@eventBookingPaymentPage')->name('eventBookingPaymentPage');
     Route::post('/event-booking-payment', 'EventController@eventBookingPayment')->name('event_booking_payment');
+    Route::get('/my-wishlist', [StaffWishlistController::class, 'index'])->name('my-wishlist')->middleware('auth');
+    Route::get('/my-wishlist/paginate-data', [StaffWishlistController::class, 'my_wish_list'])->name('my-wishlist.paginate-data')->middleware('auth');
+});
+
+Route::prefix('art-gallery')->as('art-gallery.')->group(function() {
+    Route::get('/dashboard', 'EventController@index')->name('dashboard');
+    Route::get('/art-gallery-subscription-payment-select/{id}', 'EventController@subscriptionPaymentPage')->name('subscription_payment_select');
+    Route::get('/art-gallery-subscription-payment-select/{id}', 'EventController@subscriptionPaymentPageDetails')->name('subscription_payment_select');
+    Route::get('subscription/payment/{id}','EventController@subscriptionPaymentPage')->name('subscriptionPaymentGateway');
+    Route::post('/art-galleries-subscription-payment', 'EventController@subscriptionPayment')->name('art_galleries_subscription_payment');
 });
 
 Route::prefix('seller')->as('seller.')->group(function() {

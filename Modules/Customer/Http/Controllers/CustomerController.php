@@ -47,6 +47,12 @@ class CustomerController extends Controller
         $data['customers'] = $this->customerService->getAllInterior();
         return view('customer::interiordesigner.index', $data);
     }
+
+    public function art_gallery_index()
+    {
+        $data['customers'] = $this->customerService->getAllArtGallery();
+        return view('customer::artgallery.index', $data);
+    }
     public function customer_index_get_data(){
         if(isset($_GET['table'])){
             $table = $_GET['table'];
@@ -131,6 +137,48 @@ class CustomerController extends Controller
             return [];
         }
     }
+
+    public function art_gallery_get_data(){
+        if(isset($_GET['table'])){
+            $table = $_GET['table'];
+            if($table == 'active_customer'){
+                $customer = $this->customerService->getAllArtGallery()->where('is_active',1);
+            }
+            elseif($table == 'inactive_customer'){
+                $customer = $this->customerService->getAllArtGallery()->where('is_active', 0);
+            }elseif($table == 'all_customer'){
+                $customer = $this->customerService->getAllArtGallery()->whereNotIn('is_active', ['2']);
+            }
+            return DataTables::of($customer)
+            ->addIndexColumn()
+            ->addColumn('avatar', function($customer){
+                return view('customer::artgallery.components._avatar_td',compact('customer'));
+            })
+            ->addColumn('name', function($customer){
+                return view('customer::artgallery.components._name_td',compact('customer'));
+            })
+            ->addColumn('phone', function($customer){
+                return getNumberTranslate($customer->username);
+            })
+            ->addColumn('status', function($customer){
+                return ($customer->is_active == 1) ? 'Active' : 'No-Active';
+            })
+            ->addColumn('wallet_balance', function($customer){
+                return single_price($customer->orders->sum('grand_total'));
+            })
+            ->addColumn('orders', function($customer){
+                return getNumberTranslate(count($customer->orders));
+            })
+            ->addColumn('action',function($customer){
+                return view('customer::artgallery.components._action_td',compact('customer'));
+            })
+            ->rawColumns(['avatar','status','action','name'])
+            ->make(true);
+        }else{
+            return [];
+        }
+    }
+
     public function profile(ProfileRequest $request)
     {
          try {

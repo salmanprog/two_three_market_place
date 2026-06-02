@@ -36,6 +36,7 @@ use Modules\GeneralSetting\Entities\EmailTemplateType;
 use App\Http\Controllers\Frontend\NewUserZoneController;
 use App\Http\Controllers\Auth\MerchantRegisterController;
 use App\Http\Controllers\Auth\EventOrginaizerRegisterController;
+use App\Http\Controllers\Auth\ArtGalleryRegisterController;
 use App\Http\Controllers\Frontend\EventsController;
 use App\Http\Controllers\DemoController;
 use App\Http\Controllers\Frontend\NotificationController;
@@ -219,6 +220,10 @@ Route::get('/user/book/events', [EventsController::class, 'userBookingEvent'])->
 Route::get('/user/events/details/{id}', [EventsController::class, 'userBookingEventDetail'])->name('frontend.user.book.event.show');
 Route::get('/seller/book/events', [EventsController::class, 'sellerBookingEvent'])->name('frontend.seller.book.event');
 Route::get('/seller/events/details/{id}', [EventsController::class, 'sellerBookingEventDetail'])->name('frontend.seller.book.event.show');
+//art gallery register
+Route::get('art-gallery-register/{id}', [ArtGalleryRegisterController::class, 'showRegisterSubscription'])->name('frontend.art-gallery-register');
+Route::get('/art-gallery-register-step-1', [ArtGalleryRegisterController::class, 'showRegisterForm'])->name('frontend.art-gallery-subscription-type');
+Route::post('/art-gallery-register', [ArtGalleryRegisterController::class, 'register'])->name('frontend.art-gallery.store');
 //flash deal
 Route::get('/flash-deal/{slug}', [FlashDealController::class, 'show'])->name('frontend.flash-deal');
 Route::get('/flash-deal/{slug}/fetch-data', [FlashDealController::class, 'fetchData'])->name('frontend.flash-deal.fetch-data');

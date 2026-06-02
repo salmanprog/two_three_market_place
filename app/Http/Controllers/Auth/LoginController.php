@@ -137,6 +137,54 @@ class LoginController extends Controller
     }
     // end Event Organiser login
 
+    // start for Art Gallery login
+    public function showArtGalleryLoginForm()
+    {
+        $art_gallery = User::whereHas('role', function($q){
+            return $q->where('type', 'staff');
+        })->first();
+
+        $art_gallery_email = null;
+        if($art_gallery){
+            $art_gallery_email = $art_gallery->email;
+        }
+
+        $loginPageInfo = LoginPage::findOrFail(3);
+        return view(theme('auth.art_gallery_login'), compact('art_gallery', 'loginPageInfo'));
+    }
+
+    public function artGalleryLogin(Request $request){
+       
+        if (env('NOCAPTCHA_FOR_LOGIN') == "true" && app('theme')->folder_path == 'amazy') {
+            $request->validate([
+                'g-recaptcha-response' => 'required',
+            ],[
+                'g-recaptcha-response.required' => 'The google recaptcha field is required.',
+            ]);
+        }
+        $user = null;
+        $user = User::where('email', $request->login)->where('is_active', 1)->whereHas('role', function($query){
+            return $query->where('type', 'staff');
+        })->first();
+        if(!$user){
+            $user = User::where('username', $request->login)->where('is_active', 1)->whereHas('role', function($query){
+                return $query->where('type', 'staff');
+            })->first();
+        }
+        if($user){
+            if (config('app.sync') && $request->auto_login == "true"){
+                return $this->loginDone($request, $user);
+            }else{
+                return $this->sendOtpAndCheck($request, null);
+            }
+        }else{
+            throw ValidationException::withMessages([
+                "email" => __('auth.failed')
+            ]);
+        }
+    }
+    // end Art Gallery login
+
     // start for admin login
     public function showAdminLoginForm(){
         $admin_email = User::whereHas('role', function($q){
