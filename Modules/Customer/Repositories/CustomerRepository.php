@@ -36,6 +36,16 @@ class CustomerRepository
         })->latest();
     }
 
+    public function getAllArtGallery()
+    {
+        return User::with('wallet_balances', 'orders')->where(function ($query) {
+            $query->where('role_id', 8)
+                ->orWhereHas('role', function ($q) {
+                    $q->where('type', 'art_gallery');
+                });
+        })->latest();
+    }
+
     public function find($id)
     {
         return User::with('wallet_balances', 'orders', 'customerAddresses')->findOrFail($id);

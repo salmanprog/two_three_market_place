@@ -99,6 +99,28 @@
                         </div>
                     </article>
                 </div>
+                <div class="col-12 col-sm-6 col-lg-3 d-flex" data-aos="fade-up" data-aos-duration="700" data-aos-delay="260">
+                    <article class="account-signup-card w-100">
+                        <div class="account-signup-card__media">
+                            <img
+                                src="{{ asset('') }}Modules/PageBuilder/Resources/assets/keditor/snippets/img/art_gallery_login.jpg"
+                                alt=""
+                                width="600"
+                                height="450"
+                                loading="lazy"
+                                decoding="async">
+                        </div>
+                        <div class="account-signup-card__body">
+                            <p class="account-signup-card__text primary-font mb-0">Create your Art Gallery account to start selling your artwork and start selling your paintings today.</p>
+                            <div class="account-signup-card__action">
+                                <a href="{{ route('art-gallery.login') }}" class="account-signup-btn primary-font">
+                                    Login as Art Gallery
+                                    <i class="fa-solid fa-arrow-right-long fs-12" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
             </div>
         </div>
     </section>

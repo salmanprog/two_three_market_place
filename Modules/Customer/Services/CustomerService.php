@@ -22,6 +22,11 @@ class CustomerService
         return $this->customerRepository->getAllInterior();
     }
 
+    public function getAllArtGallery()
+    {
+        return $this->customerRepository->getAllArtGallery();
+    }
+
     public function find($id)
     {
         return $this->customerRepository->find($id);

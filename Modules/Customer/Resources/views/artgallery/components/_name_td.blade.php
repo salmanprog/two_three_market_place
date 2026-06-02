@@ -1,0 +1,1 @@
+<a href="{{route('admin.merchant_show_details',$customer->id)}}">{{$customer->first_name}}</a>

@@ -50,4 +50,11 @@ Route::prefix('booking')->name('booking.')->group(function () {
         Route::get('/events', 'EventController@bookingIndex')->name('events');
         Route::get('/events/view/{id}', 'EventController@viewBooking')->name('events_view');
     });
+Route::prefix('booking')->name('booking.')->middleware(['auth'])->group(function () {
+        Route::get('/art-galleries', 'ArtGalleryController@index')->name('art_galleries');
+        Route::post('/art-galleries', 'ArtGalleryController@store')->name('art_galleries.store');
+        Route::get('/art-galleries/{id}/edit', 'ArtGalleryController@edit')->name('art_galleries.edit');
+        Route::put('/art-galleries/{id}', 'ArtGalleryController@update')->name('art_galleries.update');
+        Route::get('/art-galleries-delete/{id}', 'ArtGalleryController@destroy')->name('art_galleries.delete');
+    });
 Route::get('events-delete/{id}','EventController@destroy')->name('events.delete')->middleware(['admin','auth','permission']);
