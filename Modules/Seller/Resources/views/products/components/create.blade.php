@@ -225,7 +225,7 @@ $LanguageList = getLanguageList();
                                                     <input type="hidden" class="selected_files" value="">
                                                 </button>
                                             </div>
-                                            <div class="product_image_all_div"></div>
+                                            <div class="product_image_all_div artwork-protect-zone"></div>
                                         </div>
 
                                     </div>
@@ -1179,7 +1179,7 @@ $LanguageList = getLanguageList();
                                                             </button>
                                                             <span class="text-danger" id="error_thumbnail"></span>
                                                         </div>
-                                                        <div class="product_image_all_div">
+                                                        <div class="product_image_all_div artwork-protect-zone">
                                                         </div>
                                                     </div>
                                                 </div>

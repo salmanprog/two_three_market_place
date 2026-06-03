@@ -15,14 +15,20 @@
         box-shadow: 0 10px 40px rgba(43, 54, 228, 0.1);
     }
     .location-tier-icon__placeholder {
-        width: 100%;
-        aspect-ratio: 4 / 3;
+        width: 100px;
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         border: 1px dashed #bbb;
         border-radius: 16px;
         background: #f7f7f7;
         color: #777;
         text-align: center;
-        padding: 1rem;
+        border-radius: 100%;
+    }
+    .location-tier-icon__placeholder img {
+        max-width: 70%;
     }
     .location-tier-card .plan_title {
         font-size: 28px;
@@ -325,7 +331,7 @@
                     <div class="location-tier-icon mb-4">
                         {{-- Replace with Beagle breed image/icon --}}
                         <div class="location-tier-icon__placeholder primary-font">
-                            <span>Beagle image / icon placeholder</span>
+                            <img src="{{asset('public/images/breeds/beagle.png')}}" alt="Beagle">
                         </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-start mb-3">
@@ -348,7 +354,7 @@
                     <div class="location-tier-icon mb-4">
                         {{-- Replace with Husky breed image/icon --}}
                         <div class="location-tier-icon__placeholder primary-font">
-                            <span>Husky image / icon placeholder</span>
+                        <img src="{{asset('public/images/breeds/husky.png')}}" alt="Husky">
                         </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-start mb-3">
@@ -377,7 +383,7 @@
                     <div class="location-tier-icon mb-4">
                         {{-- Replace with Mastiff breed image/icon --}}
                         <div class="location-tier-icon__placeholder primary-font">
-                            <span>Mastiff image / icon placeholder</span>
+                        <img src="{{asset('public/images/breeds/mastiff.png')}}" alt="Mastiff">
                         </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-start mb-3">

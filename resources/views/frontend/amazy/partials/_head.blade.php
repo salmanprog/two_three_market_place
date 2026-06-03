@@ -169,6 +169,7 @@
     @else
     <link rel="stylesheet"  href="{{asset(asset_path('frontend/amazy/compile_css/app.css'))}}" >
     @endif
+    @include('partials._artwork_protection_css')
     @stack('styles')
     @if (app('business_settings')->where('type', 'google_analytics')->first()->status == 1)
           <!-- Global site tag (gtag.js) - Google Analytics -->
