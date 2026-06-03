@@ -810,6 +810,11 @@ input {
   max-height: 700px;
   width: 100%;
 }
+.modal-dialog .premium-luxury-panel {
+  border: none;
+  background-color: transparent;
+  box-shadow: none;
+}
 /* responsive */  
 @media (max-width: 1800px) {
   .header_top_area .container {

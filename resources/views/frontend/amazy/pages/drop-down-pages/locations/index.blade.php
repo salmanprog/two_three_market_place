@@ -1,5 +1,104 @@
 @extends('frontend.amazy.layouts.app')
 @push('styles')
+<style>
+    .location-tier-card {
+        border: 1px solid gray;
+        border-radius: 20px;
+        padding: 30px;
+        background: #fff;
+        position: relative;
+        height: 100%;
+        text-align: left;
+        transition: all 0.3s ease;
+    }
+    .location-tier-card:hover {
+        box-shadow: 0 10px 40px rgba(43, 54, 228, 0.1);
+    }
+    .location-tier-icon__placeholder {
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        border: 1px dashed #bbb;
+        border-radius: 16px;
+        background: #f7f7f7;
+        color: #777;
+        text-align: center;
+        padding: 1rem;
+    }
+    .location-tier-card .plan_title {
+        font-size: 28px;
+        color: #000;
+        font-weight: 500;
+        margin-bottom: 0;
+        line-height: 1.2;
+    }
+    .location-tier-card .discount_badge {
+        background: #ffeeb2;
+        color: #333;
+        font-size: 12px;
+        font-weight: 700;
+        padding: 6px 12px;
+        border-radius: 4px;
+        display: inline-block;
+        white-space: nowrap;
+    }
+    .location-tier-card .big_price {
+        font-size: 56px;
+        color: #000;
+        font-weight: 500;
+        line-height: 1;
+        margin-right: 10px;
+    }
+    .location-tier-card .price_meta {
+        font-size: 14px;
+        line-height: 1.3;
+        color: #000;
+        font-weight: 500;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .location-tier-card .feature_divider {
+        border-top: 1px solid #eee;
+        margin-bottom: 25px;
+    }
+    .location-tier-card .feature_list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .location-tier-card .feature_list li {
+        font-size: 14px;
+        color: #333;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: flex-start;
+    }
+    .location-tier-card .feature_list li i {
+        margin-right: 12px;
+        color: #888;
+        font-size: 14px;
+        margin-top: 4px;
+    }
+    .location-tier-notes {
+        max-width: 920px;
+    }
+    .location-tier-notes li {
+        font-size: 15px;
+        color: #333;
+        margin-bottom: 10px;
+    }
+    @media (max-width: 767px) {
+        .location-tier-card {
+            margin-bottom: 24px;
+        }
+        .location-tier-card .big_price {
+            font-size: 40px;
+        }
+        .location-tier-card .plan_title {
+            font-size: 25px;
+        }
+    }
+</style>
 @endpush
 @section('content')
 <section class="how-partner-section py-50 py-lg-100 overflow-visible" id="office-space">
@@ -179,6 +278,7 @@
         </div>
     </div>
 </section>
+
 <section class="nav-dp-wrapper" id="schools">
     <div class="container">
         <div class="row align-items-center">
@@ -203,7 +303,7 @@
             </div>
         </div>
         <div class="col-4 mx-auto">
-            <div class="account-signup-sec">
+            <div class="account-signup-sec" style="background: transparent !important;">
                 @guest
                 <a href="{{ route('frontend.event-organiser-register', 'subscription') }}" class="account-signup-btn primary-font">
                     Partner as a Location
@@ -212,6 +312,104 @@
                 @endguest
             </div>
         </div>
+    </div>
+</section>
+
+<section class="how-partner-section py-50 py-lg-100 overflow-visible bg-white" id="service-tiers">
+    <div class="container">
+        <h2 class="secondry-font fs-55 fw-700 text-center text-black mb-40 line-height-1-2 mx-auto" style="max-width: 920px;" data-aos="fade-up" data-aos-duration="1000" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">Service Tiers</h2>
+
+        <div class="row justify-content-center g-4">
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-duration="900" data-aos-delay="0">
+                <div class="location-tier-card">
+                    <div class="location-tier-icon mb-4">
+                        {{-- Replace with Beagle breed image/icon --}}
+                        <div class="location-tier-icon__placeholder primary-font">
+                            <span>Beagle image / icon placeholder</span>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h3 class="plan_title secondry-font">Tier 1: Beagle</h3>
+                    </div>
+                    <div class="mb-4">
+                        <div class="d-flex align-items-center">
+                            <span class="big_price secondry-font">Free</span>
+                        </div>
+                    </div>
+                    <div class="feature_divider"></div>
+                    <ul class="feature_list primary-font">
+                        <li><i class="fas fa-check"></i> Access to our online platform to host ticketed events.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-duration="900" data-aos-delay="100">
+                <div class="location-tier-card">
+                    <div class="location-tier-icon mb-4">
+                        {{-- Replace with Husky breed image/icon --}}
+                        <div class="location-tier-icon__placeholder primary-font">
+                            <span>Husky image / icon placeholder</span>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h3 class="plan_title secondry-font">Tier 2: Husky</h3>
+                    </div>
+                    <div class="mb-4">
+                        <div class="d-flex align-items-center">
+                            <span class="big_price secondry-font">$25</span>
+                            <div class="price_meta primary-font">
+                                <span>/painting</span>
+                                <span>/year</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="feature_divider"></div>
+                    <ul class="feature_list primary-font">
+                        <li><i class="fas fa-check"></i> Access to our online platform to host ticketed events.</li>
+                        <li><i class="fas fa-check"></i> Source local art for your location.</li>
+                        <li><i class="fas fa-check"></i> Art installation &amp; sales facilitation.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-duration="900" data-aos-delay="200">
+                <div class="location-tier-card">
+                    <div class="location-tier-icon mb-4">
+                        {{-- Replace with Mastiff breed image/icon --}}
+                        <div class="location-tier-icon__placeholder primary-font">
+                            <span>Mastiff image / icon placeholder</span>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h3 class="plan_title secondry-font">Tier 3: Mastiff</h3>
+                        <span class="discount_badge primary-font">{{ __('defaultTheme.best value') }}</span>
+                    </div>
+                    <div class="mb-4">
+                        <div class="d-flex align-items-center">
+                            <span class="big_price secondry-font">$150</span>
+                            <div class="price_meta primary-font">
+                                <span>/painting</span>
+                                <span>/year</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="feature_divider"></div>
+                    <ul class="feature_list primary-font">
+                        <li><i class="fas fa-check"></i> Access to our online platform to host ticketed events.</li>
+                        <li><i class="fas fa-check"></i> Source local art for your location.</li>
+                        <li><i class="fas fa-check"></i> Art installation &amp; sales facilitation.</li>
+                        <li><i class="fas fa-check"></i> Source art from more established, premium artists with more renown.</li>
+                        <li><i class="fas fa-check"></i> Seasonal rotations of art to match your desired aesthetic.</li>
+                        <li><i class="fas fa-check"></i> Business features on social media and marketing campaigns.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <ul class="location-tier-notes primary-font mx-auto mt-40 mb-0 ps-3" data-aos="fade-up" data-aos-duration="900" data-aos-delay="260">
+            <li>Events generate $1.50 per ticket sale to 23LD in service charges.</li>
+            <li>Art sales at the Mastiff/Husky locations generate 25% commission to 23LD on artwork sold (art is supplied by Husky artists).</li>
+        </ul>
     </div>
 </section>
 @endsection

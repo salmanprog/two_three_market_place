@@ -170,11 +170,9 @@
 </div>
 
 <div class="modal fade  art-modal" id="art_modal" tabindex="-1" role="dialog" aria-labelledby="art_modal" aria-hidden="true"
-tabindex="-1"
-     data-bs-backdrop="static"
-     data-bs-keyboard="false"
-
->
+    tabindex="-1"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-body">
@@ -183,9 +181,9 @@ tabindex="-1"
                 </div>
 
             </div>
-            <section class="filter-artist-sec art-modal-content overflow-visible">
+            <section class="filter-artist-sec art-modal-content overflow-visible" style="box-shadow: none; background: transparent;">
                 <div class="container">
-                    <div class="premium-luxury-panel" data-aos="fade-up" data-aos-duration="1200">
+                    <div class="premium-luxury-panel" style="background: #fff; border-radius: 0;" data-aos="fade-up" data-aos-duration="1200">
                         <h2 class="luxury-heading secondry-font">Filter Arts</h2>
 
                         <form action="{{ route('frontend.searchshop') }}" method="GET">
@@ -455,6 +453,5 @@ tabindex="-1"
         </div>
     </div>
 </div>
-@push('scripts')
 
-@endpush
+@include('frontend.amazy.partials._local_artists_modal')

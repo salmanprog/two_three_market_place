@@ -92,5 +92,7 @@ class AppServiceProvider extends ServiceProvider
                 $view->with('adminNotificationUnreadCount', 0);
             }
         });
+
+        View::composer('frontend.amazy.partials._local_artists_modal', \App\View\Composers\LocalArtistsModalComposer::class);
     }
 }
