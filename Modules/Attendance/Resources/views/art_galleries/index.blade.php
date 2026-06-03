@@ -27,7 +27,7 @@
                                     @else
                                         @lang('common.add')
                                     @endif
-                                    {{ __('Art Gallery') }}
+                                    {{ __('Art Inventory') }}
                                 </h3>
                             </div>
                             @if(isset($editData))
@@ -120,7 +120,7 @@
                         <div class="row">
                             <div class="col-lg-4 no-gutters">
                                 <div class="main-title">
-                                    <h3 class="mb-0">{{ __('Art Gallery') }} @lang('common.list')</h3>
+                                    <h3 class="mb-0">{{ __('Art Inventory') }} @lang('common.list')</h3>
                                 </div>
                             </div>
                         </div>
