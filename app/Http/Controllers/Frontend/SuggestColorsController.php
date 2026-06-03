@@ -53,7 +53,6 @@ class SuggestColorsController extends Controller
 
     public function store(Request $request)
     {
-        $palette = self::palette();
         $request->merge([
             'colors' => $request->filled('colors') ? strtoupper(trim($request->input('colors'))) : '',
         ]);
@@ -64,12 +63,6 @@ class SuggestColorsController extends Controller
                 'regex:/^#[0-9A-F]{6}$/',
             ],
         ]);
-
-        if (! in_array($request->colors, $palette, true)) {
-            Toastr::error(__('common.error_message'), __('common.error'));
-
-            return redirect()->back()->withInput();
-        }
 
         SuggestColors::create([
             'user_id' => auth()->id(),
@@ -94,7 +87,6 @@ class SuggestColorsController extends Controller
     {
         $this->authorizeRow($suggestColor);
 
-        $palette = self::palette();
         $request->merge([
             'colors' => $request->filled('colors') ? strtoupper(trim($request->input('colors'))) : '',
         ]);
@@ -105,12 +97,6 @@ class SuggestColorsController extends Controller
                 'regex:/^#[0-9A-F]{6}$/',
             ],
         ]);
-
-        if (! in_array($request->colors, $palette, true)) {
-            Toastr::error(__('common.error_message'), __('common.error'));
-
-            return redirect()->back()->withInput();
-        }
 
         $suggestColor->colors = $request->colors;
         if ($suggestColor->isDirty('colors')) {

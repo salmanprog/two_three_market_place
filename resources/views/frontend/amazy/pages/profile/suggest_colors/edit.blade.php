@@ -50,18 +50,13 @@
                         <form action="{{ route('frontend.suggest-colors.update', $suggestColor) }}" method="post" id="suggest_colors_form">
                             @csrf
                             <input type="hidden" name="colors" id="suggest_colors_value" value="{{ $selectedHex }}">
-                            <div class="suggest_color_palette mb_3" role="listbox" aria-label="{{ __('appearance.color') }}">
-                                @foreach ($palette as $hex)
-                                    @php $hexU = strtoupper($hex); @endphp
-                                    <button type="button"
-                                        class="suggest_color_swatch @if ($hexU === $selectedHex) is-selected @endif"
-                                        data-hex="{{ $hexU }}"
-                                        style="background-color: {{ $hexU }};"
-                                        title="{{ $hexU }}"
-                                        aria-label="{{ $hexU }}"
-                                        aria-selected="{{ $hexU === $selectedHex ? 'true' : 'false' }}"
-                                        role="option"></button>
-                                @endforeach
+                            <div class="suggest_color_picker mb_3">
+                                <label for="suggest_color_picker" class="form-label font_14 f_w_500 mb_2">{{ __('appearance.color') }}</label>
+                                <input type="color"
+                                    class="form-control form-control-color"
+                                    id="suggest_color_picker"
+                                    value="{{ $selectedHex }}"
+                                    title="{{ __('Choose a color') }}">
                             </div>
                             <p class="font_14 f_w_500 mute_text mb_4" id="suggest_colors_preview_wrap" @if(!$selectedHex) style="display:none" @endif>
                                 <span class="mute_text">{{ __('appearance.color') }}:</span>
@@ -82,26 +77,22 @@
 @push('scripts')
     <script>
         (function () {
-            var palette = document.querySelector('.suggest_color_palette');
-            if (!palette) return;
-            var input = document.getElementById('suggest_colors_value');
-            var preview = document.getElementById('suggest_colors_preview');
-            var previewWrap = document.getElementById('suggest_colors_preview_wrap');
-            function selectSwatch(btn) {
-                var hex = btn.getAttribute('data-hex');
-                input.value = hex;
-                palette.querySelectorAll('.suggest_color_swatch').forEach(function (b) {
-                    b.classList.remove('is-selected');
-                    b.setAttribute('aria-selected', 'false');
-                });
-                btn.classList.add('is-selected');
-                btn.setAttribute('aria-selected', 'true');
-                if (preview) preview.textContent = hex;
+            var form = document.getElementById('suggest_colors_form');
+            var picker = document.getElementById('suggest_color_picker');
+            var hidden = document.getElementById('suggest_colors_value');
+            if (!form || !picker || !hidden) return;
+
+            function syncColor() {
+                hidden.value = picker.value.toUpperCase();
+                var preview = document.getElementById('suggest_colors_preview');
+                var previewWrap = document.getElementById('suggest_colors_preview_wrap');
+                if (preview) preview.textContent = hidden.value;
                 if (previewWrap) previewWrap.style.display = '';
             }
-            palette.querySelectorAll('.suggest_color_swatch').forEach(function (btn) {
-                btn.addEventListener('click', function () { selectSwatch(btn); });
-            });
+
+            picker.addEventListener('input', syncColor);
+            picker.addEventListener('change', syncColor);
+            form.addEventListener('submit', syncColor);
         })();
     </script>
 @endpush

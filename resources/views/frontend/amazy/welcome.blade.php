@@ -530,7 +530,9 @@
                     <option value="cats">Cats</option>
                     <option value="religious">Religious</option>
                     <option value="love">Love</option>
+                    @auth
                     <option value="nude">Nude</option>
+                    @endauth
                     <option value="geometric">Geometric</option>
                     <option value="music">Music</option>
                     <option value="food_drinks">Food/Drinks</option>

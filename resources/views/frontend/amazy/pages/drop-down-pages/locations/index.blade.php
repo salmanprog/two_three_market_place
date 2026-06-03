@@ -329,7 +329,7 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-start mb-3">
-                        <h3 class="plan_title secondry-font">Tier 1: Beagle</h3>
+                        <h3 class="plan_title secondry-font">Beagle</h3>
                     </div>
                     <div class="mb-4">
                         <div class="d-flex align-items-center">
@@ -352,7 +352,7 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-start mb-3">
-                        <h3 class="plan_title secondry-font">Tier 2: Husky</h3>
+                        <h3 class="plan_title secondry-font">Husky</h3>
                     </div>
                     <div class="mb-4">
                         <div class="d-flex align-items-center">
@@ -381,7 +381,7 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-start mb-3">
-                        <h3 class="plan_title secondry-font">Tier 3: Mastiff</h3>
+                        <h3 class="plan_title secondry-font">Mastiff</h3>
                         <span class="discount_badge primary-font">{{ __('defaultTheme.best value') }}</span>
                     </div>
                     <div class="mb-4">
