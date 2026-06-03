@@ -217,7 +217,7 @@
                                                 @if($menu->backendMenu->name == 'common.customer')
                                                     <span class="admin">{{__('Manage Buyer')}}</span>
                                                 @elseif($menu->backendMenu->name == 'hr.human_resource')
-                                                    <span class="admin">{{__('Manage Organiser')}}</span>
+                                                    <span class="admin">{{__('Manage Locations')}}</span>
                                                 @elseif($menu->backendMenu->name == 'seller.manage_seller')
                                                     <span class="admin">{{__('Manage Artist')}}</span>
                                                 @elseif($menu->backendMenu->name == 'frontendCms.frontend_cms')
@@ -263,7 +263,7 @@
                                                             <a href="{{route('booking.events')}}"
                                                                 class="{{spn_active_link(['booking.events'], 'active')}} @if(@$submenu->children->count()) has-arrow @endif">{{__('Event Bookings')}}</a>
                                                                 <a href="{{route('booking.art_galleries')}}"
-                                                                class="{{spn_active_link(['booking.art_galleries', 'booking.art_galleries.edit'], 'active')}} @if(@$submenu->children->count()) has-arrow @endif">{{__('Art Gallery')}}</a>
+                                                                class="{{spn_active_link(['booking.art_galleries', 'booking.art_galleries.edit'], 'active')}} @if(@$submenu->children->count()) has-arrow @endif">{{__('Art Inventory')}}</a>
                                                             @elseif(auth()->user()->role->type == 'staff' &&$submenu->backendMenu->name == 'order.total_order' )
                                                             <a href="{{route('frontend.orders_manage')}}"
                                                                 class="{{spn_active_link(['order.total_order'], 'active')}} @if(@$submenu->children->count()) has-arrow @endif">{{__('Total Order')}}</a>
@@ -282,7 +282,7 @@
                                                                 @else
                                                                     javascript:void(0)
                                                                 @endif"
-                                                                class="{{spn_active_link(childrenRoute($submenu), 'active')}} @if(@$submenu->children->count()) has-arrow @endif">{{__('All Organiser')}}</a>
+                                                                class="{{spn_active_link(childrenRoute($submenu), 'active')}} @if(@$submenu->children->count()) has-arrow @endif">{{__('All Locations')}}</a>
                                                             @elseif(auth()->user()->role->type == 'admin'  && $submenu->backendMenu->name == 'seller.seller_list')
                                                                                                                                                                                  <a href="
                                                                 @if(\Illuminate\Support\Facades\Route::has($submenu->backendMenu->route) && !$submenu->children->count())
