@@ -304,6 +304,7 @@
     (function($){
         "use strict";
         $(document).ready(function(){
+            $('#pre-loader').hide();
             $(document).on('submit', '#register_form', function(event){
                 if($("#policyCheck").prop('checked')!=true){
                     event.preventDefault();
