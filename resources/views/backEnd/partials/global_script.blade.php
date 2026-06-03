@@ -665,6 +665,9 @@
                         } else {
                             elem.find(".file_amount").html('Choose File');
                         }
+                        if (window.ArtworkProtection) {
+                            window.ArtworkProtection.refresh(elem.next(".product_image_all_div")[0]);
+                        }
                 });
             } else {
                 elem.find(".file_amount").html('Choose File');
@@ -721,6 +724,9 @@
                                 }
                             } else {
                                 $this.find(".file_amount").html('Choose File');
+                            }
+                            if (window.ArtworkProtection) {
+                                window.ArtworkProtection.refresh($this.next(".product_image_all_div")[0]);
                             }
                     });
                 }

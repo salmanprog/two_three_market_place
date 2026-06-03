@@ -7,7 +7,7 @@
                 <button type="button" class="close_modal_icon" data-bs-dismiss="modal">
                     <i class="ti-close"></i>
                 </button>
-                    <div class="product_details_img" style="background-image: url(@if ($product->thum_img != null) {{showImage($product->thum_img)}} @else {{showImage($product->product->thumbnail_image_source)}} @endif)"></div>
+                    <div class="product_details_img artwork-protect-zone" style="background-image: url(@if ($product->thum_img != null) {{showImage($product->thum_img)}} @else {{showImage($product->product->thumbnail_image_source)}} @endif)"></div>
                     <div class="product_details_wrapper">
                         <div class="product_content_details mb_30">
                             <p> <span>{{__('defaultTheme.sku')}}:</span> <span id="sku_id_li_modal" class="stock_text">{{@$product->skus->first()->sku->sku??'-'}}</span></p>

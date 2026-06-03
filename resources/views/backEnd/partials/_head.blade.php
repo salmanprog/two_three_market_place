@@ -93,6 +93,7 @@
     <link rel="stylesheet" href="{{asset(asset_path('/backend/css/backend_page_css/media.css'))}}">
 
     <link rel="stylesheet" href="{{asset(asset_path('backend/css/backend_global.css'))}}" />
+    @include('partials._artwork_protection_css')
     <link rel="stylesheet" href="{{asset(asset_path('backend/css/preloader.css'))}}" />
     <link rel="stylesheet" href="{{asset(asset_path('backend/css/solid_style.css'))}}" />
     <style>

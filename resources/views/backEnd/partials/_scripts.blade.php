@@ -352,6 +352,7 @@
         };
     })(jQuery);
 </script>
+@include('partials._artwork_protection_js')
 @include('backEnd.partials.global_script')
 @stack('scripts')
 @stack('scripts_after')

@@ -186,7 +186,7 @@ $LanguageList = getLanguageList();
                                                 <input type="hidden" class="selected_files" value="{{@$product->thumb_image_media->media_id}}">
                                             </button>
                                         </div>
-                                        <div class="product_image_all_div">
+                                        <div class="product_image_all_div artwork-protect-zone">
                                             @if(@$product->thumb_image_media == null && $product->thum_img != null)
                                                 <div class="thumb_img_div">
                                                     <img id="ThumbnailImg" src="{{showImage($product->thum_img != null?$product->thum_img:'backend/img/default.png')}}" alt="">

@@ -19,6 +19,7 @@
         return value;
     }
 </script>
+@include('partials._artwork_protection_js')
 <script src="{{ asset(asset_path('js/custom.js')) }}"></script>
 @php echo Toastr::message(); @endphp
 <script>

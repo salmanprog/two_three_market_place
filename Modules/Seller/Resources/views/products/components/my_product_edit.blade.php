@@ -649,7 +649,7 @@ $LanguageList = getLanguageList();
                                         <input type="hidden" class="selected_files" value="{{@$product->meta_image_media->media_id}}">
                                     </button>
                                 </div>
-                                <div class="product_image_all_div">
+                                <div class="product_image_all_div artwork-protect-zone">
                                     @if(@$product->meta_image_media->media_id)
                                         <input type="hidden" name="meta_image" class="product_images_hidden" value="{{@$product->meta_image_media->media_id}}">
                                     @endif
@@ -681,7 +681,7 @@ $LanguageList = getLanguageList();
                                     <span class="text-danger" id="error_thumbnail"></span>
                                 </div>
                                 
-                                <div class="product_image_all_div">
+                                <div class="product_image_all_div artwork-protect-zone">
                                     @php
                                         if($product->media_ids){
                                             $media_ids = explode(',',$product->media_ids);
