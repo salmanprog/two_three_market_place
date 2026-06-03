@@ -1,66 +1,68 @@
 @php
-    $idPrefix = $idPrefix ?? '';
-    $showArtistGrid = $showArtistGrid ?? true;
-    $artistFilterCategories = $artistFilterCategories ?? ['Portraits & Wildlife', 'Abstract Expressionism', 'Landscapes', 'Contemporary', 'Mixed Media'];
-    $artistFilterMediums = $artistFilterMediums ?? ['Oil', 'Acrylic', 'Digital', 'Watercolor', 'Charcoal', 'Mixed'];
-    $sellers = $sellers ?? collect();
-    $countries = $countries ?? collect();
-    $states = $states ?? collect();
-    $cities = $cities ?? collect();
+$idPrefix = $idPrefix ?? '';
+$showArtistGrid = $showArtistGrid ?? true;
+$artistFilterCategories = $artistFilterCategories ?? ['Portraits & Wildlife', 'Abstract Expressionism', 'Landscapes', 'Contemporary', 'Mixed Media'];
+$artistFilterMediums = $artistFilterMediums ?? ['Oil', 'Acrylic', 'Digital', 'Watercolor', 'Charcoal', 'Mixed'];
+$sellers = $sellers ?? collect();
+$countries = $countries ?? collect();
+$states = $states ?? collect();
+$cities = $cities ?? collect();
 @endphp
 
 <section class="filter-artist-sec artists-list-section pb-40 overflow-visible" style="box-shadow: none; background: transparent;">
     <div class="premium-luxury-panel" style="background: transparent; border-radius: 0; box-shadow: none; border: none;">
-        <h1 class="artists-list-title fs-55 fw-700 text-center text-black mb-28 secondry-font mx-auto max-w-1020px text-uppercase" data-aos="fade-up" data-aos-duration="900" data-aos-easing="ease-out-cubic">
-            Artist and their work
-        </h1>
+        <div class="artist-filter-wrapper">
+            <h1 class="artists-list-title fs-55 fw-700 text-center text-black mb-28 secondry-font mx-auto max-w-1020px text-uppercase" data-aos="fade-up" data-aos-duration="900" data-aos-easing="ease-out-cubic">
+                Artist and their work
+            </h1>
 
-        @if (!$showArtistGrid || $sellers->isNotEmpty())
-        <form class="artists-filter-bar primary-font mb-40" id="{{ $idPrefix }}artists-filter-bar" data-aos="fade-up" data-aos-duration="700" method="GET" action="{{ route('frontend.artists') }}">
-            <div class="artists-filter-bar__scroll">
-                <div class="artists-filter-bar row g-3 g-lg-4 justify-content-center">
-                    <div class="artists-filter-field col-12 col-md-6 col-lg-3">
-                        <label class="artists-filter-field__label minimal-label" for="{{ $idPrefix }}artists-filter-name">Name</label>
-                        <input type="text" id="{{ $idPrefix }}artists-filter-name" class="artists-filter-input compact-input" data-artists-filter="name" name="name" value="{{ request('name') }}" autocomplete="off" placeholder="Search by Artist Name or Theme...">
-                    </div>
-                    <div class="artists-filter-field col-12 col-md-6 col-lg-3">
-                        <label class="artists-filter-field__label minimal-label" for="{{ $idPrefix }}artists-filter-location">{{ __('Country') }}</label>
-                        <select id="{{ $idPrefix }}artists-filter-location" class="artists-filter-select compact-select" data-artists-filter="location" name="country" autocomplete="off">
-                            <option value="">{{ __('Choose Country') }}</option>
-                            @foreach($countries as $country)
-                            <option value="{{ $country->id }}" @selected((string)request('country')===(string)$country->id)>{{ $country->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="artists-filter-field col-12 col-md-6 col-lg-3">
-                        <label class="artists-filter-field__label minimal-label" for="{{ $idPrefix }}artists-filter-state">{{ __('State') }}</label>
-                        <select id="{{ $idPrefix }}artists-filter-state" class="artists-filter-select compact-select" data-artists-filter="state" name="state" autocomplete="off">
-                            <option value="">{{ __('Choose State') }}</option>
-                            @foreach($states as $state)
-                            <option value="{{ $state->id }}" @selected((string)request('state')===(string)$state->id)>{{ $state->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="artists-filter-field col-12 col-md-6 col-lg-3">
-                        <label class="artists-filter-field__label minimal-label" for="{{ $idPrefix }}artists-filter-city">{{ __('City') }}</label>
-                        <select id="{{ $idPrefix }}artists-filter-city" class="artists-filter-select compact-select" data-artists-filter="city" name="city" autocomplete="off">
-                            <option value="">{{ __('Choose City') }}</option>
-                            @foreach($cities as $city)
-                            <option value="{{ $city->id }}" @selected((string)request('city')===(string)$city->id)>{{ $city->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="artists-filter-field artists-filter-field--actions col-12 col-md-6 col-lg-3">
-                        <span class="artists-filter-field__label minimal-label artists-filter-field__label minimal-label --spacer" aria-hidden="true">&nbsp;</span>
-                        <div class="artists-filter-actions primary-font justify-content-center">
-                            <button type="submit" class="btn btn-compact-black primary-font" id="{{ $idPrefix }}artists-filter-search" aria-label="Apply filters">Search</button>
+            @if (!$showArtistGrid || $sellers->isNotEmpty())
+            <form class="artists-filter-bar primary-font mb-40" id="{{ $idPrefix }}artists-filter-bar" data-aos="fade-up" data-aos-duration="700" method="GET" action="{{ route('frontend.artists') }}">
+                <div class="artists-filter-bar__scroll">
+                    <div class="artists-filter-bar row g-3 g-lg-4 justify-content-center">
+                        <div class="artists-filter-field col-12 col-md-6 col-lg-3">
+                            <label class="artists-filter-field__label minimal-label" for="{{ $idPrefix }}artists-filter-name">Name</label>
+                            <input type="text" id="{{ $idPrefix }}artists-filter-name" class="artists-filter-input compact-input" data-artists-filter="name" name="name" value="{{ request('name') }}" autocomplete="off" placeholder="Search by Artist Name or Theme...">
+                        </div>
+                        <div class="artists-filter-field col-12 col-md-6 col-lg-3">
+                            <label class="artists-filter-field__label minimal-label" for="{{ $idPrefix }}artists-filter-location">{{ __('Country') }}</label>
+                            <select id="{{ $idPrefix }}artists-filter-location" class="artists-filter-select compact-select" data-artists-filter="location" name="country" autocomplete="off">
+                                <option value="">{{ __('Choose Country') }}</option>
+                                @foreach($countries as $country)
+                                <option value="{{ $country->id }}" @selected((string)request('country')===(string)$country->id)>{{ $country->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="artists-filter-field col-12 col-md-6 col-lg-3">
+                            <label class="artists-filter-field__label minimal-label" for="{{ $idPrefix }}artists-filter-state">{{ __('State') }}</label>
+                            <select id="{{ $idPrefix }}artists-filter-state" class="artists-filter-select compact-select" data-artists-filter="state" name="state" autocomplete="off">
+                                <option value="">{{ __('Choose State') }}</option>
+                                @foreach($states as $state)
+                                <option value="{{ $state->id }}" @selected((string)request('state')===(string)$state->id)>{{ $state->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="artists-filter-field col-12 col-md-6 col-lg-3">
+                            <label class="artists-filter-field__label minimal-label" for="{{ $idPrefix }}artists-filter-city">{{ __('City') }}</label>
+                            <select id="{{ $idPrefix }}artists-filter-city" class="artists-filter-select compact-select" data-artists-filter="city" name="city" autocomplete="off">
+                                <option value="">{{ __('Choose City') }}</option>
+                                @foreach($cities as $city)
+                                <option value="{{ $city->id }}" @selected((string)request('city')===(string)$city->id)>{{ $city->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="artists-filter-field artists-filter-field--actions col-12 col-md-6 col-lg-3">
+                            <span class="artists-filter-field__label minimal-label artists-filter-field__label minimal-label --spacer" aria-hidden="true">&nbsp;</span>
+                            <div class="artists-filter-actions primary-font justify-content-center">
+                                <button type="submit" class="btn btn-compact-black primary-font" id="{{ $idPrefix }}artists-filter-search" aria-label="Apply filters">Search</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <p class="artists-filter-empty mb-0 primary-font" id="{{ $idPrefix }}artists-filter-empty" hidden>No artists match these filters.</p>
-        </form>
-        @endif
+                <p class="artists-filter-empty mb-0 primary-font" id="{{ $idPrefix }}artists-filter-empty" hidden>No artists match these filters.</p>
+            </form>
+            @endif
+        </div>
 
         @if ($showArtistGrid)
         @if ($sellers->isNotEmpty())
@@ -115,24 +117,24 @@
                                     loading="lazy"
                                     decoding="async">
                                 @endif
-                                </div>
-                            @endfor
                         </div>
+                        @endfor
                     </div>
-                    <div class="artists-list-card__body">
-                        <h2 class="artists-list-card__name secondry-font text-start fw-700">{{ $artistName }}</h2>
-                        <p class="artists-list-card__tagline primary-font text-start mb-0">{{ $filterCategory }}</p>
-                        <div class="mt-3">
-                            <a href="{{ route('frontend.seller', $seller->slug ?? base64_encode($seller->id)) }}" class="btn-artists-profile primary-font">View Profile</a>
-                        </div>
-                    </div>
-                </article>
             </div>
-            @endforeach
+            <div class="artists-list-card__body">
+                <h2 class="artists-list-card__name secondry-font text-start fw-700">{{ $artistName }}</h2>
+                <p class="artists-list-card__tagline primary-font text-start mb-0">{{ $filterCategory }}</p>
+                <div class="mt-3">
+                    <a href="{{ route('frontend.seller', $seller->slug ?? base64_encode($seller->id)) }}" class="btn-artists-profile primary-font">View Profile</a>
+                </div>
+            </div>
+            </article>
         </div>
-        @else
-        <p class="text-center primary-font fs-18 text-muted mb-0" data-aos="fade-up">No artists found.</p>
-        @endif
-        @endif
+        @endforeach
+    </div>
+    @else
+    <p class="text-center primary-font fs-18 text-muted mb-0" data-aos="fade-up">No artists found.</p>
+    @endif
+    @endif
     </div>
 </section>

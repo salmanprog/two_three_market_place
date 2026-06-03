@@ -667,9 +667,25 @@
       <div class="col">
         <div class="categories-card mx-auto" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="560" data-aos-easing="ease-out-cubic">
             <img src="{{ showImage('uploads/images/16-06-2025/6850681225004.png') }}" alt="Artists" class="mb-20">
-          <h3 class="text-start fw-700 text-black fs-18 secondry-font">Organiser</h3>
-          <p class="mb-10 primary-font">Join Organiser account</p>
+          <h3 class="text-start fw-700 text-black fs-18 secondry-font">Location</h3>
+          <p class="mb-10 primary-font">Join Location account</p>
           <a href="{{route('frontend.event-organiser-register','subscription')}}" class="btn btn-secondary pri mary-font border-gray-light text-gray-400 px-44 py-10">View More</a>
+        </div>
+      </div>
+      <div class="col">
+        <div class="categories-card mx-auto" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="560" data-aos-easing="ease-out-cubic">
+            <img src="{{asset('public/images/about-us-media-02.png')}}" alt="Artists" class="mb-20">
+          <h3 class="text-start fw-700 text-black fs-18 secondry-font">Collectors</h3>
+          <p class="mb-10 primary-font">Join Collector account</p>
+          <a href="#" class="btn btn-secondary pri mary-font border-gray-light text-gray-400 px-44 py-10">View More</a>
+        </div>
+      </div>
+      <div class="col">
+        <div class="categories-card mx-auto" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="560" data-aos-easing="ease-out-cubic">
+            <img src="{{asset('public/images/art-galleries-cat.png')}}" alt="Artists" class="mb-20">
+          <h3 class="text-start fw-700 text-black fs-18 secondry-font">Art Galleries</h3>
+          <p class="mb-10 primary-font">Join Art Gallery account</p>
+          <a href="./art-gallery-register/subscription" class="btn btn-secondary pri mary-font border-gray-light text-gray-400 px-44 py-10">View More</a>
         </div>
       </div>
       <!-- @foreach($parent_categories as $key => $category)
@@ -729,7 +745,7 @@
                     <div class="marketplace-card-content">
                         <h3 class="fw-bold secondry-font marketplace-card-title">Service</h3>
                         <p class="marketplace-card-desc">Art Services in your Neighborhood</p>
-                        <a href="{{route('frontend.artists')}}" class="btn btn-light text-black">Art Services</a>
+                        <a href="./art-gallery-register/subscription" class="btn btn-light text-black">Art Services</a>
                     </div>
                 </div>
             </div>
