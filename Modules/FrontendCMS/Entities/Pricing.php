@@ -28,4 +28,16 @@ class Pricing extends Model
     {
         return $this->belongsTo(GstTax::class,'gst_tax_id');
     }
+
+    public function features()
+    {
+        return $this->hasMany(PricingPlanFeature::class, 'pricing_id')->orderBy('sort_order');
+    }
+
+    public function activeFeatures()
+    {
+        return $this->hasMany(PricingPlanFeature::class, 'pricing_id')
+            ->where('status', 1)
+            ->orderBy('sort_order');
+    }
 }

@@ -688,9 +688,9 @@ if (!function_exists('menuElementAnchor')) {
     {
         $title = strtolower(trim($element->title ?? ''));
 
-        if ($title === 'interior designers') {
-            return ['href' => route('frontend.packages'), 'extra' => ''];
-        }
+        //  if ($title === 'interior designers') {
+        //     return ['href' => route('frontend.packages'), 'extra' => ''];
+        // }
 
         $link = trim((string) ($element->link ?? ''));
 

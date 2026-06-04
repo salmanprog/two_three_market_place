@@ -182,6 +182,18 @@ $LanguageList = getLanguageList();
                     </div>
                 </div>
 
+                <div class="col-lg-12">
+                    <div class="main-title d-flex mb-15 mt-10">
+                        <h4 class="mb-0">{{ __('frontendCms.plan_features') }}</h4>
+                    </div>
+                    <p class="text-muted mb-15">{{ __('frontendCms.plan_features_help') }}</p>
+                    <input type="hidden" name="features_sync" value="1">
+                    <div id="pricing_features_wrapper"></div>
+                    <button type="button" class="primary-btn small fix-gr-bg mt-10" id="add_pricing_feature_row">
+                        <span class="ti-plus"></span> {{ __('frontendCms.add_plan_feature') }}
+                    </button>
+                </div>
+
             </div>
 
 

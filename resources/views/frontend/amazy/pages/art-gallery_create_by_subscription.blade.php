@@ -172,10 +172,7 @@
 
                     <div class="feature_divider"></div>
 
-                    <ul class="feature_list">
-                        <li><i class="fas fa-calendar"></i> {{ __('Art Galleries') }} : {{__('defaultTheme.unlimited')}}</li>
-                        <li><i class="fas fa-percentage"></i> {{__('defaultTheme.transaction_charge')}} : {{$item->transaction_fee}} % </li>
-                    </ul>
+                    @include('frontend.amazy.partials._pricing_plan_feature_list', ['plan' => $item, 'context' => 'art-gallery'])
                 </div>
             </div>
             @endforeach

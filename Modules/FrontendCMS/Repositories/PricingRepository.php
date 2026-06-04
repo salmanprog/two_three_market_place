@@ -16,7 +16,7 @@ class PricingRepository {
     }
     public function getAllActive()
     {
-        return $this->pricing::where('status',1)->get();
+        return $this->pricing::with('activeFeatures')->where('status',1)->get();
     }
     public function save($data)
     {
@@ -42,6 +42,7 @@ class PricingRepository {
             'discount_type' => isset($data['discount_type']) ? $data['discount_type']:null,
             'discount' => isset($data['discount']) ? $data['discount']:null,
         ]);
+        $this->syncFeatures($pricing, $data);
         return $pricing;
     }
     public function update($data)
@@ -51,7 +52,7 @@ class PricingRepository {
             $image = ImageStore::saveImage($data['image'], 165, 165);
         }
 
-        return $this->pricing::where('id',$data['id'])->update([
+        $updated = $this->pricing::where('id',$data['id'])->update([
             'name' => $data['name'],
             'plan_price' => $data['plan_price'],
             'monthly_cost' => isset($data['monthly_cost'])?$data['monthly_cost']:$data['plan_price'],
@@ -69,6 +70,11 @@ class PricingRepository {
             'discount_type' => isset($data['discount_type']) ? $data['discount_type']:null,
             'discount' => isset($data['discount']) ? $data['discount']:null,
         ]);
+
+        $pricing = $this->pricing->findOrFail($data['id']);
+        $this->syncFeatures($pricing, $data);
+
+        return $updated;
     }
     public function delete($id){
         $pricing = $this->pricing->findOrFail($id);
@@ -76,16 +82,45 @@ class PricingRepository {
         return $pricing;
     }
     public function show($id){
-        $pricing = $this->pricing->findOrFail($id);
+        $pricing = $this->pricing->with('features')->findOrFail($id);
         return $pricing;
     }
     public function edit($id){
-        $pricing = $this->pricing->findOrFail($id);
+        $pricing = $this->pricing->with('features')->findOrFail($id);
         return $pricing;
     }
     public function statusUpdate($data, $id){
         return $this->pricing::where('id',$id)->update([
             'status' => $data['status']
         ]);
+    }
+
+    private function syncFeatures(Pricing $pricing, array $data): void
+    {
+        if (!array_key_exists('features_sync', $data)) {
+            return;
+        }
+
+        $pricing->features()->delete();
+
+        $features = is_array($data['features']) ? $data['features'] : [];
+
+        foreach ($features as $index => $feature) {
+            if (!is_array($feature)) {
+                continue;
+            }
+
+            $title = trim((string) ($feature['title'] ?? ''));
+            if ($title === '') {
+                continue;
+            }
+
+            $pricing->features()->create([
+                'title' => $title,
+                'icon' => trim((string) ($feature['icon'] ?? '')) ?: 'fas fa-check',
+                'sort_order' => isset($feature['sort_order']) ? (int) $feature['sort_order'] : $index,
+                'status' => array_key_exists('status', $feature) ? (int) (bool) $feature['status'] : 1,
+            ]);
+        }
     }
 }

@@ -2,7 +2,76 @@
 <script>
     (function($){
         "use strict";
+
+        function pricingFeatureRowHtml(index, title, icon) {
+            title = title || '';
+            icon = icon || 'fas fa-check';
+            return `
+                <div class="pricing-feature-row row align-items-end mb-15" data-index="${index}">
+                    <div class="col-lg-7">
+                        <div class="primary_input mb-0">
+                            <label class="primary_input_label">{{ __('frontendCms.feature_title') }}</label>
+                            <input class="primary_input_field" type="text" name="features[${index}][title]" value="${title.replace(/"/g, '&quot;')}" placeholder="{{ __('frontendCms.feature_title') }}">
+                            <input type="hidden" name="features[${index}][sort_order]" value="${index}">
+                            <input type="hidden" name="features[${index}][status]" value="1">
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="primary_input mb-0">
+                            <label class="primary_input_label">{{ __('frontendCms.feature_icon') }}</label>
+                            <input class="primary_input_field" type="text" name="features[${index}][icon]" value="${icon.replace(/"/g, '&quot;')}" placeholder="fas fa-check">
+                        </div>
+                    </div>
+                    <div class="col-lg-1">
+                        <button type="button" class="primary-btn small fix-gr-bg remove_pricing_feature_row w-100" title="{{ __('frontendCms.remove_feature') }}">
+                            <span class="ti-trash"></span>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function reindexPricingFeatureRows() {
+            $('#pricing_features_wrapper .pricing-feature-row').each(function(rowIndex) {
+                $(this).attr('data-index', rowIndex);
+                $(this).find('input[name*="[title]"]').attr('name', `features[${rowIndex}][title]`);
+                $(this).find('input[name*="[icon]"]').attr('name', `features[${rowIndex}][icon]`);
+                $(this).find('input[name*="[sort_order]"]').attr('name', `features[${rowIndex}][sort_order]`).val(rowIndex);
+                $(this).find('input[name*="[status]"]').attr('name', `features[${rowIndex}][status]`);
+            });
+        }
+
+        function addPricingFeatureRow(title, icon) {
+            var index = $('#pricing_features_wrapper .pricing-feature-row').length;
+            $('#pricing_features_wrapper').append(pricingFeatureRowHtml(index, title, icon));
+        }
+
+        function renderPricingFeatures(features) {
+            $('#pricing_features_wrapper').empty();
+            if (!features || !features.length) {
+                return;
+            }
+            features.forEach(function(feature, index) {
+                addPricingFeatureRow(feature.title || '', feature.icon || 'fas fa-check');
+            });
+            reindexPricingFeatureRows();
+        }
+
         $(document).ready(function() {
+            if ($('#pricing_features_wrapper').length && $('#pricing_features_wrapper').children().length === 0) {
+                renderPricingFeatures([]);
+            }
+
+            $(document).on('click', '#add_pricing_feature_row', function() {
+                addPricingFeatureRow('', 'fas fa-check');
+                reindexPricingFeatureRows();
+            });
+
+            $(document).on('click', '.remove_pricing_feature_row', function() {
+                $(this).closest('.pricing-feature-row').remove();
+                reindexPricingFeatureRows();
+            });
+
             $(document).on('submit', '#item_delete_form', function(event) {
                 event.preventDefault();
                 $('#pre-loader').removeClass('d-none');
@@ -31,6 +100,7 @@
                             success: function(response) {
                                 $('#formHtml').empty();
                                 $('#formHtml').html(response.editHtml);
+                                renderPricingFeatures([]);
                                 $('#monthly_cost').addClass(
                                     'has-content');
                                 $('#yearly_cost').addClass(
@@ -241,6 +311,7 @@
                         }
 
                         $("#gst_id").val(item.gst_tax_id).change();
+                        renderPricingFeatures(response.data.features || []);
                     },
                     error: function(response) {
                         toastr.error("{{__('common.error_message')}}","{{__('common.error')}}");

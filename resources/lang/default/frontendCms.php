@@ -166,5 +166,11 @@ return [
     "expire_in"  => "Expire In",
     "days" => "Day's",
     'commission' => "Commission",
-    "product_limit" => "Product Limit"
+    "product_limit" => "Product Limit",
+    'plan_features' => 'Plan Features (Bullet Points)',
+    'plan_features_help' => 'Add bullet points shown on subscription/pricing cards. Leave empty to keep the current default list on the frontend.',
+    'add_plan_feature' => 'Add Feature Point',
+    'feature_title' => 'Feature Text',
+    'feature_icon' => 'Icon Class',
+    'remove_feature' => 'Remove',
 ];

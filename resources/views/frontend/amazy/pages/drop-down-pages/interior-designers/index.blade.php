@@ -37,7 +37,7 @@ Interior Designers | {{ config('app.name') }}
             </div>
         </div>
     </section>
-    <!-- <section class="how-partner-section py-50 py-lg-100 overflow-visible">
+    <section class="how-partner-section py-50 py-lg-100 overflow-visible" id="why-23-ld">
         <div class="container">
             <h1 class="secondry-font fs-55 fw-700 text-center text-black mb-40 line-height-1-2 mx-auto" style="max-width: 920px;" data-aos="fade-up" data-aos-duration="1000" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">Why 23rd LD?</h1>
 
@@ -68,7 +68,7 @@ Interior Designers | {{ config('app.name') }}
                 </div>
             </div>
         </div>
-    </section> -->
+    </section>
 </div>
 @endsection
 

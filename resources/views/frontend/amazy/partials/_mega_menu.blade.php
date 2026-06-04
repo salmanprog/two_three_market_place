@@ -126,7 +126,7 @@
                                             @if(!isModuleActive('MultiVendor') && $element->page->slug == 'merchant' || !isModuleActive('MultiVendor') && $element->page->module == 'MultiVendor')
                                                 @continue
                                             @endif
-                                            @if($element->childs->count() > 0)
+                                           @if($element->childs->count() > 0)
                                                 <li class="submenu_active" data-aos="fade-down" data-aos-duration="1500" data-aos-delay="{{ 40 + $aosNavI * 65 }}">@php $aosNavI++; @endphp<a href="{{ (strtolower(trim($element->title)) == 'interior designers') ? route('frontend.packages') : url(@$element->page->slug) }}" {{$element->is_newtab == 1? 'target="_blank"':''}}>{{ ucfirst(textLimit($element->title, 20)) }}  <i class="ti-angle-down"></i></a>
                                                     @include(theme('partials._menu_chield'), ['element' => $element])
                                                 </li>

@@ -153,7 +153,7 @@ class MerchantRegisterController extends Controller
     //             session()->put('commission_id', $commission->id);
     //             session()->put('commission_rate', $commission->rate);
     //             if ($commission->id == 3) {
-    //                 $data['pricing_plans'] = Pricing::where('best_for', 'Artist')->where('status', 1)->get();
+    //                 $data['pricing_plans'] = Pricing::with('activeFeatures')->where('best_for', 'Artist')->where('status', 1)->get();
     //                 $data['content'] = MerchantContent::firstOrFail();
     //                 return view(theme('pages.merchant_create_by_subscription'), $data);
     //             } else {
@@ -187,7 +187,7 @@ class MerchantRegisterController extends Controller
     //                 }
     //             }
     //             if ($commission->id == 3) {
-    //                 $data['pricing_plans'] = Pricing::where('best_for', 'Artist')->where('status', 1)->get();
+    //                 $data['pricing_plans'] = Pricing::with('activeFeatures')->where('best_for', 'Artist')->where('status', 1)->get();
     //                 $data['content'] = MerchantContent::firstOrFail();
     //                 return view(theme('pages.merchant_create_by_subscription'), $data);
     //             } else {
@@ -225,7 +225,7 @@ class MerchantRegisterController extends Controller
                 session()->put('commission_id', $commission->id);
                 session()->put('commission_rate', $commission->rate);
                 if ($commission->id == 3) {
-                    $data['pricing_plans'] = Pricing::where('best_for', 'Artist')->where('status', 1)->get();
+                    $data['pricing_plans'] = Pricing::with('activeFeatures')->where('best_for', 'Artist')->where('status', 1)->get();
                     $data['content'] = MerchantContent::firstOrFail();
                     return view(theme('pages.merchant_create_by_subscription'), $data);
                 } else {
@@ -259,7 +259,7 @@ class MerchantRegisterController extends Controller
                     }
                 }
                 if ($commission->id == 3) {
-                    $data['pricing_plans'] = Pricing::where('best_for', 'Artist')->where('status', 1)->get();
+                    $data['pricing_plans'] = Pricing::with('activeFeatures')->where('best_for', 'Artist')->where('status', 1)->get();
                     $data['content'] = MerchantContent::firstOrFail();
                     return view(theme('pages.merchant_create_by_subscription'), $data);
                 } else {
