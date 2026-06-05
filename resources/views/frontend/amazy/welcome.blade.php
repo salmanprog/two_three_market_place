@@ -1046,7 +1046,7 @@
               <h3 class="fs-24 fw-700 text-white secondry-font mb-10">Installation</h3>
             </div>
             <p class="fs-16 fw-400 text-white primary-font">Our team will configure all the pieces in your space for a flat rate. including identifying art labels and desired light fixtures.</p>
-            <a href="{{route('frontend.art-gallery')}}" class="btn btn-secondary pri mary-font border-gray-light text-gray-400 px-44 py-10">View More</a>
+            <a href="./art-gallery-register/subscription" class="btn btn-secondary pri mary-font border-gray-light text-gray-400 px-44 py-10">View More</a>
           </div>
         </div>
       </div>
