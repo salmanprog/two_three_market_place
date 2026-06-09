@@ -420,7 +420,7 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             var form = document.querySelector('#payform');
-            var stripe_publishable_key = "pk_test_51RikHx4CJ9suiAoOvUmv0hDbR3SDomvIwcuFzi6TVsvcf2a5iBc5zu1PtEMwC3RjZZkOksiQayvKdCjHpjJpqvUS00cjN0biY6";
+            var stripe_publishable_key = "pk_live_51KVNYMCRrnOErjCY9HcENE2J4hIHB7n6MR9d3H8I4Gk4aUgIKeew24q31kJ6L24LJmKt6TIVhVUByaXpTPuEautV005khxGgWw";
             var stripe = Stripe(stripe_publishable_key);
             var elements = stripe.elements();
             var card = elements.create('card');
