@@ -1,7 +1,7 @@
 @extends('frontend.amazy.layouts.app')
 
 @section('title')
-Art Galleries | {{ config('app.name') }}
+Art Galleries & Museums | {{ config('app.name') }}
 @endsection
 
 @section('share_meta')
@@ -14,7 +14,7 @@ Art Galleries | {{ config('app.name') }}
 
 @section('content')
 <div class="how-partner-page dropdown-main-page">
-    <section class="how-partner-section py-50 py-lg-100 overflow-visible">
+    <section class="how-partner-section py-50 py-lg-100 overflow-visible" id="how-we-partner">
         <div class="container">
             <h1 class="secondry-font fs-55 fw-700 text-center text-black mb-40 line-height-1-2 mx-auto" style="max-width: 920px;" data-aos="fade-up" data-aos-duration="1000" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">How We Partner</h1>
 
@@ -28,11 +28,13 @@ Art Galleries | {{ config('app.name') }}
                     <div class="how-partner-prose primary-font ps-lg-2" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="140" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
                         <h2 class="how-partner-lead secondry-font">Our goal isn’t to compete with you, but to support and promote.</h2>
                         <p>
-                            See us as another avenue of exposure for your gallery and artists.
-                            We charge %$#@ post your gallery on our website, artists, and the artwork your gallery displays
+                        See us as another avenue of exposure for your gallery and artists.
                         </p>
                         <p>
-                            For artists who work with your gallery and want to work with us, you will come first. Why? Because you have a physical location and art is meant to be seen in person and we want to support any physical location that displays art.
+                            We charge %$#@ post your gallery on our website, artists, and the artwork your gallery displays.
+                        </p>
+                        <p>
+                        For artists who work with your gallery and want to work with us, you will come first. Why? Because you have a physical location and art is meant to be seen in person and we want to support any physical location that displays art.
                         </p>
                     </div>
                 </div>
@@ -40,7 +42,7 @@ Art Galleries | {{ config('app.name') }}
         </div>
     </section>
 
-    <!-- <section class="how-partner-section py-50 py-lg-100 overflow-visible" id="why-23-ld">
+    <section class="how-partner-section py-50 py-lg-100 overflow-visible" id="why-23-ld">
         <div class="container">
             <h2 class="secondry-font fs-55 fw-700 text-center text-black mb-40 line-height-1-2 mx-auto" style="max-width: 920px;" data-aos="fade-up" data-aos-duration="1000" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">Why 23rd LD?</h2>
 
@@ -62,7 +64,7 @@ Art Galleries | {{ config('app.name') }}
                 </div>
             </div>
         </div>
-    </section> -->
+    </section>
 </div>
 @endsection
 

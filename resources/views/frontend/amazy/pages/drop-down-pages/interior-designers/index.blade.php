@@ -30,7 +30,10 @@ Interior Designers | {{ config('app.name') }}
                             We have a simple 3-tiered discount structure for interior designers based on the amount spent in a calendar year.
                         </p>
                         <p>
-                            You’ll have your own administrative dashboard, filter system, and saved color palettes. We want the process of sourcing art for your clients to be easy, cost-effective, and enjoyable.
+                            You’ll have your own administrative dashboard, filter system, and saved color palettes.
+                        </p>
+                        <p>
+                        We want the process of sourcing art for your clients to be easy, cost-effective, and enjoyable.
                         </p>
                     </div>
                 </div>

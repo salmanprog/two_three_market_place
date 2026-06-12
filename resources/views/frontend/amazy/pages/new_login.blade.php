@@ -12,7 +12,7 @@
                     <article class="account-signup-card w-100">
                         <div class="account-signup-card__media">
                             <img
-                                src="{{ asset('') }}Modules/PageBuilder/Resources/assets/keditor/snippets/img/buyer_login.jfif"
+                                src="{{ asset('') }}Modules/PageBuilder/Resources/assets/keditor/snippets/img/buyer_login.png"
                                 alt=""
                                 width="600"
                                 height="450"
@@ -35,7 +35,7 @@
                     <article class="account-signup-card w-100">
                         <div class="account-signup-card__media">
                             <img
-                                src="{{ asset('') }}Modules/PageBuilder/Resources/assets/keditor/snippets/img/artist_login.jfif"
+                                src="{{ asset('') }}Modules/PageBuilder/Resources/assets/keditor/snippets/img/artist_login.png"
                                 alt=""
                                 width="600"
                                 height="450"

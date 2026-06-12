@@ -460,7 +460,7 @@ Route::get('/interior-designers', function() {
     return view('frontend.amazy.pages.drop-down-pages.events.index');
 });
 
-Route::get('/art-galleries', function() {
+Route::get('/art-galleries-museums', function() {
     return view('frontend.amazy.pages.drop-down-pages.art-galleries.index');
 })->name('frontend.art-galleries');
 

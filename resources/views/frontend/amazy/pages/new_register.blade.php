@@ -35,7 +35,7 @@
                     <article class="account-signup-card w-100">
                         <div class="account-signup-card__media">
                             <img
-                                src="{{ asset('') }}Modules/PageBuilder/Resources/assets/keditor/snippets/img/artist.jfif"
+                                src="{{ asset('') }}Modules/PageBuilder/Resources/assets/keditor/snippets/img/artist.png"
                                 alt=""
                                 width="600"
                                 height="450"

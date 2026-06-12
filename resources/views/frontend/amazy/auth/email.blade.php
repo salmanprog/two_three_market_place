@@ -67,5 +67,11 @@
     function onSubmit(token) {
         document.getElementById("email_form").submit();
     }
+    (function($){
+        "use strict";
+        $(document).ready(function(){
+            $('#pre-loader').hide();
+        });
+    })(jQuery);
 </script>
 @endpush

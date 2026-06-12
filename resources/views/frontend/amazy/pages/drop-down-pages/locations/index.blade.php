@@ -11,9 +11,11 @@
         text-align: left;
         transition: all 0.3s ease;
     }
+
     .location-tier-card:hover {
         box-shadow: 0 10px 40px rgba(43, 54, 228, 0.1);
     }
+
     .location-tier-icon__placeholder {
         width: 100px;
         height: 100px;
@@ -27,9 +29,11 @@
         text-align: center;
         border-radius: 100%;
     }
+
     .location-tier-icon__placeholder img {
         max-width: 70%;
     }
+
     .location-tier-card .plan_title {
         font-size: 28px;
         color: #000;
@@ -37,6 +41,7 @@
         margin-bottom: 0;
         line-height: 1.2;
     }
+
     .location-tier-card .discount_badge {
         background: #ffeeb2;
         color: #333;
@@ -47,6 +52,7 @@
         display: inline-block;
         white-space: nowrap;
     }
+
     .location-tier-card .big_price {
         font-size: 56px;
         color: #000;
@@ -54,6 +60,7 @@
         line-height: 1;
         margin-right: 10px;
     }
+
     .location-tier-card .price_meta {
         font-size: 14px;
         line-height: 1.3;
@@ -63,15 +70,18 @@
         flex-direction: column;
         justify-content: center;
     }
+
     .location-tier-card .feature_divider {
         border-top: 1px solid #eee;
         margin-bottom: 25px;
     }
+
     .location-tier-card .feature_list {
         list-style: none;
         padding: 0;
         margin: 0;
     }
+
     .location-tier-card .feature_list li {
         font-size: 14px;
         color: #333;
@@ -79,27 +89,33 @@
         display: flex;
         align-items: flex-start;
     }
+
     .location-tier-card .feature_list li i {
         margin-right: 12px;
         color: #888;
         font-size: 14px;
         margin-top: 4px;
     }
+
     .location-tier-notes {
         max-width: 920px;
     }
+
     .location-tier-notes li {
         font-size: 15px;
         color: #333;
         margin-bottom: 10px;
     }
+
     @media (max-width: 767px) {
         .location-tier-card {
             margin-bottom: 24px;
         }
+
         .location-tier-card .big_price {
             font-size: 40px;
         }
+
         .location-tier-card .plan_title {
             font-size: 25px;
         }
@@ -107,6 +123,54 @@
 </style>
 @endpush
 @section('content')
+<section class="how-partner-section py-50 py-lg-100 overflow-visible" id="entertainment/food">
+    <div class="container">
+        <h1 class="secondry-font fs-55 fw-700 text-center text-black mb-40 line-height-1-2 mx-auto" style="max-width: 920px;" data-aos="fade-up" data-aos-duration="1000" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">Entertainment/Food</h1>
+
+        <div class="row align-items-center g-4 g-lg-5">
+            <div class="col-12 col-lg-6">
+                <figure class="how-partner-media mb-0" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="80" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
+                    <img src="{{asset('public/images/locations/entertainment-food.jpg')}}" alt="Office and workspace art on {{ config('app.name') }}" width="750" height="500" loading="lazy" decoding="async">
+                </figure>
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="how-partner-prose primary-font ps-lg-2" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="140" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
+                    <h2 class="how-partner-lead secondry-font">"We should go back to that restaurant with the art. I love how the art changes every time we go."</h2>
+                    <p>
+                        The entertainment/food industry has become highly competitive and owners/managers are constantly looking for ways to stand out, leave a lasting impression on their customers, and find new ways to get people coming back to their business. Art is the answer. No, not the art you buy from a mass produced factory that everyone subconsciously has seen a thousand times. Original art attracts the mind's attention and for many leaves a visual reference. Think about it, when you've had a great meal doesn't your brain automatically think about the setting, smell, and feeling you had in that said place? In the past,most entertainment/food businesses in order to be successful only needed to provide quality food/service to stand out.
+                    </p>
+                    <p>
+                        However, now this is the norm and these businesses need to do more to compete. We believe art and art services are one of the best ways to do so. If you've been in the entertainment/food industry long enough, then you know the customer experience is what gets people coming back consistently. What better experience than art? Art is appreciated and valued by all ages and groups. That's a fact. We've helped businesses increase their traffic and customer experience through our artists, their services, and their art. Get in contact with us to curate your space, book art shows in your space, and see how we increase traffic for your business.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="how-partner-section py-50 py-lg-100 overflow-visible" id="businesses">
+    <div class="container">
+        <h1 class="secondry-font fs-55 fw-700 text-center text-black mb-40 line-height-1-2 mx-auto" style="max-width: 920px;" data-aos="fade-up" data-aos-duration="1000" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">Businesses</h1>
+
+        <div class="row align-items-center g-4 g-lg-5">
+            <div class="col-12 col-lg-6">
+                <figure class="how-partner-media mb-0" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="80" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
+                    <img src="{{asset('public/images/locations/businesses.jpg')}}" alt="Office and workspace art on {{ config('app.name') }}" width="750" height="500" loading="lazy" decoding="async">
+                </figure>
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="how-partner-prose primary-font ps-lg-2" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="140" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
+                    <h2 class="how-partner-lead secondry-font">"Wow. I totally enjoy going to work where I stare at screens and the walls around me scream mehhhhhhh!"</h2>
+                    <p>
+                    The place of business can be for work and fun. Not to say 23LD will turn your workplace into the next hip Google environment, unless you want that. Instead, we turn the space of business into a place for creativity. It's pretty simple, you want your employees to be more creative, put more creativity around them. Do you want your employees to hit their goals? Put a painting of their goals in front of them.
+                    </p>
+                    <p>
+                    Your employees spend 40+ hours a week in your space, aka they live there. It's worth mulling over the idea of making your workplace more creative, fun, interesting, or whatever emotion you want to embody through art. Don't be surprised when recruiting new employees, employee satisfaction, and retention improve because your business decided to leverage art.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 <section class="how-partner-section py-50 py-lg-100 overflow-visible" id="office-space">
     <div class="container">
         <h1 class="secondry-font fs-55 fw-700 text-center text-black mb-40 line-height-1-2 mx-auto" style="max-width: 920px;" data-aos="fade-up" data-aos-duration="1000" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">Office Space</h1>
@@ -354,7 +418,7 @@
                     <div class="location-tier-icon mb-4">
                         {{-- Replace with Husky breed image/icon --}}
                         <div class="location-tier-icon__placeholder primary-font">
-                        <img src="{{asset('public/images/breeds/husky.png')}}" alt="Husky">
+                            <img src="{{asset('public/images/breeds/husky.png')}}" alt="Husky">
                         </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-start mb-3">
@@ -383,7 +447,7 @@
                     <div class="location-tier-icon mb-4">
                         {{-- Replace with Mastiff breed image/icon --}}
                         <div class="location-tier-icon__placeholder primary-font">
-                        <img src="{{asset('public/images/breeds/mastiff.png')}}" alt="Mastiff">
+                            <img src="{{asset('public/images/breeds/mastiff.png')}}" alt="Mastiff">
                         </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-start mb-3">
