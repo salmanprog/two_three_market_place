@@ -6084,9 +6084,9 @@ fieldset:disabled .btn {
   opacity: 0
 }
 
-.modal-backdrop.show {
+/* .modal-backdrop.show {
   opacity: .5
-}
+} */
 
 .modal-header {
   display: flex;

@@ -33,6 +33,15 @@ $cities = $cities ?? collect();
                                 @endforeach
                             </select>
                         </div>
+                        <!-- <div class="artists-filter-field col-12 col-md-6 col-lg-3">
+                            <label class="artists-filter-field__label minimal-label" for="{{ $idPrefix }}artists-filter-location">{{ __('Country') }}</label>
+                            <select id="{{ $idPrefix }}artists-filter-location" class="artists-filter-select compact-select" data-artists-filter="location" name="country" autocomplete="off">
+                                <option value="">{{ __('Choose Country') }}</option>
+                                @foreach($countries as $country)
+                                <option value="{{ $country->id }}" @selected((string)request('country')===(string)$country->id)>{{ $country->name }}</option>
+                                @endforeach
+                            </select>
+                        </div> -->
                         <div class="artists-filter-field col-12 col-md-6 col-lg-3">
                             <label class="artists-filter-field__label minimal-label" for="{{ $idPrefix }}artists-filter-state">{{ __('State') }}</label>
                             <select id="{{ $idPrefix }}artists-filter-state" class="artists-filter-select compact-select" data-artists-filter="state" name="state" autocomplete="off">

@@ -159,8 +159,8 @@
               <li class="mb-10"><a href="{{ route('frontend.artists') }}" class="fs-22 primary-font">Find Local Artists</a></li>
               <li class="mb-10"><a href="{{ route('frontend.organiser-events') }}" class="fs-22 primary-font">Find Local Events</a></li>
               <li class="mb-10"><a href="{{ url('art-services/commissions') }}" class="fs-22 primary-font">Find Local Art Services</a></li>
-              <li class="mb-10"><a href="#" class="fs-22 primary-font">Find Art Galleries</a></li>
-              <li class="mb-10"><a href="#" class="fs-22 primary-font">Find Local Locations</a></li>
+              <li class="mb-10"><a href="{{ url('organiser-events#find-local-art-shows') }}" class="fs-22 primary-font">Find Art Galleries</a></li>
+              <li class="mb-10"><a href="{{ url('organiser-events#find-an-artist-for-your-event') }}" class="fs-22 primary-font">Find Local Locations</a></li>
               <li class="mb-10"><a href="{{ url('art-services/commissions') }}" class="fs-22 primary-font">Commission a Painting</a></li>
              
             </ul>
@@ -170,9 +170,9 @@
               <li class="text-white fs-22 mb-20 fw-700 primary-font">Partnerships</li>
               <li class="mb-10"><a href="{{ route('frontend.merchant-register-step-first') }}" class="fs-22 primary-font">Artists</a></li>
               <li class="mb-10"><a href="{{ url('art-services/commissions') }}" class="fs-22 primary-font">Art Services</a></li>
-              <li class="mb-10"><a href="{{ url('locations/hospitality') }}" class="fs-22 primary-font">Locations</a></li>
-              <li class="mb-10"><a href="{{ url('art-galleries/how-we-partner') }}" class="fs-22 primary-font">Art Galleries</a></li>
-              <li class="mb-10"><a href="{{ url('interior-designers/why-23-ld') }}" class="fs-22 primary-font">Interior Designers</a></li>
+              <li class="mb-10"><a href="{{ url('locations') }}" class="fs-22 primary-font">Locations</a></li>
+              <li class="mb-10"><a href="{{ url('art-galleries-museums') }}" class="fs-22 primary-font">Art Galleries</a></li>
+              <li class="mb-10"><a href="{{ url('interior-designers') }}" class="fs-22 primary-font">Interior Designers</a></li>
               <li class="mb-10"><a href="{{ route('frontend.event-organiser-subscription-type') }}" class="fs-22 primary-font">Events</a></li>
             
             </ul>

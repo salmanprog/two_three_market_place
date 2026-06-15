@@ -442,10 +442,10 @@ Route::get('interior-designers/how-we-partner', function() {
 Route::get('interior-designers/why-23-ld', function() {
     return view('frontend.amazy.pages.drop-down-pages.interior-designers.why-23-ld');
 });
-Route::get('interior-designers/find-local-art-shows', function() {
+Route::get('/find-local-art-shows', function() {
     return view('frontend.amazy.pages.drop-down-pages.interior-designers.find-local-art-shows');
 });
-Route::get('interior-designers/find-an-artist-for-your-event', function() {
+Route::get('/find-an-artist-for-your-event', function() {
     return view('frontend.amazy.pages.drop-down-pages.interior-designers.find-an-artist-for-your-event');
 });
 Route::get('/art-services', function() {
@@ -460,7 +460,7 @@ Route::get('/interior-designers', function() {
     return view('frontend.amazy.pages.drop-down-pages.events.index');
 });
 
-Route::get('/art-galleries-museums', function() {
+Route::get('/art-galleries', function() {
     return view('frontend.amazy.pages.drop-down-pages.art-galleries.index');
 })->name('frontend.art-galleries');
 

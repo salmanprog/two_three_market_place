@@ -21,7 +21,7 @@
             <div class="row align-items-center g-4 g-lg-5">
                 <div class="col-12 col-lg-6">
                     <div class="how-partner-media mb-0" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="80" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
-                        <img src="../public/images/interior-designers/local-art.png" alt="Find local art shows on {{ config('app.name') }}" width="750" height="500" loading="lazy" decoding="async">
+                        <img src="{{asset('public/images/interior-designers/local-art.png')}}" alt="Find local art shows on {{ config('app.name') }}" width="750" height="500" loading="lazy" decoding="async">
 </div>
                 </div>
                 <div class="col-12 col-lg-6">
