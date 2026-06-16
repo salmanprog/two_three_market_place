@@ -1,6 +1,129 @@
 @extends('frontend.amazy.layouts.app')
 
 @push('styles')
+<style>
+    .categories-sec .categories-slider-wrap {
+        position: relative;
+        padding: 0 48px;
+    }
+
+    .categories-sec .categories-slider .categories-slider-slide {
+        width: 100%;
+        height: 100%;
+    }
+
+    .categories-sec .categories-slider .owl-stage {
+        display: flex;
+        align-items: stretch;
+    }
+
+    .categories-sec .categories-slider .owl-item {
+        display: flex;
+    }
+
+    .categories-sec .categories-slider .categories-card {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 0 10px;
+    }
+
+    .categories-sec .categories-card__media {
+        position: relative;
+        background: #f3f3f3;
+        overflow: hidden;
+        margin-bottom: 20px;
+        height: 370px;
+    }
+
+    .categories-sec .categories-card__media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .categories-sec .categories-card:hover .categories-card__media img {
+        transform: scale(1.04);
+    }
+
+    .categories-sec .categories-slider.owl-carousel .owl-nav {
+        display: none !important;
+    }
+
+    .categories-sec .categories-slider__nav {
+        position: absolute;
+        top: 40%;
+        transform: translateY(-50%);
+        width: 44px;
+        height: 44px;
+        border: none;
+        border-radius: 50%;
+        background: #000;
+        color: #fff;
+        font-size: 16px;
+        line-height: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        margin: 0;
+        z-index: 10;
+        cursor: pointer;
+        transition: background 0.25s ease, transform 0.2s ease;
+    }
+
+    .categories-sec .categories-slider__nav:hover {
+        background: #1a1a1a;
+        transform: translateY(-50%) scale(1.05);
+    }
+
+    .categories-sec .categories-slider__nav--prev {
+        left: 0;
+    }
+
+    .categories-sec .categories-slider__nav--next {
+        right: 0;
+    }
+
+    .categories-sec .categories-slider.owl-carousel .owl-dots {
+        margin-top: 28px;
+        text-align: center;
+    }
+
+    .categories-sec .categories-slider.owl-carousel .owl-dot span {
+        width: 10px;
+        height: 10px;
+        margin: 4px 6px;
+        background: rgba(0, 0, 0, 0.2);
+        transition: background 0.25s ease, transform 0.25s ease;
+    }
+
+    .categories-sec .categories-slider.owl-carousel .owl-dot.active span,
+    .categories-sec .categories-slider.owl-carousel .owl-dot:hover span {
+        background: #000;
+        transform: scale(1.1);
+    }
+
+    @media (max-width: 767.98px) {
+        .categories-sec .categories-slider-wrap {
+            padding: 0 40px;
+        }
+
+        .categories-sec .categories-slider__nav {
+            width: 36px;
+            height: 36px;
+            font-size: 14px;
+        }
+
+        /* @media (max-width: 375px) {
+            .categories-sec .categories-card__media {
+                height: 250px;
+            } */
+    }
+</style>
 @endpush
 
 @section('content')
@@ -647,61 +770,65 @@
  <section class="categories-sec pb-60 overflow-visible">
   <div class="container">
     <h2 class="fs-55 fw-700 text-center text-black mx-auto mb-30 line-height-1-2 secondry-font" style="max-width: 990px;" data-aos="fade-down" data-aos-duration="1500" data-aos-easing="ease-out-cubic">We provide specialized service to these categories</h2>
-    <div class="row row-gap-40 row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-5 justify-content-center">
-      <div class="col">
-        <div class="categories-card mx-auto" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="200" data-aos-easing="ease-out-cubic">
-            <img src="{{ showImage('uploads/images/16-06-2025/6850494d1cc2c.png') }}" alt="Interior Designers" class="mb-20">
-          <h3 class="text-start fw-700 text-black fs-18 secondry-font">Interior Designers</h3>
-          <p class="mb-10 primary-font">Source art for your clients</p>
-          <a href="{{route('frontend.buyer.signup')}}" class="btn btn-secondary pri mary-font border-gray-light text-gray-400 px-44 py-10">View More</a>
+    <div class="categories-slider-wrap" data-aos="fade-up" data-aos-duration="1500" data-aos-easing="ease-out-cubic">
+      <button type="button" class="categories-slider__nav categories-slider__nav--prev" aria-label="Previous category">
+        <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+      </button>
+      <button type="button" class="categories-slider__nav categories-slider__nav--next" aria-label="Next category">
+        <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+      </button>
+      <div class="categories-slider owl-carousel owl-theme">
+        <div class="categories-slider-slide d-flex">
+          <div class="categories-card mx-auto">
+            <div class="categories-card__media">
+              <img src="{{ showImage('uploads/images/16-06-2025/6850494d1cc2c.png') }}" alt="Interior Designers" loading="lazy" decoding="async">
+            </div>
+            <h3 class="text-start fw-700 text-black fs-18 secondry-font">Interior Designers</h3>
+            <p class="mb-10 primary-font">Source art for your clients</p>
+            <a href="{{ route('frontend.buyer.signup') }}" class="btn btn-secondary primary-font border-gray-light text-gray-400 px-44 py-10">View More</a>
+          </div>
+        </div>
+        <div class="categories-slider-slide d-flex">
+          <div class="categories-card mx-auto">
+            <div class="categories-card__media">
+              <img src="{{ asset('public/images/artist-cat.png') }}" alt="Artists" loading="lazy" decoding="async">
+            </div>
+            <h3 class="text-start fw-700 text-black fs-18 secondry-font">Artists</h3>
+            <p class="mb-10 primary-font">Join our team</p>
+            <a href="{{ route('frontend.merchant-register','subscription') }}" class="btn btn-secondary primary-font border-gray-light text-gray-400 px-44 py-10">View More</a>
+          </div>
+        </div>
+        <div class="categories-slider-slide d-flex">
+          <div class="categories-card mx-auto">
+            <div class="categories-card__media">
+              <img src="{{ showImage('uploads/images/16-06-2025/6850681225004.png') }}" alt="Location" loading="lazy" decoding="async">
+            </div>
+            <h3 class="text-start fw-700 text-black fs-18 secondry-font">Location</h3>
+            <p class="mb-10 primary-font">Join Location account</p>
+            <a href="{{ route('frontend.event-organiser-register','subscription') }}" class="btn btn-secondary primary-font border-gray-light text-gray-400 px-44 py-10">View More</a>
+          </div>
+        </div>
+        <div class="categories-slider-slide d-flex">
+          <div class="categories-card mx-auto">
+            <div class="categories-card__media">
+              <img src="{{ asset('public/images/about-us-media-02.png') }}" alt="Collectors" loading="lazy" decoding="async">
+            </div>
+            <h3 class="text-start fw-700 text-black fs-18 secondry-font">Collectors</h3>
+            <p class="mb-10 primary-font">Join Collector account</p>
+            <a href="#" class="btn btn-secondary primary-font border-gray-light text-gray-400 px-44 py-10">View More</a>
+          </div>
+        </div>
+        <div class="categories-slider-slide d-flex">
+          <div class="categories-card mx-auto">
+            <div class="categories-card__media">
+              <img src="{{ asset('public/images/art-galleries-cat.png') }}" alt="Art Galleries" loading="lazy" decoding="async">
+            </div>
+            <h3 class="text-start fw-700 text-black fs-18 secondry-font">Art Galleries</h3>
+            <p class="mb-10 primary-font">Join Art Gallery account</p>
+            <a href="./art-gallery-register/subscription" class="btn btn-secondary primary-font border-gray-light text-gray-400 px-44 py-10">View More</a>
+          </div>
         </div>
       </div>
-      <div class="col">
-        <div class="categories-card mx-auto" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="380" data-aos-easing="ease-out-cubic">
-            <img src="{{('public/images/artist-cat.png')}}" alt="Artists" class="mb-20">
-          <h3 class="text-start fw-700 text-black fs-18 secondry-font">Artists</h3>
-          <p class="mb-10 primary-font">Join our team</p>
-          <a href="{{route('frontend.merchant-register','subscription')}}" class="btn btn-secondary pri mary-font border-gray-light text-gray-400 px-44 py-10">View More</a>
-        </div>
-      </div>
-      <div class="col">
-        <div class="categories-card mx-auto" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="560" data-aos-easing="ease-out-cubic">
-            <img src="{{ showImage('uploads/images/16-06-2025/6850681225004.png') }}" alt="Artists" class="mb-20">
-          <h3 class="text-start fw-700 text-black fs-18 secondry-font">Location</h3>
-          <p class="mb-10 primary-font">Join Location account</p>
-          <a href="{{route('frontend.event-organiser-register','subscription')}}" class="btn btn-secondary pri mary-font border-gray-light text-gray-400 px-44 py-10">View More</a>
-        </div>
-      </div>
-      <div class="col">
-        <div class="categories-card mx-auto" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="560" data-aos-easing="ease-out-cubic">
-            <img src="{{asset('public/images/about-us-media-02.png')}}" alt="Artists" class="mb-20">
-          <h3 class="text-start fw-700 text-black fs-18 secondry-font">Collectors</h3>
-          <p class="mb-10 primary-font">Join Collector account</p>
-          <a href="#" class="btn btn-secondary pri mary-font border-gray-light text-gray-400 px-44 py-10">View More</a>
-        </div>
-      </div>
-      <div class="col">
-        <div class="categories-card mx-auto" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="560" data-aos-easing="ease-out-cubic">
-            <img src="{{asset('public/images/art-galleries-cat.png')}}" alt="Artists" class="mb-20">
-          <h3 class="text-start fw-700 text-black fs-18 secondry-font">Art Galleries</h3>
-          <p class="mb-10 primary-font">Join Art Gallery account</p>
-          <a href="./art-gallery-register/subscription" class="btn btn-secondary pri mary-font border-gray-light text-gray-400 px-44 py-10">View More</a>
-        </div>
-      </div>
-      <!-- @foreach($parent_categories as $key => $category)
-      <div class="col">
-        <div class="categories-card mx-auto">
-          @if($category->categoryImage && $category->categoryImage->image)
-            <img src="{{ showImage($category->categoryImage->image) }}" alt="{{ $category->name }}" class="mb-20">
-          @else
-            <img src="{{ asset('assets/images/category-0'.($key+1).'.png') }}" alt="{{ $category->name }}" class="mb-20">
-          @endif
-          <h3 class="text-start fw-700 text-black fs-18 secondry-font">{{ $category->name }}</h3>
-          <p class="mb-10 primary-font">{{ $category->description ?? 'Explore our ' . $category->name . ' collection' }}</p>
-          <a href="{{ route('frontend.category-product', ['slug' => $category->slug, 'item' => 'category']) }}" class="btn btn-secondary primary-font border-gray-light text-gray-400 px-44 py-10">View More</a>
-        </div>
-      </div>
-      @endforeach -->
     </div>
   </div>
 </section>
@@ -3424,6 +3551,41 @@ const range = document.getElementById("priceRange");
         priceValue.textContent = this.value;
       });
     }
+
+    $(document).ready(function () {
+        var $categoriesSlider = $('.categories-slider');
+
+        if ($categoriesSlider.length && typeof $.fn.owlCarousel === 'function') {
+            $categoriesSlider.owlCarousel({
+                loop: true,
+                margin: 24,
+                nav: false,
+                dots: true,
+                autoplay: false,
+                autoplayHoverPause: true,
+                smartSpeed: 500,
+                responsive: {
+                    0: { items: 1 },
+                    576: { items: 2 },
+                    992: { items: 3 }
+                }
+            });
+
+            $('.categories-slider__nav--prev').on('click', function () {
+                $categoriesSlider.trigger('prev.owl.carousel');
+            });
+
+            $('.categories-slider__nav--next').on('click', function () {
+                $categoriesSlider.trigger('next.owl.carousel');
+            });
+
+            $categoriesSlider.on('initialized.owl.carousel refreshed.owl.carousel', function () {
+                if (typeof AOS !== 'undefined') {
+                    AOS.refresh();
+                }
+            });
+        }
+    });
 
     var $relatedProductsSlider = $(".related-products-slider");
     if ($relatedProductsSlider.length) {

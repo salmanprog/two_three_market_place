@@ -10,7 +10,7 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="nav-dp-img-wrapper">
-                        <img src="../public/images/interior-designers/find-an-artist.png" alt="find-an-artist">
+                        <img src="{{asset('public/images/interior-designers/find-an-artist.png')}}" alt="find-an-artist">
                     </div>
                 </div>
                 <div class="col-lg-6">

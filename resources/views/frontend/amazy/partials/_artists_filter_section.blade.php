@@ -1,12 +1,29 @@
 @php
+use Modules\Setup\Entities\City;
+use Modules\Setup\Entities\Country;
+use Modules\Setup\Entities\State;
+
 $idPrefix = $idPrefix ?? '';
 $showArtistGrid = $showArtistGrid ?? true;
 $artistFilterCategories = $artistFilterCategories ?? ['Portraits & Wildlife', 'Abstract Expressionism', 'Landscapes', 'Contemporary', 'Mixed Media'];
 $artistFilterMediums = $artistFilterMediums ?? ['Oil', 'Acrylic', 'Digital', 'Watercolor', 'Charcoal', 'Mixed'];
 $sellers = $sellers ?? collect();
-$countries = $countries ?? collect();
-$states = $states ?? collect();
-$cities = $cities ?? collect();
+
+$usCountry = Country::where('status', 1)->where('code', 'US')->first();
+if (!$usCountry) {
+    $usCountry = Country::where('status', 1)->where('name', 'United States')->first();
+}
+
+$selectedCountryId = request('country') ?: ($usCountry?->id);
+$selectedStateId = request('state');
+
+$states = $selectedCountryId
+    ? State::where('status', 1)->where('country_id', $selectedCountryId)->orderBy('name')->get(['id', 'name'])
+    : collect();
+
+$cities = $selectedStateId
+    ? City::where('status', 1)->where('state_id', $selectedStateId)->orderBy('name')->get(['id', 'name'])
+    : collect();
 @endphp
 
 <section class="filter-artist-sec artists-list-section pb-40 overflow-visible" style="box-shadow: none; background: transparent;">
@@ -27,10 +44,9 @@ $cities = $cities ?? collect();
                         <div class="artists-filter-field col-12 col-md-6 col-lg-3">
                             <label class="artists-filter-field__label minimal-label" for="{{ $idPrefix }}artists-filter-location">{{ __('Country') }}</label>
                             <select id="{{ $idPrefix }}artists-filter-location" class="artists-filter-select compact-select" data-artists-filter="location" name="country" autocomplete="off">
-                                <option value="">{{ __('Choose Country') }}</option>
-                                @foreach($countries as $country)
-                                <option value="{{ $country->id }}" @selected((string)request('country')===(string)$country->id)>{{ $country->name }}</option>
-                                @endforeach
+                                @if($usCountry)
+                                <option value="{{ $usCountry->id }}" @selected((string) $selectedCountryId === (string) $usCountry->id)>{{ $usCountry->name }}</option>
+                                @endif
                             </select>
                         </div>
                         <div class="artists-filter-field col-12 col-md-6 col-lg-3">

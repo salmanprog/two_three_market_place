@@ -57,10 +57,21 @@ class MerchantsListController extends Controller
             });
         }
 
-        // country options for filter dropdown (same structure as merchant step two)
-        $data['countries'] = Country::where('status', 1)->orderBy('name')->get(['id', 'name']);
-        $data['states'] = State::orderBy('name')->get(['id', 'name']);
-        $data['cities'] = City::orderBy('name')->get(['id', 'name']);
+        $usCountry = Country::where('status', 1)->where('code', 'US')->first();
+        if (!$usCountry) {
+            $usCountry = Country::where('status', 1)->where('name', 'United States')->first();
+        }
+
+        $selectedCountryId = $request->input('country') ?: ($usCountry?->id);
+        $selectedStateId = $request->input('state');
+
+        $data['countries'] = $usCountry ? collect([$usCountry]) : collect();
+        $data['states'] = $selectedCountryId
+            ? State::where('status', 1)->where('country_id', $selectedCountryId)->orderBy('name')->get(['id', 'name'])
+            : collect();
+        $data['cities'] = $selectedStateId
+            ? City::where('status', 1)->where('state_id', $selectedStateId)->orderBy('name')->get(['id', 'name'])
+            : collect();
 
         // paginate result
         $data['sellers'] = $query->paginate(12);
