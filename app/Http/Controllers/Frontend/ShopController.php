@@ -458,6 +458,8 @@ class ShopController extends Controller
         $filters = [
             'search' => 'product_name',
             'location' => 'location',
+            'state' => 'state',
+            'city' => 'city',
             'art_services' => 'art_services',
             'category' => 'category',
             'style' => 'style',
