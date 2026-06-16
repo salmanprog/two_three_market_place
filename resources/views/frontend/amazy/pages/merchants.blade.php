@@ -120,7 +120,7 @@
                 <div class="account-signup-sec" style="background: transparent !important;">
                     @guest
                     <a href="./merchant-register-step-2/subscription" class="account-signup-btn primary-font">
-                    Become a Featured Artst
+                    Become a Featured Artist
                         <i class="fa-solid fa-arrow-right-long fs-12" aria-hidden="true"></i>
                     </a>
                     @endguest

@@ -173,12 +173,12 @@
                                     <span class="text-danger" >{{ $message }}</span>
                                 @enderror
                             </div>
-                            <div class="col-lg-12 mb_20">
+                            <div class="col-lg-12 mb_20 d-none">
                                 <label class="primary_label2">{{ __('Country') }} <span>*</span></label>
                                 <select class="primary_input3 radius_5px" name="country" id="country" aria-label="Sizes" required>
                                     <option value="">{{__('Choose Country')}}</option>
                                     @foreach($countries as $key => $country)
-                                        <option value="{{$country->id}}">{{$country->name}}</option>
+                                        <option value="{{$country->id}}" {{ $country->id == 231 ? 'selected' : '' }}>{{$country->name}}</option>
                                     @endforeach
                                 </select>
                                 @error('country')
@@ -299,30 +299,26 @@
             $('.select_box').niceSelect();
         });
     })(jQuery);
-    $(document).on('change', '#country', function(event){
-    let country = $('#country').val();
-    $('#pre-loader').show();
+    $(document).ready(function() {
+    let country = $('#country').val(); // will be 231
     if(country){
+        $('#pre-loader').show();
         let base_url = $('#url').val();
-        let url = base_url + '/seller/profile/get-state?country_id=' +country;
+        let url = base_url + '/seller/profile/get-state?country_id=' + country;
 
         $('#state').empty();
-
-        $('#state').append(
-            `<option value="">{{__("common.select_from_options")}}</option>`
-        );
+        $('#state').append(`<option value="">{{__("common.select_from_options")}}</option>`);
         $('#state').niceSelect('update');
+
         $('#city').empty();
-        $('#city').append(
-            `<option value="">{{__("common.select_from_options")}}</option>`
-        );
+        $('#city').append(`<option value="">{{__("common.select_from_options")}}</option>`);
         $('#city').niceSelect('update');
+
         $.get(url, function(data){
-
             $.each(data, function(index, stateObj) {
-                $('#state').append('<option value="'+ stateObj.id +'">'+ stateObj.name +'</option>');
+                let selected = stateObj.id == 231 ? 'selected' : ''; // if you want to preselect state too
+                $('#state').append('<option value="'+ stateObj.id +'" '+selected+'>'+ stateObj.name +'</option>');
             });
-
             $('#state').niceSelect('update');
             $('#pre-loader').hide();
         });
