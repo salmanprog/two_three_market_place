@@ -156,11 +156,11 @@
           <div class="col-12 col-md-6 col-lg-3" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="160" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
             <ul class="footer-links list-unstyled ps-0 mb-0">
               <li class="text-white fs-22 mb-20 fw-700 primary-font">Art</li>
-              <li class="mb-10"><a href="{{ route('frontend.artists') }}" class="fs-22 primary-font">Find Local Artists</a></li>
+              <li class="mb-10"><a href="{{ url('artists') }}" class="fs-22 primary-font">Find Local Artists</a></li>
               <li class="mb-10"><a href="{{ route('frontend.organiser-events') }}" class="fs-22 primary-font">Find Local Events</a></li>
-              <li class="mb-10"><a href="{{ url('art-services/commissions') }}" class="fs-22 primary-font">Find Local Art Services</a></li>
-              <li class="mb-10"><a href="{{ url('organiser-events#find-local-art-shows') }}" class="fs-22 primary-font">Find Art Galleries</a></li>
-              <li class="mb-10"><a href="{{ url('organiser-events#find-an-artist-for-your-event') }}" class="fs-22 primary-font">Find Local Locations</a></li>
+              <li class="mb-10"><a href="{{ url('art-services') }}" class="fs-22 primary-font">Find Local Art Services</a></li>
+              <li class="mb-10"><a href="{{ url('art-galleries') }}" class="fs-22 primary-font">Find Art Galleries</a></li>
+              <li class="mb-10"><a href="{{ url('locations') }}" class="fs-22 primary-font">Find Local Locations</a></li>
               <li class="mb-10"><a href="{{ url('art-services/commissions') }}" class="fs-22 primary-font">Commission a Painting</a></li>
              
             </ul>
@@ -168,12 +168,12 @@
           <div class="col-12 col-md-6 col-lg-3" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="240" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
             <ul class="footer-links list-unstyled ps-0 mb-0">
               <li class="text-white fs-22 mb-20 fw-700 primary-font">Partnerships</li>
-              <li class="mb-10"><a href="{{ route('frontend.merchant-register-step-first') }}" class="fs-22 primary-font">Artists</a></li>
-              <li class="mb-10"><a href="{{ url('art-services/commissions') }}" class="fs-22 primary-font">Art Services</a></li>
+              <li class="mb-10"><a href="{{ url('artists') }}" class="fs-22 primary-font">Artists</a></li>
+              <li class="mb-10"><a href="{{ url('art-services') }}" class="fs-22 primary-font">Art Services</a></li>
               <li class="mb-10"><a href="{{ url('locations') }}" class="fs-22 primary-font">Locations</a></li>
-              <li class="mb-10"><a href="{{ url('art-galleries-museums') }}" class="fs-22 primary-font">Art Galleries</a></li>
+              <li class="mb-10"><a href="{{ url('art-galleries') }}" class="fs-22 primary-font">Art Galleries</a></li>
               <li class="mb-10"><a href="{{ url('interior-designers') }}" class="fs-22 primary-font">Interior Designers</a></li>
-              <li class="mb-10"><a href="{{ route('frontend.event-organiser-subscription-type') }}" class="fs-22 primary-font">Events</a></li>
+              <li class="mb-10"><a href="{{ url('organiser-events') }}" class="fs-22 primary-font">Events</a></li>
             
             </ul>
           </div>
