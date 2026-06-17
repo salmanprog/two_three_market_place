@@ -96,12 +96,18 @@ class PricingController extends Controller
     {
         try {
             $this->pricingService->update($request->except("_token"));
-            LogActivity::successLog('Pricing updated.');
         } catch (Exception $e) {
             LogActivity::errorLog($e->getMessage());
-            return $e->getMessage();
+            return response()->json(['message' => $e->getMessage()], 500);
         }
-        return  $this->loadTableData();
+
+        try {
+            LogActivity::successLog('Pricing updated.');
+        } catch (Exception $e) {
+            // Do not fail a successful update when activity logging is unavailable.
+        }
+
+        return response()->json(['success' => true]);
     }
 
     public function destroy(Request $request)

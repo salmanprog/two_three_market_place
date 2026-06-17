@@ -5,7 +5,7 @@
             <div class="row">
                 @include('frontendcms::pricing.components.show')
                 @include('backEnd.partials._deleteModalForAjax',['item_name' => __('frontendCms.pricing')])
-                @if (permissionCheck('frontendcms.pricing.store'))
+                @if (permissionCheck('admin.pricing.store'))
                     <div class="col-lg-3">
                         <div class="row">
                             <div id="formHtml" class="col-lg-12">

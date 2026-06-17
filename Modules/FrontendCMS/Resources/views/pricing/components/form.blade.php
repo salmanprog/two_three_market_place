@@ -3,7 +3,7 @@
 $LanguageList = getLanguageList();
 @endphp
 @endif
-<form method="POST" action="" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data" id="{{$form_id}}">
+<form method="POST" action="{{ $form_id === 'pricing_edit_form' ? route('admin.pricing.update') : route('admin.pricing.store') }}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data" id="{{$form_id}}">
     @csrf
     <div class="white-box">
         <div class="add-visitor">

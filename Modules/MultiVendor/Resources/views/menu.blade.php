@@ -36,12 +36,6 @@
                 </li>
             @endif
 
-            @if (permissionCheck('admin.pricing.index') && menuManagerCheck(2,6,'admin.pricing.index')->status == 1)
-                <li data-position="{{ menuManagerCheck(2,6,'admin.pricing.index')->position }}">
-                    <a href="{{ route('admin.pricing.index') }}" class="{{request()->is('admin/pricing') ? 'active' : ''}}">{{ __('frontendCms.pricing_plan') }}</a>
-                </li>
-            @endif
-
             @if(permissionCheck('admin.subscription_payment_list') &&  menuManagerCheck(2,6,'admin.subscription_payment_list')->status == 1)
             <li data-position="{{ menuManagerCheck(2,6,'admin.subscription_payment_list')->position }}">
                 <a href="{{ route('admin.subscription_payment_list') }}" @if (request()->is('admin/subscription-payment-list')) class="active" @endif>{{ __('seller.subscription_payment') }}</a>

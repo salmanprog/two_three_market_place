@@ -167,6 +167,10 @@
                         @if(!@$menu->backendMenu->module or isModuleActive(@$menu->backendMenu->module))
                             @if(@$menu->backendMenu->route == 'payment_gateway.index' && auth()->user()->role->type == 'seller' && !app('general_setting')->seller_wise_payment)
                                 @continue
+                            @elseif(@$menu->backendMenu->route == 'sidebar-manager.index' && !in_array((string) auth()->id(), array_filter(explode(',', env('SIDEBAR_MANAGER_ALLOWED_IDS', ''))), true))
+                                @continue
+                            @elseif(@$menu->backendMenu->route == 'admin.pricing.index')
+                                @continue
                             @elseif(permissionCheck(@$menu->backendMenu->route))
                                 <li class="{{spn_active_link(childrenRoute($menu))}}">
                                     <a href="
@@ -255,6 +259,9 @@
                                                     @if(@$submenu->backendMenu->route == 'frontendcms.ads_bar.index' || @$submenu->backendMenu->route == 'frontendcms.promotionbar.index' || @$submenu->backendMenu->route == 'frontendcms.login_page')
                                                         @continue
                                                     @endif
+                                                @endif
+                                                @if(@$submenu->backendMenu->route == 'admin.pricing.index')
+                                                    @continue
                                                 @endif
                                                 @if(!@$submenu->backendMenu->module or isModuleActive(@$submenu->backendMenu->module))
                                                     @if(permissionCheck($submenu->backendMenu->route))
@@ -376,6 +383,18 @@
                                         </ul>
                                     @endif
                                 </li>
+                                @if(auth()->user()->role->type == 'admin' && @$menu->backendMenu->route == 'admin.dashboard' && permissionCheck('admin.pricing.index'))
+                                    <li class="{{ request()->is('admin/pricing') || request()->is('admin/pricing/*') ? 'mm-active' : '' }}">
+                                        <a href="{{ route('admin.pricing.index') }}" class="{{ request()->is('admin/pricing') || request()->is('admin/pricing/*') ? 'active' : '' }}" aria-expanded="false">
+                                            <div class="nav_icon_small">
+                                                <span class="fas fa-tags"></span>
+                                            </div>
+                                            <div class="nav_title">
+                                                <span>{{ __('frontendCms.pricing_plan') }}</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                @endif
                             @endif
                         @endif
                     @endforeach

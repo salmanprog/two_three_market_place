@@ -1,28 +1,30 @@
 @extends('frontend.amazy.layouts.app')
 @section('styles')
-    <style>
-        .mb-15{
-            margin-bottom: 15px!important;
-        }
-        .customer_img input{
-            width: 100%;
-            background: #fff;
-        }
-        .send_query .form-group input{
-            text-transform: none!important;
-        }
-    </style>
+<style>
+    .mb-15 {
+        margin-bottom: 15px !important;
+    }
+
+    .customer_img input {
+        width: 100%;
+        background: #fff;
+    }
+
+    .send_query .form-group input {
+        text-transform: none !important;
+    }
+</style>
 @endsection
 @section('title')
 {{$contactContent->mainTitle}}
 @endsection
 @section('breadcrumb')
-    {{ $contactContent->mainTitle }}
+{{ $contactContent->mainTitle }}
 @endsection
 
 @section('content')
 
-    <div class="contact_section ">
+<!-- <div class="contact_section ">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-12">
@@ -228,8 +230,133 @@
                     </div>
                 </div>
             </div>
+
+        </div>
+    </div> -->
+<section class="contact-us-sec pt-100 pb-100 overflow-visible">
+    <div class="container">
+        <div class="row align-items-center row-gap-40">
+            <div class="col-12 col-md-6">
+                <h2 class="secondry-font text-center text-md-start fs-55 fw-400 mb-20" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="0" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">Connect with us</h2>
+                <div class="d-flex align-items-center flex-column flex-md-row gap-20 mb-20" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="90" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
+                    <div>
+                        <img src="{{ asset('public/uploads/all/68530cdb43d0e.png') }}" alt="profile">
+                    </div>
+                    <div>
+                        <h5 class="text-center text-md-start fw-500 fs-25 primary-font">Alex Grove</h5>
+                        <div class="d-flex flex-column gap-20 row-gap-10">
+                            <div class="d-flex align-items-center gap-20 justify-content-center justify-content-md-start">
+                                <i class="fa-solid fa-phone fs-20 text-black"></i>
+                                <a href="tel:9548500145" class="fs-20 p-0 text-black primary-font">954 850 0145</a>
+                            </div>
+                            <div class="d-flex align-items-center gap-20">
+                                <i class="fa-solid fa-envelope fs-20 text-black"></i>
+                                <a href="mailto:alexgrove.23ld@gmail.com" class="email-address-link fs-20 p-0 text-black primary-font">alexgrove.23ld@gmail.com</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center flex-column flex-md-row gap-20 mb-20" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="180" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
+                    <div>
+                        <img src="{{ asset('public/uploads/all/68530cde80b1c.png') }}" alt="profile">
+                    </div>
+                    <div>
+                        <h5 class="text-center text-md-start fw-500 fs-25 primary-font">Devin Pughsley</h5>
+                        <div class="d-flex flex-column gap-20 row-gap-10">
+                            <div class="d-flex align-items-center gap-20 justify-content-center justify-content-md-start">
+                                <i class="fa-solid fa-phone fs-24 text-black"></i>
+                                <a href="tel:2057778284" class="fs-20 p-0 text-black primary-font">205 777 8284</a>
+                            </div>
+                            <div class="d-flex align-items-center gap-20">
+                                <i class="fa-solid fa-envelope fs-20 text-black"></i>
+                                <a href="mailto:devinpughsley.23ld@gmail.com" class="email-address-link fs-20 p-0 text-black primary-font">devinpughsley.23ld@gmail.com</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <h2 class="secondry-font text-start fs-55 fw-400 mb-20" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="0" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">Contact Us</h2>
+                @if (session('success'))
+                <div class="alert alert-success mb-3" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="70" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
+                    {{ session('success') }}
+                </div>
+                @endif
+                <form action="{{ route('frontend.contact.us') }}" method="POST">
+                    @csrf
+                    <div class="row row-gap-20">
+                        <div class="col-12 col-sm-6" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="110" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
+                            <input type="text"
+                                name="first_name"
+                                value="{{ old('first_name') }}"
+                                placeholder="First Name"
+                                class="primary-font border-gray-light fs-16 px-16 py-18 input-field w-100">
+                            @error('first_name')
+                            <small class="text-danger d-block mt-1">{{ $message }}</small>
+                            @enderror
+                        </div>
+                        <div class="col-12 col-sm-6" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="200" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
+                            <input type="text"
+                                name="last_name"
+                                value="{{ old('last_name') }}"
+                                placeholder="Last Name"
+                                class="primary-font border-gray-light fs-16 px-16 py-18 input-field w-100">
+                            @error('last_name')
+                            <small class="text-danger d-block mt-1">{{ $message }}</small>
+                            @enderror
+                        </div>
+                        <div class="col-12 col-sm-6" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="290" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
+                            <input type="email"
+                                name="email"
+                                value="{{ old('email') }}"
+                                placeholder="Email"
+                                class="primary-font border-gray-light fs-16 px-16 py-18 input-field w-100">
+                            @error('email')
+                            <small class="text-danger d-block mt-1">{{ $message }}</small>
+                            @enderror
+                        </div>
+                        <div class="col-12 col-sm-6" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="380" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
+                            <input type="tel"
+                                name="phone"
+                                value="{{ old('phone') }}"
+                                placeholder="Phone"
+                                class="primary-font border-gray-light fs-16 px-16 py-18 input-field w-100">
+                            @error('phone')
+                            <small class="text-danger d-block mt-1">{{ $message }}</small>
+                            @enderror
+                        </div>
+                        <div class="col-12" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="470" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
+                            <textarea name="message"
+                                rows="5"
+                                placeholder="Message"
+                                class="primary-font border-gray-light fs-16 px-16 py-18 text-area w-100">{{ old('message') }}</textarea>
+                            @error('message')
+                            <small class="text-danger d-block mt-1">{{ $message }}</small>
+                            @enderror
+                        </div>
+                        <div class="col-12" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="560" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
+                            <div class="position-relative w-100">
+                                <select class="primary-font border-gray-light fs-16 px-16 py-18 input-field" id="serviceSelect" name="service">
+                                    <option selected="" disabled="">Which service are you interested in?</option>
+                                    <option value="interior_designers">Interior Designers</option>
+                                    <option value="artists">Artists</option>
+                                    <option value="organiser">Location</option>
+                                    <option value="art_galleries">Art Galleries</option>
+                                    <option value="art_sourcing_purchase">Art Sourcing/Purchase</option>
+                                    <!-- <option value="other">Other</option> -->
+                                </select>
+                                <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-17 text-black me-3 pe-none"></i>
+                            </div>
+                        </div>
+                        <div class="col-12 text-end" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="650" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
+                            <button type="submit" class="btn btn-primary radius-60 bg-black text-white primary-font py-17 px-30 fs-16">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
+</section>
 
 @endsection
 @push('scripts')
@@ -238,32 +365,32 @@
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
 <script>
-
-    (function($){
+    (function($) {
         "use strict";
 
         $(document).ready(function() {
 
             $('#contactForm').on('submit', function(event) {
                 event.preventDefault();
-                @if(env('NOCAPTCHA_FOR_CONTACT') == "true" )
-                    var response = grecaptcha.getResponse();
-                    if(response.length == 0){
-                        @if(env('NOCAPTCHA_INVISIBLE') != "true")
-                        $('#error_g_recaptcha').text("The google recaptcha field is required");
-                        return false;
-                        @endif
-                    }
+                @if(env('NOCAPTCHA_FOR_CONTACT') == "true")
+                var response = grecaptcha.getResponse();
+                if (response.length == 0) {
+                    @if(env('NOCAPTCHA_INVISIBLE') != "true")
+                    $('#error_g_recaptcha').text("The google recaptcha field is required");
+                    return false;
                     @endif
-              //  $("#contactBtn").prop('disabled', true);
-                $('#contactBtn').text('{{ __('common.submitting') }}');
+                }
+                @endif
+                //  $("#contactBtn").prop('disabled', true);
+                $('#contactBtn').text('{{ __('
+                    common.submitting ') }}');
 
                 var formElement = $(this).serializeArray()
                 var formData = new FormData();
                 formElement.forEach(element => {
                     formData.append(element.name, element.value);
                 });
-                if($('.custom_file').length > 0){
+                if ($('.custom_file').length > 0) {
                     let photo = $('.custom_file')[0].files[0];
                     if (photo) {
                         formData.append($('.custom_file').attr('name'), photo)
@@ -278,7 +405,7 @@
                     processData: false,
                     data: formData,
                     success: function(data) {
-                        toastr.success("{{__('defaultTheme.message_sent_successfully')}}","{{__('common.success')}}");
+                        toastr.success("{{__('defaultTheme.message_sent_successfully')}}", "{{__('common.success')}}");
                         $("#contactBtn").prop('disabled', false);
                         $('#contactBtn').text("{{ __('defaultTheme.send_message') }}");
                         resetErrorData();
@@ -293,14 +420,14 @@
                 });
             });
 
-            function showErrorData(errors){
+            function showErrorData(errors) {
                 $('#contactForm #error_name').text(errors.name);
                 $('#contactForm #error_email').text(errors.email);
                 $('#contactForm #error_query_type').text(errors.query_type);
                 $('#contactForm #error_message').text(errors.message);
             }
 
-            function resetErrorData(){
+            function resetErrorData() {
                 $('#contactForm')[0].reset();
                 $('#contactForm #error_name').text('');
                 $('#contactForm #error_email').text('');
@@ -311,12 +438,10 @@
             if ($('#contact-map').length != 0) {
                 var latitude = "{{ app('general_setting')->latitude }}";
                 var longitude = "{{ app('general_setting')->longitude }}";
-                google.maps.event.addDomListener(window, 'load', basicmap(parseFloat(latitude),parseFloat(longitude)));
+                google.maps.event.addDomListener(window, 'load', basicmap(parseFloat(latitude), parseFloat(longitude)));
             }
 
         });
     })(jQuery);
-
-
 </script>
 @endpush

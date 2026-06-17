@@ -103,7 +103,7 @@ class PricingRepository {
 
         $pricing->features()->delete();
 
-        $features = is_array($data['features']) ? $data['features'] : [];
+        $features = (isset($data['features']) && is_array($data['features'])) ? $data['features'] : [];
 
         foreach ($features as $index => $feature) {
             if (!is_array($feature)) {

@@ -78,11 +78,11 @@ Route::middleware(['admin','auth'])->prefix('frontendcms')->as('frontendcms.')->
 });
 Route::middleware(['admin','auth'])->prefix('admin')->as('admin.')->group(function(){
     //pricing
-    Route::resource('/pricing', 'PricingController')->except('destroy, update');
     Route::post('/pricing/delete','PricingController@destroy')->name('pricing.delete')->middleware('prohibited_demo_mode');
     Route::post('/pricing/update','PricingController@update')->name('pricing.update')->middleware('prohibited_demo_mode');
     Route::post('/pricing/status-update','PricingController@status')->name('pricing.status')->middleware('prohibited_demo_mode');
     Route::get('/pricings/list-for-seller','PricingController@get_pricing')->name('pricing.get_pricing_url');
+    Route::resource('/pricing', 'PricingController')->except(['destroy', 'update', 'show'])->where(['pricing' => '[0-9]+']);
         //social link
     Route::post('setting/social-link/store', 'SocialLinkController@socialLinkStore')->name('setting.social-link.store')->middleware('prohibited_demo_mode');
     Route::post('setting/social-link/update', 'SocialLinkController@socialLinkUpdate')->name('setting.social-link.update')->middleware('prohibited_demo_mode');

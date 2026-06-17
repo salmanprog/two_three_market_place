@@ -1160,7 +1160,7 @@
             <img src="{{ asset('public/uploads/all/68530cdb43d0e.png') }}" alt="profile">
           </div>
           <div>
-            <h5 class="text-center text-md-start fw-500 fs-25 primary-font">Alex Soto</h5>
+            <h5 class="text-center text-md-start fw-500 fs-25 primary-font">Alex Grove</h5>
             <div class="d-flex flex-column gap-20 row-gap-10">
               <div class="d-flex align-items-center gap-20 justify-content-center justify-content-md-start">
                 <i class="fa-solid fa-phone fs-20 text-black"></i>
@@ -1168,7 +1168,7 @@
               </div>
               <div class="d-flex align-items-center gap-20">
                 <i class="fa-solid fa-envelope fs-20 text-black"></i>
-                <a href="mailto:alexsoto.23ld@gmail.com" class="email-address-link fs-20 p-0 text-black primary-font">alexsoto.23ld@gmail.com</a>
+                <a href="mailto:alexgrove.23ld@gmail.com" class="email-address-link fs-20 p-0 text-black primary-font">alexgrove.23ld@gmail.com</a>
               </div>
             </div>
           </div>

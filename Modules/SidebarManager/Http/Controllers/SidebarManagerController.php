@@ -18,6 +18,13 @@ class SidebarManagerController extends Controller
     public function __construct()
     {
         $this->middleware('maintenance_mode');
+        $this->middleware(function ($request, $next) {
+            $allowed = array_filter(explode(',', env('SIDEBAR_MANAGER_ALLOWED_IDS', '')));
+            if (!in_array((string) auth()->id(), $allowed, true)) {
+                abort(403);
+            }
+            return $next($request);
+        });
     }
 
     public function index()

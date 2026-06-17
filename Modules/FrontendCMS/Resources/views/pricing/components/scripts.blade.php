@@ -164,9 +164,8 @@
             $(document).on('submit','#pricing_edit_form', function(event) {
                 event.preventDefault();
                 var formData = new FormData(this);
-                console.log(formData);
-                $("#create_btn").prop('disabled', true);
-                $('#create_btn').text('{{ __("common.submitting") }}');
+                $("#edit_btn").prop('disabled', true);
+                $('#edit_btn').text('{{ __("common.submitting") }}');
                 $('#pre-loader').removeClass('d-none');
                 removeValidationError();
 
@@ -174,8 +173,19 @@
                     url: "{{ route('admin.pricing.update') }}",
                     type: 'POST',
                     data: formData,
-                    success: function (data) {
+                    success: function () {
+                        toastr.success("{{__('common.updated_successfully')}}","{{__('common.success')}}");
                         location.reload();
+                    },
+                    error: function(response) {
+                        $("#edit_btn").prop('disabled', false);
+                        $('#edit_btn').text('{{ __("common.update") }}');
+                        $('#pre-loader').addClass('d-none');
+                        if (response.responseJSON && response.responseJSON.errors) {
+                            showValidationErrors('#pricing_edit_form', response.responseJSON.errors);
+                        } else {
+                            toastr.error("{{__('common.error_message')}}","{{__('common.error')}}");
+                        }
                     },
                     cache: false,
                     contentType: false,
@@ -254,9 +264,13 @@
             $(document).on('click', '.edit_pricing', function(event){
                 event.preventDefault();
                 let item = $(this).data('value');
+                let pricingId = $(this).data('id') || (item && item.id);
+                if (!pricingId) {
+                    toastr.error("{{__('common.error_message')}}","{{__('common.error')}}");
+                    return;
+                }
                 $('#pre-loader').removeClass('d-none');
-                let baseUrl = $('#url').val();
-                let url = baseUrl + '/admin/pricing/' + item.id + '/edit'
+                let url = "{{ url('/admin/pricing') }}/" + pricingId + "/edit";
                 $.ajax({
                     url: url,
                     type: "GET",
@@ -314,6 +328,7 @@
                         renderPricingFeatures(response.data.features || []);
                     },
                     error: function(response) {
+                        $('#pre-loader').addClass('d-none');
                         toastr.error("{{__('common.error_message')}}","{{__('common.error')}}");
                     }
                 });
