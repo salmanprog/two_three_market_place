@@ -76,14 +76,17 @@ Route::middleware(['admin','auth'])->prefix('frontendcms')->as('frontendcms.')->
     Route::get('/socialLink','SocialLinkController@social_Link')->name('socialLink');
     Route::post('/socialLink/update','SocialLinkController@socialLink_update')->name('socialLink.update')->middleware('prohibited_demo_mode');
 });
+Route::middleware(['admin','auth'])->prefix('pricing')->as('admin.')->group(function(){
+    Route::get('/', 'PricingController@index')->name('pricing.index');
+    Route::post('/', 'PricingController@store')->name('pricing.store');
+    Route::get('/create', 'PricingController@create')->name('pricing.create');
+    Route::get('/{pricing}/edit', 'PricingController@edit')->name('pricing.edit')->where('pricing', '[0-9]+');
+    Route::post('/delete','PricingController@destroy')->name('pricing.delete')->middleware('prohibited_demo_mode');
+    Route::post('/update','PricingController@update')->name('pricing.update')->middleware('prohibited_demo_mode');
+    Route::post('/status-update','PricingController@status')->name('pricing.status')->middleware('prohibited_demo_mode');
+    Route::get('/list-for-seller','PricingController@get_pricing')->name('pricing.get_pricing_url');
+});
 Route::middleware(['admin','auth'])->prefix('admin')->as('admin.')->group(function(){
-    //pricing
-    Route::post('/pricing/delete','PricingController@destroy')->name('pricing.delete')->middleware('prohibited_demo_mode');
-    Route::post('/pricing/update','PricingController@update')->name('pricing.update')->middleware('prohibited_demo_mode');
-    Route::post('/pricing/status-update','PricingController@status')->name('pricing.status')->middleware('prohibited_demo_mode');
-    Route::get('/pricings/list-for-seller','PricingController@get_pricing')->name('pricing.get_pricing_url');
-    Route::resource('/pricing', 'PricingController')->except(['destroy', 'update', 'show'])->where(['pricing' => '[0-9]+']);
-        //social link
     Route::post('setting/social-link/store', 'SocialLinkController@socialLinkStore')->name('setting.social-link.store')->middleware('prohibited_demo_mode');
     Route::post('setting/social-link/update', 'SocialLinkController@socialLinkUpdate')->name('setting.social-link.update')->middleware('prohibited_demo_mode');
     Route::post('setting/social-link/delete', 'SocialLinkController@socialLinkDelete')->name('setting.social-link.delete')->middleware('prohibited_demo_mode');

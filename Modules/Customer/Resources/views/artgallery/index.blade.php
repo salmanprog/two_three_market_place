@@ -45,8 +45,13 @@
 
                         <div role="tabpanel" class="tab-pane fade active show" id="all_customer">
                             <div class="box_header common_table_header ">
-                                <div class="main-title d-md-flex">
-                                    <h3 class="mb-0 mr-30 mb_xs_15px mb_sm_20px">{{__('Active Art Gallery')}}</h3>
+                                <div class="main-title d-md-flex align-items-center">
+                                    <h3 class="mb-0 mr-30 mb_xs_15px mb_sm_20px">{{ __('common.all') }} {{ __('Art Gallery') }}</h3>
+                                    @if (permissionCheck('admin.customer.destroy'))
+                                    <button type="button" class="primary-btn fix-gr-bg small d-none bulk_delete_art_galleries" data-table="allCustomerTable">
+                                        <i class="ti-trash"></i> {{ __('common.bulk_delete') }}
+                                    </button>
+                                    @endif
                                 </div>
                             </div>
                             <div class="QA_section QA_section_heading_custom check_box_table">
@@ -61,8 +66,13 @@
 
                         <div role="tabpanel" class="tab-pane fade" id="active_customer">
                             <div class="box_header common_table_header ">
-                                <div class="main-title d-md-flex">
+                                <div class="main-title d-md-flex align-items-center">
                                     <h3 class="mb-0 mr-30 mb_xs_15px mb_sm_20px">{{__('Active Art Gallery')}}</h3>
+                                    @if (permissionCheck('admin.customer.destroy'))
+                                    <button type="button" class="primary-btn fix-gr-bg small d-none bulk_delete_art_galleries" data-table="activeCustomerTable">
+                                        <i class="ti-trash"></i> {{ __('common.bulk_delete') }}
+                                    </button>
+                                    @endif
                                 </div>
                             </div>
                             <div class="QA_section QA_section_heading_custom check_box_table">
@@ -77,9 +87,14 @@
                         @if (permissionCheck('customer.list_inactive'))
                         <div role="tabpanel" class="tab-pane fade" id="in_active_customer">
                             <div class="box_header common_table_header ">
-                                <div class="main-title d-md-flex">
+                                <div class="main-title d-md-flex align-items-center">
                                     <h3 class="mb-0 mr-30 mb_xs_15px mb_sm_20px">{{ __('Inactive Art Gallery') }}
                                     </h3>
+                                    @if (permissionCheck('admin.customer.destroy'))
+                                    <button type="button" class="primary-btn fix-gr-bg small d-none bulk_delete_art_galleries" data-table="inactiveCustomerTable">
+                                        <i class="ti-trash"></i> {{ __('common.bulk_delete') }}
+                                    </button>
+                                    @endif
                                 </div>
                             </div>
                             <div class="QA_section QA_section_heading_custom check_box_table">
@@ -100,6 +115,28 @@
         </div>
     </div>
     @include('backEnd.partials.delete_modal',['item_name' => __('common.customer')])
+
+    <div class="modal fade" id="confirm-bulk-delete-art-gallery">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{ __('common.bulk_delete') }}</h4>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <i class="ti-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center">
+                        <h4>{{ __('common.are_you_sure_to_delete_?') }}</h4>
+                    </div>
+                    <div class="mt-40 d-flex justify-content-between">
+                        <button type="button" class="primary-btn tr-bg" data-dismiss="modal">{{ __('common.cancel') }}</button>
+                        <button type="button" class="primary-btn fix-gr-bg" id="confirm_bulk_delete_art_gallery">{{ __('common.delete') }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 @endsection
 @push('scripts')
@@ -108,6 +145,39 @@
                 "use strict";
 
                 $(document).ready(function(){
+                    var artGalleryExportColumns = "{{ permissionCheck('admin.customer.destroy') ? ':not(:first-child):not(:last-child)' : ':not(:last-child)' }}";
+                    var bulkDeleteTableId = '';
+
+                    function artGalleryTableColumns() {
+                        return [
+                            @if (permissionCheck('admin.customer.destroy'))
+                            { data: 'checkbox', name: 'checkbox', orderable: false, searchable: false },
+                            @endif
+                            { data: 'DT_RowIndex', name: 'id' ,render:function(data){
+                                return numbertrans(data)
+                            }},
+                            { data: 'avatar', name: 'avatar' },
+                            { data: 'name', name: 'first_name' },
+                            { data: 'email', name: 'email' },
+                            { data: 'phone', name: 'username' },
+                            { data: 'wallet_balance', name: 'wallet_balance' },
+                            { data: 'orders', name: 'orders' },
+                            { data: 'status', name: 'status' },
+                            { data: 'action', name: 'action' }
+                        ];
+                    }
+
+                    function reloadArtGalleryTables() {
+                        allCustomerDataTable();
+                        activeCustomerDataTable();
+                        inactiveCustomerDataTable();
+                    }
+
+                    function toggleBulkDeleteButton(tableId) {
+                        var hasChecked = $('#' + tableId + ' .art_gallery_row_checkbox:checked').length > 0;
+                        $('.bulk_delete_art_galleries[data-table="' + tableId + '"]').toggleClass('d-none', !hasChecked);
+                    }
+
                     activeCustomerDataTable();
                     inactiveCustomerDataTable();
                     allCustomerDataTable();
@@ -116,6 +186,78 @@
                         event.preventDefault();
                         let value = $(this).data('value');
                         confirm_modal(value);
+                    });
+
+                    $(document).on('change', '.select_all_art_galleries', function() {
+                        var tableId = $(this).data('table');
+                        var checked = $(this).is(':checked');
+                        $('#' + tableId + ' .art_gallery_row_checkbox').prop('checked', checked);
+                        toggleBulkDeleteButton(tableId);
+                    });
+
+                    $(document).on('change', '.art_gallery_row_checkbox', function() {
+                        var tableId = $(this).closest('table').attr('id');
+                        var total = $('#' + tableId + ' .art_gallery_row_checkbox').length;
+                        var checked = $('#' + tableId + ' .art_gallery_row_checkbox:checked').length;
+                        $('#' + tableId).closest('.QA_table').find('.select_all_art_galleries[data-table="' + tableId + '"]').prop('checked', total > 0 && total === checked);
+                        toggleBulkDeleteButton(tableId);
+                    });
+
+                    $(document).on('click', '.bulk_delete_art_galleries', function() {
+                        bulkDeleteTableId = $(this).data('table');
+                        var ids = [];
+                        $('#' + bulkDeleteTableId + ' .art_gallery_row_checkbox:checked').each(function() {
+                            ids.push($(this).val());
+                        });
+
+                        if (!ids.length) {
+                            toastr.warning("{{ __('common.select_one') }}", "{{ __('common.warning') }}");
+                            return;
+                        }
+
+                        $('#confirm-bulk-delete-art-gallery').modal('show');
+                    });
+
+                    $('#confirm_bulk_delete_art_gallery').on('click', function() {
+                        var ids = [];
+                        $('#' + bulkDeleteTableId + ' .art_gallery_row_checkbox:checked').each(function() {
+                            ids.push($(this).val());
+                        });
+
+                        if (!ids.length) {
+                            $('#confirm-bulk-delete-art-gallery').modal('hide');
+                            return;
+                        }
+
+                        $('#pre-loader').removeClass('d-none');
+                        $('#confirm-bulk-delete-art-gallery').modal('hide');
+
+                        $.ajax({
+                            url: "{{ route('admin.art_gallery.bulk_destroy') }}",
+                            type: 'POST',
+                            data: {
+                                _token: "{{ csrf_token() }}",
+                                ids: ids
+                            },
+                            success: function(response) {
+                                if (response.deleted > 0) {
+                                    toastr.success(response.message, "{{ __('common.success') }}");
+                                } else {
+                                    toastr.warning(response.message, "{{ __('common.warning') }}");
+                                }
+                                reloadArtGalleryTables();
+                                $('.bulk_delete_art_galleries').addClass('d-none');
+                                $('#pre-loader').addClass('d-none');
+                            },
+                            error: function(response) {
+                                if (response.responseJSON && response.responseJSON.message) {
+                                    toastr.error(response.responseJSON.message, "{{ __('common.error') }}");
+                                } else {
+                                    toastr.error("{{ __('common.error_message') }}", "{{ __('common.error') }}");
+                                }
+                                $('#pre-loader').addClass('d-none');
+                            }
+                        });
                     });
 
                     $(document).on('change', '.update_active_status', function(event){
@@ -163,19 +305,7 @@
                             "initComplete":function(json){
 
                             },
-                            columns: [
-                                { data: 'DT_RowIndex', name: 'id' ,render:function(data){
-                                    return numbertrans(data)
-                                }},
-                                { data: 'avatar', name: 'avatar' },
-                                { data: 'name', name: 'first_name' },
-                                { data: 'email', name: 'email' },
-                                { data: 'phone', name: 'username' },
-                                { data: 'wallet_balance', name: 'wallet_balance' },
-                                { data: 'orders', name: 'orders' },
-                                { data: 'status', name: 'status' },
-                                { data: 'action', name: 'action' }
-                            ],
+                            columns: artGalleryTableColumns(),
 
                             bLengthChange: false,
                             "bDestroy": true,
@@ -195,7 +325,7 @@
                                     titleAttr: 'Copy',
                                     exportOptions: {
                                         columns: ':visible',
-                                        columns: ':not(:last-child)',
+                                        columns: artGalleryExportColumns,
                                     }
                                 },
                                 {
@@ -206,7 +336,7 @@
                                     margin: [10, 10, 10, 0],
                                     exportOptions: {
                                         columns: ':visible',
-                                        columns: ':not(:last-child)',
+                                        columns: artGalleryExportColumns,
                                     },
 
                                 },
@@ -216,7 +346,7 @@
                                     titleAttr: 'CSV',
                                     exportOptions: {
                                         columns: ':visible',
-                                        columns: ':not(:last-child)',
+                                        columns: artGalleryExportColumns,
                                     }
                                 },
                                 {
@@ -226,7 +356,7 @@
                                     titleAttr: 'PDF',
                                     exportOptions: {
                                         columns: ':visible',
-                                        columns: ':not(:last-child)',
+                                        columns: artGalleryExportColumns,
                                     },
                                     pageSize: 'A4',
                                     margin: [0, 0, 0, 0],
@@ -240,7 +370,7 @@
                                     titleAttr: 'Print',
                                     title: $("#header_title").text(),
                                     exportOptions: {
-                                        columns: ':not(:last-child)',
+                                        columns: artGalleryExportColumns,
                                     }
                                 },
                                 {
@@ -267,20 +397,7 @@
                             "initComplete":function(json){
 
                             },
-                            columns: [
-                                { data: 'DT_RowIndex', name: 'id' ,render:function(data){
-                                    return numbertrans(data)
-                                }},
-                                { data: 'avatar', name: 'avatar' },
-                                { data: 'name', name: 'first_name' },
-                                { data: 'email', name: 'email' },
-                                { data: 'phone', name: 'username' },
-                                { data: 'wallet_balance', name: 'wallet_balance' },
-                                { data: 'orders', name: 'orders' },
-                                { data: 'status', name: 'status' },
-                                { data: 'action', name: 'action' }
-
-                            ],
+                            columns: artGalleryTableColumns(),
 
                             bLengthChange: false,
                             "bDestroy": true,
@@ -300,7 +417,7 @@
                                     titleAttr: 'Copy',
                                     exportOptions: {
                                         columns: ':visible',
-                                        columns: ':not(:last-child)',
+                                        columns: artGalleryExportColumns,
                                     }
                                 },
                                 {
@@ -311,7 +428,7 @@
                                     margin: [10, 10, 10, 0],
                                     exportOptions: {
                                         columns: ':visible',
-                                        columns: ':not(:last-child)',
+                                        columns: artGalleryExportColumns,
                                     },
 
                                 },
@@ -321,7 +438,7 @@
                                     titleAttr: 'CSV',
                                     exportOptions: {
                                         columns: ':visible',
-                                        columns: ':not(:last-child)',
+                                        columns: artGalleryExportColumns,
                                     }
                                 },
                                 {
@@ -331,7 +448,7 @@
                                     titleAttr: 'PDF',
                                     exportOptions: {
                                         columns: ':visible',
-                                        columns: ':not(:last-child)',
+                                        columns: artGalleryExportColumns,
                                     },
                                     pageSize: 'A4',
                                     margin: [0, 0, 0, 0],
@@ -345,7 +462,7 @@
                                     titleAttr: 'Print',
                                     title: $("#header_title").text(),
                                     exportOptions: {
-                                        columns: ':not(:last-child)',
+                                        columns: artGalleryExportColumns,
                                     }
                                 },
                                 {
@@ -372,20 +489,7 @@
                             "initComplete":function(json){
 
                             },
-                            columns: [
-                                { data: 'DT_RowIndex', name: 'id' ,render:function(data){
-                                    return numbertrans(data)
-                                }},
-                                { data: 'avatar', name: 'avatar' },
-                                { data: 'name', name: 'first_name' },
-                                { data: 'email', name: 'email' },
-                                { data: 'phone', name: 'username' },
-                                { data: 'wallet_balance', name: 'wallet_balance' },
-                                { data: 'orders', name: 'orders' },
-                                { data: 'status', name: 'status' },
-                                { data: 'action', name: 'action' }
-
-                            ],
+                            columns: artGalleryTableColumns(),
 
                             bLengthChange: false,
                             "bDestroy": true,
@@ -405,7 +509,7 @@
                                     titleAttr: 'Copy',
                                     exportOptions: {
                                         columns: ':visible',
-                                        columns: ':not(:last-child)',
+                                        columns: artGalleryExportColumns,
                                     }
                                 },
                                 {
@@ -416,7 +520,7 @@
                                     margin: [10, 10, 10, 0],
                                     exportOptions: {
                                         columns: ':visible',
-                                        columns: ':not(:last-child)',
+                                        columns: artGalleryExportColumns,
                                     },
 
                                 },
@@ -426,7 +530,7 @@
                                     titleAttr: 'CSV',
                                     exportOptions: {
                                         columns: ':visible',
-                                        columns: ':not(:last-child)',
+                                        columns: artGalleryExportColumns,
                                     }
                                 },
                                 {
@@ -436,7 +540,7 @@
                                     titleAttr: 'PDF',
                                     exportOptions: {
                                         columns: ':visible',
-                                        columns: ':not(:last-child)',
+                                        columns: artGalleryExportColumns,
                                     },
                                     pageSize: 'A4',
                                     margin: [0, 0, 0, 0],
@@ -450,7 +554,7 @@
                                     titleAttr: 'Print',
                                     title: $("#header_title").text(),
                                     exportOptions: {
-                                        columns: ':not(:last-child)',
+                                        columns: artGalleryExportColumns,
                                     }
                                 },
                                 {

@@ -21,7 +21,7 @@ class StaffController extends Controller
     public function __construct(UserRepositoryInterface $userRepository)
     {
         $this->middleware(['auth', 'verified','maintenance_mode']);
-        $this->middleware('prohibited_demo_mode')->only('store','status_update','destroy','document_store','document_destroy','profile_update','profileImgDelete','update');
+        $this->middleware('prohibited_demo_mode')->only('store','status_update','destroy','bulk_destroy','document_store','document_destroy','profile_update','profileImgDelete','update');
         $this->userRepository = $userRepository;
     }
     public function index(Request $request)
@@ -137,6 +137,59 @@ class StaffController extends Controller
             return back();
         }
     }
+
+    public function bulk_destroy(Request $request)
+    {
+        if (!permissionCheck('staffs.destroy')) {
+            return response()->json(['message' => __('common.error_message')], 403);
+        }
+
+        $request->validate([
+            'ids' => 'required|array|min:1',
+            'ids.*' => 'integer',
+        ]);
+
+        try {
+            $staffIds = \App\Models\User::whereIn('id', $request->ids)
+                ->where('role_id', 3)
+                ->pluck('id')
+                ->all();
+
+            if (empty($staffIds)) {
+                return response()->json(['message' => __('common.error_message')], 422);
+            }
+
+            $deleted = 0;
+            $skipped = 0;
+
+            foreach ($staffIds as $staffId) {
+                try {
+                    $this->userRepository->delete($staffId);
+                    $deleted++;
+                } catch (\Exception $e) {
+                    LogActivity::errorLog($e->getMessage());
+                    $skipped++;
+                }
+            }
+
+            if ($deleted > 0) {
+                LogActivity::successLog('Organisers bulk deleted.');
+            }
+
+            return response()->json([
+                'success' => true,
+                'deleted' => $deleted,
+                'skipped' => $skipped,
+                'message' => $deleted > 0
+                    ? __('common.deleted_successfully')
+                    : __('common.error_message'),
+            ]);
+        } catch (\Exception $e) {
+            LogActivity::errorLog($e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
     public function status_update(Request $request)
     {
         try {

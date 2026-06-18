@@ -28,6 +28,8 @@ Route::middleware(['auth','admin'])->prefix('admin')->group(function() {
     Route::get('/merchant-create', 'MerchantController@create')->name('admin.merchants_create')->middleware(['permission']);
     Route::post('/merchant-add-form-data', 'MerchantController@store')->name('admin.merchants_store')->middleware('prohibited_demo_mode');
     Route::post('/merchant-gst-status-change', 'MerchantController@gst_status_update')->name('admin.merchants_gst_status_update')->middleware('prohibited_demo_mode');
+    Route::get('/merchant/{id}/destroy', 'MerchantController@destroy')->name('admin.merchant.destroy');
+    Route::post('/merchant/bulk-delete', 'MerchantController@bulk_destroy')->name('admin.merchant.bulk_destroy')->middleware('prohibited_demo_mode');
     Route::get('/merchant/{id}/details', 'MerchantController@show')->name('admin.merchant_show_details')->middleware(['permission']);
     Route::get('/merchant/{id}/details/get-orders', 'MerchantController@getOrders')->name('admin.merchant_show_details.get-orders');
     Route::post('/merchant-order-request-details', 'MerchantController@orders_show')->name('order.merchant_order_show_details');
@@ -44,6 +46,8 @@ Route::middleware(['auth','admin'])->prefix('admin')->group(function() {
     Route::get('/subscription-payment-list', 'SellerController@subscription_payment_index')->name('admin.subscription_payment_list')->middleware(['permission']);
     Route::get('/subscription-payment-list-dtbl', 'SellerController@subscription_payment_dtbl')->name('admin.subscription_payment_dtbl');
     Route::post('/subscription-payment-approve', 'SellerController@approve')->name('admin.subscription_payment_approve')->middleware(['prohibited_demo_mode','permission']);
+    Route::get('/subscription-payment/{id}/destroy', 'SellerController@subscription_payment_destroy')->name('admin.subscription_payment.destroy')->middleware('prohibited_demo_mode');
+    Route::post('/subscription-payment/bulk-delete', 'SellerController@subscription_payment_bulk_destroy')->name('admin.subscription_payment.bulk_destroy')->middleware('prohibited_demo_mode');
     Route::get('/seller-subscription-crone-job', 'SellerController@subscription_crone_job')->name('subscription_crone_job');
     // Configuration
     Route::get('/seller-configuration', 'MerchantController@seller_configuration')->name('admin.seller_configuration');

@@ -281,6 +281,7 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
         Route::get('/staff/view/{id}', [StaffController::class, 'show'])->name('staffs.view');
         Route::get('/staff/destroy/{id}', [StaffController::class, 'destroy'])->name('staffs.destroy')->middleware('prohibited_demo_mode');
     });
+    Route::post('/hr/staff/bulk-delete', [StaffController::class, 'bulk_destroy'])->name('staffs.bulk_destroy')->middleware('prohibited_demo_mode');
     Route::post('/staff-document/store', [StaffController::class, 'document_store'])->name('staff_document.store')->middleware('prohibited_demo_mode');
     Route::get('/staff-document/destroy/{id}', [StaffController::class, 'document_destroy'])->name('staff_document.destroy')->middleware('prohibited_demo_mode');
     Route::get('/profile-view', [StaffController::class, 'profile_view'])->name('profile_view');

@@ -116,6 +116,22 @@ class Permission
                 abort(401);
             }
         }
+        elseif (str_ends_with($request->route()->getName(), '.bulk_destroy')) {
+            $destroyRoute = str_replace('.bulk_destroy', '.destroy', $request->route()->getName());
+            if ($role != null && $role->permissions->contains('route', $destroyRoute)) {
+                if ($role->name == 'Sub Seller') {
+                    if (auth()->user()->permissions->contains('route', $destroyRoute)) {
+                        return $next($request);
+                    }
+
+                    abort(401);
+                }
+
+                return $next($request);
+            }
+
+            abort(401);
+        }
         else{
             if($role != null && $role->permissions->contains('route',$request->route()->getName())){
                 if($role->name == 'Sub Seller'){

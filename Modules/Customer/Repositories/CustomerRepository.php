@@ -18,6 +18,23 @@ use Modules\Marketing\Entities\ReferralCodeSetup;
 use Modules\Marketing\Entities\ReferralUse;
 use Modules\OrderManage\Entities\CustomerNotification;
 use Modules\Wallet\Entities\WalletBalance;
+use Modules\Seller\Entities\SellerProduct;
+use Modules\Seller\Entities\SellerProductSKU;
+use Modules\Seller\Services\ProductService as SellerProductService;
+use Modules\Product\Entities\Product;
+use Modules\Product\Services\ProductService;
+use App\Models\Cart;
+use App\Models\OrderPackageDetail;
+use Modules\Marketing\Entities\FlashDealProduct;
+use Modules\Marketing\Entities\NewUserZoneProduct;
+use Modules\Menu\Entities\MenuElement;
+use Modules\Appearance\Entities\HeaderSliderPanel;
+use Modules\FrontendCMS\Entities\HomepageCustomProduct;
+use Modules\Appearance\Entities\HeaderProductPanel;
+use Modules\FrontendCMS\Entities\SubsciptionPaymentInfo;
+use Modules\OrderManage\Entities\OrderDeliveryState;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class CustomerRepository
 {
@@ -119,11 +136,16 @@ class CustomerRepository
 
     public function destroy($id){
         $customer = User::find($id);
-        $customer_orders  = Order::where('customer_id',$id)->pluck('id');
-        $wallet = WalletBalance::where('user_id', $id)->pluck('id');
-        if($customer_orders->count() || $wallet->count()){
+        if (!$customer) {
             return false;
         }
+
+        try {
+            $this->prepareUserForAdminDelete($id);
+        } catch (\Throwable $e) {
+            \Log::error('prepareUserForAdminDelete failed for user '.$id.': '.$e->getMessage());
+        }
+
         $addresses = $customer->customerAddresses->pluck('id');
         CustomerAddress::destroy($addresses);
         $notifications = CustomerNotification::where('customer_id', $id)->pluck('id');
@@ -133,6 +155,142 @@ class CustomerRepository
         $customer->delete();
         return true;
     }
+
+    public function prepareUserForAdminDelete(int $userId): void
+    {
+        $this->deleteUserProducts($userId);
+        $this->clearUserDeleteBlockers($userId);
+    }
+
+    public function deleteUserProducts(int $userId): void
+    {
+        if (isModuleActive('MultiVendor') && class_exists(SellerProduct::class)) {
+            $sellerProductService = app(SellerProductService::class);
+
+            SellerProduct::where('user_id', $userId)->get()->each(function ($sellerProduct) use ($sellerProductService) {
+                try {
+                    if ($sellerProductService->deleteById($sellerProduct->id) !== 'possible') {
+                        $this->forceDeleteSellerListing($sellerProduct);
+                    }
+                } catch (\Throwable $e) {
+                    $this->forceDeleteSellerListing($sellerProduct);
+                }
+            });
+        }
+
+        if (!class_exists(Product::class)) {
+            return;
+        }
+
+        $productService = app(ProductService::class);
+
+        Product::where('created_by', $userId)->get()->each(function ($product) use ($productService, $userId) {
+            if (class_exists(SellerProduct::class) && SellerProduct::where('product_id', $product->id)->where('user_id', '!=', $userId)->exists()) {
+                return;
+            }
+
+            try {
+                if ($productService->deleteById($product->id) !== 'possible') {
+                    $this->forceDeleteCatalogProduct($product->id);
+                }
+            } catch (\Throwable $e) {
+                $this->forceDeleteCatalogProduct($product->id);
+            }
+        });
+    }
+
+    protected function clearUserDeleteBlockers(int $userId): void
+    {
+        $fallbackUserId = User::whereHas('role', function ($query) {
+            $query->where('type', 'superadmin');
+        })->value('id') ?? 1;
+
+        WalletBalance::where('user_id', $userId)->delete();
+        Order::where('customer_id', $userId)->update(['customer_id' => null]);
+        OrderPackageDetail::where('seller_id', $userId)->update(['seller_id' => $fallbackUserId]);
+
+        OrderDeliveryState::where('created_by', $userId)->update(['created_by' => $fallbackUserId]);
+
+        if (Schema::hasTable('push_notifications')) {
+            DB::table('push_notifications')->where('user_id', $userId)->delete();
+        }
+
+        if (Schema::hasTable('attendances')) {
+            DB::table('attendances')->where('created_by', $userId)->update(['created_by' => $fallbackUserId]);
+        }
+
+        if (class_exists(SubsciptionPaymentInfo::class)) {
+            SubsciptionPaymentInfo::where('seller_id', $userId)->delete();
+        }
+
+        if (class_exists(\Modules\Attendance\Entities\Event::class)) {
+            $eventIds = \Modules\Attendance\Entities\Event::where('created_by', $userId)->pluck('id');
+            if ($eventIds->isNotEmpty() && class_exists(\Modules\Attendance\Entities\EventBooking::class)) {
+                \Modules\Attendance\Entities\EventBooking::whereIn('event_id', $eventIds)->delete();
+            }
+            \Modules\Attendance\Entities\Event::where('created_by', $userId)->delete();
+        }
+    }
+
+    protected function forceDeleteSellerListing(SellerProduct $sellerProduct): void
+    {
+        $skuIds = $sellerProduct->skus->pluck('id')->toArray();
+
+        if (!empty($skuIds)) {
+            Cart::where('product_type', 'product')->whereIn('product_id', $skuIds)->delete();
+        }
+
+        FlashDealProduct::where('seller_product_id', $sellerProduct->id)->delete();
+        NewUserZoneProduct::where('seller_product_id', $sellerProduct->id)->delete();
+        MenuElement::where('type', 'product')->where('element_id', $sellerProduct->id)->delete();
+        HeaderSliderPanel::where('data_type', 'product')->where('data_id', $sellerProduct->id)->delete();
+        HomepageCustomProduct::where('seller_product_id', $sellerProduct->id)->delete();
+        HeaderProductPanel::where('product_id', $sellerProduct->id)->delete();
+
+        if ($sellerProduct->thum_img) {
+            $this->deleteImage($sellerProduct->thum_img);
+        }
+
+        SellerProductSKU::where('product_id', $sellerProduct->id)->delete();
+        $sellerProduct->delete();
+    }
+
+    protected function forceDeleteCatalogProduct(int $productId): void
+    {
+        $product = Product::find($productId);
+        if (!$product) {
+            return;
+        }
+
+        SellerProduct::where('product_id', $productId)->get()->each(function ($sellerProduct) {
+            $this->forceDeleteSellerListing($sellerProduct);
+        });
+
+        $productService = app(ProductService::class);
+        if ($productService->deleteById($productId) !== 'possible') {
+            Product::where('id', $productId)->delete();
+        }
+    }
+
+    public function destroyBulk(array $ids): array
+    {
+        $deleted = 0;
+        $skipped = 0;
+
+        foreach ($ids as $id) {
+            if ($this->destroy($id) === true) {
+                $deleted++;
+            } else {
+                $skipped++;
+            }
+        }
+
+        return [
+            'deleted' => $deleted,
+            'skipped' => $skipped,
+        ];
+    }
+
     public function imageDelete($data){
         $customer = User::find(auth()->user()->id);
         if (showImage($customer->avatar ) == $data['image']) {

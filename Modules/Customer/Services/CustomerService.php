@@ -43,6 +43,16 @@ class CustomerService
     public function destroy($id){
         return $this->customerRepository->destroy($id);
     }
+
+    public function prepareUserForAdminDelete(int $userId): void
+    {
+        $this->customerRepository->prepareUserForAdminDelete($userId);
+    }
+
+    public function destroyBulk(array $ids){
+        return $this->customerRepository->destroyBulk($ids);
+    }
+
     public function imageDelete($data){
         return $this->customerRepository->imageDelete($data);
     }

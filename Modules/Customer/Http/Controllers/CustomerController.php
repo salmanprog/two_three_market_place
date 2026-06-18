@@ -66,6 +66,9 @@ class CustomerController extends Controller
             }
             return DataTables::of($customer)
             ->addIndexColumn()
+            ->addColumn('checkbox', function($customer){
+                return view('customer::customers.components._checkbox_td', compact('customer'));
+            })
             ->addColumn('avatar', function($customer){
                 return view('customer::customers.components._avatar_td',compact('customer'));
             })
@@ -89,10 +92,48 @@ class CustomerController extends Controller
             ->addColumn('action',function($customer){
                 return view('customer::customers.components._action_td',compact('customer'));
             })
-            ->rawColumns(['avatar','status','action','name'])
+            ->rawColumns(['checkbox','avatar','status','action','name'])
             ->make(true);
         }else{
             return [];
+        }
+    }
+    public function customer_bulk_destroy(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array|min:1',
+            'ids.*' => 'integer',
+        ]);
+
+        try {
+            $customerIds = User::whereIn('id', $request->ids)
+                ->whereHas('role', function ($query) {
+                    $query->where('type', 'customer');
+                })
+                ->pluck('id')
+                ->all();
+
+            if (empty($customerIds)) {
+                return response()->json(['message' => __('common.error_message')], 422);
+            }
+
+            $result = $this->customerService->destroyBulk($customerIds);
+
+            if ($result['deleted'] > 0) {
+                LogActivity::successLog('Buyers bulk deleted.');
+            }
+
+            return response()->json([
+                'success' => true,
+                'deleted' => $result['deleted'],
+                'skipped' => $result['skipped'],
+                'message' => $result['skipped'] > 0
+                    ? __('hr.deleted_not_possible_for_this_customer')
+                    : __('common.deleted_successfully'),
+            ]);
+        } catch (Exception $e) {
+            LogActivity::errorLog($e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 500);
         }
     }
     public function interior_designer_get_data(){
@@ -108,6 +149,9 @@ class CustomerController extends Controller
             }
             return DataTables::of($customer)
             ->addIndexColumn()
+            ->addColumn('checkbox', function($customer){
+                return view('customer::interiordesigner.components._checkbox_td', compact('customer'));
+            })
             ->addColumn('avatar', function($customer){
                 return view('customer::interiordesigner.components._avatar_td',compact('customer'));
             })
@@ -131,13 +175,12 @@ class CustomerController extends Controller
             ->addColumn('action',function($customer){
                 return view('customer::interiordesigner.components._action_td',compact('customer'));
             })
-            ->rawColumns(['avatar','status','action','name'])
+            ->rawColumns(['checkbox','avatar','status','action','name'])
             ->make(true);
         }else{
             return [];
         }
     }
-
     public function art_gallery_get_data(){
         if(isset($_GET['table'])){
             $table = $_GET['table'];
@@ -151,6 +194,9 @@ class CustomerController extends Controller
             }
             return DataTables::of($customer)
             ->addIndexColumn()
+            ->addColumn('checkbox', function($customer){
+                return view('customer::artgallery.components._checkbox_td', compact('customer'));
+            })
             ->addColumn('avatar', function($customer){
                 return view('customer::artgallery.components._avatar_td',compact('customer'));
             })
@@ -172,7 +218,7 @@ class CustomerController extends Controller
             ->addColumn('action',function($customer){
                 return view('customer::artgallery.components._action_td',compact('customer'));
             })
-            ->rawColumns(['avatar','status','action','name'])
+            ->rawColumns(['checkbox','avatar','status','action','name'])
             ->make(true);
         }else{
             return [];
@@ -294,6 +340,125 @@ class CustomerController extends Controller
             LogActivity::errorLog($e->getMessage());
             Toastr::error(__('common.error_message'), __('common.error'));
             return back();
+        }
+    }
+
+    public function interior_designer_destroy($id)
+    {
+        try {
+            $this->findInteriorDesigner($id);
+            $result = $this->customerService->destroy($id);
+
+            if ($result === true) {
+                Toastr::success(__('common.deleted_successfully'), __('common.success'));
+            } else {
+                Toastr::warning(__('hr.deleted_not_possible_for_this_customer'), __('common.warning'));
+            }
+        } catch (Exception $e) {
+            LogActivity::errorLog($e->getMessage());
+            Toastr::error(__('common.error_message'), __('common.error'));
+        }
+
+        return redirect()->route('interior-designer.list_active');
+    }
+
+    public function interior_designer_bulk_destroy(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array|min:1',
+            'ids.*' => 'integer',
+        ]);
+
+        try {
+            $designerIds = User::whereIn('id', $request->ids)
+                ->whereHas('role', function ($query) {
+                    $query->where('type', 'interior_designer');
+                })
+                ->pluck('id')
+                ->all();
+
+            if (empty($designerIds)) {
+                return response()->json(['message' => __('common.error_message')], 422);
+            }
+
+            $result = $this->customerService->destroyBulk($designerIds);
+
+            if ($result['deleted'] > 0) {
+                LogActivity::successLog('Interior designers bulk deleted.');
+            }
+
+            return response()->json([
+                'success' => true,
+                'deleted' => $result['deleted'],
+                'skipped' => $result['skipped'],
+                'message' => $result['skipped'] > 0
+                    ? __('hr.deleted_not_possible_for_this_customer')
+                    : __('common.deleted_successfully'),
+            ]);
+        } catch (Exception $e) {
+            LogActivity::errorLog($e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function art_gallery_destroy($id)
+    {
+        try {
+            $this->findArtGallery($id);
+            $result = $this->customerService->destroy($id);
+
+            if ($result === true) {
+                Toastr::success(__('common.deleted_successfully'), __('common.success'));
+            } else {
+                Toastr::warning(__('hr.deleted_not_possible_for_this_customer'), __('common.warning'));
+            }
+        } catch (Exception $e) {
+            LogActivity::errorLog($e->getMessage());
+            Toastr::error(__('common.error_message'), __('common.error'));
+        }
+
+        return redirect()->route('art-gallery.list_active');
+    }
+
+    public function art_gallery_bulk_destroy(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array|min:1',
+            'ids.*' => 'integer',
+        ]);
+
+        try {
+            $galleryIds = User::whereIn('id', $request->ids)
+                ->where(function ($query) {
+                    $query->where('role_id', 8)
+                        ->orWhereHas('role', function ($q) {
+                            $q->where('type', 'art_gallery');
+                        });
+                })
+                ->pluck('id')
+                ->all();
+
+            if (empty($galleryIds)) {
+                return response()->json(['message' => __('common.error_message')], 422);
+            }
+
+            $result = $this->customerService->destroyBulk($galleryIds);
+
+            if ($result['deleted'] > 0) {
+                LogActivity::successLog('Art galleries bulk deleted.');
+            }
+
+            return response()->json([
+                'success' => true,
+                'deleted' => $result['deleted'],
+                'skipped' => $result['skipped'],
+                'message' => $result['skipped'] > 0
+                    ? __('hr.deleted_not_possible_for_this_customer')
+                    : __('common.deleted_successfully'),
+            ]);
+        } catch (Exception $e) {
+            LogActivity::errorLog($e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 
@@ -692,5 +857,22 @@ class CustomerController extends Controller
             LogActivity::errorLog($e->getMessage());
             return back();
         }
+    }
+
+    private function findInteriorDesigner($id)
+    {
+        return User::whereHas('role', function ($query) {
+            $query->where('type', 'interior_designer');
+        })->findOrFail($id);
+    }
+
+    private function findArtGallery($id)
+    {
+        return User::where(function ($query) {
+            $query->where('role_id', 8)
+                ->orWhereHas('role', function ($q) {
+                    $q->where('type', 'art_gallery');
+                });
+        })->findOrFail($id);
     }
 }

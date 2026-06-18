@@ -417,6 +417,9 @@ class SellerController extends Controller
 
         return DataTables::of($subscription)
             ->addIndexColumn()
+            ->addColumn('checkbox', function ($subscription) {
+                return view('multivendor::subscription_payments.component._checkbox_td', compact('subscription'));
+            })
             ->addColumn('name', function ($subscription) {
                 return @$subscription->transaction->morphable->user->first_name . ' ' . @$subscription->transaction->morphable->user->last_name;
             })
@@ -451,8 +454,87 @@ class SellerController extends Controller
             ->addColumn('is_approved', function ($subscription) {
                 return view('multivendor::subscription_payments.component.status', compact('subscription'));
             })
-            ->rawColumns(['is_approved'])
+            ->addColumn('action', function ($subscription) {
+                return view('multivendor::subscription_payments.component._action_td', compact('subscription'));
+            })
+            ->rawColumns(['checkbox', 'is_approved', 'action'])
             ->toJson();
+    }
+
+    public function subscription_payment_destroy($id)
+    {
+        try {
+            if ($this->deleteSubscriptionPaymentRecord($id)) {
+                Toastr::success(__('common.deleted_successfully'), __('common.success'));
+            } else {
+                Toastr::error(__('common.error_message'), __('common.error'));
+            }
+        } catch (\Exception $e) {
+            LogActivity::errorLog($e->getMessage());
+            Toastr::error(__('common.error_message'), __('common.error'));
+        }
+
+        return redirect()->route('admin.subscription_payment_list');
+    }
+
+    public function subscription_payment_bulk_destroy(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array|min:1',
+            'ids.*' => 'integer',
+        ]);
+
+        try {
+            $deleted = 0;
+            $skipped = 0;
+
+            foreach ($request->ids as $paymentId) {
+                if ($this->deleteSubscriptionPaymentRecord($paymentId)) {
+                    $deleted++;
+                } else {
+                    $skipped++;
+                }
+            }
+
+            if ($deleted > 0) {
+                LogActivity::successLog('Subscription payments bulk deleted.');
+            }
+
+            return response()->json([
+                'success' => true,
+                'deleted' => $deleted,
+                'skipped' => $skipped,
+                'message' => $skipped > 0 && $deleted === 0
+                    ? __('common.error_message')
+                    : __('common.deleted_successfully'),
+            ]);
+        } catch (\Exception $e) {
+            LogActivity::errorLog($e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
+    private function deleteSubscriptionPaymentRecord($id): bool
+    {
+        $subscription = SubsciptionPaymentInfo::find($id);
+
+        if (!$subscription) {
+            return false;
+        }
+
+        $transactionId = $subscription->transaction_id;
+
+        if ($subscription->item_details && $subscription->item_details->id) {
+            $subscription->item_details->delete();
+        }
+
+        $subscription->delete();
+
+        if ($transactionId) {
+            Transaction::where('id', $transactionId)->delete();
+        }
+
+        return true;
     }
 
     public function approve(Request $request)

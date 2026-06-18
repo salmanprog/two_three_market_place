@@ -213,7 +213,7 @@ class UserRepository implements  UserRepositoryInterface
         if (File::exists(public_path($user->avatar))) {
             File::delete(public_path($user->avatar));
         }
-        if(count($user->staff->documents) > 0){
+        if ($user->staff && count($user->staff->documents) > 0) {
             foreach($user->staff->documents as $doc){
                 if (File::exists(public_path($doc->documents))) {
                     File::delete(public_path($doc->documents));
@@ -229,7 +229,19 @@ class UserRepository implements  UserRepositoryInterface
         $backend_menu_ids = Backendmenu::where('user_id', $user->id)->pluck('id')->toArray();
         BackendmenuUser::destroy($backend_muneuuser_ids);
         Backendmenu::destroy($backend_menu_ids);
-        $user->staff->delete();
+
+        if ($user->staff) {
+            $user->staff->delete();
+        }
+
+        try {
+            if (class_exists(\Modules\Customer\Services\CustomerService::class)) {
+                app(\Modules\Customer\Services\CustomerService::class)->prepareUserForAdminDelete($user->id);
+            }
+        } catch (\Throwable $e) {
+            \Log::error('prepareUserForAdminDelete failed for user '.$user->id.': '.$e->getMessage());
+        }
+
         $user->delete();
     }
 

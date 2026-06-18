@@ -132,7 +132,7 @@ $LanguageList = getLanguageList();
                     <label class="primary_input_label" for="discount">{{ __('gst.gst_list') }}</label>
                     <select name="gst_id" id="gst_id" class="primary_select mb-15">
                         <option disabled selected>{{ __('common.select') }}</option>
-                        @foreach($gst_taxes as $tax)
+                        @foreach(($gst_taxes ?? []) as $tax)
                             <option value="{{ $tax->id }}">{{ $tax->name }} ({{ $tax->tax_percentage }} %) </option>
                         @endforeach
                     </select>

@@ -1,6 +1,14 @@
 <table class="table" id="inactiveCustomerTable">
     <thead>
         <tr>
+            @if (permissionCheck('admin.customer.destroy'))
+            <th>
+                <label class="primary_checkbox d-flex mr-0 mb-0">
+                    <input type="checkbox" class="select_all_art_galleries" data-table="inactiveCustomerTable">
+                    <span class="checkmark"></span>
+                </label>
+            </th>
+            @endif
             <th>{{__('common.sl')}}</th>
             <th>{{ __('common.avatar') }}</th>
             <th>{{ __('common.name') }}</th>

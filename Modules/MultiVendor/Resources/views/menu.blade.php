@@ -1,7 +1,7 @@
 @if (isModuleActive('MultiVendor') && auth()->check() && auth()->user()->role->type == "superadmin" || isModuleActive('MultiVendor') && auth()->check() && auth()->user()->role->type == "admin" && permissionCheck('manage_seller') || isModuleActive('MultiVendor') && auth()->check() && auth()->user()->role->type == "staff" && permissionCheck('manage_seller'))
     @php
         $seller_route_admin = false;
-        if(request()->is('admin/merchants') || request()->is('admin/merchant-create') || (strpos(request()->getUri(),'details') != false && strpos(request()->getUri(),'refund-request-details') != true && strpos(request()->getUri(),'my-sales-details') != true && strpos(request()->getUri(),'sales-details') != true && strpos(request()->getUri(),'seller-refund-request-details') != true) || request()->is('admin/seller-commisions') || request()->is('admin/subscription-payment-list') || request()->is('admin/pricing') || request()->is('admin/inactive-merchants') || request()->is('admin/seller-configuration')
+        if(request()->is('admin/merchants') || request()->is('admin/merchant-create') || (strpos(request()->getUri(),'details') != false && strpos(request()->getUri(),'refund-request-details') != true && strpos(request()->getUri(),'my-sales-details') != true && strpos(request()->getUri(),'sales-details') != true && strpos(request()->getUri(),'seller-refund-request-details') != true) || request()->is('admin/seller-commisions') || request()->is('admin/subscription-payment-list') || request()->is('admin/inactive-merchants') || request()->is('admin/seller-configuration')
         )
         {
             $seller_route_admin = true;

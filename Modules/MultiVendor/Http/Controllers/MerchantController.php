@@ -26,22 +26,24 @@ use Modules\GeneralSetting\Entities\NotificationSetting;
 use Modules\MultiVendor\Repositories\CommisionRepository;
 use Modules\GeneralSetting\Entities\UserNotificationSetting;
 use Modules\MultiVendor\Http\Requests\SellerPassordChangeRequest;
+use Modules\Customer\Services\CustomerService;
 use Modules\FrontendCMS\Entities\SubsciptionPaymentInfo;
 
 class MerchantController extends Controller
 {
     use Notification;
 
-    protected $merchantService, $profileService, $refundRepository, $ordermanageService;
+    protected $merchantService, $profileService, $refundRepository, $ordermanageService, $customerService;
 
 
-    public function __construct(MerchantService $merchantService, ProfileService $profileService ,RefundRepository $refundRepository ,OrderManageService $ordermanageService)
+    public function __construct(MerchantService $merchantService, ProfileService $profileService ,RefundRepository $refundRepository ,OrderManageService $ordermanageService, CustomerService $customerService)
     {
         $this->middleware('maintenance_mode');
         $this->merchantService = $merchantService;
         $this->profileService = $profileService;
         $this->refundRepository = $refundRepository;
         $this->ordermanageService = $ordermanageService;
+        $this->customerService = $customerService;
     }
 
     public function index()
@@ -82,6 +84,9 @@ class MerchantController extends Controller
                 $query->whereRaw($sql, ["%{$keyword}%"]);
             })
             ->addIndexColumn()
+            ->addColumn('checkbox', function($seller){
+                return view('multivendor::merchants.components._checkbox_td', compact('seller'));
+            })
             ->addColumn('avatar', function($seller){
                 return view('multivendor::merchants.components._avatar_td',compact('seller'));
             })
@@ -115,8 +120,82 @@ class MerchantController extends Controller
             ->addColumn('action', function($seller){
                 return view('multivendor::merchants.components._action_td',compact('seller'));
             })
-            ->rawColumns(['commission_type','is_trusted','action'])
+            ->rawColumns(['checkbox','commission_type','is_trusted','action'])
             ->toJson();
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $this->findSeller($id);
+            $result = $this->customerService->destroy($id);
+
+            if ($result === true) {
+                Toastr::success(__('common.deleted_successfully'), __('common.success'));
+            } else {
+                Toastr::error(__('common.error_message'), __('common.error'));
+            }
+        } catch (Exception $e) {
+            LogActivity::errorLog($e->getMessage());
+            Toastr::error(__('common.error_message'), __('common.error'));
+        }
+
+        return redirect()->route('admin.merchants_list');
+    }
+
+    public function bulk_destroy(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array|min:1',
+            'ids.*' => 'integer',
+        ]);
+
+        try {
+            $sellerIds = User::whereIn('id', $request->ids)
+                ->whereHas('role', function ($query) {
+                    $query->where('type', 'seller');
+                })
+                ->pluck('id')
+                ->all();
+
+            if (empty($sellerIds)) {
+                return response()->json(['message' => __('common.error_message')], 422);
+            }
+
+            $deleted = 0;
+            $skipped = 0;
+
+            foreach ($sellerIds as $sellerId) {
+                if ($this->customerService->destroy($sellerId) === true) {
+                    $deleted++;
+                } else {
+                    $skipped++;
+                }
+            }
+
+            if ($deleted > 0) {
+                LogActivity::successLog('Artists bulk deleted.');
+            }
+
+            return response()->json([
+                'success' => true,
+                'deleted' => $deleted,
+                'skipped' => $skipped,
+                'message' => $deleted > 0
+                    ? __('common.deleted_successfully')
+                    : __('common.error_message'),
+            ]);
+        } catch (Exception $e) {
+            LogActivity::errorLog($e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
+    private function findSeller($id)
+    {
+        return User::whereHas('role', function ($query) {
+            $query->where('type', 'seller');
+        })->findOrFail($id);
     }
 
     public function show($id)

@@ -5,8 +5,13 @@
             <div class="row justify-content-center">
                 <div class="col-lg-12">
                     <div class="box_header common_table_header">
-                        <div class="main-title d-flex">
+                        <div class="main-title d-flex align-items-center">
                             <h3 class="mb-0 mr-30 mb_xs_15px mb_sm_20px">Artist List</h3>
+                            @if (permissionCheck('admin.customer.destroy'))
+                            <button type="button" class="primary-btn fix-gr-bg small d-none bulk_delete_merchants">
+                                <i class="ti-trash"></i> {{ __('common.bulk_delete') }}
+                            </button>
+                            @endif
                             @if (permissionCheck('admin.merchants_create'))
                                 <!-- <ul class="d-flex">
                                     <li><a id="create_new_seller_btn" class="primary-btn radius_30px mr-10 fix-gr-bg" href="{{ route('admin.merchants_create') }}"><i class="ti-plus"></i>{{ __('common.add_new_seller') }}</a></li>
@@ -23,6 +28,14 @@
                                 <table class="table" id="sellerTable">
                                     <thead>
                                         <tr>
+                                            @if (permissionCheck('admin.customer.destroy'))
+                                            <th>
+                                                <label class="primary_checkbox d-flex mr-0 mb-0">
+                                                    <input type="checkbox" class="select_all_merchants">
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                            </th>
+                                            @endif
                                             <th>{{ __('common.sl') }}</th>
                                             <th>{{ __('common.avatar') }}</th>
                                             <th>{{ __('common.name') }}</th>
@@ -60,6 +73,29 @@
 
 @include('multivendor::merchants.confirm_modal')
 @include('multivendor::merchants.seller_change_password_modal')
+@include('backEnd.partials.delete_modal',['item_name' => __('common.seller')])
+
+<div class="modal fade" id="confirm-bulk-delete-merchant">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">{{ __('common.bulk_delete') }}</h4>
+                <button type="button" class="close" data-dismiss="modal">
+                    <i class="ti-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center">
+                    <h4>{{ __('common.are_you_sure_to_delete_?') }}</h4>
+                </div>
+                <div class="mt-40 d-flex justify-content-between">
+                    <button type="button" class="primary-btn tr-bg" data-dismiss="modal">{{ __('common.cancel') }}</button>
+                    <button type="button" class="primary-btn fix-gr-bg" id="confirm_bulk_delete_merchant">{{ __('common.delete') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 @push('scripts')
     <script type="text/javascript">
@@ -67,6 +103,106 @@
         (function($){
             "use strict";
             $(document).ready(function(){
+                var merchantExportColumns = "{{ permissionCheck('admin.customer.destroy') ? ':not(:first-child):not(:last-child)' : ':not(:last-child)' }}";
+
+                function merchantTableColumns() {
+                    var cols = [];
+                    @if (permissionCheck('admin.customer.destroy'))
+                    cols.push({ data: 'checkbox', name: 'checkbox', orderable: false, searchable: false });
+                    @endif
+                    cols.push(
+                        { data: 'DT_RowIndex', name: 'id',render:function(data){
+                            return numbertrans(data)
+                        }},
+                        { data: 'avatar', name: 'avatar' },
+                        { data: 'name', name: 'user.first_name'},
+                        { data: 'email', name: 'user.email' },
+                        { data: 'phone', name: 'user.username' },
+                        { data: 'commission_type', name: 'commission_type' },
+                        { data: 'shop_name', name: 'shop_name' },
+                        { data: 'action', name: 'action' }
+                    );
+                    return cols;
+                }
+
+                function reloadMerchantTable() {
+                    $('#sellerTable').DataTable().ajax.reload();
+                }
+
+                function toggleMerchantBulkDeleteButton() {
+                    var hasChecked = $('#sellerTable .merchant_row_checkbox:checked').length > 0;
+                    $('.bulk_delete_merchants').toggleClass('d-none', !hasChecked);
+                }
+
+                $(document).on('click', '.delete_merchant', function(event){
+                    event.preventDefault();
+                    let value = $(this).data('value');
+                    confirm_modal(value);
+                });
+
+                $(document).on('change', '.select_all_merchants', function() {
+                    var checked = $(this).is(':checked');
+                    $('#sellerTable .merchant_row_checkbox').prop('checked', checked);
+                    toggleMerchantBulkDeleteButton();
+                });
+
+                $(document).on('change', '.merchant_row_checkbox', function() {
+                    var total = $('#sellerTable .merchant_row_checkbox').length;
+                    var checked = $('#sellerTable .merchant_row_checkbox:checked').length;
+                    $('.select_all_merchants').prop('checked', total > 0 && total === checked);
+                    toggleMerchantBulkDeleteButton();
+                });
+
+                $(document).on('click', '.bulk_delete_merchants', function() {
+                    if (!$('#sellerTable .merchant_row_checkbox:checked').length) {
+                        toastr.warning("{{ __('common.select_one') }}", "{{ __('common.warning') }}");
+                        return;
+                    }
+                    $('#confirm-bulk-delete-merchant').modal('show');
+                });
+
+                $('#confirm_bulk_delete_merchant').on('click', function() {
+                    var ids = [];
+                    $('#sellerTable .merchant_row_checkbox:checked').each(function() {
+                        ids.push($(this).val());
+                    });
+
+                    if (!ids.length) {
+                        $('#confirm-bulk-delete-merchant').modal('hide');
+                        return;
+                    }
+
+                    $('#pre-loader').removeClass('d-none');
+                    $('#confirm-bulk-delete-merchant').modal('hide');
+
+                    $.ajax({
+                        url: "{{ route('admin.merchant.bulk_destroy') }}",
+                        type: 'POST',
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            ids: ids
+                        },
+                        success: function(response) {
+                            if (response.deleted > 0) {
+                                toastr.success(response.message, "{{ __('common.success') }}");
+                            } else {
+                                toastr.warning(response.message, "{{ __('common.warning') }}");
+                            }
+                            reloadMerchantTable();
+                            $('.bulk_delete_merchants').addClass('d-none');
+                            $('.select_all_merchants').prop('checked', false);
+                            $('#pre-loader').addClass('d-none');
+                        },
+                        error: function(response) {
+                            if (response.responseJSON && response.responseJSON.message) {
+                                toastr.error(response.responseJSON.message, "{{ __('common.error') }}");
+                            } else {
+                                toastr.error("{{ __('common.error_message') }}", "{{ __('common.error') }}");
+                            }
+                            $('#pre-loader').addClass('d-none');
+                        }
+                    });
+                });
 
                 $(document).on('click', '.trust_seller_change', function(event){
                     let url = $(this).data('value');
@@ -151,40 +287,9 @@
 
                 });
 
-                let columns =[];
+                let columns = merchantTableColumns();
                 if ($("#gst_module_enable").val() == 1) {
-                    columns = [
-                                { data: 'DT_RowIndex', name: 'id',render:function(data){
-                                    return numbertrans(data)
-                                }},
-                                { data: 'avatar', name: 'avatar' },
-                                { data: 'name', name: 'user.first_name'},
-                                { data: 'email', name: 'user.email' },
-                                { data: 'phone', name: 'user.username' },
-                                { data: 'commission_type', name: 'commission_type' },
-                                //{ data: 'gst', name: 'gst' },
-                                //{ data: 'is_trusted', name: 'is_trusted' },
-                                { data: 'shop_name', name: 'shop_name' },
-                                //{ data: 'wallet_balance', name: 'wallet_balance' },
-                                //{ data: 'total_orders', name: 'total_orders' },
-                                { data: 'action', name: 'action' }
-                            ];
-                }else {
-                    columns = [
-                                { data: 'DT_RowIndex', name: 'id',render:function(data){
-                                    return numbertrans(data)
-                                }},
-                                { data: 'avatar', name: 'avatar' },
-                                { data: 'name', name: 'user.first_name' },
-                                { data: 'email', name: 'user.email' },
-                                { data: 'phone', name: 'user.username' },
-                                { data: 'commission_type', name: 'commission_type' },
-                                //{ data: 'is_trusted', name: 'is_trusted' },
-                                { data: 'shop_name', name: 'shop_name' },
-                                //{ data: 'wallet_balance', name: 'wallet_balance' },
-                                //{ data: 'total_orders', name: 'total_orders' },
-                                { data: 'action', name: 'action' }
-                            ];
+                    columns = merchantTableColumns();
                 }
                 $('#sellerTable').DataTable({
                     processing: true,
@@ -216,7 +321,7 @@
                             titleAttr: 'Copy',
                             exportOptions: {
                                 columns: ':visible',
-                                columns: ':not(:last-child)',
+                                columns: merchantExportColumns
                             }
                         },
                         {
@@ -227,7 +332,7 @@
                             margin: [10, 10, 10, 0],
                             exportOptions: {
                                 columns: ':visible',
-                                columns: ':not(:last-child)',
+                                columns: merchantExportColumns
                             },
 
                         },
@@ -237,7 +342,7 @@
                             titleAttr: 'CSV',
                             exportOptions: {
                                 columns: ':visible',
-                                columns: ':not(:last-child)',
+                                columns: merchantExportColumns
                             }
                         },
                         {
@@ -247,7 +352,7 @@
                             titleAttr: 'PDF',
                             exportOptions: {
                                 columns: ':visible',
-                                columns: ':not(:last-child)',
+                                columns: merchantExportColumns
                             },
                             pageSize: 'A4',
                             margin: [0, 0, 0, 0],
@@ -261,7 +366,7 @@
                             titleAttr: 'Print',
                             title: $("#header_title").text(),
                             exportOptions: {
-                                columns: ':not(:last-child)',
+                                columns: merchantExportColumns
                             }
                         },
                         {

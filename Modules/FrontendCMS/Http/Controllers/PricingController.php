@@ -55,26 +55,39 @@ class PricingController extends Controller
     public function create()
     {
         try {
+            $gst_taxes = GstTax::where('is_active', 1)->get();
+
             return response()->json([
-                'editHtml' => (string)view('frontendcms::pricing.components.create')
+                'editHtml' => (string) view('frontendcms::pricing.components.create', compact('gst_taxes')),
             ]);
         } catch (Exception $e) {
-            LogActivity::errorLog($e->getMessage());
-            return $e->getMessage();
+            try {
+                LogActivity::errorLog($e->getMessage());
+            } catch (Exception $logException) {
+            }
+
+            return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 
     public function store(PricingRequest $request)
     {
         try {
-
             $this->pricingService->save($request->except("_token"));
-            LogActivity::successLog('Pricing Status Added');
-            return true;
         } catch (Exception $e) {
-            LogActivity::errorLog($e->getMessage());
-            return $e->getMessage();
+            try {
+                LogActivity::errorLog($e->getMessage());
+            } catch (Exception $logException) {
+            }
+            return response()->json(['message' => $e->getMessage()], 500);
         }
+
+        try {
+            LogActivity::successLog('Pricing Status Added');
+        } catch (Exception $e) {
+        }
+
+        return response()->json(['success' => true]);
     }
 
     public function edit($id)
@@ -87,8 +100,7 @@ class PricingController extends Controller
                 'data' => $pricing,
             ]);
         } catch (Exception $e) {
-            LogActivity::errorLog($e->getMessage());
-            return $e->getMessage();
+            return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 
@@ -97,7 +109,10 @@ class PricingController extends Controller
         try {
             $this->pricingService->update($request->except("_token"));
         } catch (Exception $e) {
-            LogActivity::errorLog($e->getMessage());
+            try {
+                LogActivity::errorLog($e->getMessage());
+            } catch (Exception $logException) {
+            }
             return response()->json(['message' => $e->getMessage()], 500);
         }
 
@@ -115,12 +130,14 @@ class PricingController extends Controller
         try {
             $this->pricingService->deleteById($request->id);
         } catch (Exception $e) {
-            LogActivity::errorLog($e->getMessage());
-            return response()->json([
-                'status'    =>  false,
-                'message'   =>  $e->getMessage()
-            ]);
+            return response()->json(['message' => $e->getMessage()], 500);
         }
+
+        try {
+            LogActivity::successLog('Pricing deleted.');
+        } catch (Exception $e) {
+        }
+
         return $this->loadTableData();
     }
 
@@ -131,11 +148,15 @@ class PricingController extends Controller
                 'status' => $request->status == 1 ? 0 : 1
             ];
             $this->pricingService->statusUpdate($data, $request->id);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+
+        try {
             LogActivity::successLog('Pricing Status Update.');
         } catch (Exception $e) {
-            LogActivity::errorLog($e->getMessage());
-            return $e->getMessage();
         }
+
         return $this->loadTableData();
     }
 
@@ -147,9 +168,7 @@ class PricingController extends Controller
                 'TableData' =>  (string)view('frontendcms::pricing.components.list', compact('PricingList'))
             ]);
         } catch (\Exception $e) {
-            LogActivity::errorLog($e->getMessage());
-            Toastr::error(__('common.operation_failed'));
-            return back();
+            return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 }

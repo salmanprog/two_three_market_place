@@ -10,7 +10,7 @@
             <a href="{{route('admin.merchant_edit_profile',$customer->id)}}" class="dropdown-item" type="button">{{__('common.edit')}}</a>
         @endif
         @if (permissionCheck('admin.customer.destroy'))
-            <!-- <a data-value="{{route('admin.customer.destroy', $customer->id)}}" class="dropdown-item delete_customer" type="button">{{__('common.delete')}}</a> -->
+            <a data-value="{{ route('admin.art_gallery.destroy', $customer->id) }}" class="dropdown-item delete_customer" type="button">{{ __('common.delete') }}</a>
         @endif
     </div>
 </div>

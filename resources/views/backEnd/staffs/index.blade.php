@@ -14,12 +14,17 @@
             <div class="row justify-content-center">
                 <div class="col-12">
                     <div class="box_header common_table_header">
-                        <div class="main-title d-md-flex">
+                        <div class="main-title d-md-flex align-items-center">
                             <h3 class="mb-0 mr-30 mb_xs_15px mb_sm_20px">{{ __('Organiser List') }}</h3>
                             @if(permissionCheck('staffs.store'))
                             <ul class="d-flex">
                                 <li><a class="primary-btn radius_30px mr-10 fix-gr-bg" href="{{ route('staffs.create') }}"><i class="ti-plus"></i>{{ __('common.add_new') }} {{ __('hr.staff') }}</a></li>
                             </ul>
+                            @endif
+                            @if (permissionCheck('staffs.destroy'))
+                            <button type="button" class="primary-btn fix-gr-bg small d-none bulk_delete_staffs ml-3">
+                                <i class="ti-trash"></i> {{ __('common.bulk_delete') }}
+                            </button>
                             @endif
                         </div>
                     </div>
@@ -32,6 +37,14 @@
                                 <table class="table Crm_table_active3">
                                     <thead>
                                     <tr>
+                                        @if (permissionCheck('staffs.destroy'))
+                                        <th scope="col">
+                                            <label class="primary_checkbox d-flex mr-0 mb-0">
+                                                <input type="checkbox" class="select_all_staffs">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                        </th>
+                                        @endif
                                         <th scope="col">{{ __('common.sl') }}</th>
                                         <th scope="col">{{ __('common.avatar') }}</th>
                                         <th scope="col">{{ __('common.name') }}</th>
@@ -45,6 +58,14 @@
                                     <tbody>
                                     @foreach($staffs as $key => $staff)
                                             <tr>
+                                                @if (permissionCheck('staffs.destroy'))
+                                                <th>
+                                                    <label class="primary_checkbox d-flex mr-0 mb-0">
+                                                        <input type="checkbox" class="staff_row_checkbox" value="{{ $staff->id }}">
+                                                        <span class="checkmark"></span>
+                                                    </label>
+                                                </th>
+                                                @endif
                                                 <th>{{ getNumberTranslate($key+1) }}</th>
                                                 <th>
                                                     <div class="logo_div">
@@ -93,6 +114,28 @@
         </div>
     </section>
 @include('backEnd.partials.delete_modal')
+
+<div class="modal fade" id="confirm-bulk-delete-staff">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">{{ __('common.bulk_delete') }}</h4>
+                <button type="button" class="close" data-dismiss="modal">
+                    <i class="ti-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center">
+                    <h4>{{ __('common.are_you_sure_to_delete_?') }}</h4>
+                </div>
+                <div class="mt-40 d-flex justify-content-between">
+                    <button type="button" class="primary-btn tr-bg" data-dismiss="modal">{{ __('common.cancel') }}</button>
+                    <button type="button" class="primary-btn fix-gr-bg" id="confirm_bulk_delete_staff">{{ __('common.delete') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 @push('scripts')
     <script>
@@ -127,6 +170,75 @@
                     event.preventDefault();
                     let value = $(this).data('value');
                     confirm_modal(value);
+                });
+
+                function toggleStaffBulkDeleteButton() {
+                    var hasChecked = $('.staff_row_checkbox:checked').length > 0;
+                    $('.bulk_delete_staffs').toggleClass('d-none', !hasChecked);
+                }
+
+                $(document).on('change', '.select_all_staffs', function() {
+                    var checked = $(this).is(':checked');
+                    $('.staff_row_checkbox').prop('checked', checked);
+                    toggleStaffBulkDeleteButton();
+                });
+
+                $(document).on('change', '.staff_row_checkbox', function() {
+                    var total = $('.staff_row_checkbox').length;
+                    var checked = $('.staff_row_checkbox:checked').length;
+                    $('.select_all_staffs').prop('checked', total > 0 && total === checked);
+                    toggleStaffBulkDeleteButton();
+                });
+
+                $(document).on('click', '.bulk_delete_staffs', function() {
+                    if (!$('.staff_row_checkbox:checked').length) {
+                        toastr.warning("{{ __('common.select_one') }}", "{{ __('common.warning') }}");
+                        return;
+                    }
+                    $('#confirm-bulk-delete-staff').modal('show');
+                });
+
+                $('#confirm_bulk_delete_staff').on('click', function() {
+                    var ids = [];
+                    $('.staff_row_checkbox:checked').each(function() {
+                        ids.push($(this).val());
+                    });
+
+                    if (!ids.length) {
+                        $('#confirm-bulk-delete-staff').modal('hide');
+                        return;
+                    }
+
+                    $('#pre-loader').removeClass('d-none');
+                    $('#confirm-bulk-delete-staff').modal('hide');
+
+                    $.ajax({
+                        url: "{{ route('staffs.bulk_destroy') }}",
+                        type: 'POST',
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            ids: ids
+                        },
+                        success: function(response) {
+                            if (response.deleted > 0) {
+                                toastr.success(response.message, "{{ __('common.success') }}");
+                                window.location.reload();
+                            } else {
+                                toastr.warning(response.message, "{{ __('common.warning') }}");
+                            }
+                            $('#pre-loader').addClass('d-none');
+                        },
+                        error: function(response) {
+                            var message = "{{ __('common.error_message') }}";
+                            if (response.responseJSON) {
+                                message = response.responseJSON.message
+                                    || response.responseJSON.error
+                                    || message;
+                            }
+                            toastr.error(message, "{{ __('common.error') }}");
+                            $('#pre-loader').addClass('d-none');
+                        }
+                    });
                 });
 
                 $(document).on('change', '.update_status_staff', function(){

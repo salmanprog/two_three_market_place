@@ -7,6 +7,10 @@
             <a href="{{route('admin.merchant_show_details',$seller->user->id)}}" class="dropdown-item" type="button">{{ __('common.details') }}</a>
         @endif
 
+        @if (permissionCheck('admin.customer.destroy'))
+            <a data-value="{{ route('admin.merchant.destroy', $seller->user->id) }}" class="dropdown-item delete_merchant" type="button">{{ __('common.delete') }}</a>
+        @endif
+
         @if (permissionCheck('admin.secret_login'))
             <!-- <a href="{{route('admin.secret_login',$seller->user->id)}}" class="dropdown-item" type="button">{{ __('common.secret_login') }}</a> -->
         @endif

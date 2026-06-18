@@ -172,7 +172,13 @@
                             @elseif(@$menu->backendMenu->route == 'admin.pricing.index')
                                 @continue
                             @elseif(permissionCheck(@$menu->backendMenu->route))
-                                <li class="{{spn_active_link(childrenRoute($menu))}}">
+                                @php
+                                    $menuRoutes = childrenRoute($menu);
+                                    if (@$menu->backendMenu->route == 'manage_seller') {
+                                        $menuRoutes = array_values(array_filter($menuRoutes, fn ($route) => $route !== 'admin.pricing.index'));
+                                    }
+                                @endphp
+                                <li class="{{spn_active_link($menuRoutes)}}">
                                     <a href="
                                         @if(\Illuminate\Support\Facades\Route::has(@$menu->backendMenu->route) && !$menu->children->count())
                                             @if(@$menu->backendMenu->route == 'my-wallet.index')
@@ -384,8 +390,8 @@
                                     @endif
                                 </li>
                                 @if(auth()->user()->role->type == 'admin' && @$menu->backendMenu->route == 'admin.dashboard' && permissionCheck('admin.pricing.index'))
-                                    <li class="{{ request()->is('admin/pricing') || request()->is('admin/pricing/*') ? 'mm-active' : '' }}">
-                                        <a href="{{ route('admin.pricing.index') }}" class="{{ request()->is('admin/pricing') || request()->is('admin/pricing/*') ? 'active' : '' }}" aria-expanded="false">
+                                    <li class="{{ request()->is('pricing') || request()->is('pricing/*') ? 'mm-active' : '' }}">
+                                        <a href="{{ route('admin.pricing.index') }}" class="{{ request()->is('pricing') || request()->is('pricing/*') ? 'active' : '' }}" aria-expanded="false">
                                             <div class="nav_icon_small">
                                                 <span class="fas fa-tags"></span>
                                             </div>

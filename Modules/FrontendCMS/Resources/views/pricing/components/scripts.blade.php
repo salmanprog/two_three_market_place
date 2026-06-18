@@ -3,6 +3,12 @@
     (function($){
         "use strict";
 
+        var pricingBaseUrl = "{{ url('/pricing') }}";
+
+        function pricingUrl(path) {
+            return pricingBaseUrl + (path || '');
+        }
+
         function pricingFeatureRowHtml(index, title, icon) {
             title = title || '';
             icon = icon || 'fas fa-check';
@@ -57,6 +63,57 @@
             reindexPricingFeatureRows();
         }
 
+        function fillPricingEditForm(item) {
+            if (!item) {
+                return;
+            }
+
+            $('#item_id').val(item.id);
+            @if(isModuleActive('FrontendMultiLang'))
+            if (item.name != null) {
+                $.each(item.name, function(key, value) {
+                    $('#name_' + key).val(value);
+                });
+            } else {
+                $('#name_{{auth()->user()->lang_code}}').val(item.translateName);
+            }
+            @else
+            $('#name').val(item.name).addClass('has-content');
+            @endif
+
+            $('#team_size').val(item.team_size).addClass('has-content');
+            $('#plan_price').val(item.plan_price).addClass('has-content');
+            $('#expire_in').val(item.expire_in).addClass('has-content');
+            $('#stock_limit').val(item.stock_limit).addClass('has-content');
+            $('#category_limit').val(item.category_limit).addClass('has-content');
+            $('#transaction_fee').val(item.transaction_fee).addClass('has-content');
+            $('#best_for').val(item.best_for).addClass('has-content');
+            $('#old_image').val(item.image).addClass('has-content');
+            $('#discount').val(item.discount).addClass('has-content');
+
+            if (item.discount_type == 1) {
+                $('#discount_type_percentage').prop('checked', true);
+            } else {
+                $('#discount_type_amount').prop('checked', true);
+            }
+
+            if (item.status == 1) {
+                $('#pricing_edit_form #status_active').prop('checked', true);
+                $('#pricing_edit_form #status_inactive').prop('checked', false);
+            } else {
+                $('#pricing_edit_form #status_active').prop('checked', false);
+                $('#pricing_edit_form #status_inactive').prop('checked', true);
+            }
+
+            if (item.is_featured == 1) {
+                $('#pricing_edit_form #is_featured').prop('checked', true);
+            } else {
+                $('#pricing_edit_form #is_featured').prop('checked', false);
+            }
+
+            $('#gst_id').val(item.gst_tax_id).change();
+        }
+
         $(document).ready(function() {
             if ($('#pricing_features_wrapper').length && $('#pricing_features_wrapper').children().length === 0) {
                 renderPricingFeatures([]);
@@ -81,7 +138,7 @@
                 let id = $('#delete_item_id').val();
                 $('#deleteItemModal').modal('hide');
                 $.ajax({
-                    url: "{{ route('admin.pricing.delete') }}",
+                    url: pricingUrl('/delete'),
                     type: "POST",
                     cache: false,
                     contentType: false,
@@ -92,7 +149,7 @@
                         toastr.success("{{__('common.deleted_successfully')}}","{{__('common.success')}}");
                         $('#pre-loader').addClass('d-none');
                         $.ajax({
-                            url: "{{ route('admin.pricing.create') }}",
+                            url: pricingUrl('/create'),
                             type: "GET",
                             cache: false,
                             contentType: false,
@@ -142,18 +199,28 @@
             $("#add_pricing_form").submit(function(e) {
                 e.preventDefault();
                 var formData = new FormData(this);
-                console.log(formData);
                 $("#create_btn").prop('disabled', true);
                 $('#create_btn').text('{{ __("common.submitting") }}');
                 $('#pre-loader').removeClass('d-none');
                 removeValidationError();
 
                 $.ajax({
-                    url: "{{ route('admin.pricing.store') }}",
+                    url: pricingUrl(''),
                     type: 'POST',
                     data: formData,
-                    success: function (data) {
+                    success: function () {
+                        toastr.success("{{__('common.added_successfully')}}","{{__('common.success')}}");
                         location.reload();
+                    },
+                    error: function(response) {
+                        $("#create_btn").prop('disabled', false);
+                        $('#create_btn').text('{{ __("common.save") }}');
+                        $('#pre-loader').addClass('d-none');
+                        if (response.responseJSON && response.responseJSON.errors) {
+                            showValidationErrors('#add_pricing_form', response.responseJSON.errors);
+                        } else {
+                            toastr.error("{{__('common.error_message')}}","{{__('common.error')}}");
+                        }
                     },
                     cache: false,
                     contentType: false,
@@ -170,7 +237,7 @@
                 removeValidationError();
 
                 $.ajax({
-                    url: "{{ route('admin.pricing.update') }}",
+                    url: pricingUrl('/update'),
                     type: 'POST',
                     data: formData,
                     success: function () {
@@ -195,14 +262,15 @@
 
 
             $(document).on('change', '.statusChange', function(event){
-                let item = $(this).data('value');
+                let id = $(this).val();
+                let status = $(this).data('status');
                 $('#pre-loader').removeClass('d-none');
                 var formData = new FormData();
                 formData.append('_token', "{{ csrf_token() }}");
-                formData.append('id', item.id);
-                formData.append('status', item.status);
+                formData.append('id', id);
+                formData.append('status', status);
                 $.ajax({
-                    url: "{{ route('admin.pricing.status') }}",
+                    url: pricingUrl('/status-update'),
                     type: "POST",
                     cache: false,
                     contentType: false,
@@ -227,29 +295,15 @@
 
             $(document).on('click', '.show_pricing', function(event){
                 event.preventDefault();
-                let item = $(this).data('value');
+                let $item = $(this);
                 $('#item_show').modal('show');
-                @if(isModuleActive('FrontendMultiLang'))
-                if (item.name != null) {
-                    var cat_name = '';
-                    $.each(item.name, function( key, value ) {
-                        if(key == '{{auth()->user()->lang_code}}'){
-                            cat_name = value;
-                        }
-                    });
-                    $('#show_name').text(cat_name);
-                }else{
-                    $('#show_name').text(item.translateName);
-                }
-                @else
-                $("#show_name").text(item.name);
-                @endif
-                $('#show_monthly_cost').text(numbertrans(item.monthly_cost));
-                $('#show_yearly_cost').text(numbertrans(item.yearly_cost));
-                $('#show_team_size').text(numbertrans(item.team_size));
-                $('#show_stock_limit').text(numbertrans(item.stock_limit));
-                $("#show_category_limit").text(numbertrans(item.category_limit));
-                $('#show_transaction_fee').text(numbertrans(item.transaction_fee));
+                $('#show_name').text($item.data('name') || '');
+                $('#show_monthly_cost').text(numbertrans($item.data('monthly_cost') || 0));
+                $('#show_yearly_cost').text(numbertrans($item.data('yearly_cost') || 0));
+                $('#show_team_size').text(numbertrans($item.data('team_size') || 0));
+                $('#show_stock_limit').text(numbertrans($item.data('stock_limit') || 0));
+                $("#show_category_limit").text(numbertrans($item.data('category_limit') || 0));
+                $('#show_transaction_fee').text(numbertrans($item.data('transaction_fee') || 0));
             });
 
             $(document).on('click', '.delete_pricing', function(event){
@@ -263,73 +317,30 @@
 
             $(document).on('click', '.edit_pricing', function(event){
                 event.preventDefault();
-                let item = $(this).data('value');
-                let pricingId = $(this).data('id') || (item && item.id);
+                let pricingId = $(this).attr('data-id');
                 if (!pricingId) {
                     toastr.error("{{__('common.error_message')}}","{{__('common.error')}}");
                     return;
                 }
                 $('#pre-loader').removeClass('d-none');
-                let url = "{{ url('/admin/pricing') }}/" + pricingId + "/edit";
                 $.ajax({
-                    url: url,
+                    url: pricingUrl('/' + pricingId + '/edit'),
                     type: "GET",
                     cache: false,
-                    contentType: false,
-                    processData: false,
                     success: function(response) {
                         $('#formHtml').empty();
                         $('#formHtml').append(response.editHtml);
-                        $('#pre-loader').addClass('d-none');
-                        $('#item_id').val(item.id);
-                        @if(isModuleActive('FrontendMultiLang'))
-                        if (item.name != null) {
-                            $.each(item.name, function( key, value ) {
-                                $('#name_'+key).val(value);
-                            });
-                        }else{
-                            $('#name_{{auth()->user()->lang_code}}').val(item.translateName);
-                        }
-                        @else
-                        $('#name').val(item.name).addClass('has-content');
-                        @endif
-
-                        $('#team_size').val(item.team_size).addClass('has-content');
-                        $("#plan_price").val(item.plan_price).addClass('has-content');
-                        $("#expire_in").val(item.expire_in).addClass('has-content');
-                        $('#stock_limit').val(item.stock_limit).addClass('has-content');
-                        $('#category_limit').val(item.category_limit).addClass('has-content');
-                        $('#transaction_fee').val(item.transaction_fee).addClass('has-content');
-                        $('#best_for').val(item.best_for).addClass('has-content');
-                        $("#old_image").val(item.image).addClass('has-content');
-                        $("#discount").val(item.discount).addClass('has-content');
-
-                        if(item.discount_type == 1)
-                        {
-                            $("#discount_type_percentage").prop("checked", true);
-                        }else{
-                            $("#discount_type_amount").prop("checked", true);
-                        }
-
-                        if (item.status == 1) {
-                            $('#pricing_edit_form #status_active').prop("checked", true);
-                            $('#pricing_edit_form #status_inactive').prop("checked", false);
-                        } else {
-                            $('#pricing_edit_form #status_active').prop("checked", false);
-                            $('#pricing_edit_form #status_inactive').prop("checked", true);
-                        }
-                        if(item.is_featured == 1){
-                            $('#pricing_edit_form #is_featured').prop("checked", true);
-                        }else{
-                            $('#pricing_edit_form #is_featured').prop("checked", false);
-                        }
-
-                        $("#gst_id").val(item.gst_tax_id).change();
+                        fillPricingEditForm(response.data);
                         renderPricingFeatures(response.data.features || []);
+                        $('#pre-loader').addClass('d-none');
                     },
                     error: function(response) {
                         $('#pre-loader').addClass('d-none');
-                        toastr.error("{{__('common.error_message')}}","{{__('common.error')}}");
+                        if (response.responseJSON && response.responseJSON.message) {
+                            toastr.error(response.responseJSON.message, "{{__('common.error')}}");
+                        } else {
+                            toastr.error("{{__('common.error_message')}}","{{__('common.error')}}");
+                        }
                     }
                 });
             });

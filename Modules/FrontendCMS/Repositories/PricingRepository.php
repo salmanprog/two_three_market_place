@@ -38,9 +38,9 @@ class PricingRepository {
             'image' => $image,
             'expire_in' => $data['expire_in'],
             'is_featured' => isset($data['is_featured']) ? 1 : 0,
-            'gst_tax_id' => isset($data['gst_id']) ? $data['gst_id']:null,
-            'discount_type' => isset($data['discount_type']) ? $data['discount_type']:null,
-            'discount' => isset($data['discount']) ? $data['discount']:null,
+            'gst_tax_id' => !empty($data['gst_id']) ? $data['gst_id'] : null,
+            'discount_type' => $this->resolveDiscountType($data),
+            'discount' => $this->resolveDiscount($data),
         ]);
         $this->syncFeatures($pricing, $data);
         return $pricing;
@@ -66,9 +66,9 @@ class PricingRepository {
             'image' => $image,
             'expire_in' => $data['expire_in'],
             'is_featured' => isset($data['is_featured']) ? 1 : 0,
-            'gst_tax_id' => isset($data['gst_id']) ? $data['gst_id']:null,
-            'discount_type' => isset($data['discount_type']) ? $data['discount_type']:null,
-            'discount' => isset($data['discount']) ? $data['discount']:null,
+            'gst_tax_id' => !empty($data['gst_id']) ? $data['gst_id'] : null,
+            'discount_type' => $this->resolveDiscountType($data),
+            'discount' => $this->resolveDiscount($data),
         ]);
 
         $pricing = $this->pricing->findOrFail($data['id']);
@@ -93,6 +93,24 @@ class PricingRepository {
         return $this->pricing::where('id',$id)->update([
             'status' => $data['status']
         ]);
+    }
+
+    private function resolveDiscountType(array $data): int
+    {
+        if (!array_key_exists('discount_type', $data) || $data['discount_type'] === '' || $data['discount_type'] === null) {
+            return 0;
+        }
+
+        return (int) $data['discount_type'];
+    }
+
+    private function resolveDiscount(array $data)
+    {
+        if (!array_key_exists('discount', $data) || $data['discount'] === '' || $data['discount'] === null) {
+            return 0;
+        }
+
+        return $data['discount'];
     }
 
     private function syncFeatures(Pricing $pricing, array $data): void
