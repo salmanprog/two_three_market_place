@@ -630,3 +630,10 @@ if(!function_exists('getTorodCouriers'))
         return TorodCourier::all();
     }
 }
+
+if (!function_exists('siteContactProfiles')) {
+    function siteContactProfiles(): array
+    {
+        return app(\Modules\FrontendCMS\Services\SiteContactService::class)->get();
+    }
+}

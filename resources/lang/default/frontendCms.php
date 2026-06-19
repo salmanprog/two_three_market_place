@@ -173,4 +173,11 @@ return [
     'feature_title' => 'Feature Text',
     'feature_icon' => 'Icon Class',
     'remove_feature' => 'Remove',
+    'site_settings' => 'Site Settings',
+    'contact_us_settings' => 'Contact Us',
+    'section_title' => 'Section Title',
+    'contact_profiles' => 'Contact Profiles',
+    'contact_profile' => 'Contact Profile',
+    'add_contact_profile' => 'Add Contact Profile',
+    'at_least_one_contact_profile' => 'At least one contact profile is required.',
 ];

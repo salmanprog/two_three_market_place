@@ -401,6 +401,25 @@
                                         </a>
                                     </li>
                                 @endif
+                                @if(in_array(auth()->user()->role->type, ['admin', 'superadmin']) && @$menu->backendMenu->route == 'admin.dashboard')
+                                    <li class="{{ request()->is('site-settings*') ? 'mm-active' : '' }}">
+                                        <a href="javascript:void(0)" class="has-arrow {{ request()->is('site-settings*') ? 'active' : '' }}" aria-expanded="{{ request()->is('site-settings*') ? 'true' : 'false' }}">
+                                            <div class="nav_icon_small">
+                                                <span class="fas fa-cog"></span>
+                                            </div>
+                                            <div class="nav_title">
+                                                <span>{{ __('frontendCms.site_settings') }}</span>
+                                            </div>
+                                        </a>
+                                        <ul class="mm-collapse {{ request()->is('site-settings*') ? 'mm-show' : '' }}">
+                                            <li>
+                                                <a href="{{ route('admin.site-settings.contact') }}" class="{{ request()->routeIs('admin.site-settings.contact') ? 'active' : '' }}">
+                                                    {{ __('frontendCms.contact_us_settings') }}
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                @endif
                             @endif
                         @endif
                     @endforeach

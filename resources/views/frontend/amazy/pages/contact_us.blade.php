@@ -237,43 +237,7 @@
     <div class="container">
         <div class="row align-items-center row-gap-40">
             <div class="col-12 col-md-6">
-                <h2 class="secondry-font text-center text-md-start fs-55 fw-400 mb-20" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="0" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">Connect with us</h2>
-                <div class="d-flex align-items-center flex-column flex-md-row gap-20 mb-20" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="90" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
-                    <div>
-                        <img src="{{ asset('public/uploads/all/68530cdb43d0e.png') }}" alt="profile">
-                    </div>
-                    <div>
-                        <h5 class="text-center text-md-start fw-500 fs-25 primary-font">Alex Grove</h5>
-                        <div class="d-flex flex-column gap-20 row-gap-10">
-                            <div class="d-flex align-items-center gap-20 justify-content-center justify-content-md-start">
-                                <i class="fa-solid fa-phone fs-20 text-black"></i>
-                                <a href="tel:9548500145" class="fs-20 p-0 text-black primary-font">954 850 0145</a>
-                            </div>
-                            <div class="d-flex align-items-center gap-20">
-                                <i class="fa-solid fa-envelope fs-20 text-black"></i>
-                                <a href="mailto:alexgrove.23ld@gmail.com" class="email-address-link fs-20 p-0 text-black primary-font">alexgrove.23ld@gmail.com</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center flex-column flex-md-row gap-20 mb-20" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="180" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">
-                    <div>
-                        <img src="{{ asset('public/uploads/all/68530cde80b1c.png') }}" alt="profile">
-                    </div>
-                    <div>
-                        <h5 class="text-center text-md-start fw-500 fs-25 primary-font">Devin Pughsley</h5>
-                        <div class="d-flex flex-column gap-20 row-gap-10">
-                            <div class="d-flex align-items-center gap-20 justify-content-center justify-content-md-start">
-                                <i class="fa-solid fa-phone fs-24 text-black"></i>
-                                <a href="tel:2057778284" class="fs-20 p-0 text-black primary-font">205 777 8284</a>
-                            </div>
-                            <div class="d-flex align-items-center gap-20">
-                                <i class="fa-solid fa-envelope fs-20 text-black"></i>
-                                <a href="mailto:devinpughsley.23ld@gmail.com" class="email-address-link fs-20 p-0 text-black primary-font">devinpughsley.23ld@gmail.com</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                @include(theme('partials._connect_with_us'))
             </div>
             <div class="col-12 col-md-6">
                 <h2 class="secondry-font text-start fs-55 fw-400 mb-20" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="0" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">Contact Us</h2>

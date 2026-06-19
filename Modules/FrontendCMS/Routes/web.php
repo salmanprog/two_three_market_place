@@ -86,6 +86,11 @@ Route::middleware(['admin','auth'])->prefix('pricing')->as('admin.')->group(func
     Route::post('/status-update','PricingController@status')->name('pricing.status')->middleware('prohibited_demo_mode');
     Route::get('/list-for-seller','PricingController@get_pricing')->name('pricing.get_pricing_url');
 });
+Route::middleware(['admin','auth'])->prefix('site-settings')->as('admin.site-settings.')->group(function () {
+    Route::get('/', 'SiteSettingsController@index')->name('index');
+    Route::get('/contact', 'SiteSettingsController@contact')->name('contact');
+    Route::post('/contact/update', 'SiteSettingsController@contactUpdate')->name('contact.update')->middleware('prohibited_demo_mode');
+});
 Route::middleware(['admin','auth'])->prefix('admin')->as('admin.')->group(function(){
     Route::post('setting/social-link/store', 'SocialLinkController@socialLinkStore')->name('setting.social-link.store')->middleware('prohibited_demo_mode');
     Route::post('setting/social-link/update', 'SocialLinkController@socialLinkUpdate')->name('setting.social-link.update')->middleware('prohibited_demo_mode');

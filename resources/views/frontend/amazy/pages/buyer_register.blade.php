@@ -8,7 +8,7 @@
     <section class="account-signup-sec">
         <div class="container">
             <div class="row account-signup-grid justify-content-center">
-                <div class="col-12 col-sm-6 d-flex" data-aos="fade-up" data-aos-duration="700" data-aos-delay="80 s">
+                <!-- <div class="col-12 col-sm-6 d-flex" data-aos="fade-up" data-aos-duration="700" data-aos-delay="80 s">
                     <article class="account-signup-card w-100">
                         <div class="account-signup-card__media">
                             <img
@@ -29,9 +29,9 @@
                             </div>
                         </div>
                     </article>
-                </div>
+                </div> -->
 
-                <div class="col-12 col-sm-6 d-flex" data-aos="fade-up" data-aos-duration="700" data-aos-delay="140">
+                <!-- <div class="col-12 col-sm-6 d-flex" data-aos="fade-up" data-aos-duration="700" data-aos-delay="140">
                     <article class="account-signup-card w-100">
                         <div class="account-signup-card__media">
                             <img
@@ -52,7 +52,7 @@
                             </div>
                         </div>
                     </article>
-                </div>
+                </div> -->
             </div>
         </div>
     </section>

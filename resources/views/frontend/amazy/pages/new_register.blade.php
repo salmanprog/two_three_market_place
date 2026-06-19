@@ -1,7 +1,7 @@
 @extends(theme('layouts.app'))
 
 @section('title')
-    {{ __('Sign Up') }}
+{{ __('Sign Up') }}
 @endsection
 
 @push('styles')
@@ -97,116 +97,159 @@
 @endpush
 
 @section('content')
-    <section class="account-signup-sec">
-        <div class="container">
-            <div class="account-signup-slider-wrap" data-aos="fade-up" data-aos-duration="700">
-                <button type="button" class="account-signup-slider__nav account-signup-slider__nav--prev" aria-label="Previous slide">
-                    <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
-                </button>
-                <button type="button" class="account-signup-slider__nav account-signup-slider__nav--next" aria-label="Next slide">
-                    <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
-                </button>
-                <div class="account-signup-slider owl-carousel owl-theme">
-                    <div class="account-signup-slide d-flex">
-                        <article class="account-signup-card w-100">
-                            <div class="account-signup-card__media">
-                                <img
-                                    src="{{ asset('') }}Modules/PageBuilder/Resources/assets/keditor/snippets/img/buyer.jpg"
-                                    alt=""
-                                    width="600"
-                                    height="450"
-                                    loading="lazy"
-                                    decoding="async">
+<section class="account-signup-sec">
+    <div class="container">
+        <div class="account-signup-slider-wrap" data-aos="fade-up" data-aos-duration="700">
+            <button type="button" class="account-signup-slider__nav account-signup-slider__nav--prev" aria-label="Previous slide">
+                <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+            </button>
+            <button type="button" class="account-signup-slider__nav account-signup-slider__nav--next" aria-label="Next slide">
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+            </button>
+            <div class="account-signup-slider owl-carousel owl-theme">
+                <!-- <div class="account-signup-slide d-flex">
+                    <article class="account-signup-card w-100">
+                        <div class="account-signup-card__media">
+                            <img
+                                src="{{ asset('') }}Modules/PageBuilder/Resources/assets/keditor/snippets/img/buyer.jpg"
+                                alt=""
+                                width="600"
+                                height="450"
+                                loading="lazy"
+                                decoding="async">
+                        </div>
+                        <div class="account-signup-card__body">
+                            <p class="account-signup-card__text primary-font mb-0">Create your buyer account to explore products, connect with sellers, and start purchasing.</p>
+                            <div class="account-signup-card__action">
+                                <a href="{{ route('frontend.buyer.signup') }}" class="account-signup-btn primary-font">
+                                    Become a Buyer
+                                    <i class="fa-solid fa-arrow-right-long fs-12" aria-hidden="true"></i>
+                                </a>
                             </div>
-                            <div class="account-signup-card__body">
-                                <p class="account-signup-card__text primary-font mb-0">Create your buyer account to explore products, connect with sellers, and start purchasing.</p>
-                                <div class="account-signup-card__action">
-                                    <a href="{{ route('frontend.buyer.signup') }}" class="account-signup-btn primary-font">
-                                        Become a Buyer
-                                        <i class="fa-solid fa-arrow-right-long fs-12" aria-hidden="true"></i>
-                                    </a>
-                                </div>
+                        </div>
+                    </article>
+                </div> -->
+                <div class="d-flex">
+                    <article class="account-signup-card w-100">
+                        <div class="account-signup-card__media">
+                            <img
+                                src="{{ asset('') }}Modules/PageBuilder/Resources/assets/keditor/snippets/img/interior_designer.jpg"
+                                alt=""
+                                width="600"
+                                height="450"
+                                loading="lazy"
+                                decoding="async">
+                        </div>
+                        <div class="account-signup-card__body">
+                            <p class="account-signup-card__text primary-font mb-0">Create your Interior designers account transform spaces by planning layouts.</p>
+                            <div class="account-signup-card__action">
+                                <a href="{{ URL('/interior-designer-register') }}" class="account-signup-btn primary-font">
+                                Partner as an Interior Designer
+                                    <i class="fa-solid fa-arrow-right-long fs-12" aria-hidden="true"></i>
+                                </a>
                             </div>
-                        </article>
-                    </div>
+                        </div>
+                    </article>
+                </div>
+                <div class="d-flex">
+                    <article class="account-signup-card w-100">
+                        <div class="account-signup-card__media">
+                            <img
+                                src="{{ asset('') }}Modules/PageBuilder/Resources/assets/keditor/snippets/img/buyer.jpg"
+                                alt=""
+                                width="600"
+                                height="450"
+                                loading="lazy"
+                                decoding="async">
+                        </div>
+                        <div class="account-signup-card__body">
+                            <p class="account-signup-card__text primary-font mb-0">Create your buyer account to explore products, connect with sellers, and start purchasing.</p>
+                            <div class="account-signup-card__action">
+                                <a href="{{ URL('/register') }}" class="account-signup-btn primary-font">
+                                    Create Buyer Profile
+                                    <i class="fa-solid fa-arrow-right-long fs-12" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+                <div class="account-signup-slide d-flex">
+                    <article class="account-signup-card w-100">
+                        <div class="account-signup-card__media">
+                            <img
+                                src="{{ asset('') }}Modules/PageBuilder/Resources/assets/keditor/snippets/img/artist.png"
+                                alt=""
+                                width="600"
+                                height="450"
+                                loading="lazy"
+                                decoding="async">
+                        </div>
+                        <div class="account-signup-card__body">
+                            <p class="account-signup-card__text primary-font mb-0">Create your Artist account to upload your artwork and start selling your paintings today.</p>
+                            <div class="account-signup-card__action">
+                                <a href="{{ route('frontend.merchant-register','subscription') }}" class="account-signup-btn primary-font">
+                                    Partner as an Artist
+                                    <i class="fa-solid fa-arrow-right-long fs-12" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
 
-                    <div class="account-signup-slide d-flex">
-                        <article class="account-signup-card w-100">
-                            <div class="account-signup-card__media">
-                                <img
-                                    src="{{ asset('') }}Modules/PageBuilder/Resources/assets/keditor/snippets/img/artist.png"
-                                    alt=""
-                                    width="600"
-                                    height="450"
-                                    loading="lazy"
-                                    decoding="async">
+                <div class="account-signup-slide d-flex">
+                    <article class="account-signup-card w-100">
+                        <div class="account-signup-card__media">
+                            <img
+                                src="{{ asset('') }}Modules/PageBuilder/Resources/assets/keditor/snippets/img/eventss.jpg"
+                                alt=""
+                                width="600"
+                                height="450"
+                                loading="lazy"
+                                decoding="async">
+                        </div>
+                        <div class="account-signup-card__body">
+                            <p class="account-signup-card__text primary-font mb-0">Create your Organizer account to start hosting and managing events today.</p>
+                            <div class="account-signup-card__action">
+                                <a href="{{ route('frontend.event-organiser-register','subscription') }}" class="account-signup-btn primary-font">
+                                    Partner as a Location
+                                    <i class="fa-solid fa-arrow-right-long fs-12" aria-hidden="true"></i>
+                                </a>
                             </div>
-                            <div class="account-signup-card__body">
-                                <p class="account-signup-card__text primary-font mb-0">Create your Artist account to upload your artwork and start selling your paintings today.</p>
-                                <div class="account-signup-card__action">
-                                    <a href="{{ route('frontend.merchant-register','subscription') }}" class="account-signup-btn primary-font">
-                                        Partner as an Artist
-                                        <i class="fa-solid fa-arrow-right-long fs-12" aria-hidden="true"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </article>
-                    </div>
+                        </div>
+                    </article>
+                </div>
 
-                    <div class="account-signup-slide d-flex">
-                        <article class="account-signup-card w-100">
-                            <div class="account-signup-card__media">
-                                <img
-                                    src="{{ asset('') }}Modules/PageBuilder/Resources/assets/keditor/snippets/img/eventss.jpg"
-                                    alt=""
-                                    width="600"
-                                    height="450"
-                                    loading="lazy"
-                                    decoding="async">
+                <div class="account-signup-slide d-flex">
+                    <article class="account-signup-card w-100">
+                        <div class="account-signup-card__media">
+                            <img
+                                src="{{ asset('') }}Modules/PageBuilder/Resources/assets/keditor/snippets/img/eventss.jpg"
+                                alt=""
+                                width="600"
+                                height="450"
+                                loading="lazy"
+                                decoding="async">
+                        </div>
+                        <div class="account-signup-card__body">
+                            <p class="account-signup-card__text primary-font mb-0">Create your Art Gallery account to start selling your artwork and start selling your paintings today.</p>
+                            <div class="account-signup-card__action">
+                                <a href="{{ route('frontend.art-gallery-register','subscription') }}" class="account-signup-btn primary-font">
+                                    Partner as an Art Gallery
+                                    <i class="fa-solid fa-arrow-right-long fs-12" aria-hidden="true"></i>
+                                </a>
                             </div>
-                            <div class="account-signup-card__body">
-                                <p class="account-signup-card__text primary-font mb-0">Create your Organizer account to start hosting and managing events today.</p>
-                                <div class="account-signup-card__action">
-                                    <a href="{{ route('frontend.event-organiser-register','subscription') }}" class="account-signup-btn primary-font">
-                                        Partner as a Location
-                                        <i class="fa-solid fa-arrow-right-long fs-12" aria-hidden="true"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </article>
-                    </div>
-
-                    <div class="account-signup-slide d-flex">
-                        <article class="account-signup-card w-100">
-                            <div class="account-signup-card__media">
-                                <img
-                                    src="{{ asset('') }}Modules/PageBuilder/Resources/assets/keditor/snippets/img/eventss.jpg"
-                                    alt=""
-                                    width="600"
-                                    height="450"
-                                    loading="lazy"
-                                    decoding="async">
-                            </div>
-                            <div class="account-signup-card__body">
-                                <p class="account-signup-card__text primary-font mb-0">Create your Art Gallery account to start selling your artwork and start selling your paintings today.</p>
-                                <div class="account-signup-card__action">
-                                    <a href="{{ route('frontend.art-gallery-register','subscription') }}" class="account-signup-btn primary-font">
-                                        Partner as an Art Gallery
-                                        <i class="fa-solid fa-arrow-right-long fs-12" aria-hidden="true"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </article>
-                    </div>
+                        </div>
+                    </article>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 @endsection
 
 @push('scripts')
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         var $accountSignupSlider = $('.account-signup-slider');
 
         if (!$accountSignupSlider.length || typeof $.fn.owlCarousel !== 'function') {
@@ -222,21 +265,27 @@
             autoplayHoverPause: true,
             smartSpeed: 500,
             responsive: {
-                0: { items: 1 },
-                576: { items: 2 },
-                992: { items: 3 }
+                0: {
+                    items: 1
+                },
+                576: {
+                    items: 2
+                },
+                992: {
+                    items: 3
+                }
             }
         });
 
-        $('.account-signup-slider__nav--prev').on('click', function () {
+        $('.account-signup-slider__nav--prev').on('click', function() {
             $accountSignupSlider.trigger('prev.owl.carousel');
         });
 
-        $('.account-signup-slider__nav--next').on('click', function () {
+        $('.account-signup-slider__nav--next').on('click', function() {
             $accountSignupSlider.trigger('next.owl.carousel');
         });
 
-        $accountSignupSlider.on('initialized.owl.carousel refreshed.owl.carousel', function () {
+        $accountSignupSlider.on('initialized.owl.carousel refreshed.owl.carousel', function() {
             if (typeof AOS !== 'undefined') {
                 AOS.refresh();
             }
