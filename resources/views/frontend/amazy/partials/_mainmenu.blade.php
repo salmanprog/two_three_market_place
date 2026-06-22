@@ -186,7 +186,7 @@
                     <div class="premium-luxury-panel" style="background: #fff; border-radius: 0;" data-aos="fade-up" data-aos-duration="1200">
                         <h2 class="luxury-heading secondry-font">Filter Arts</h2>
 
-                        <form action="{{ route('frontend.searchshop') }}" method="GET">
+                        <form action="{{ route('frontend.searchshop') }}" method="GET" class="js-filter-arts-form">
                             <div class="row g-3 justify-content-center">
                                 <!-- Compact Luxury Search Bar -->
                                 <div class="col-6" data-aos="fade-up" data-aos-delay="100">
@@ -397,6 +397,7 @@
 </div>
 
 @include('frontend.amazy.partials._local_artists_modal')
+@include('frontend.amazy.partials._filter_arts_age_verification')
 
 @push('scripts')
     @once

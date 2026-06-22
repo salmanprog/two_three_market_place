@@ -497,7 +497,7 @@
     <div class="premium-luxury-panel" data-aos="fade-up" data-aos-duration="1200">
       <h2 class="luxury-heading secondry-font">Filter Arts</h2>
       
-      <form action="{{ route('frontend.searchshop') }}" method="GET">
+      <form action="{{ route('frontend.searchshop') }}" method="GET" class="js-filter-arts-form">
         <div class="row g-3 justify-content-center">
           <!-- Compact Luxury Search Bar -->
           <div class="col-6" data-aos="fade-up" data-aos-delay="100">
@@ -706,7 +706,8 @@
     </div>
   </div>
 </section>
-<!-- filter artist section -->  
+<!-- filter artist section -->
+@include('frontend.amazy.partials._filter_arts_age_verification')
 <!-- love art section -->  
 <!-- Slider section -->
  <section class="categories-sec pb-60 overflow-visible">

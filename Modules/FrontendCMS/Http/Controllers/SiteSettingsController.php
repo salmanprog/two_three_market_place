@@ -54,7 +54,7 @@ class SiteSettingsController extends Controller
             'profiles.*.phone' => 'required|string|max:50',
             'profiles.*.email' => 'required|email|max:255',
             'profiles.*.existing_image' => 'nullable|string',
-            'profiles.*.image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'profiles.*.image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
         ]);
 
         try {
