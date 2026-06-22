@@ -646,24 +646,25 @@
               </div>
 
               <!-- Price Box -->
+              @php $filterMaxPrice = min(50000, max(0, (int) request('max_price', 2500))); @endphp
               <div class="col-12 col-md-6 col-lg-3 d-flex flex-column" data-aos="fade-up" data-aos-delay="500">
                 <label class="minimal-label">Price Range</label>
                 <div class="slider-compact-container primary-font">
-                    <input 
-                      type="range" 
-                      class="compact-range" 
-                      min="0" 
-                      max="5000" 
-                      step="100" 
-                      value="2500"
-                      id="priceRange"
+                    <input
+                      type="range"
+                      class="compact-range js-price-range-input"
+                      name="max_price"
+                      min="0"
+                      max="50000"
+                      step="1"
+                      value="{{ $filterMaxPrice }}"
                     >
                     <div class="d-flex justify-content-between align-items-center mt-1">
-                      <span class="small fw-800 opacity-50 px-none">$0</span>
+                      <span class="small fw-800 opacity-50 px-none js-price-range-current">${{ number_format($filterMaxPrice) }}</span>
                       <p class="mb-0 fw-bold fs-12">
-                          Up to: <span class="text-dark">$<span id="priceValue">2500</span></span>
+                          Up to: <span class="text-dark js-price-range-up-to">${{ number_format($filterMaxPrice) }}</span>
                       </p>
-                      <span class="small fw-800 opacity-50">$5k</span>
+                      <span class="small fw-800 opacity-50">$50k</span>
                     </div>
                 </div>
               </div>
@@ -3396,14 +3397,6 @@
 @include(theme('partials.add_to_compare_script'))
 @push('scripts')
 <script>
-const range = document.getElementById("priceRange");
-    const priceValue = document.getElementById("priceValue");
-    if (range && priceValue) {
-      range.addEventListener("input", function () {
-        priceValue.textContent = this.value;
-      });
-    }
-
     $(document).ready(function () {
         var $categoriesSlider = $('.categories-slider');
 

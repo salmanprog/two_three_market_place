@@ -469,6 +469,7 @@ Route::get('/interior-designers', function() {
     return view('frontend.amazy.pages.drop-down-pages.interior-designers.index');
 })->name('frontend.interior-designers');
 
+
 Route::get('/test', [MainPageController::class, 'index'])->name('frontend.new-shop');
 
 // terms and conditions routes

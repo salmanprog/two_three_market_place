@@ -483,6 +483,15 @@ class ShopController extends Controller
             }
         }
 
+        if ($request->filled('material')) {
+            $mainProducts->where('material', '=', $request->get('material'));
+        }
+
+        $maxPriceLimit = null;
+        if ($request->filled('max_price')) {
+            $maxPriceLimit = min(50000, max(0, (int) $request->max_price));
+        }
+
         $data['filter_name'] = "Search Query : " . "\" " . $slug . " \" ";
             $slugs = explode(' ', $slug);
 
@@ -496,6 +505,9 @@ class ShopController extends Controller
                     return $q;
                 });
             })->select(['*', 'name as product_name', 'sku as slug'])->get();
+            if ($maxPriceLimit !== null) {
+                $giftCards = $giftCards->where('selling_price', '<=', $maxPriceLimit);
+            }
             // $digitalgiftCards = DigitalGiftCard::Where('gift_name', 'LIKE', "%{$slug}%")->select(['*', 'gift_name as product_name'])->get();
             $category_ids = CategoryProduct::whereRaw("product_id in ('" . implode("','", $main_product_ids) . "')")->distinct()->pluck('category_id')->toArray();
             $data['CategoryList'] = Category::whereRaw("id in ('" . implode("','", $category_ids) . "')")->where('status', 1)->take(20)->get();
@@ -503,8 +515,13 @@ class ShopController extends Controller
                         ->select('seller_products.*')
                         ->join('products', 'seller_products.product_id', '=', 'products.id')
                         ->whereIn('seller_products.product_id', $main_product_ids) // Use whereIn to prevent SQL injection
-                        ->where('seller_products.status','1')
-                        ->limit(100) // Limit the number of records to 100
+                        ->where('seller_products.status','1');
+
+            if ($maxPriceLimit !== null) {
+                $products->where('seller_products.min_sell_price', '<=', $maxPriceLimit);
+            }
+
+            $products = $products->limit(100) // Limit the number of records to 100
                         ->get();
                             
             $data['brandList'] = Brand::whereRaw("id in ('" . implode("','", $main_product_ids) . "')")->where('status', 1)->take(10)->get();
