@@ -23,6 +23,13 @@ class SellerBankAccountRequest extends FormRequest
         ];
     }
 
+    protected function prepareForValidation()
+    {
+        if (!$this->filled('ibn')) {
+            $this->merge(['ibn' => '-']);
+        }
+    }
+
     /**
      * Determine if the user is authorized to make this request.
      *

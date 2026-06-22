@@ -100,16 +100,12 @@
                             </div>
 
                         </div>
-                        <div class="col-xl-6">
-                            <div class="primary_input mb-25">
-                                <label class="primary_input_label" for="ibn">{{__('common.ibn')}} <span class="text-danger">*</span></label>
-                                <input name="ibn" class="primary_input_field" placeholder="-" type="text"
-                                       value="{{ old('ibn')? old('ibn'):$seller->sellerBankAccount->bank_ibn }}">
-                                       @error('ibn')
-                                       <span class="text-danger">{{$message}}</span>
-                                       @enderror
-                            </div>
-
+                        @php
+                            $ibnValue = old('ibn', $seller->sellerBankAccount->bank_ibn ?? '');
+                            $ibnValue = filled($ibnValue) ? $ibnValue : '-';
+                        @endphp
+                        <div class="col-xl-6" style="display: none;" aria-hidden="true">
+                            <input type="hidden" name="ibn" value="{{ $ibnValue }}">
                         </div>
 
                         <!-- <div class="col-xl-6">
