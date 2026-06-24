@@ -413,6 +413,11 @@
                                         </a>
                                         <ul class="mm-collapse {{ request()->is('site-settings*') ? 'mm-show' : '' }}">
                                             <li>
+                                                <a href="{{ route('admin.site-settings.home') }}" class="{{ request()->routeIs('admin.site-settings.home') ? 'active' : '' }}">
+                                                    {{ __('frontendCms.home_page_settings') }}
+                                                </a>
+                                            </li>
+                                            <li>
                                                 <a href="{{ route('admin.site-settings.contact') }}" class="{{ request()->routeIs('admin.site-settings.contact') ? 'active' : '' }}">
                                                     {{ __('frontendCms.contact_us_settings') }}
                                                 </a>

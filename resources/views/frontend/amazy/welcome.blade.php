@@ -775,55 +775,7 @@
     </div>
   </div>
 </section>
-<section class="market-place-sec position-relative mb-35 overflow-visible">
-  <div class="container-fluid px-0">
-    <div class="marketplace-shell">
-      <div class="marketplace-top text-white position-relative">
-        <h2 class="text-uppercase fw-bold secondary-font mb-3" style="font-size: clamp(36px, 4vw, 55px);" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="0" data-aos-easing="ease-out-cubic">
-          23LD MARKETPLACE
-        </h2>
-        <p class="fs-6 lh-base marketplace-intro-text" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="120" data-aos-easing="ease-out-cubic">
-          Find your next work of art or design piece and connect with the community of 23LD buyers and sellers.
-        </p>
-      </div>
-      <div class="marketplace-cards-grid" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="200" data-aos-easing="ease-out-cubic">
-            <div class="marketplace-card">
-                <div class="marketplace-card-media">
-                    <img src="{{ asset('public/uploads/all/68530cd031e6b.png') }}" class="img-fluid" alt="Slide 2">
-                    <div class="marketplace-card-content">
-                        <h3 class="fw-bold secondry-font marketplace-card-title">Collect</h3>
-                        <p class="marketplace-card-desc">Buy local art</p>
-                        <a href="{{route('frontend.buyer.signup')}}" class="btn btn-light text-black">Sign up as a Buyer</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="marketplace-card">
-                <div class="marketplace-card-media">
-                    <img src="{{ asset('public/uploads/all/68530cd031e6b.png') }}" class="img-fluid" alt="Slide 1">
-                    <div class="marketplace-card-content">
-                        <h3 class="fw-bold secondry-font marketplace-card-title">Sell</h3>
-                        <p class="marketplace-card-desc">Join our artist community</p>
-                        <a href="{{route('frontend.merchant-register','subscription')}}" class="btn btn-light text-black">Sign up as a Artist</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="marketplace-card">
-                <div class="marketplace-card-media">
-                    <img src="{{ asset('public/uploads/all/68530cd031e6b.png') }}" class="img-fluid" alt="Slide 2">
-                    <div class="marketplace-card-content">
-                        <h3 class="fw-bold secondry-font marketplace-card-title">Service</h3>
-                        <p class="marketplace-card-desc">Art Services in your Neighborhood</p>
-                        <a href="./art-gallery-register/subscription" class="btn btn-light text-black">Art Services</a>
-                    </div>
-                </div>
-            </div>
-      </div>
-    </div>
-  </div>
-  
-</section>
+@include('frontend.amazy.partials._home_marketplace')
 <!-- Slider section -->
 <!-- newsletter section -->
 <section class="newsletter-sec pb-40 overflow-visible">
@@ -1066,64 +1018,7 @@
 @endif -->
 
 <!-- category section -->
-<!-- how it works — fade-up only (horizontal AOS + overflow clipping caused hidden blocks) -->
-<section class="how-it-works-sec py-100 bg-black overflow-visible">
-  <div class="container">
-    <h2 class="fs-55 fw-700 text-center text-white mx-auto secondry-font mb-40" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="0" data-aos-easing="ease-out-cubic">Connect Your Location with Local Artists</h2>
-    <div class="row justify-content-center align-items-center row-gap-30">
-      <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="100" data-aos-easing="ease-out-cubic">
-        <div class="d-flex gap-30 flex-column flex-md-row align-items-center align-items-md-start text-center text-md-start  ">
-          <div class="w-100 text-center text-md-start">
-            <img src="{{ asset('public/uploads/all/685340c7f1013.png') }}" alt="Vision Casting" class="mb-20 mx-auto" style="max-width: 140px;">
-          </div>
-          <div>
-            <div class="d-flex justify-content-center justify-content-md-start  gap-10 align-items-center">
-              <div>
-                <img src="{{ asset('public/uploads/all/685340c7ec6fb.png') }}" alt="Vision Casting" class="mb-20 mx-auto">
-              </div>
-              <h3 class="fs-24 fw-700 text-white secondry-font mb-10">Walk Through</h3>
-            </div>
-            <p class="fs-16 fw-400 text-white primary-font">During our in-person discovery, we’ll learn about the vision for your business and put together a plan that connects your space with local art that helps you achieve your desired aesthetic.</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="220" data-aos-easing="ease-out-cubic">
-        <div class="d-flex gap-30 flex-column flex-md-row align-items-center align-items-md-start text-center text-md-start ">
-          <div class=" w-100">
-            <img src="{{ asset('public/uploads/all/685340c820468.png') }}" alt="Fine Art Matching &amp; Acquisition" class="mb-20 mx-auto" style="max-width: 140px;">
-          </div>
-          <div>
-            <div class="d-flex justify-content-center justify-content-md-start gap-10 align-items-center text-center text-md-start flex-column flex-md-row">
-              <div>
-                <img src="{{ asset('public/uploads/all/685340c82af6e.png') }}" alt="Fine Art Matching &amp; Acquisition" class="mb-20 mx-auto">
-              </div>
-              <h3 class="fs-24 fw-700 text-white secondry-font mb-10">Fine Art Matching &amp; Acquisition</h3>
-            </div>
-            <p class="fs-16 fw-400 text-white primary-font">We’ll connect you with artists best suited to meet your needs.</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="340" data-aos-easing="ease-out-cubic">
-        <div class="d-flex gap-30 flex-column flex-md-row align-items-center align-items-md-start text-center text-md-start ">
-          <div class=" w-100">
-            <img src="{{ asset('public/uploads/all/685340c81c9f6.png') }}" alt="Installation" class="mb-20 mx-auto" style="max-width: 140px;">
-          </div>
-          <div>
-            <div class="d-flex gap-10 align-items-center justify-content-center justify-content-lg-start">
-              <div>
-                <img src="{{ asset('public/uploads/all/685340c9eec89.png') }}" alt="Installation" class="mb-20 mx-auto">
-              </div>
-              <h3 class="fs-24 fw-700 text-white secondry-font mb-10">Installation</h3>
-            </div>
-            <p class="fs-16 fw-400 text-white primary-font">Our team will configure all the pieces in your space for a flat rate. including identifying art labels and desired light fixtures.</p>
-            <a href="./art-gallery-register/subscription" class="btn btn-secondary pri mary-font border-gray-light text-gray-400 px-44 py-10">View More</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<!-- how it works section -->
+@include('frontend.amazy.partials._home_location_artists')
 <!-- partners section -->
 <section class="partners-sec py-100 overflow-visible">
   <div class="container">

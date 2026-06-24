@@ -1,0 +1,72 @@
+{
+    "slides": [
+        {
+            "heading": "Discover. Connect. Collect.",
+            "sub_heading": "Source local art for your home or business.",
+            "image": "uploads\/images\/12-06-2025\/684b191a210ad.png",
+            "url": ""
+        },
+        {
+            "heading": "asdasd",
+            "sub_heading": "asdasdasdasd",
+            "image": "uploads\/images\/22-06-2026\/6a39c12c627d2.png",
+            "url": ""
+        }
+    ],
+    "marketplace": {
+        "heading": "23LD MARKETPLACE",
+        "intro": "Find your next work of art or design piece and connect with the community of 23LD buyers and sellers.",
+        "cards": [
+            {
+                "title": "Collect",
+                "description": "Buy local art",
+                "button_text": "Sign up as a Buyer",
+                "button_url": "http:\/\/localhost\/23-ld\/buyer-signup",
+                "image": "uploads\/images\/22-06-2026\/6a39c3f41f514.webp"
+            },
+            {
+                "title": "Sell",
+                "description": "Join our artist community",
+                "button_text": "Sign up as a Artist",
+                "button_url": "http:\/\/localhost\/23-ld\/merchant-register-step-2\/subscription",
+                "image": "uploads\/images\/22-06-2026\/6a39c3f451759.webp"
+            },
+            {
+                "title": "Service",
+                "description": "Art Services in your Neighborhood",
+                "button_text": "Art Services",
+                "button_url": "http:\/\/localhost\/23-ld\/art-gallery-register\/subscription",
+                "image": "uploads\/images\/22-06-2026\/6a39c3f48149b.webp"
+            }
+        ]
+    },
+    "location_artists": {
+        "heading": "Connect Your Location with Local Artists",
+        "items": [
+            {
+                "title": "Walk Through",
+                "description": "During our in-person discovery, we’ll learn about the vision for your business and put together a plan that connects your space with local art that helps you achieve your desired aesthetic.",
+                "button_text": "",
+                "button_url": "",
+                "number_image": "uploads\/images\/22-06-2026\/6a39c5818fecf.webp",
+                "icon_image": "uploads\/images\/22-06-2026\/6a39c5ccd4de5.webp"
+            },
+            {
+                "title": "Fine Art Matching & Acquisition",
+                "description": "We’ll connect you with artists best suited to meet your needs.",
+                "button_text": "",
+                "button_url": "",
+                "number_image": "uploads\/images\/22-06-2026\/6a39c5819d955.webp",
+                "icon_image": "uploads\/images\/22-06-2026\/6a39c5ccd7906.webp"
+            },
+            {
+                "title": "Installation",
+                "description": "Our team will configure all the pieces in your space for a flat rate. including identifying art labels and desired light fixtures.",
+                "button_text": "View More",
+                "button_url": "http:\/\/localhost\/23-ld\/art-gallery-register\/subscription",
+                "number_image": "uploads\/images\/22-06-2026\/6a39c5ccdc555.webp",
+                "icon_image": "uploads\/images\/22-06-2026\/6a39c5cce438d.webp"
+            }
+        ]
+    }
+}

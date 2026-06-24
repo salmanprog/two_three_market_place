@@ -4,6 +4,12 @@
     </div>
     <ul class="list-unstyled mb-0">
         <li class="mb-10">
+            <a href="{{ route('admin.site-settings.home') }}"
+               class="d-block primary-btn tr-bg text-center {{ request()->routeIs('admin.site-settings.home') ? 'fix-gr-bg text-white' : '' }}">
+                {{ __('frontendCms.home_page_settings') }}
+            </a>
+        </li>
+        <li class="mb-10">
             <a href="{{ route('admin.site-settings.contact') }}"
                class="d-block primary-btn tr-bg text-center {{ request()->routeIs('admin.site-settings.contact') ? 'fix-gr-bg text-white' : '' }}">
                 {{ __('frontendCms.contact_us_settings') }}

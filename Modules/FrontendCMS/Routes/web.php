@@ -90,6 +90,8 @@ Route::middleware(['admin','auth'])->prefix('site-settings')->as('admin.site-set
     Route::get('/', 'SiteSettingsController@index')->name('index');
     Route::get('/contact', 'SiteSettingsController@contact')->name('contact');
     Route::post('/contact/update', 'SiteSettingsController@contactUpdate')->name('contact.update')->middleware('prohibited_demo_mode');
+    Route::get('/home', 'SiteSettingsController@home')->name('home');
+    Route::post('/home/update', 'SiteSettingsController@homeUpdate')->name('home.update')->middleware('prohibited_demo_mode');
 });
 Route::middleware(['admin','auth'])->prefix('admin')->as('admin.')->group(function(){
     Route::post('setting/social-link/store', 'SocialLinkController@socialLinkStore')->name('setting.social-link.store')->middleware('prohibited_demo_mode');

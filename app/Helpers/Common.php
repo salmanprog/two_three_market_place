@@ -637,3 +637,17 @@ if (!function_exists('siteContactProfiles')) {
         return app(\Modules\FrontendCMS\Services\SiteContactService::class)->get();
     }
 }
+
+if (!function_exists('siteHomePageMarketplace')) {
+    function siteHomePageMarketplace(): array
+    {
+        return app(\Modules\FrontendCMS\Services\SiteHomePageService::class)->getMarketplace();
+    }
+}
+
+if (!function_exists('siteHomePageLocationArtists')) {
+    function siteHomePageLocationArtists(): array
+    {
+        return app(\Modules\FrontendCMS\Services\SiteHomePageService::class)->getLocationArtists();
+    }
+}
