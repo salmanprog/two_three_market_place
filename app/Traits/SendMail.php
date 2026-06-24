@@ -884,6 +884,11 @@ trait SendMail
         $datas["body"] = str_replace("{CUSTOMER_NAME}", $user->name, $datas["body"]);
         $datas["body"] = str_replace("{CUSTOMER_EMAIL}", $user->email, $datas["body"]);
         $datas["body"] = str_replace("{APP_NAME}", config('app.name'), $datas["body"]);
+        $siteUrl = app('general_setting')->website_url
+            ?: config('app.url')
+            ?: env('APP_URL')
+            ?: url('/');
+        $datas["body"] = str_replace("{SITE_URL}", rtrim((string) $siteUrl, '/'), $datas["body"]);
         $datas["body"] = str_replace("{EMAIL_SIGNATURE}", app('general_setting')->mail_signature, $datas["body"]);
         return $datas;
     }
