@@ -184,6 +184,8 @@ class InteriorDesignerRegisterController extends Controller
             $this->sendVerificationMail($user, $code);
         }
 
+        $this->newUserRegistradEmailSend('new_user_registration_template', $user);
+
         return $user;
     }
 
@@ -208,7 +210,6 @@ class InteriorDesignerRegisterController extends Controller
         if(manualActivation()){
             $this->validator($request->all())->validate();
             event(new Registered($user = $this->create($request)));
-            $this->newUserRegistradEmailSend('new_user_registration_template',$user);
             if(!empty(app('general_setting')->registration_success_url)){
                 $url =app('general_setting')->registration_success_url;
                 return  redirect()->to($url);
