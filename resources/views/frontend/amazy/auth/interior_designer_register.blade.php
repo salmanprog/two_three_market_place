@@ -169,13 +169,13 @@
                         </div>
                         @if(isModuleActive('Otp') && otp_configuration('otp_activation_for_customer') || app('business_settings')->where('type', 'email_verification')->first()->status == 0)
                         <div class="col-12 mb_20">
-                            <label class="primary_label2">{{__('common.email')}} <span>*</span></label>
+                            <label class="primary_label2">{{__('Company Email')}} <span>*</span></label>
                             <input name="email" id="email" value="{{ old('email') }}" placeholder="{{ __('common.email_or_phone') }}" onfocus="this.placeholder = ''" onblur="this.placeholder = '{{ __('common.email_or_phone') }}'" class="primary_input3 radius_5px" type="text">
                             <span class="text-danger" >{{ $errors->first('email') }}</span>
                         </div>
                         @else
                         <div class="col-12 mb_20">
-                            <label class="primary_label2">{{__('common.email')}} <span>*</span></label>
+                            <label class="primary_label2">{{__('Company Email')}} <span>*</span></label>
                             <input name="email" id="email" value="{{ old('email') }}" placeholder="{{ __('common.email') }}" onfocus="this.placeholder = ''" onblur="this.placeholder = '{{ __('common.email') }}'" class="primary_input3 radius_5px" type="text">
                             <span class="text-danger" >{{ $errors->first('email') }}</span>
                         </div>
@@ -189,7 +189,7 @@
                             @enderror
                         </div>
                         <div class="col-lg-12 mb_20">
-                            <label class="primary_label2">{{ __('Website') }} <span>*</span></label>
+                            <label class="primary_label2">{{ __('Company Website') }} <span>*</span></label>
                             <input type="text" id="web_site_url" name="web_site_url" value="{{old('web_site_url')}}" placeholder="{{ __('Website Url') }}" onfocus="this.placeholder = ''" onblur="this.placeholder = '{{ __('Website Url') }}'" class="primary_input3 radius_5px">
                             @error('web_site_url')
                                 <span class="text-danger" >{{ $message }}</span>

@@ -332,7 +332,18 @@ class CustomerController extends Controller
             'status' => 'required'
         ]);
         try{
+            $customer = $this->customerService->find($id);
+            $wasInactive = (int) $customer->is_active !== 1;
+
             $this->customerService->update($request->except('_token'), $id);
+
+            if ((int) $request->status === 1 && $wasInactive && manualActivation()) {
+                $user = User::find($id);
+                if ($user && $user->email) {
+                    (new UserRepository)->userActivationMailSend('user_activation_template', $user);
+                }
+            }
+
             Toastr::success(__('common.updated_successfully'), __('common.success'));
             LogActivity::successLog('Designer Updated Successfully.');
             return redirect()->route('interior-designer.list_active');

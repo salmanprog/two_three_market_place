@@ -12,7 +12,7 @@
             <th>{{__('common.sl')}}</th>
             <th>{{ __('common.avatar') }}</th>
             <th>{{ __('common.name') }}</th>
-            <th>{{ __('common.email') }}</th>
+            <th>{{ __('Company Email') }}</th>
             <th>{{ __('common.phone') }}</th>
             <th>{{ __('Total Balance') }}</th>
             <th>{{ __('common.total_orders') }}</th>

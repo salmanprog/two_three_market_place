@@ -51,7 +51,7 @@
                             </div>
                             <div class="col-xl-4">
                                 <div class="primary_input mb-25">
-                                    <label class="primary_input_label" for="">{{ __('common.email_or_phone') }} <span class="text-danger">*</span></label>
+                                    <label class="primary_input_label" for="">{{ __('Company Email') }} <span class="text-danger">*</span></label>
                                     <input name="email" class="primary_input_field user_id name"
                                         placeholder="{{ __('common.email_or_phone') }}" type="text" value="@if(old('email')) {{old('email')}} @else{{$customer->email?$customer->email:$customer->username}}@endif">
                                     <span class="text-danger">{{$errors->first('email')}}</span>

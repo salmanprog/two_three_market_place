@@ -35,8 +35,8 @@ class GeneralSettingsServiceProvider extends ServiceProvider
             $config = GeneralSetting::first();
             if($config){
                 config(['app.name' => $config->site_title]);
-                config(['app.url' => $config->site_url]);
-                config(['app.asset_url' => $config->site_url]);
+                config(['app.url' => $config->website_url ?: env('APP_URL')]);
+                config(['app.asset_url' => $config->website_url ?: env('APP_URL')]);
                 config(['app.force_https' => $config->force_ssl]);
                 config(['app.timezone' => $config->time_zone]);
 

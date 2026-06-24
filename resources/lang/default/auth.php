@@ -36,5 +36,5 @@ return [
     'Forgot Your Password' => 'Forgot Your Password',
     'Send Password Reset Link' => 'Send Password Reset Link',
     'Please confirm your password before continuing' => 'Please confirm your password before continuing',
-    'successfully_registered_activation' => "Registration successfull, Please wait for active your account"
+    'successfully_registered_activation' => "Registration successful. Please allow us 3-5 business days to review and activate your account."
 ];

@@ -30,7 +30,7 @@
                                         <td>: <span class="ml-1"></span>{{$customer->first_name}} {{$customer->last_name}}</td>
                                     </tr>
                                     <tr>
-                                        <td>{{ __('common.email') }}</td>
+                                        <td>{{ __('Company Email') }}</td>
                                         <td>: <span class="ml-1"></span>{{ $customer->email }}</td>
                                     </tr>
                                     <tr>
@@ -38,7 +38,7 @@
                                         <td>: <span class="ml-1"></span>{{ (getNumberTranslate($customer->phone)) ?? $customer->username }}</td>
                                     </tr>
                                     <tr>
-                                        <td>{{ __('Website') }}</td>
+                                        <td>{{ __('Company Website') }}</td>
                                         <td>: <span class="ml-1"></span>{{ $customer->web_site_url }}</td>
                                     </tr>
                                     <tr>
