@@ -310,6 +310,9 @@ table {
             </table>
         </div>
         <div class="main-content">
+            @php
+                $orderAddress = ($order->customer_id && $order->address) ? $order->address : $order->guest_info;
+            @endphp
             <table class="info">
                 <tr>
                    
@@ -319,28 +322,28 @@ table {
 
                                 <td class="left">
                                     <h4>{{ __('common.billing_info') }}</h4>
-                                    <h6>{{($order->customer_id) ? $order->address->billing_name : $order->guest_info->billing_name}}</h6>
+                                    <h6>{{ $orderAddress->billing_name }}</h6>
                                     <p>
-                                        {{($order->customer_id) ? $order->address->billing_address : $order->guest_info->billing_address}}, 
-                                        {{($order->customer_id) ? @$order->address->getBillingCity->name : @$order->guest_info->getBillingCity->name}}, 
-                                        {{($order->customer_id) ? @$order->address->getBillingState->name : @$order->guest_info->getBillingState->name}}, 
-                                        {{($order->customer_id) ? @$order->address->getBillingCountry->name : @$order->guest_info->getBillingCountry->name}}
+                                        {{ $orderAddress->billing_address }}, 
+                                        {{ @$orderAddress->getBillingCity->name }}, 
+                                        {{ @$orderAddress->getBillingState->name }}, 
+                                        {{ @$orderAddress->getBillingCountry->name }}
                                     </p>
                                     <p>
-                                        {{($order->customer_id) ? $order->address->billing_email : $order->guest_info->billing_email}} <br> {{getNumberTranslate(($order->customer_id) ? $order->address->billing_phone : $order->guest_info->billing_phone)}}
+                                        {{ $orderAddress->billing_email }} <br> {{ getNumberTranslate($orderAddress->billing_phone) }}
                                     </p>
                                 </td>
                                 <td class="right">
                                     <h4>{{ __('shipping.shipping_info') }} @if($order->delivery_type == 'pickup_location')({{ __('shipping.collect_from_pickup_location') }}) @endif</h4>
-                                    <h6>{{($order->customer_id) ? $order->address->shipping_name : $order->guest_info->shipping_name}}</h6>
+                                    <h6>{{ $orderAddress->shipping_name }}</h6>
                                     <p>
-                                        {{($order->customer_id) ? $order->address->shipping_address : $order->guest_info->shipping_address}}, 
-                                        {{($order->customer_id) ? @$order->address->getShippingCity->name : $order->guest_info->getShippingCity->name}}, 
-                                        {{($order->customer_id) ? @$order->address->getShippingState->name : $order->guest_info->getShippingState->name}}, 
-                                        {{($order->customer_id) ? $order->address->getShippingCountry->name : $order->guest_info->getShippingCountry->name}}
+                                        {{ $orderAddress->shipping_address }}, 
+                                        {{ @$orderAddress->getShippingCity->name }}, 
+                                        {{ @$orderAddress->getShippingState->name }}, 
+                                        {{ @$orderAddress->getShippingCountry->name }}
                                     </p>
                                     <p>
-                                        {{($order->customer_id) ? $order->address->shipping_email : $order->guest_info->shipping_email}}<br> {{getNumberTranslate(($order->customer_id) ? $order->address->shipping_phone : $order->guest_info->shipping_phone)}}
+                                        {{ $orderAddress->shipping_email }}<br> {{ getNumberTranslate($orderAddress->shipping_phone) }}
                                     </p>
                                 </td>
                             </tr>

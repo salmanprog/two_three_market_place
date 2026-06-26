@@ -116,9 +116,6 @@ class ResellOrderController extends Controller
             DB::beginTransaction();
             $order = $this->orderService->orderStore($request->except('_token'));
             DB::commit();
-            if (app('business_settings')->where('type', 'mail_notification')->first()->status == 1) {
-                $this->sendInvoiceMail($order->order_number, $order);
-            }
             Toastr::success(__('order.oredre_created_successfully'), __('common.success'));
             LogActivity::successLog('order store successful.');
             return redirect()->route('frontend.order.summary_after_checkout', encrypt($order->id));

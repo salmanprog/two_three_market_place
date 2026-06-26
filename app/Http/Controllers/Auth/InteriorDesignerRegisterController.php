@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
+use App\Models\AdminNotification;
 use App\Models\Cart;
 use App\Models\User;
 use Illuminate\Support\Str;
@@ -185,6 +186,13 @@ class InteriorDesignerRegisterController extends Controller
         }
 
         $this->newUserRegistradEmailSend('new_user_registration_template', $user);
+
+        $designerName = trim($user->first_name.' '.($user->last_name ?? ''));
+        AdminNotification::notifyAdminRoleUsers(
+            'interior-designer-signup-'.$user->id,
+            (int) $user->id,
+            $designerName.' has signed up as an Interior Designer.'
+        );
 
         return $user;
     }

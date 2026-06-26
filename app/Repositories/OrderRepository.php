@@ -4,11 +4,13 @@ namespace App\Repositories;
 use App\Models\Cart;
 use App\Models\DigitalFileDownload;
 use App\Models\User;
+use App\Models\AdminNotification;
 use App\Models\Order;
 use App\Traits\Carrier;
 use App\Models\OrderPayment;
 use App\Traits\Notification;
 use App\Traits\PickupLocation;
+use App\Traits\SendMail;
 use App\Models\GuestOrderDetail;
 use App\Traits\GoogleAnalytics4;
 use App\Models\OrderAddressDetail;
@@ -17,6 +19,8 @@ use App\Models\OrderProductDetail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Modules\Marketing\Entities\Coupon;
 use Illuminate\Support\Facades\Session;
 use Modules\GiftCard\Entities\GiftCard;
@@ -25,7 +29,10 @@ use Modules\Marketing\Entities\CouponUse;
 use Modules\Marketing\Entities\ReferralUse;
 use Modules\Marketing\Entities\ReferralCode;
 use Modules\Affiliate\Events\ReferralPayment;
+use Modules\Customer\Entities\CustomerAddress;
+use Modules\GeneralSetting\Entities\UserNotificationSetting;
 use Modules\Seller\Entities\SellerProductSKU;
+use Modules\UserActivityLog\Traits\LogActivity;
 use \Modules\Wallet\Repositories\WalletRepository;
 use Modules\GeneralSetting\Entities\EmailTemplateType;
 use Modules\GeneralSetting\Entities\NotificationSetting;
@@ -36,7 +43,7 @@ use Modules\Shipping\Entities\PickupLocation as EntitiesPickupLocation;
 
 class OrderRepository
 {
-    use GoogleAnalytics4, PickupLocation, Notification;
+    use GoogleAnalytics4, PickupLocation, Notification, SendMail;
     public function myPurchaseOrderList()
     {
         return Order::with('customer', 'packages', 'packages.products')->where('customer_id', auth()->user()->id)->latest()->paginate(5, ['*'], 'myPurchaseOrderList');
@@ -691,8 +698,10 @@ class OrderRepository
         //shipping carrier config
         if(sellerWiseShippingConfig(1)['order_confirm_and_sync'] == 'Automatic'){
             $orderManageRepo = new OrderManageRepository();
-            $orderManageRepo->orderConfirm($order->id);
+            $orderManageRepo->orderConfirm($order->id, false);
         }
+
+        $this->dispatchOrderPlacedAlerts($order);
 
         // send Notification for create order
         $notificationUrl = route('frontend.my_purchase_order_detail',encrypt($order->id));
@@ -702,11 +711,12 @@ class OrderRepository
         $this->adminNotificationUrl = 'ordermanage/total-sales-list';
         $this->routeCheck = 'order_manage.total_sales_index';
         $this->typeId = EmailTemplateType::where('type','order_email_template')->first()->id;//order email templete type id
-        $this->order_on_notification = $order;
+        $this->order_on_notification = $order->fresh(['customer', 'guest_info']);
         $notification = NotificationSetting::where('slug','new-order')->first();
         if ($notification) {
-            $this->notificationSend($notification->id, $order->customer_id);
+            $this->notificationSend($notification->id, $this->order_on_notification->customer_id);
         }
+
         //end shipping carrier
         Session::forget('coupon_type');
         Session::forget('coupon_discount');
@@ -1145,10 +1155,124 @@ class OrderRepository
             //shipping carrier config
             if(sellerWiseShippingConfig(1)['order_confirm_and_sync'] == 'Automatic'){
             $orderManageRepo = new OrderManageRepository();
-            $orderManageRepo->orderConfirm($order->id);
+            $orderManageRepo->orderConfirm($order->id, false);
         }
 
+        $this->dispatchOrderPlacedAlerts($order);
+
         return $order;
+    }
+
+    protected function dispatchOrderPlacedAlerts(Order $order): void
+    {
+        $order->loadMissing(['customer', 'packages', 'packages.seller', 'guest_info']);
+
+        $newAccountPassword = null;
+        if (empty($order->customer_id)) {
+            $guestAccount = $this->ensureGuestCustomerAccount($order);
+            if ($guestAccount && $guestAccount['created']) {
+                $newAccountPassword = $guestAccount['password'];
+                $order->refresh();
+                $order->loadMissing(['customer', 'packages', 'packages.seller', 'guest_info']);
+            }
+        }
+
+        $customerLabel = $order->customer
+            ? trim($order->customer->first_name.' '.($order->customer->last_name ?? ''))
+            : ($order->customer_email ?: 'Guest');
+
+        AdminNotification::notifyAdminRoleUsers(
+            'new-order-'.$order->id,
+            (int) $order->id,
+            'New order #'.$order->order_number.' placed by '.$customerLabel.'.'
+        );
+
+        if (! empty($order->customer_email)) {
+            $this->sendOrderPlacedCustomerMail($order, $newAccountPassword);
+        }
+
+        $this->sendOrderPlacedSellerMails($order);
+    }
+
+    protected function ensureGuestCustomerAccount(Order $order): ?array
+    {
+        if ($order->customer_id || empty($order->customer_email)) {
+            return null;
+        }
+
+        $email = strtolower(trim((string) $order->customer_email));
+        if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return null;
+        }
+
+        try {
+            $existingUser = User::where('email', $email)->first();
+            if ($existingUser) {
+                if ((int) $existingUser->role_id === 4) {
+                    $order->update(['customer_id' => $existingUser->id]);
+                }
+
+                return null;
+            }
+
+            $guest = $order->guest_info;
+            $fullName = trim((string) ($guest->billing_name ?? $guest->shipping_name ?? 'Customer'));
+            $nameParts = preg_split('/\s+/', $fullName, 2) ?: ['Customer'];
+            $plainPassword = Str::password(12, symbols: false);
+
+            $user = User::create([
+                'first_name' => $nameParts[0],
+                'last_name' => $nameParts[1] ?? '',
+                'email' => $email,
+                'phone' => $order->customer_phone ?: ($guest->billing_phone ?? $guest->shipping_phone ?? null),
+                'password' => Hash::make($plainPassword),
+                'role_id' => 4,
+                'is_verified' => 1,
+                'is_active' => 1,
+                'currency_id' => app('general_setting')->currency,
+                'lang_code' => app('general_setting')->language_code,
+                'currency_code' => app('general_setting')->currency_code,
+            ]);
+
+            (new UserNotificationSetting())->createForRegisterUser($user->id);
+            $this->storeGuestCheckoutAddressForCustomer($user, $guest);
+            $order->update(['customer_id' => $user->id]);
+
+            return [
+                'user' => $user,
+                'password' => $plainPassword,
+                'created' => true,
+            ];
+        } catch (\Throwable $e) {
+            LogActivity::errorLog('Guest checkout account creation failed for order '.$order->id.': '.$e->getMessage());
+
+            return null;
+        }
+    }
+
+    protected function storeGuestCheckoutAddressForCustomer(User $user, ?GuestOrderDetail $guest): void
+    {
+        if (! $guest) {
+            return;
+        }
+
+        if (CustomerAddress::where('customer_id', $user->id)->exists()) {
+            return;
+        }
+
+        CustomerAddress::create([
+            'customer_id' => $user->id,
+            'name' => $guest->shipping_name ?: $guest->billing_name,
+            'email' => $guest->shipping_email ?: $guest->billing_email ?: $user->email,
+            'phone' => $guest->shipping_phone ?: $guest->billing_phone ?: $user->phone,
+            'address' => $guest->shipping_address ?: $guest->billing_address,
+            'city' => $guest->shipping_city_id ?: $guest->billing_city_id,
+            'state' => $guest->shipping_state_id ?: $guest->billing_state_id,
+            'country' => $guest->shipping_country_id ?: $guest->billing_country_id,
+            'postal_code' => $guest->shipping_post_code ?: $guest->billing_post_code,
+            'is_shipping_default' => 1,
+            'is_billing_default' => 1,
+        ]);
     }
 
     public function orderPaymentDone($amount, $method, $response, $user = null)

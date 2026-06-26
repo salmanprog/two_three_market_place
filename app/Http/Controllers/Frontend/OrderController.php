@@ -137,9 +137,6 @@ class OrderController extends Controller
             DB::beginTransaction();
             $order = $this->orderService->orderStore($request->except('_token'));
             DB::commit();
-            if (app('business_settings')->where('type', 'mail_notification')->first()->status == 1) {
-                $this->sendInvoiceMail($order->order_number, $order);
-            }
             Toastr::success(__('order.oredre_created_successfully'), __('common.success'));
             LogActivity::successLog('order store successful.');
             return redirect()->route('frontend.order.summary_after_checkout', encrypt($order->id));
@@ -384,15 +381,19 @@ class OrderController extends Controller
             $data['processes'] = $orderDeliveryRepo->getAll();
             $cancelReasonRepo = new CancelReasonRepository;
             $data['cancel_reasons'] = $cancelReasonRepo->getAll();
-            if (auth()->check() && auth()->user()->role->type == 'customer' || auth()->user()->role->type == 'interior_designer') {
-                if (auth()->check() && $data['order']->customer_id != null) {
+            if (auth()->check() && in_array(auth()->user()->role->type, ['customer', 'interior_designer'])) {
+                if ($data['order']->customer_id != null) {
                     return view(theme('pages.profile.order_details'), $data);
-                } else {
-                    return view(theme('pages.profile.order_details_for_guest'), $data);
                 }
-            }else {
-                return view('backEnd.pages.customer_data.order_details',$data);
+
+                return view(theme('pages.profile.order_details_for_guest'), $data);
             }
+
+            if (auth()->check()) {
+                return view('backEnd.pages.customer_data.order_details', $data);
+            }
+
+            return view(theme('pages.profile.order_details_for_guest'), $data);
         } catch (Exception $e) {
             LogActivity::errorLog($e->getMessage());
             return back();

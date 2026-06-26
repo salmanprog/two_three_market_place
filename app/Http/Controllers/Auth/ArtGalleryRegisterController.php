@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Nwidart\Modules\Facades\Module;
 use App\Http\Controllers\Controller;
+use App\Models\AdminNotification;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Event;
@@ -416,6 +417,14 @@ class ArtGalleryRegisterController extends Controller
         Event::dispatch(new SellerShippingRateEvent($user['id']));
         Event::dispatch(new SellerShippingConfigEvent($user['id']));
         $this->setupSidebar($user);
+
+        $signupName = trim((string) ($data['name'] ?? $user->first_name));
+        AdminNotification::notifyAdminRoleUsers(
+            'art-gallery-signup-'.$user->id,
+            (int) $user->id,
+            $signupName.' has signed up as an Art Gallery.'
+        );
+
         return $user;
     }
 

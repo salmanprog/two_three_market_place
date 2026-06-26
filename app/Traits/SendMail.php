@@ -18,7 +18,12 @@ trait SendMail
 
     public function sendNotificationByMail($typeId, $user, $notificationSetting, $relatable_id = null, $relatable_type = null, $order_tracking_number = null)
     {
-        $email_template = EmailTemplate::where('type_id', $typeId)->where('relatable_id', $relatable_id)->where('relatable_type', $relatable_type)->where('is_active', 1)->first();
+        $email_template = EmailTemplate::where('type_id', $typeId)
+            ->where('is_active', 1)
+            ->when($relatable_id, function ($query) use ($relatable_id, $relatable_type) {
+                $query->where('relatable_id', $relatable_id)->where('relatable_type', $relatable_type);
+            })
+            ->first();
         if ($email_template) {
             try {
                 if (app('general_setting')->mail_protocol == "smtp") {
@@ -423,6 +428,319 @@ trait SendMail
             LogActivity::errorLog($e->getMessage());
         }
     }
+
+    public function sendOrderPlacedCustomerMail($order, ?string $newAccountPassword = null)
+    {
+        if (empty($order->customer_email)) {
+            return false;
+        }
+
+        $order->loadMissing([
+            'customer',
+            'address',
+            'packages.products.seller_product_sku.product',
+            'packages.products.seller_product_sku.sku.product',
+            'guest_info',
+        ]);
+
+        $typeId = EmailTemplateType::where('type', 'order_invoice_template')->value('id');
+
+        $email_template = $typeId
+            ? EmailTemplate::where('type_id', $typeId)->where('is_active', 1)->first()
+            : null;
+
+        if (! $email_template) {
+            return false;
+        }
+
+        $customerName = $order->customer
+            ? $order->customer->first_name
+            : ($order->guest_info->billing_name ?? 'Customer');
+
+        try {
+            if (app('general_setting')->mail_protocol == 'smtp') {
+                $datas = $this->orderConfirmationMailData($email_template, $customerName, $order, $newAccountPassword);
+
+                try {
+                    $invoiceDir = public_path('invoice');
+                    if (! is_dir($invoiceDir)) {
+                        mkdir($invoiceDir, 0755, true);
+                    }
+
+                    $path = public_path('/invoice/order-'.$order->id.'.pdf');
+                    PDF::loadView(theme('pages.profile.order_pdf'), compact('order'))->save($path);
+                    $datas['attach'] = $path;
+                } catch (\Exception $pdfException) {
+                    LogActivity::errorLog('Order invoice PDF failed: '.$pdfException->getMessage());
+                }
+
+                Mail::to($order->customer_email)->queue(new SendQueueMail($datas));
+
+                return true;
+            }
+
+            if (app('general_setting')->mail_protocol == 'sendmail') {
+                $datas = $this->orderConfirmationMailData($email_template, $customerName, $order, $newAccountPassword);
+                $message = (string) view('emails.mail', $datas);
+
+                if (config('queue.default') == 'sync') {
+                    return $this->phpMailData($order->customer_email, $email_template->subject, $message);
+                }
+
+                dispatch(new SendmailJob($order->customer_email, $email_template->subject, $message));
+
+                return true;
+            }
+        } catch (\Exception $e) {
+            LogActivity::errorLog($e->getMessage());
+        }
+
+        return false;
+    }
+
+    public function sendOrderPlacedSellerMails($order): void
+    {
+        $order->loadMissing([
+            'customer',
+            'guest_info',
+            'packages.seller.role',
+            'packages.products.seller_product_sku.product',
+            'packages.products.seller_product_sku.sku.product',
+        ]);
+
+        $typeId = EmailTemplateType::where('type', 'seller_new_order_template')->value('id');
+        $email_template = $typeId
+            ? EmailTemplate::where('type_id', $typeId)->where('is_active', 1)->first()
+            : null;
+
+        if (! $email_template) {
+            return;
+        }
+
+        $customerName = $order->customer
+            ? trim($order->customer->first_name.' '.($order->customer->last_name ?? ''))
+            : ($order->guest_info->billing_name ?? $order->customer_email ?? 'Customer');
+
+        $customerEmail = $order->customer_email ?: ($order->guest_info->billing_email ?? '');
+
+        foreach ($order->packages as $package) {
+            $seller = $package->seller;
+            if (! $seller || empty($seller->email) || ($seller->role->type ?? null) !== 'seller') {
+                continue;
+            }
+
+            try {
+                $datas = $this->sellerNewOrderMailData(
+                    $email_template,
+                    $seller,
+                    $order,
+                    $package,
+                    $customerName,
+                    $customerEmail
+                );
+
+                if (app('general_setting')->mail_protocol == 'smtp') {
+                    Mail::to($seller->email)->queue(new SendQueueMail($datas));
+                } elseif (app('general_setting')->mail_protocol == 'sendmail') {
+                    $message = (string) view('emails.mail', $datas);
+
+                    if (config('queue.default') == 'sync') {
+                        $this->phpMailData($seller->email, $datas['title'], $message);
+                    } else {
+                        dispatch(new SendmailJob($seller->email, $datas['title'], $message));
+                    }
+                }
+            } catch (\Exception $e) {
+                LogActivity::errorLog('Seller new order email failed: '.$e->getMessage());
+            }
+        }
+    }
+
+    protected function buildPackageItemsSummaryHtml($package): string
+    {
+        $rows = '';
+
+        foreach ($package->products as $item) {
+            $productName = @$item->seller_product_sku->product->product_name
+                ?? @$item->seller_product_sku->sku->product->product_name
+                ?? (@$item->giftCard->name ?: 'Product');
+
+            $rows .= '<tr>'
+                .'<td style="padding:10px 12px;border-bottom:1px solid #eeeeee;font-size:14px;color:#333333;">'.e($productName).'</td>'
+                .'<td style="padding:10px 12px;border-bottom:1px solid #eeeeee;font-size:14px;color:#333333;text-align:center;">'.e((string) $item->qty).'</td>'
+                .'<td style="padding:10px 12px;border-bottom:1px solid #eeeeee;font-size:14px;color:#333333;text-align:right;">'.e(single_price($item->total_price ?? ($item->price * $item->qty))).'</td>'
+                .'</tr>';
+        }
+
+        if ($rows === '') {
+            return '<p style="margin:0;font-size:14px;color:#666666;">No items found for this package.</p>';
+        }
+
+        return '<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border:1px solid #eeeeee;border-radius:6px;overflow:hidden;margin-bottom:8px;">'
+            .'<tr style="background-color:#f3f3f3;">'
+            .'<th style="padding:10px 12px;font-size:13px;color:#333333;text-align:left;">Item</th>'
+            .'<th style="padding:10px 12px;font-size:13px;color:#333333;text-align:center;">Qty</th>'
+            .'<th style="padding:10px 12px;font-size:13px;color:#333333;text-align:right;">Total</th>'
+            .'</tr>'
+            .$rows
+            .'</table>';
+    }
+
+    protected function packageTotalAmount($package): float
+    {
+        $itemsTotal = $package->products->sum(function ($item) {
+            return (float) ($item->total_price ?? ($item->price * $item->qty));
+        });
+
+        return $itemsTotal + (float) ($package->shipping_cost ?? 0) + (float) ($package->tax_amount ?? 0);
+    }
+
+    public function sellerNewOrderMailData($email_template, $seller, $order, $package, $customerName, $customerEmail): array
+    {
+        $siteUrl = app('general_setting')->website_url
+            ?: (app()->runningInConsole() ? config('app.url') : url('/'))
+            ?: config('app.url')
+            ?: env('APP_URL')
+            ?: url('/');
+
+        $siteUrl = rtrim((string) $siteUrl, '/');
+        $orderLink = url(route('order_manage.show_details_mine', encrypt($package->id), false));
+
+        $subject = str_replace(
+            ['{ORDER_NUMBER}', '{PACKAGE_CODE}'],
+            [$order->order_number, $package->package_code],
+            $email_template->subject
+        );
+
+        $datas = [
+            'email' => app('general_setting')->email,
+            'title' => $subject,
+            'from' => env('MAIL_FROM_ADDRESS'),
+            'body' => $email_template->value,
+        ];
+
+        $replacements = [
+            '{USER_FIRST_NAME}' => $seller->first_name,
+            '{USER_EMAIL}' => $seller->email,
+            '{APP_NAME}' => app('general_setting')->site_title ?: config('app.name'),
+            '{SITE_URL}' => $siteUrl,
+            '{EMAIL_SIGNATURE}' => app('general_setting')->mail_signature,
+            '{ORDER_NUMBER}' => $order->order_number,
+            '{PACKAGE_CODE}' => $package->package_code,
+            '{ORDER_TOTAL}' => single_price($this->packageTotalAmount($package)),
+            '{ORDER_DATE}' => $order->created_at ? $order->created_at->format('M d, Y') : now()->format('M d, Y'),
+            '{ORDER_ITEMS}' => $this->buildPackageItemsSummaryHtml($package),
+            '{ORDER_LINK}' => $orderLink,
+            '{CUSTOMER_NAME}' => $customerName,
+            '{CUSTOMER_EMAIL}' => $customerEmail,
+            '{WEBSITE_NAME}' => app('general_setting')->site_title,
+            '{EMAIL_FOOTER}' => $email_template->footer ?? '',
+        ];
+
+        foreach ($replacements as $placeholder => $value) {
+            $datas['body'] = str_replace($placeholder, (string) $value, $datas['body']);
+        }
+
+        return $datas;
+    }
+
+    protected function buildOrderItemsSummaryHtml($order): string
+    {
+        $rows = '';
+
+        foreach ($order->packages as $package) {
+            foreach ($package->products as $item) {
+                $productName = @$item->seller_product_sku->product->product_name
+                    ?? @$item->seller_product_sku->sku->product->product_name
+                    ?? 'Product';
+
+                $rows .= '<tr>'
+                    .'<td style="padding:10px 12px;border-bottom:1px solid #eeeeee;font-size:14px;color:#333333;">'.e($productName).'</td>'
+                    .'<td style="padding:10px 12px;border-bottom:1px solid #eeeeee;font-size:14px;color:#333333;text-align:center;">'.e((string) $item->qty).'</td>'
+                    .'<td style="padding:10px 12px;border-bottom:1px solid #eeeeee;font-size:14px;color:#333333;text-align:right;">'.e(single_price($item->price * $item->qty)).'</td>'
+                    .'</tr>';
+            }
+        }
+
+        if ($rows === '') {
+            return '<p style="margin:0;font-size:14px;color:#666666;">No items found for this order.</p>';
+        }
+
+        return '<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border:1px solid #eeeeee;border-radius:6px;overflow:hidden;margin-bottom:8px;">'
+            .'<tr style="background-color:#f3f3f3;">'
+            .'<th style="padding:10px 12px;font-size:13px;color:#333333;text-align:left;">Item</th>'
+            .'<th style="padding:10px 12px;font-size:13px;color:#333333;text-align:center;">Qty</th>'
+            .'<th style="padding:10px 12px;font-size:13px;color:#333333;text-align:right;">Total</th>'
+            .'</tr>'
+            .$rows
+            .'</table>';
+    }
+
+    protected function buildNewAccountCredentialsHtml(?string $email, ?string $plainPassword): string
+    {
+        if (empty($email) || empty($plainPassword)) {
+            return '';
+        }
+
+        $loginUrl = url(route('login', [], false));
+
+        return '<p style="margin:24px 0 12px;font-size:15px;color:#333333;font-weight:600;">Your Account Login Details</p>'
+            .'<p style="margin:0 0 16px;font-size:14px;color:#555555;line-height:1.7;">We created an account for you so you can sign in and track your order status on our platform.</p>'
+            .'<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#f9f9f9;border:1px solid #eeeeee;border-radius:6px;margin-bottom:16px;">'
+            .'<tr><td style="padding:16px 20px;">'
+            .'<p style="margin:0 0 8px;font-size:14px;color:#333333;line-height:1.6;"><strong>Email:</strong> '.e($email).'</p>'
+            .'<p style="margin:0;font-size:14px;color:#333333;line-height:1.6;"><strong>Password:</strong> '.e($plainPassword).'</p>'
+            .'</td></tr></table>'
+            .'<p style="margin:0 0 16px;font-size:13px;color:#666666;line-height:1.6;">Please change your password after your first login.</p>'
+            .'<table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:0 auto 8px;">'
+            .'<tr><td style="background-color:#000000;border-radius:5px;">'
+            .'<a href="'.e($loginUrl).'" target="_blank" style="display:inline-block;padding:12px 28px;font-size:14px;font-weight:600;color:#ffffff;text-decoration:none;">Sign In to Your Account</a>'
+            .'</td></tr></table>';
+    }
+
+    public function orderConfirmationMailData($email_template, $to_name, $order, ?string $newAccountPassword = null): array
+    {
+        $siteUrl = app('general_setting')->website_url
+            ?: (app()->runningInConsole() ? config('app.url') : url('/'))
+            ?: config('app.url')
+            ?: env('APP_URL')
+            ?: url('/');
+
+        $siteUrl = rtrim((string) $siteUrl, '/');
+        $orderLink = url(route('frontend.my_purchase_order_detail', encrypt($order->id), false));
+
+        $datas = [
+            'email' => app('general_setting')->email,
+            'title' => $email_template->subject,
+            'from' => env('MAIL_FROM_ADDRESS'),
+            'body' => $email_template->value,
+        ];
+
+        $replacements = [
+            '{USER_FIRST_NAME}' => $to_name,
+            '{USER_EMAIL}' => $order->customer_email,
+            '{APP_NAME}' => app('general_setting')->site_title ?: config('app.name'),
+            '{SITE_URL}' => $siteUrl,
+            '{EMAIL_SIGNATURE}' => app('general_setting')->mail_signature,
+            '{ORDER_NUMBER}' => $order->order_number,
+            '{ORDER_TRACKING_NUMBER}' => $order->order_number,
+            '{ORDER_TOTAL}' => single_price($order->grand_total),
+            '{ORDER_DATE}' => $order->created_at ? $order->created_at->format('M d, Y') : now()->format('M d, Y'),
+            '{ORDER_ITEMS}' => $this->buildOrderItemsSummaryHtml($order),
+            '{ORDER_LINK}' => $orderLink,
+            '{LOGIN_URL}' => url(route('login', [], false)),
+            '{ACCOUNT_CREDENTIALS}' => $this->buildNewAccountCredentialsHtml($order->customer_email, $newAccountPassword),
+            '{WEBSITE_NAME}' => app('general_setting')->site_title,
+            '{EMAIL_FOOTER}' => $email_template->footer ?? '',
+        ];
+
+        foreach ($replacements as $placeholder => $value) {
+            $datas['body'] = str_replace($placeholder, (string) $value, $datas['body']);
+        }
+
+        return $datas;
+    }
+
     function sendOrderRefundInfoUpdateMail($order, $type_id)
     {
         try {

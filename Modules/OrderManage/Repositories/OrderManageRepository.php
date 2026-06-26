@@ -625,7 +625,7 @@ class OrderManageRepository
         }
     }
 
-    public function orderConfirm($id){
+    public function orderConfirm($id, $sendCustomerNotification = true){
 
         $order = Order::with(['packages','packages.order','packages.order.billing_address','packages.order.shipping_address'])->find($id);
         if($order){
@@ -633,16 +633,18 @@ class OrderManageRepository
                 'is_confirmed' => 1
             ]);
 
-            //customer and seller get Notification When super admin change any delivery status
-            $notificationUrl = route('frontend.my_purchase_order_detail',encrypt($order->id));
-            $notificationUrl = str_replace(url('/'),'',$notificationUrl);
-            $this->notificationUrl = $notificationUrl;
-            $this->adminNotificationUrl = 'ordermanage/total-sales-list';
-            $this->routeCheck = 'order_manage.total_sales_index';
-            $this->typeId = EmailTemplateType::where('type','order_email_template')->first()->id;//order email templete type id
-            $notification = NotificationSetting::where('slug','order-confirmation')->first();
-            if ($notification) {
-                $this->notificationSend($notification->id, $order->customer_id);
+            if ($sendCustomerNotification) {
+                //customer and seller get Notification When super admin change any delivery status
+                $notificationUrl = route('frontend.my_purchase_order_detail',encrypt($order->id));
+                $notificationUrl = str_replace(url('/'),'',$notificationUrl);
+                $this->notificationUrl = $notificationUrl;
+                $this->adminNotificationUrl = 'ordermanage/total-sales-list';
+                $this->routeCheck = 'order_manage.total_sales_index';
+                $this->typeId = EmailTemplateType::where('type','order_email_template')->first()->id;//order email templete type id
+                $notification = NotificationSetting::where('slug','order-confirmation')->first();
+                if ($notification) {
+                    $this->notificationSend($notification->id, $order->customer_id);
+                }
             }
             foreach($order->packages as $key => $package){
                 $package->update([

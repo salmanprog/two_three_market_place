@@ -38,12 +38,12 @@ trait Notification
                 }
                 $userNotificationSetting = UserNotificationSetting::where('notification_setting_id', $notificationSetting->id)->where('user_id', $userId)->first();
 
-                if ($userNotificationSetting) {
+                if($userNotificationSetting){
                     if($user && $user->role_id != 1){
                         $this->checkUserNotificationSettingAndSend($user, $notificationSetting, $userNotificationSetting);
                     }
                 }
-                if($user && $event == 'Sub Seller Created'){
+                if($user && $notificationSetting->event == 'Sub Seller Created'){
                     $this->sendNotificationForSeller($notificationSetting, $user->sub_seller->user_id);
                 }else{
                     // send notification to super admin
@@ -51,13 +51,8 @@ trait Notification
                     //send notificatuion permission wise
                     $this->sendNotificationToPermissionWise($notificationSetting);
                 }
-                if($event == 'New Order' && !$user){
-                    $guestData = [
-                        'email' => $this->order_on_notification->customer_email,
-                        'first_name' => '',
-                    ];
-                    $this->sendNotificationMail((object) $guestData,$notificationSetting);
-                }
+                // Customer order confirmation email is sent by OrderRepository::dispatchOrderPlacedAlerts().
+                // Do not send legacy order_email_template here (causes duplicate/broken guest emails).
             }
         } catch (\Exception $th) {
 
@@ -123,7 +118,7 @@ trait Notification
             }
         }
         if (Str::contains($notificationSetting->type, 'email')) {
-            if($user->email != null){
+            if($user->email != null && $notificationSetting->slug !== 'new-order'){
                 $this->sendNotificationMail($user, $notificationSetting);
             }
         }
@@ -171,7 +166,7 @@ trait Notification
             }
         }
         if (Str::contains($notificationSetting->type, 'email') && Str::contains($userNotificationSetting->type, 'email')) {
-            if($user->email != null){
+            if($user->email != null && $notificationSetting->slug !== 'new-order'){
                 $this->sendNotificationMail($user, $notificationSetting);
             }
         }
@@ -296,7 +291,7 @@ trait Notification
             }
         }
         if (Str::contains($notificationSetting->type, 'email') && Str::contains($userNotificationSetting->type, 'email')) {
-            if($user->email != null){
+            if($user->email != null && $notificationSetting->slug !== 'new-order'){
                 $this->sendNotificationMail($user, $notificationSetting);
             }
         }
@@ -367,7 +362,7 @@ trait Notification
             }
         }
         if (Str::contains($notificationSetting->type, 'email') && Str::contains($userNotificationSetting->type, 'email')) {
-            if($user->email != null){
+            if($user->email != null && $notificationSetting->slug !== 'new-order'){
                 $this->sendNotificationMail($user, $notificationSetting);
             }
         }

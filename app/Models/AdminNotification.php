@@ -74,4 +74,37 @@ class AdminNotification extends Model
             ->limit($limit)
             ->get();
     }
+
+    public static function notifyAdminRoleUsers(string $slug, int $referenceId, string $message): void
+    {
+        if (! Schema::hasTable((new static)->getTable())) {
+            return;
+        }
+
+        $adminUserIds = User::query()
+            ->where('is_active', 1)
+            ->whereHas('role', function (Builder $query) {
+                $query->where('type', 'admin');
+            })
+            ->pluck('id');
+
+        if ($adminUserIds->isEmpty()) {
+            return;
+        }
+
+        $now = now();
+        $rows = $adminUserIds->map(function ($adminId) use ($slug, $referenceId, $message, $now) {
+            return [
+                'slug' => $slug,
+                'user_id' => $adminId,
+                'refrence_id' => $referenceId,
+                'message' => $message,
+                'is_read' => '0',
+                'created_at' => $now,
+                'updated_at' => $now,
+            ];
+        })->all();
+
+        static::query()->insert($rows);
+    }
 }
