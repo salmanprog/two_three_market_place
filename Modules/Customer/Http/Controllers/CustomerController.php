@@ -277,7 +277,7 @@ class CustomerController extends Controller
         $request->validate([
             'first_name' => 'required|max:255',
             'last_name' => 'nullable|max:255',
-            'email' => ['required', 'string', 'max:255', 'unique:users,email', 'check_unique_phone'],
+            'email' => ['required', 'string', 'max:255', 'unique:users,email'],
             'password' => 'required|confirmed|min:8',
             'referral_code' => ['sometimes', 'nullable', Rule::exists('referral_codes', 'referral_code')->where('status', 1)],
             'status' => 'required'
@@ -587,9 +587,9 @@ class CustomerController extends Controller
             $email = 'nullable|email|max:255|unique:users,email,'.auth()->user()->id;
         }
         if (auth()->user()->phone) {
-            $phone = 'required|min:'.app('general_setting')->min_digit.'|max:'.app('general_setting')->max_digit.'|unique:users,phone,'.auth()->user()->id;
-        }else{
-            $phone = 'nullable|min:'.app('general_setting')->min_digit.'|max:'.app('general_setting')->max_digit.'|unique:users,username,'.auth()->user()->id;
+            $phone = 'required|max:25';
+        } else {
+            $phone = 'nullable|max:25';
         }
         $request->validate([
             'first_name' => 'required',

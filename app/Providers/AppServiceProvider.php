@@ -58,16 +58,8 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
 
 
-        Validator::extend('check_unique_phone', function($attribute, $value, $parameters, $validator) {
-            if (is_numeric($value)) {
-              $data=User::where('phone',$value)->first();
-              if($data){
-                return false;
-               }
-                return true;
-            }
+        Validator::extend('check_unique_phone', function ($attribute, $value, $parameters, $validator) {
             return true;
-
         });
 
         Paginator::useBootstrap();

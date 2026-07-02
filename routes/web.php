@@ -404,6 +404,10 @@ Route::get('/packages', function() {
     return view('frontend.amazy.pages.packages');
 })->name('frontend.packages');
 
+Route::post('/interior-designer/register/prepare', [\App\Http\Controllers\Auth\InteriorDesignerRegisterController::class, 'prepareRegistration'])
+    ->name('interior-designer.register.prepare')
+    ->middleware('maintenance_mode');
+
 
 // menu dropdowns routes — art-services sections live on one page with hash anchors
 $artServicesSectionRedirect = function (string $section) {

@@ -41,20 +41,24 @@ class SuggestColorsController extends Controller
             ->latest()
             ->get();
 
-        return view(theme('pages.profile.suggest_colors.index'), compact('suggestColors'));
+        $existingJobNames = $this->existingJobNamesForUser();
+
+        return view(theme('pages.profile.suggest_colors.index'), compact('suggestColors', 'existingJobNames'));
     }
 
     public function create()
     {
         $palette = self::palette();
+        $existingJobNames = $this->existingJobNamesForUser();
 
-        return view(theme('pages.profile.suggest_colors.create'), compact('palette'));
+        return view(theme('pages.profile.suggest_colors.create'), compact('palette', 'existingJobNames'));
     }
 
     public function store(Request $request)
     {
         $request->merge([
             'colors' => $request->filled('colors') ? strtoupper(trim($request->input('colors'))) : '',
+            'job_name' => $request->filled('job_name') ? trim($request->input('job_name')) : null,
         ]);
 
         $request->validate([
@@ -62,11 +66,13 @@ class SuggestColorsController extends Controller
                 'required',
                 'regex:/^#[0-9A-F]{6}$/',
             ],
+            'job_name' => 'required|string|max:191',
         ]);
 
         SuggestColors::create([
             'user_id' => auth()->id(),
             'colors' => $request->colors,
+            'job_name' => $request->job_name,
             'slug' => $this->uniqueSlug($request->colors),
         ]);
 
@@ -79,8 +85,9 @@ class SuggestColorsController extends Controller
     {
         $this->authorizeRow($suggestColor);
         $palette = self::palette();
+        $existingJobNames = $this->existingJobNamesForUser();
 
-        return view(theme('pages.profile.suggest_colors.edit'), compact('suggestColor', 'palette'));
+        return view(theme('pages.profile.suggest_colors.edit'), compact('suggestColor', 'palette', 'existingJobNames'));
     }
 
     public function update(Request $request, SuggestColors $suggestColor)
@@ -89,6 +96,7 @@ class SuggestColorsController extends Controller
 
         $request->merge([
             'colors' => $request->filled('colors') ? strtoupper(trim($request->input('colors'))) : '',
+            'job_name' => $request->filled('job_name') ? trim($request->input('job_name')) : null,
         ]);
 
         $request->validate([
@@ -96,9 +104,11 @@ class SuggestColorsController extends Controller
                 'required',
                 'regex:/^#[0-9A-F]{6}$/',
             ],
+            'job_name' => 'required|string|max:191',
         ]);
 
         $suggestColor->colors = $request->colors;
+        $suggestColor->job_name = $request->job_name;
         if ($suggestColor->isDirty('colors')) {
             $suggestColor->slug = $this->uniqueSlug($request->colors);
         }
@@ -132,5 +142,16 @@ class SuggestColorsController extends Controller
         } while (SuggestColors::where('slug', $slug)->exists());
 
         return $slug;
+    }
+
+    protected function existingJobNamesForUser()
+    {
+        return SuggestColors::query()
+            ->where('user_id', auth()->id())
+            ->whereNotNull('job_name')
+            ->where('job_name', '!=', '')
+            ->distinct()
+            ->orderBy('job_name')
+            ->pluck('job_name');
     }
 }

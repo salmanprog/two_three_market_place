@@ -53,7 +53,7 @@ class ProfileController extends Controller
         $request->validate([
             'first_name' => 'nullable',
             'email' => 'nullable|unique:users,email,'.$request->user()->id,
-            'phone' => 'nullable|unique:users,phone,'.$request->user()->id
+            'phone' => 'nullable|max:25'
         ]);
 
         $user=User::find($request->user()->id);

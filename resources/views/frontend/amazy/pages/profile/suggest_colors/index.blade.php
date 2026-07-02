@@ -9,7 +9,7 @@
             <div class="col-xl-9 col-lg-8">
                 <div class="dashboard_white_box style2 bg-white mb_25">
                     <div class="dashboard_white_box_header d-flex align-items-center justify-content-between flex-wrap gap-2 mb_20">
-                        <h4 class="font_24 f_w_700 m-0">{{ __('Suggest Artwork') }}</h4>
+                        <h4 class="font_24 f_w_700 m-0">{{ __('customer_panel.my_palette') }}</h4>
                         <a href="{{ route('frontend.suggest-colors.create') }}" class="amaz_primary_btn style2 text-nowrap">{{ __('common.add_new') }}</a>
                     </div>
                     <div class="dashboard_white_box_body">
@@ -22,6 +22,7 @@
                                         <tr>
                                             <th class="font_14 f_w_600">{{ __('common.preview') }}</th>
                                             <th class="font_14 f_w_600">{{ __('appearance.color') }}</th>
+                                            <th class="font_14 f_w_600">{{ __('customer_panel.job_name') }}</th>
                                             <th class="font_14 f_w_600">{{ __('common.action') }}</th>
                                         </tr>
                                     </thead>
@@ -32,6 +33,7 @@
                                                     <span class="d-inline-block rounded border" style="width:40px;height:40px;background:{{ $row->colors }};" title="{{ $row->colors }}"></span>
                                                 </td>
                                                 <td class="font_14 f_w_500">{{ $row->colors }}</td>
+                                                <td class="font_14 f_w_500">{{ $row->job_name ?: '—' }}</td>
                                                 <td>
                                                     <div class="d-flex align-items-center gap_10 flex-wrap">
                                                         <a href="{{ route('frontend.suggest-colors.edit', $row) }}" class="font_14 theme_hover">{{ __('common.edit') }}</a>

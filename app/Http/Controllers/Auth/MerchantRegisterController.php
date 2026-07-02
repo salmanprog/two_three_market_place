@@ -339,7 +339,7 @@ class MerchantRegisterController extends Controller
         if (filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
             $email = ['required', 'string', 'max:255','email',new RealEmail(),'unique:users,email'];
          }elseif (preg_match("/^\\+?\\d{1,4}?[-.\\s]?\\(?\\d{1,3}?\\)?[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,9}$/",$data['email'])) {
-             $email = ['required', 'string','min:7', 'max:16','unique:users,phone'];
+             $email = ['required', 'string','min:7', 'max:25'];
          }else {
              $email = ['required', 'string', 'max:255','email',new RealEmail()];
          }
@@ -349,7 +349,7 @@ class MerchantRegisterController extends Controller
             [
                 'name' => ['required', 'string', 'max:255','unique:seller_accounts,seller_shop_display_name',new SellerValidateRule($data['name'])],
                 'email' => $email,
-                'phone' => ['required', 'string', 'max:255', 'unique:users'],
+                'phone' => ['required', 'string', 'max:255'],
                 'password' => ['required', 'string', 'min:8', 'confirmed'],
                 'g-recaptcha-response' =>$g_recaptcha,
 

@@ -1,13 +1,13 @@
 @extends('frontend.amazy.layouts.app')
 
 @section('title')
-Why 23rd LD? | {{ config('app.name') }}
+Why 23LD? | {{ config('app.name') }}
 @endsection
 
 @section('share_meta')
-<meta name="title" content="Why 23rd LD? | {{ config('app.name') }}">
+<meta name="title" content="Why 23LD? | {{ config('app.name') }}">
 <meta name="description" content="Why art galleries and museums partner with {{ config('app.name') }} — events, referrals, and art synergy.">
-<meta property="og:title" content="Why 23rd LD? | {{ config('app.name') }}" />
+<meta property="og:title" content="Why 23LD? | {{ config('app.name') }}" />
 <meta property="og:description" content="Why art galleries and museums partner with us — events, referrals, and art synergy." />
 <meta property="og:url" content="{{ url()->current() }}" />
 @endsection
@@ -16,7 +16,7 @@ Why 23rd LD? | {{ config('app.name') }}
 <div class="how-partner-page">
     <section class="how-partner-section py-50 py-lg-100 overflow-visible">
         <div class="container">
-            <h1 class="secondry-font fs-55 fw-700 text-center text-black mb-40 line-height-1-2 mx-auto" style="max-width: 920px;" data-aos="fade-up" data-aos-duration="1000" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">Why 23rd LD?</h1>
+            <h1 class="secondry-font fs-55 fw-700 text-center text-black mb-40 line-height-1-2 mx-auto" style="max-width: 920px;" data-aos="fade-up" data-aos-duration="1000" data-aos-easing="ease-out-cubic" data-aos-anchor-placement="top-bottom">Why 23LD?</h1>
 
             <div class="row align-items-center g-4 g-lg-5">
                 <div class="col-12 col-lg-6">

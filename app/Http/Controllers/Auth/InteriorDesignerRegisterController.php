@@ -56,8 +56,28 @@ class InteriorDesignerRegisterController extends Controller
 
     public function __construct()
     {
-        $this->middleware(['guest', 'maintenance_mode']);
+        $this->middleware(['guest', 'maintenance_mode'])->except('prepareRegistration');
+        $this->middleware(['maintenance_mode'])->only('prepareRegistration');
         $this->middleware(['prohibited_demo_mode'])->only('register');
+    }
+
+    public function prepareRegistration(Request $request)
+    {
+        if (auth()->check()) {
+            if (auth()->user()->role->type === 'interior_designer') {
+                Toastr::info(__('You already have an Interior Designer account.'), __('common.info'));
+
+                return redirect('/profile/dashboard');
+            }
+
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            Toastr::info(__('You have been logged out. Please complete your Interior Designer registration.'), __('common.success'));
+        }
+
+        return redirect()->route('interiorregister');
     }
 
     protected function validator(array $data)
@@ -70,7 +90,7 @@ class InteriorDesignerRegisterController extends Controller
         if (filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
            $email = ['required', 'string', 'max:255','email',new RealEmail(),'unique:users,email'];
         }elseif (preg_match("/^\\+?\\d{1,4}?[-.\\s]?\\(?\\d{1,3}?\\)?[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,9}$/",$data['email'])) {
-            $email = ['required', 'string','min:7', 'max:16','unique:users,phone'];
+            $email = ['required', 'string','min:7', 'max:25'];
         }else {
             $email = ['required', 'string', 'max:255','email',new RealEmail()];
         }
@@ -202,7 +222,7 @@ class InteriorDesignerRegisterController extends Controller
         if (filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
           $email = ['required', 'string', 'max:255','email',new RealEmail(),'unique:users,email'];
         }elseif (preg_match("/^\\+?\\d{1,4}?[-.\\s]?\\(?\\d{1,3}?\\)?[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,9}$/", $request->email)) {
-            $email = ['required', 'string','min:7', 'max:16','unique:users,phone'];
+            $email = ['required', 'string','min:7', 'max:25'];
         }else {
             $email = ['required', 'string', 'max:255','email'];
         }

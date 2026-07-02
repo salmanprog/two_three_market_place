@@ -287,7 +287,7 @@
                             <path  data-name="Path 4168" d="M21.065,16.356H18.553a2.3,2.3,0,0,1,0-4.606h2.512a.628.628,0,1,1,0,1.256H18.553a1.047,1.047,0,0,0,0,2.094h2.512a.628.628,0,1,1,0,1.256Z" transform="translate(-2.443 -1.706)" fill="#00124e"/>
                         </g>
                         </svg>
-                        {{__('Suggest Artwork')}}</a>
+                        {{__('customer_panel.my_palette')}}</a>
                 </li>
                 <li>
                     <a class="position-relative d-flex align-items-center" href="{{url('/profile')}}">

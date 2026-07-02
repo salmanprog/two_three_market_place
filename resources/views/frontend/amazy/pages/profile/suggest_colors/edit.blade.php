@@ -43,7 +43,7 @@
             <div class="col-xl-9 col-lg-8">
                 <div class="dashboard_white_box style2 bg-white mb_25">
                     <div class="dashboard_white_box_header d-flex align-items-center justify-content-between flex-wrap gap-2 mb_20">
-                        <h4 class="font_24 f_w_700 m-0">{{ __('Suggest Artwork') }}</h4>
+                        <h4 class="font_24 f_w_700 m-0">{{ __('customer_panel.my_palette') }}</h4>
                         <a href="{{ route('frontend.suggest-colors.index') }}" class="amaz_primary_btn3 style2 text-nowrap">{{ __('common.cancel') }}</a>
                     </div>
                     <div class="dashboard_white_box_body">
@@ -57,6 +57,28 @@
                                     id="suggest_color_picker"
                                     value="{{ $selectedHex }}"
                                     title="{{ __('Choose a color') }}">
+                            </div>
+                            <div class="mb_3">
+                                <label for="job_name" class="form-label font_14 f_w_500 mb_2">{{ __('customer_panel.job_name') }} <span class="text-danger">*</span></label>
+                                <input type="text"
+                                    class="primary_input_field"
+                                    id="job_name"
+                                    name="job_name"
+                                    list="existing_job_names"
+                                    value="{{ old('job_name', $suggestColor->job_name) }}"
+                                    placeholder="{{ __('customer_panel.job_name') }}"
+                                    maxlength="191"
+                                    required>
+                                @if(isset($existingJobNames) && $existingJobNames->isNotEmpty())
+                                    <datalist id="existing_job_names">
+                                        @foreach ($existingJobNames as $jobName)
+                                            <option value="{{ $jobName }}"></option>
+                                        @endforeach
+                                    </datalist>
+                                @endif
+                                @error('job_name')
+                                    <p class="text-danger font_14 mb-0 mt-2">{{ $message }}</p>
+                                @enderror
                             </div>
                             <p class="font_14 f_w_500 mute_text mb_4" id="suggest_colors_preview_wrap" @if(!$selectedHex) style="display:none" @endif>
                                 <span class="mute_text">{{ __('appearance.color') }}:</span>
