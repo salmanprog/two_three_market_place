@@ -10,9 +10,9 @@
                     if ($(this).data('producttype') == 1) {
                         let prod_info = $(this).data('prod_info');
                         let is_stock_manage = $(this).data('stock_manage');
-                        let stock = $(this).data('stock');
-                        let min_qty = $(this).data('min_qty');
-                        if(is_stock_manage == 1 && stock > min_qty){
+                        let stock = parseInt($(this).data('stock'), 10) || 0;
+                        let min_qty = parseInt($(this).data('min_qty'), 10) || 1;
+                        if(is_stock_manage == 1 && stock >= min_qty){
                             addToCart($(this).attr('data-product-sku'),$(this).attr('data-seller'),min_qty,$(this).attr('data-base-price'),0,'product', prod_info)
                             $("."+className).prop("disabled", false);
                         }else if(is_stock_manage == 0){

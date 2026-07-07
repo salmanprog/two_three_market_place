@@ -5,8 +5,8 @@
     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
         @if (permissionCheck('customer.show_details'))
             <a href="{{route('customer.show_details',$customer->id)}}" class="dropdown-item" type="button">{{__('common.details')}}</a>
-        @endif
-        @if (permissionCheck('admin.customer.edit'))
+            <a href="{{route('admin.customer.edit',$customer->id)}}" class="dropdown-item" type="button">{{__('common.edit')}}</a>
+        @elseif(in_array(auth()->user()->role->type, ['superadmin', 'admin', 'staff']))
             <a href="{{route('admin.customer.edit',$customer->id)}}" class="dropdown-item" type="button">{{__('common.edit')}}</a>
         @endif
         @if (permissionCheck('admin.customer.destroy'))

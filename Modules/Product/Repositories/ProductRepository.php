@@ -4,6 +4,8 @@ namespace Modules\Product\Repositories;
 
 use App\Models\Cart;
 use App\Models\UsedMedia;
+use App\Models\AdminNotification;
+use App\Models\User;
 use App\Traits\ImageStore;
 use App\Models\MediaManager;
 use App\Traits\GenerateSlug;
@@ -241,13 +243,33 @@ class ProductRepository
             $notificationUrl = route('seller.product.index');
             $notificationUrl = str_replace(url('/'),'',$notificationUrl);
             $this->notificationUrl = $notificationUrl;
-            $this->adminNotificationUrl = '/products';
+            $this->adminNotificationUrl = '/products#order_complete_data';
             $this->routeCheck = 'product.index';
             $this->typeId = EmailTemplateType::where('type', 'product_approve_email_template')->first()->id;
             $notification = NotificationSetting::where('slug','seller-product-create')->first();
             if ($notification) {
                 $this->notificationSend($notification->id, $product->created_by);
             }
+
+            $seller = User::find($product->created_by);
+            $sellerName = trim(($seller->first_name ?? '').' '.($seller->last_name ?? ''));
+            if ($sellerName === '' && $seller) {
+                $sellerName = $seller->email ?? __('common.seller');
+            }
+            $productName = $product->product_name;
+            if (is_string($productName)) {
+                $decodedName = json_decode($productName, true);
+                if (is_array($decodedName)) {
+                    $productName = reset($decodedName) ?: $productName;
+                }
+            } elseif (is_array($productName)) {
+                $productName = reset($productName) ?: __('common.product');
+            }
+            AdminNotification::notifyAdminRoleUsers(
+                'seller-product-request-'.$product->id,
+                (int) $product->id,
+                $sellerName.' submitted "'.$productName.'" for product approval.'
+            );
         }
 
         $tags = [];

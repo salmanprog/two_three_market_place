@@ -3,10 +3,27 @@
     <section class="admin-visitor-area up_st_admin_visitor">
         <div class="container-fluid p-0">
             <div class="row justify-content-center">
+                <div class="col-md-12 mb-20">
+                    <div class="box_header_right">
+                        <div class="float-lg-right float-none pos_tab_btn justify-content-end">
+                            <ul class="nav" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active show merchant-list-tab" href="javascript:void(0)" data-table="all_merchant">{{ __('common.all') }} Artist</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link merchant-list-tab" href="javascript:void(0)" data-table="active_merchant">{{ __('common.active') }} Artist</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link merchant-list-tab" href="javascript:void(0)" data-table="inactive_merchant">{{ __('common.inactive') }} Artist</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-lg-12">
                     <div class="box_header common_table_header">
                         <div class="main-title d-flex align-items-center">
-                            <h3 class="mb-0 mr-30 mb_xs_15px mb_sm_20px">Artist List</h3>
+                            <h3 class="mb-0 mr-30 mb_xs_15px mb_sm_20px" id="merchant_list_title">{{ __('common.all') }} Artist</h3>
                             @if (permissionCheck('admin.customer.destroy'))
                             <button type="button" class="primary-btn fix-gr-bg small d-none bulk_delete_merchants">
                                 <i class="ti-trash"></i> {{ __('common.bulk_delete') }}
@@ -49,8 +66,7 @@
                                             @endif -->
                                             <!-- <th>{{ __('common.is_trusted') }}</th> -->
                                             <th>{{ __('common.shop_name') }}</th>
-                                            <!-- <th>{{ __('common.wallet_balance') }}</th>
-                                            <th>{{ __('common.total_orders') }}</th> -->
+                                            <th>{{ __('common.is_active') }}</th>
                                             <th>{{ __('common.action') }}</th>
                                         </tr>
                                     </thead>
@@ -96,6 +112,50 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade admin-query" id="confirm-activate-merchant">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">{{ __('common.activate') }}</h4>
+                <button type="button" class="close" data-dismiss="modal">
+                    <i class="ti-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center">
+                    <h4>{{ __('common.are_you_sure_to_activate') }}</h4>
+                </div>
+                <div class="mt-40 d-flex justify-content-between">
+                    <button type="button" class="primary-btn tr-bg" data-dismiss="modal">{{ __('common.cancel') }}</button>
+                    <button type="button" class="primary-btn fix-gr-bg" id="confirm_activate_merchant">{{ __('common.activate') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade admin-query" id="confirm-deactivate-merchant">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">{{ __('common.inactive') }}</h4>
+                <button type="button" class="close" data-dismiss="modal">
+                    <i class="ti-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center">
+                    <h4>{{ __('common.are_you_sure_to_inactive') }}</h4>
+                </div>
+                <div class="mt-40 d-flex justify-content-between">
+                    <button type="button" class="primary-btn tr-bg" data-dismiss="modal">{{ __('common.cancel') }}</button>
+                    <button type="button" class="primary-btn fix-gr-bg" id="confirm_deactivate_merchant">{{ __('common.inactive') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 @push('scripts')
     <script type="text/javascript">
@@ -104,6 +164,56 @@
             "use strict";
             $(document).ready(function(){
                 var merchantExportColumns = "{{ permissionCheck('admin.customer.destroy') ? ':not(:first-child):not(:last-child)' : ':not(:last-child)' }}";
+                var merchantTableType = 'all_merchant';
+                var pendingMerchantStatus = null;
+                var merchantTable = null;
+
+                var merchantListTitles = {
+                    all_merchant: "{{ __('common.all') }} Artist",
+                    active_merchant: "{{ __('common.active') }} Artist",
+                    inactive_merchant: "{{ __('common.inactive') }} Artist"
+                };
+
+                function setMerchantToggleState(id, isActive) {
+                    $('.update_merchant_status[data-id="' + id + '"]').prop('checked', isActive);
+                }
+
+                function submitMerchantStatusUpdate() {
+                    if (!pendingMerchantStatus) {
+                        return;
+                    }
+
+                    var id = pendingMerchantStatus.id;
+                    var status = pendingMerchantStatus.status;
+                    pendingMerchantStatus = null;
+
+                    $('#pre-loader').removeClass('d-none');
+                    $('#confirm-activate-merchant').modal('hide');
+                    $('#confirm-deactivate-merchant').modal('hide');
+
+                    $.post('{{ route('admin.merchant.update_status') }}', {
+                        _token: '{{ csrf_token() }}',
+                        id: id,
+                        status: status
+                    }, function(data) {
+                        if (data == 1) {
+                            toastr.success("{{ __('common.updated_successfully') }}", "{{ __('common.success') }}");
+                            reloadMerchantTable();
+                        } else {
+                            toastr.error("{{ __('common.error_message') }}", "{{ __('common.error') }}");
+                            setMerchantToggleState(id, status !== 1);
+                        }
+                        $('#pre-loader').addClass('d-none');
+                    }).fail(function(response) {
+                        if (response.responseJSON && response.responseJSON.error) {
+                            toastr.error(response.responseJSON.error, "{{ __('common.error') }}");
+                        } else {
+                            toastr.error("{{ __('common.error_message') }}", "{{ __('common.error') }}");
+                        }
+                        setMerchantToggleState(id, status !== 1);
+                        $('#pre-loader').addClass('d-none');
+                    });
+                }
 
                 function merchantTableColumns() {
                     var cols = [];
@@ -120,13 +230,108 @@
                         { data: 'phone', name: 'user.username' },
                         { data: 'commission_type', name: 'commission_type' },
                         { data: 'shop_name', name: 'shop_name' },
+                        { data: 'status', name: 'status' },
                         { data: 'action', name: 'action' }
                     );
                     return cols;
                 }
 
                 function reloadMerchantTable() {
-                    $('#sellerTable').DataTable().ajax.reload();
+                    if (merchantTable) {
+                        merchantTable.ajax.reload();
+                    }
+                }
+
+                function initMerchantTable(tableType) {
+                    merchantTableType = tableType;
+                    $('#merchant_list_title').text(merchantListTitles[tableType] || merchantListTitles.all_merchant);
+
+                    if ($.fn.DataTable.isDataTable('#sellerTable')) {
+                        $('#sellerTable').DataTable().destroy();
+                    }
+
+                    merchantTable = $('#sellerTable').DataTable({
+                        processing: true,
+                        serverSide: true,
+                        stateSave: false,
+                        ajax: {
+                            url: "{{ route('admin.merchants_list.get-data') }}",
+                            data: function(data) {
+                                data.table = merchantTableType;
+                            }
+                        },
+                        columns: merchantTableColumns(),
+                        bLengthChange: false,
+                        bDestroy: true,
+                        language: {
+                            search: "<i class='ti-search'></i>",
+                            searchPlaceholder: trans('common.quick_search'),
+                            paginate: {
+                                next: "<i class='ti-arrow-right'></i>",
+                                previous: "<i class='ti-arrow-left'></i>"
+                            }
+                        },
+                        dom: 'Bfrtip',
+                        buttons: [{
+                                extend: 'copyHtml5',
+                                text: '<i class="fa fa-files-o"></i>',
+                                title: $("#header_title").text(),
+                                titleAttr: 'Copy',
+                                exportOptions: {
+                                    columns: merchantExportColumns
+                                }
+                            },
+                            {
+                                extend: 'excelHtml5',
+                                text: '<i class="fa fa-file-excel-o"></i>',
+                                titleAttr: 'Excel',
+                                title: $("#header_title").text(),
+                                margin: [10, 10, 10, 0],
+                                exportOptions: {
+                                    columns: merchantExportColumns
+                                },
+                            },
+                            {
+                                extend: 'csvHtml5',
+                                text: '<i class="fa fa-file-text-o"></i>',
+                                titleAttr: 'CSV',
+                                exportOptions: {
+                                    columns: merchantExportColumns
+                                }
+                            },
+                            {
+                                extend: 'pdfHtml5',
+                                text: '<i class="fa fa-file-pdf-o"></i>',
+                                title: $("#header_title").text(),
+                                titleAttr: 'PDF',
+                                exportOptions: {
+                                    columns: merchantExportColumns
+                                },
+                                pageSize: 'A4',
+                                margin: [0, 0, 0, 0],
+                                alignment: 'center',
+                                header: true,
+                            },
+                            {
+                                extend: 'print',
+                                text: '<i class="fa fa-print"></i>',
+                                titleAttr: 'Print',
+                                title: $("#header_title").text(),
+                                exportOptions: {
+                                    columns: merchantExportColumns
+                                }
+                            },
+                            {
+                                extend: 'colvis',
+                                text: '<i class="fa fa-columns"></i>',
+                                postfixButtons: ['colvisRestore']
+                            }
+                        ],
+                        columnDefs: [{
+                            visible: false
+                        }],
+                        responsive: true,
+                    });
                 }
 
                 function toggleMerchantBulkDeleteButton() {
@@ -255,131 +460,46 @@
                     });
                 });
 
-                $(document).on('click', '.update_active_status', function(event){
-
-                    $("#pre-loader").removeClass('d-none');
-                    let status = 0;
-                    if($(this).prop('checked')){
-                        status = 1;
-                    }
-                    else{
-                        status = 0;
-                    }
-                    $.post('{{ route('customer.update_active_status') }}', {_token:'{{ csrf_token() }}', id:el.value, status:status}, function(data){
-                        if(data == 1){
-
-                            tr.success("{{__('common.updated_successfully')}}","{{__('common.success')}}");
-                        }
-                        else{
-                            toastr.error("{{__('common.error_message')}}","{{__('common.error')}}");
-                        }
-                        $("#pre-loader").addClass('d-none');
-                    })
-
-                    .fail(function(response) {
-                            if(response.responseJSON.error){
-                                    toastr.error(response.responseJSON.error ,"{{__('common.error')}}");
-                                    $('#pre-loader').addClass('d-none');
-                                    return false;
-                                }
-
-                            });
-
+                $(document).on('click', '.merchant-list-tab', function(event) {
+                    event.preventDefault();
+                    $('.merchant-list-tab').removeClass('active show');
+                    $(this).addClass('active show');
+                    initMerchantTable($(this).data('table'));
                 });
 
-                let columns = merchantTableColumns();
-                if ($("#gst_module_enable").val() == 1) {
-                    columns = merchantTableColumns();
-                }
-                $('#sellerTable').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    stateSave: true,
-                    "ajax": ( {
-                        url: "{{ route('admin.merchants_list.get-data') }}"
-                    }),
-                    "initComplete":function(json){
+                $(document).on('change', '.update_merchant_status', function(event){
+                    var $checkbox = $(this);
+                    var id = $checkbox.data('id');
+                    var status = $checkbox.prop('checked') ? 1 : 0;
 
-                    },
-                    columns: columns,
+                    setMerchantToggleState(id, status !== 1);
+                    pendingMerchantStatus = { id: id, status: status };
 
-                    bLengthChange: false,
-                    "bDestroy": true,
-                    language: {
-                        search: "<i class='ti-search'></i>",
-                        searchPlaceholder: trans('common.quick_search'),
-                        paginate: {
-                            next: "<i class='ti-arrow-right'></i>",
-                            previous: "<i class='ti-arrow-left'></i>"
-                        }
-                    },
-                    dom: 'Bfrtip',
-                    buttons: [{
-                            extend: 'copyHtml5',
-                            text: '<i class="fa fa-files-o"></i>',
-                            title: $("#header_title").text(),
-                            titleAttr: 'Copy',
-                            exportOptions: {
-                                columns: ':visible',
-                                columns: merchantExportColumns
-                            }
-                        },
-                        {
-                            extend: 'excelHtml5',
-                            text: '<i class="fa fa-file-excel-o"></i>',
-                            titleAttr: 'Excel',
-                            title: $("#header_title").text(),
-                            margin: [10, 10, 10, 0],
-                            exportOptions: {
-                                columns: ':visible',
-                                columns: merchantExportColumns
-                            },
-
-                        },
-                        {
-                            extend: 'csvHtml5',
-                            text: '<i class="fa fa-file-text-o"></i>',
-                            titleAttr: 'CSV',
-                            exportOptions: {
-                                columns: ':visible',
-                                columns: merchantExportColumns
-                            }
-                        },
-                        {
-                            extend: 'pdfHtml5',
-                            text: '<i class="fa fa-file-pdf-o"></i>',
-                            title: $("#header_title").text(),
-                            titleAttr: 'PDF',
-                            exportOptions: {
-                                columns: ':visible',
-                                columns: merchantExportColumns
-                            },
-                            pageSize: 'A4',
-                            margin: [0, 0, 0, 0],
-                            alignment: 'center',
-                            header: true,
-
-                        },
-                        {
-                            extend: 'print',
-                            text: '<i class="fa fa-print"></i>',
-                            titleAttr: 'Print',
-                            title: $("#header_title").text(),
-                            exportOptions: {
-                                columns: merchantExportColumns
-                            }
-                        },
-                        {
-                            extend: 'colvis',
-                            text: '<i class="fa fa-columns"></i>',
-                            postfixButtons: ['colvisRestore']
-                        }
-                    ],
-                    columnDefs: [{
-                        visible: false
-                    }],
-                    responsive: true,
+                    if (status === 1) {
+                        $('#confirm-activate-merchant').modal('show');
+                    } else {
+                        $('#confirm-deactivate-merchant').modal('show');
+                    }
                 });
+
+                $('#confirm_activate_merchant').on('click', function() {
+                    submitMerchantStatusUpdate();
+                });
+
+                $('#confirm_deactivate_merchant').on('click', function() {
+                    submitMerchantStatusUpdate();
+                });
+
+                $('#confirm-activate-merchant, #confirm-deactivate-merchant').on('hidden.bs.modal', function() {
+                    if (!pendingMerchantStatus) {
+                        return;
+                    }
+
+                    setMerchantToggleState(pendingMerchantStatus.id, pendingMerchantStatus.status !== 1);
+                    pendingMerchantStatus = null;
+                });
+
+                initMerchantTable('all_merchant');
 
                 $(document).on('change', ".ac", function(){
                     if($(this).is(':checked') == true){

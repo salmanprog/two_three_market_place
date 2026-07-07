@@ -27,6 +27,7 @@ use Modules\MultiVendor\Repositories\CommisionRepository;
 use Modules\GeneralSetting\Entities\UserNotificationSetting;
 use Modules\MultiVendor\Http\Requests\SellerPassordChangeRequest;
 use Modules\Customer\Services\CustomerService;
+use App\Repositories\UserRepository;
 use Modules\FrontendCMS\Entities\SubsciptionPaymentInfo;
 
 class MerchantController extends Controller
@@ -72,11 +73,18 @@ class MerchantController extends Controller
 
     public function getData(Request $request){
 
-        if($request->type == "deactive"){
+        if ($request->filled('table')) {
+            if ($request->table === 'active_merchant') {
+                $seller = $this->merchantService->getActive();
+            } elseif ($request->table === 'inactive_merchant') {
+                $seller = $this->merchantService->getInactive();
+            } else {
+                $seller = $this->merchantService->getAllListed();
+            }
+        } elseif ($request->type == "deactive") {
             $seller = $this->merchantService->getInactive();
-        }else{
-
-            $seller = $this->merchantService->getActive();
+        } else {
+            $seller = $this->merchantService->getAllListed();
         }
         return DataTables::of($seller)
             ->filterColumn('name', function($query, $keyword) {
@@ -111,6 +119,9 @@ class MerchantController extends Controller
             ->addColumn('shop_name', function($seller){
                 return @$seller->seller_shop_display_name ?? 'X';
             })
+            ->addColumn('status', function($seller){
+                return view('multivendor::merchants.components._status_td', compact('seller'));
+            })
             ->addColumn('wallet_balance', function($seller){
                 return single_price(@$seller->user->SellerCurrentWalletAmounts);
             })
@@ -120,7 +131,7 @@ class MerchantController extends Controller
             ->addColumn('action', function($seller){
                 return view('multivendor::merchants.components._action_td',compact('seller'));
             })
-            ->rawColumns(['checkbox','commission_type','is_trusted','action'])
+            ->rawColumns(['checkbox','commission_type','is_trusted','action','status','avatar','name'])
             ->toJson();
     }
 
@@ -308,6 +319,58 @@ class MerchantController extends Controller
         $data['commissions'] = $commissionRepo->getAllActive();
         $data['pricings'] = Pricing::where('status', 1)->get();
         return view('multivendor::profile.index', $data);
+    }
+
+    public function merchant_edit($id)
+    {
+        $user = $this->findSeller($id);
+        return view('multivendor::merchants.edit', compact('user'));
+    }
+
+    public function merchant_update(Request $request, $id)
+    {
+        $request->validate([
+            'first_name' => 'required|max:255',
+            'last_name' => 'nullable|max:255',
+            'email' => ['required', 'string', 'max:255', 'unique:users,email,'.$id],
+            'password' => 'sometimes|nullable|confirmed|min:8',
+            'status' => 'required'
+        ]);
+
+        try {
+            $user = $this->findSeller($id);
+            $wasInactive = (int) $user->is_active !== 1;
+
+            $this->customerService->update($request->except('_token'), $id);
+
+            if ((int) $request->status === 1 && $wasInactive && manualActivation()) {
+                $user = User::find($id);
+                if ($user && $user->email) {
+                    (new UserRepository)->userActivationMailSend('user_activation_template', $user);
+                }
+            }
+
+            Toastr::success(__('common.updated_successfully'), __('common.success'));
+            LogActivity::successLog('Merchant Updated Successfully.');
+            return redirect()->route('admin.merchants_list');
+        } catch (Exception $e) {
+            LogActivity::errorLog($e->getMessage());
+            Toastr::error(__('common.error_message'), __('common.error'));
+            return back();
+        }
+    }
+
+    public function merchant_update_status(Request $request)
+    {
+        try {
+            $this->findSeller($request->id);
+            (new UserRepository)->statusUpdate($request->all());
+            LogActivity::successLog('merchant update active status');
+            return 1;
+        } catch (Exception $e) {
+            LogActivity::errorLog($e->getMessage());
+            return 0;
+        }
     }
 
     public function create()

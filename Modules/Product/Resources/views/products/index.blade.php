@@ -276,6 +276,9 @@
         "use strict";
         let module_check = $('#module_check').val();
         $(document).ready(function(){
+            if (window.location.hash === '#order_complete_data') {
+                $('a[href="#order_complete_data"]').tab('show');
+            }
             if(module_check == 'false'){
             var columnData = [
                 { data: 'DT_RowIndex', name: 'id',render:function(data){

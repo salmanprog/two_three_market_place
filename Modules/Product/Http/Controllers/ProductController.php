@@ -27,7 +27,6 @@ use Modules\UserActivityLog\Traits\LogActivity;
 use Modules\WholeSale\Repositories\WholesalePriceRepository;
 use Modules\GST\Services\GSTService;
 
-use Modules\OrderManage\Entities\CustomerNotification;
 use App\Traits\Notification as NotificationTrait;
 
 class ProductController extends Controller
@@ -282,28 +281,6 @@ class ProductController extends Controller
         try {
 
             $this->productService->create($request->except("_token"));
-            if(auth()->user()->role_id != 1)
-            {
-                $notificationSetting = DB::table('notification_settings')->where('slug','seller-product-create')->first();
-                if($notificationSetting)
-                {
-                    $admin_notification = (array) json_decode($notificationSetting->admin_msg);
-                    $langs = getLanguageList();
-                    $adminNot = new CustomerNotification();
-                    foreach($langs as $key => $lang)
-                    {
-                       if(isset($admin_notification[$lang->code]))
-                       {
-                           $adminNot->setTranslation('title',$lang->code,$admin_notification[$lang->code]);
-                       }
-                    }
-                    $adminNot->customer_id = 1;
-                    $adminNot->url = "#";
-                    $adminNot->save();
-
-                }
-
-            }
 
             DB::commit();
             Toastr::success(__('common.added_successfully'), __('common.success'));

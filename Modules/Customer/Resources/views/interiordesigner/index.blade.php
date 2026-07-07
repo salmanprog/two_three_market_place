@@ -137,6 +137,50 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade admin-query" id="confirm-activate-designer">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{ __('common.activate') }}</h4>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <i class="ti-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center">
+                        <h4>{{ __('common.are_you_sure_to_activate') }}</h4>
+                    </div>
+                    <div class="mt-40 d-flex justify-content-between">
+                        <button type="button" class="primary-btn tr-bg" data-dismiss="modal">{{ __('common.cancel') }}</button>
+                        <button type="button" class="primary-btn fix-gr-bg" id="confirm_activate_designer">{{ __('common.activate') }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade admin-query" id="confirm-deactivate-designer">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{ __('common.inactive') }}</h4>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <i class="ti-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center">
+                        <h4>{{ __('common.are_you_sure_to_inactive') }}</h4>
+                    </div>
+                    <div class="mt-40 d-flex justify-content-between">
+                        <button type="button" class="primary-btn tr-bg" data-dismiss="modal">{{ __('common.cancel') }}</button>
+                        <button type="button" class="primary-btn fix-gr-bg" id="confirm_deactivate_designer">{{ __('common.inactive') }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 @endsection
 @push('scripts')
@@ -147,6 +191,50 @@
                 $(document).ready(function(){
                     var designerExportColumns = "{{ permissionCheck('admin.customer.destroy') ? ':not(:first-child):not(:last-child)' : ':not(:last-child)' }}";
                     var bulkDeleteTableId = '';
+                    var pendingDesignerStatus = null;
+
+                    function setDesignerToggleState(id, isActive) {
+                        $('.update_active_status[data-id="' + id + '"]').prop('checked', isActive);
+                    }
+
+                    function submitDesignerStatusUpdate() {
+                        if (!pendingDesignerStatus) {
+                            return;
+                        }
+
+                        var id = pendingDesignerStatus.id;
+                        var status = pendingDesignerStatus.status;
+                        pendingDesignerStatus = null;
+
+                        $('#pre-loader').removeClass('d-none');
+                        $('#confirm-activate-designer').modal('hide');
+                        $('#confirm-deactivate-designer').modal('hide');
+
+                        $.post('{{ route('admin.designer.update_status') }}', {
+                            _token: '{{ csrf_token() }}',
+                            id: id,
+                            status: status
+                        }, function(data) {
+                            if (data == 1) {
+                                toastr.success("{{ __('common.updated_successfully') }}", "{{ __('common.success') }}");
+                                reloadDesignerTables();
+                            } else {
+                                toastr.error("{{ __('common.error_message') }}", "{{ __('common.error') }}");
+                                setDesignerToggleState(id, status !== 1);
+                            }
+                            pendingDesignerStatus = null;
+                            $('#pre-loader').addClass('d-none');
+                        }).fail(function(response) {
+                            if (response.responseJSON && response.responseJSON.error) {
+                                toastr.error(response.responseJSON.error, "{{ __('common.error') }}");
+                            } else {
+                                toastr.error("{{ __('common.error_message') }}", "{{ __('common.error') }}");
+                            }
+                            setDesignerToggleState(id, status !== 1);
+                            pendingDesignerStatus = null;
+                            $('#pre-loader').addClass('d-none');
+                        });
+                    }
 
                     function designerTableColumns() {
                         return [
@@ -261,37 +349,35 @@
                     });
 
                     $(document).on('change', '.update_active_status', function(event){
-                        let id = $(this).data('id');
-                        let status = 0;
+                        var $checkbox = $(this);
+                        var id = $checkbox.data('id');
+                        var status = $checkbox.prop('checked') ? 1 : 0;
 
-                        if($(this).prop('checked')){
-                            status = 1;
+                        setDesignerToggleState(id, status !== 1);
+                        pendingDesignerStatus = { id: id, status: status };
+
+                        if (status === 1) {
+                            $('#confirm-activate-designer').modal('show');
+                        } else {
+                            $('#confirm-deactivate-designer').modal('show');
                         }
-                        else{
-                            status = 0;
+                    });
+
+                    $('#confirm_activate_designer').on('click', function() {
+                        submitDesignerStatusUpdate();
+                    });
+
+                    $('#confirm_deactivate_designer').on('click', function() {
+                        submitDesignerStatusUpdate();
+                    });
+
+                    $('#confirm-activate-designer, #confirm-deactivate-designer').on('hidden.bs.modal', function() {
+                        if (!pendingDesignerStatus) {
+                            return;
                         }
-                        $("#pre-loader").removeClass('d-none');
 
-                        $.post('{{ route('customer.update_active_status') }}', {_token:'{{ csrf_token() }}', id:id, status:status}, function(data){
-                            if(data == 1){
-                                toastr.success("{{__('common.updated_successfully')}}","{{__('common.success')}}");
-                                activeCustomerDataTable();
-                                inactiveCustomerDataTable();
-                            }
-                            else{
-                                toastr.error("{{__('common.error_message')}}","{{__('common.error')}}");
-                            }
-                            $("#pre-loader").addClass('d-none');
-                        })
-
-                        .fail(function(response) {
-                                if(response.responseJSON.error){
-                                        toastr.error(response.responseJSON.error ,"{{__('common.error')}}");
-                                        $('#pre-loader').addClass('d-none');
-                                        return false;
-                                    }
-
-                                });
+                        setDesignerToggleState(pendingDesignerStatus.id, pendingDesignerStatus.status !== 1);
+                        pendingDesignerStatus = null;
                     });
 
                     function activeCustomerDataTable(){

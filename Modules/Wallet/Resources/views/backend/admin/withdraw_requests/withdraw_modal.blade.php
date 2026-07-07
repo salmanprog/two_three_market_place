@@ -75,10 +75,6 @@
                                             <td class="bank_routing_number">{{getNumberTranslate(@$transaction->user->SellerBankAccount->bank_routing_number)}}</td>
                                         </tr>
                                         <tr>
-                                            <th>{{ __('wallet.bank_ibn') }}</th>
-                                            <td class="bank_ibn">{{getNumberTranslate(@$transaction->user->SellerBankAccount->bank_ibn)}}</td>
-                                        </tr>
-                                        <tr>
                                             <th>{{ __('common.type') }}</th>
                                             <td class="type">{{@$transaction->type}}</td>
                                         </tr>

@@ -5,6 +5,7 @@
     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
         @if (permissionCheck('admin.merchant_show_details'))
             <a href="{{route('admin.merchant_show_details',$seller->user->id)}}" class="dropdown-item" type="button">{{ __('common.details') }}</a>
+            <a href="{{ route('admin.merchant.edit', $seller->user->id) }}" class="dropdown-item" type="button">{{ __('common.edit') }}</a>
         @endif
 
         @if (permissionCheck('admin.customer.destroy'))

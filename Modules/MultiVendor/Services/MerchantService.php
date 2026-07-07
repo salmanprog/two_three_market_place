@@ -31,6 +31,11 @@ class MerchantService{
         return $this->merchantRepository->getInactive();
     }
 
+    public function getAllListed()
+    {
+        return $this->merchantRepository->getAllListed();
+    }
+
     public function getAllSeller()
     {
         return $this->merchantRepository->getAllSeller();

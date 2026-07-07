@@ -129,7 +129,7 @@
                     @if(auth()->user()->role->type == 'admin')
                         @if(__(@$section->backendMenu->name) == 'User manages')
                             <li class="{{spn_active_link(childrenRoute($menu))}}">
-                                <a href="{{route('interior-designer.list_active')}}" class="has-arrow" aria-expanded="false">
+                                <a href="javascript:void(0)" class="has-arrow" aria-expanded="false">
                                     <div class="nav_icon_small">
                                         <span class="fas fa-users"></span>
                                     </div>
@@ -145,7 +145,7 @@
                                 </ul>
                             </li>
                             <li class="{{spn_active_link(childrenRoute($menu))}}">
-                                <a href="{{route('art-gallery.list_active')}}" class="has-arrow" aria-expanded="false">
+                                <a href="javascript:void(0)" class="has-arrow" aria-expanded="false">
                                     <div class="nav_icon_small">
                                         <span class="fas fa-users"></span>
                                     </div>

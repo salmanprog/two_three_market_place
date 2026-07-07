@@ -422,6 +422,60 @@
                 }
             });
 
+            function sanitizeUsBankNumericInput(input, maxLength) {
+                let value = String(input.value || '').replace(/\D/g, '');
+
+                if (maxLength && value.length > maxLength) {
+                    value = value.slice(0, maxLength);
+                }
+
+                input.value = value;
+            }
+
+            function bindUsBankNumericInput(selector, maxLength) {
+                $(document).on('input', selector, function () {
+                    sanitizeUsBankNumericInput(this, maxLength);
+                });
+
+                $(document).on('paste', selector, function (event) {
+                    event.preventDefault();
+                    const clipboardData = event.originalEvent?.clipboardData || window.clipboardData;
+                    const pastedValue = clipboardData ? clipboardData.getData('text') : '';
+                    let value = pastedValue.replace(/\D/g, '');
+
+                    if (maxLength && value.length > maxLength) {
+                        value = value.slice(0, maxLength);
+                    }
+
+                    this.value = value;
+                });
+
+                $(document).on('keypress', selector, function (event) {
+                    if (event.ctrlKey || event.metaKey || event.altKey) {
+                        return;
+                    }
+
+                    const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End'];
+                    if (allowedKeys.includes(event.key)) {
+                        return;
+                    }
+
+                    if (!/^\d$/.test(event.key)) {
+                        event.preventDefault();
+                    }
+                });
+            }
+
+            bindUsBankNumericInput('#bank_account_number', {{ \Modules\MultiVendor\Http\Requests\SellerBankAccountRequest::US_ACCOUNT_NUMBER_MAX }});
+            bindUsBankNumericInput('#routing_number', {{ \Modules\MultiVendor\Http\Requests\SellerBankAccountRequest::US_ROUTING_NUMBER_LENGTH }});
+
+            $('#bank_account_number, #routing_number').each(function () {
+                const maxLength = this.id === 'routing_number'
+                    ? {{ \Modules\MultiVendor\Http\Requests\SellerBankAccountRequest::US_ROUTING_NUMBER_LENGTH }}
+                    : {{ \Modules\MultiVendor\Http\Requests\SellerBankAccountRequest::US_ACCOUNT_NUMBER_MAX }};
+                sanitizeUsBankNumericInput(this, maxLength);
+            });
+
         });
 
     })(jQuery);

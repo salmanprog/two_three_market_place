@@ -50,8 +50,10 @@ Route::prefix('admin')->middleware(['auth','admin'])->as('admin.')->group(functi
    Route::post('/designer/bulk-delete', 'CustomerController@interior_designer_bulk_destroy')->name('designer.bulk_destroy')->middleware('prohibited_demo_mode');
    Route::get('/art-gallery/{id}/destroy', 'CustomerController@art_gallery_destroy')->name('art_gallery.destroy');
    Route::post('/art-gallery/bulk-delete', 'CustomerController@art_gallery_bulk_destroy')->name('art_gallery.bulk_destroy')->middleware('prohibited_demo_mode');
-   Route::post('/customer/update/{id}', 'CustomerController@update')->name('customer.update')->middleware('prohibited_demo_mode'); 
+   Route::post('/customer/update/{id}', 'CustomerController@update')->name('customer.update')->middleware('prohibited_demo_mode');
+   Route::post('/customer/update-status', 'CustomerController@update_active_status')->name('customer.update_status')->middleware('prohibited_demo_mode');
    Route::post('/designer/update/{id}', 'CustomerController@interior_designer_update')->name('designer.update')->middleware('prohibited_demo_mode');
+   Route::post('/designer/update-status', 'CustomerController@update_active_status')->name('designer.update_status')->middleware('prohibited_demo_mode');
    Route::post('/customer/bulk-delete', 'CustomerController@customer_bulk_destroy')->name('customer.bulk_destroy')->middleware('prohibited_demo_mode');
    Route::get('/customer/{id}/destroy', 'CustomerController@destroy')->name('customer.destroy')->middleware('permission'); 
    Route::get('/customer/bulk-upload', 'CustomerController@customerBulkUpload')->name('customer.bulk_upload')->middleware('permission'); 

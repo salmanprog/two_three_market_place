@@ -36,6 +36,9 @@
                                                 @endif
                                             </td>
                                             <td>
+                                                @if(str_starts_with((string) ($row->slug ?? ''), 'seller-product-request-'))
+                                                    <a href="{{ url('/products#order_complete_data') }}" class="primary-btn small fix-gr-bg mr-2">{{ __('review.review') }}</a>
+                                                @endif
                                                 @php
                                                     $chatReceiverId = $row->chat_receiver_user_id ?? null;
                                                     $chatHref = $chatReceiverId

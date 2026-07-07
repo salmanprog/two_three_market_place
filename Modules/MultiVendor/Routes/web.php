@@ -28,6 +28,9 @@ Route::middleware(['auth','admin'])->prefix('admin')->group(function() {
     Route::get('/merchant-create', 'MerchantController@create')->name('admin.merchants_create')->middleware(['permission']);
     Route::post('/merchant-add-form-data', 'MerchantController@store')->name('admin.merchants_store')->middleware('prohibited_demo_mode');
     Route::post('/merchant-gst-status-change', 'MerchantController@gst_status_update')->name('admin.merchants_gst_status_update')->middleware('prohibited_demo_mode');
+    Route::get('/merchant/{id}/edit', 'MerchantController@merchant_edit')->name('admin.merchant.edit');
+    Route::post('/merchant/update/{id}', 'MerchantController@merchant_update')->name('admin.merchant.update')->middleware('prohibited_demo_mode');
+    Route::post('/merchant/update-status', 'MerchantController@merchant_update_status')->name('admin.merchant.update_status')->middleware('prohibited_demo_mode');
     Route::get('/merchant/{id}/destroy', 'MerchantController@destroy')->name('admin.merchant.destroy');
     Route::post('/merchant/bulk-delete', 'MerchantController@bulk_destroy')->name('admin.merchant.bulk_destroy')->middleware('prohibited_demo_mode');
     Route::get('/merchant/{id}/details', 'MerchantController@show')->name('admin.merchant_show_details')->middleware(['permission']);

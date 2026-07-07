@@ -52,6 +52,13 @@ class MerchantRepository
         })->latest();
     }
 
+    public function getAllListed()
+    {
+        return SellerAccount::with(['commission_type','user'])->whereHas('user', function($query){
+            $query->where('id', '>', 1);
+        });
+    }
+
     public function getAllSeller()
     {
         return SellerAccount::with('user', 'user.SellerAccount', 'user.SellerBankAccount')->latest()->get();

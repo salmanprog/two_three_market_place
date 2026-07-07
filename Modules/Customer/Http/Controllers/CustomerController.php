@@ -79,8 +79,7 @@ class CustomerController extends Controller
                 return getNumberTranslate($customer->username);
             })
             ->addColumn('status', function($customer){
-                return ($customer->is_active == 1) ? 'Active' : 'No-Active';
-                //return view('customer::customers.components._status_td',compact('customer'));
+                return view('customer::customers.components._status_td', compact('customer'));
             })
             ->addColumn('wallet_balance', function($customer){
                 //return single_price($customer->CustomerCurrentWalletAmounts);
@@ -162,8 +161,7 @@ class CustomerController extends Controller
                 return getNumberTranslate($customer->username);
             })
             ->addColumn('status', function($customer){
-                return ($customer->is_active == 1) ? 'Active' : 'No-Active';
-                //return view('customer::customers.components._status_td',compact('customer'));
+                return view('customer::interiordesigner.components._status_td', compact('customer'));
             })
             ->addColumn('wallet_balance', function($customer){
                 //return single_price($customer->CustomerCurrentWalletAmounts);

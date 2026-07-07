@@ -1,7 +1,13 @@
 @extends('backEnd.master')
+@php
+    $sellerMapsEnabled = config('app.map_api_status') == 'true' && filled(config('app.map_api_key'));
+    $priceSliderValue = old('price', $product->skus->first()->selling_price ?? 5000);
+    $paletteColor = old('palette_color', $product->palette_color ?? '#cccccc');
+@endphp
 
 @section('styles')
 <link rel="stylesheet" href="{{asset(asset_path('modules/seller/css/my_product_edit.css'))}}" />
+@include('seller::products.partials.product_address_styles')
 @endsection
 @section('mainContent')
 @if(isModuleActive('FrontendMultiLang'))
@@ -32,7 +38,7 @@ $LanguageList = getLanguageList();
                             </div>
                         </div>
                         <input type="hidden" name="id" value="{{ $product->id }}">
-                        <div class="col-lg-12">
+                        <div class="col-lg-12" style="display:none">
 
                             <input type="hidden" value="{{ $product->product_type }}" name="product_type" id="product_type">
                             <div class="primary_input">
@@ -159,7 +165,7 @@ $LanguageList = getLanguageList();
                                 <span class="text-danger">{{ $errors->first('model_number') }}</span>
                             </div>
                         </div>
-                        <div class="col-lg-3">
+                        <div class="col-lg-3" style="display:none">
                             <div class="primary_input mb-25">
                                 <label class="primary_input_label" for="">{{ __('product.category') }}
                                     <span class="text-danger">*</span></label>
@@ -175,7 +181,7 @@ $LanguageList = getLanguageList();
                                 <span class="text-danger" id="error_category_ids">{{ $errors->first('category_id') }}</span>
                             </div>
                         </div>
-                        <div class="col-lg-3">
+                        <div class="col-lg-3" style="display:none">
                             <div class="primary_input mb-25">
                                 <label class="primary_input_label" for="">{{ __('product.brand') }}</label>
                                 <select name="brand_id" id="brand_id" class="mb-15 brand">
@@ -192,7 +198,7 @@ $LanguageList = getLanguageList();
                                 <span class="text-danger">{{ $errors->first('brand_id') }}</span>
                             </div>
                         </div>
-                        <div class="col-lg-3">
+                        <div class="col-lg-3" style="display:none">
                             <div class="primary_input mb-25">
                                 <label class="primary_input_label" for="">{{ __('product.unit') }}</label>
                                 <select name="unit_type_id" id="unit_type_id" class="primary_select mb-15 unit">
@@ -206,7 +212,7 @@ $LanguageList = getLanguageList();
                                 <span class="text-danger" id="error_unit_type">{{ $errors->first('unit_type_id') }}</span>
                             </div>
                         </div>
-                        <div class="col-lg-3">
+                        <div class="col-lg-3" style="display:none">
                             <div class="primary_input mb-15">
                                 <label class="primary_input_label" for="">{{ __('product.barcode_type') }}</label>
                                 <select name="barcode_type" id="barcode_type" class="primary_select mb-15">
@@ -365,25 +371,24 @@ $LanguageList = getLanguageList();
                             </div>
                         </div>
 
-                        <div class="col-xl-12">
+                        <div class="col-xl-12" style="display:none">
                             <div class="primary_input">
                                 <ul id="theme_nav" class="permission_list sms_list ">
                                     <li>
                                         <label data-id="bg_option" class="primary_checkbox d-flex mr-12">
-                                            <input name="is_physical" id="is_physical"
-                                                {{ $product->is_physical == 1 ? 'checked' : '' }} value="1"
+                                            <input name="" id="is_physical" checked value="1"
                                                 type="checkbox">
                                             <span class="checkmark"></span>
                                         </label>
                                         <p>{{ __('product.is_physical_product') }}</p>
-                                        <input type="hidden" name="is_physical" id="is_physical_prod" value="{{$product->is_physical}}">
+                                        <input type="hidden" name="is_physical" id="is_physical_prod" value="1">
                                     </li>
                                 </ul>
 
                             </div>
                         </div>
 
-                        <div class="col-lg-12 weight_height_div">
+                        <div class="col-lg-12 weight_height_div" style="display:none">
                             <div class="main-title d-flex">
                                 <h3 class="mb-3 mr-30">{{ __('product.weight_height_info') }}</h3>
                             </div>
@@ -428,7 +433,7 @@ $LanguageList = getLanguageList();
                         </div>
 
 
-                        <div class="col-lg-12 digital_file_upload_div_edit" style="display: {{$product->is_physical == 0?'block':'none'}}">
+                        <div class="col-lg-12 digital_file_upload_div_edit" style="display:none">
                             <div class="primary_input mb-25">
                                 <label class="primary_input_label" for="">{{ __('product.program_file_upload') }}
                                     @if(@$product->skus->first()->digital_file->file_source != null)
@@ -449,7 +454,7 @@ $LanguageList = getLanguageList();
                             </div>
                         </div>
 
-                        <div id="phisical_shipping_div" class="col-lg-12" style="display: {{$product->is_physical == 0?'none':'block'}}">
+                        <div id="phisical_shipping_div" class="col-lg-12" style="display:none">
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="primary_input mb-15">
@@ -479,7 +484,7 @@ $LanguageList = getLanguageList();
                         </div>
                         
                         
-                        <div class="col-lg-3">
+                        <div class="col-lg-3" style="display:none">
                             <div class="primary_input mb-15">
                                 <label class="primary_input_label" for="">
                                     {{ __('product.discount') }}</label>
@@ -489,7 +494,7 @@ $LanguageList = getLanguageList();
                                 <span class="text-danger" id="error_discunt">{{ $errors->first('discount') }}</span>
                             </div>
                         </div>
-                        <div class="col-lg-3">
+                        <div class="col-lg-3" style="display:none">
                             <div class="primary_input mb-25">
                                 <label class="primary_input_label" for="">{{ __('product.discount_type') }}</label>
                                 <select class="primary_select mb-25" name="discount_type" id="discount_type">
@@ -500,8 +505,24 @@ $LanguageList = getLanguageList();
                                 </select>
                             </div>
                         </div>
+                        <div class="col-lg-6" id="stock_manage_div" style="display:none">
+                            <div class="primary_input mb-25">
+                                <label class="primary_input_label" for="stock_manage">{{ __('product.stock_manage') }}</label>
+                                <select class="primary_select mb-25" name="stock_manage" id="stock_manage">
+                                    <option value="1" @if($product->stock_manage == 1) selected @endif>{{ __('common.yes') }}</option>
+                                    <option value="0" @if($product->stock_manage == 0) selected @endif>{{ __('common.no') }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6" id="single_stock_div">
+                            <div class="primary_input mb-15">
+                                <label class="primary_input_label" for="single_stock">{{ __('product.product_stock') }}</label>
+                                <input class="primary_input_field" name="single_stock" id="single_stock" type="number" min="0" step="0" value="{{ old('single_stock', $product->skus->first()->product_stock ?? 0) }}">
+                                <span class="text-danger">{{ $errors->first('single_stock') }}</span>
+                            </div>
+                        </div>
                         @if (app('gst_config')['enable_gst'] == "only_tax") 
-                        <div class="col-lg-6">
+                        <div class="col-lg-6" style="display:none">
                             <div class="primary_input mb-25">
                                 <label class="primary_input_label" for="tax_id">{{ __('common.tax')}}</label>
                                 <select class="primary_select mb-25" name="tax_id" id="tax_id">
@@ -513,7 +534,7 @@ $LanguageList = getLanguageList();
                             </div>
                         </div>
                         @else
-                        <div class="col-lg-6">
+                        <div class="col-lg-6" style="display:none">
                             <div class="primary_input mb-25">
                                 <label class="primary_input_label" for="">{{ __('GST/TAX Group')
                                     }}</label>
@@ -525,12 +546,18 @@ $LanguageList = getLanguageList();
                                 </select>
                             </div>
                         </div>
-                        <div class="col-lg-6" id="gst_list_div">
+                        <div class="col-lg-6" id="gst_list_div" style="display:none">
                             @if($product->gst_group_id)
                                 @include('product::products.components._group_gst_list',['group' => $product->gstGroup])
                             @endif
                         </div>
                         @endif
+                        @include('seller::products.partials.product_address_fields', ['productForAddress' => $product])
+                        @include('seller::products.partials._seller_art_product_fields', [
+                            'product' => $product,
+                            'priceSliderValue' => $priceSliderValue,
+                            'paletteColor' => $paletteColor,
+                        ])
                         @if(isModuleActive('FrontendMultiLang'))
                             <div class="col-lg-12">
                                 <ul class="nav nav-tabs justify-content-start mt-sm-md-20 mb-30 grid_gap_5" role="tablist">
@@ -700,12 +727,12 @@ $LanguageList = getLanguageList();
                     </div>
                     
                     <div class="row">
-                        <div class="col-lg-12">
+                        <div class="col-lg-12" style="display:none">
                             <div class="main-title d-flex">
                                 <h3 class="mb-3 mr-30">{{ __('product.pdf_specifications') }}</h3>
                             </div>
                         </div>
-                        <div class="col-lg-12">
+                        <div class="col-lg-12" style="display:none">
                             <div class="primary_input mb-25">
                                 <label class="primary_input_label" for="">{{ __('product.pdf_specifications') }}</label>
                                 <div class="primary_file_uploader">
@@ -721,12 +748,12 @@ $LanguageList = getLanguageList();
                             </div>
                         </div>
 
-                        <div class="col-lg-12">
+                        <div class="col-lg-12" style="display:none">
                             <div class="main-title d-flex">
                                 <h3 class="mb-3 mr-30">{{ __('product.product_videos_info') }}</h3>
                             </div>
                         </div>
-                        <div class="col-lg-12">
+                        <div class="col-lg-12" style="display:none">
                             <div class="primary_input mb-25">
                                 <label class="primary_input_label" for="">{{ __('product.video_provider') }}</label>
                                 <select class="primary_select mb-25" name="video_provider" id="video_provider">
@@ -738,7 +765,7 @@ $LanguageList = getLanguageList();
                                 </select>
                             </div>
                         </div>
-                        <div class="col-lg-12">
+                        <div class="col-lg-12" style="display:none">
                             <div class="primary_input mb-15">
                                 <label class="primary_input_label" for="">
                                     {{ __('product.video_link') }}</label>
@@ -780,7 +807,7 @@ $LanguageList = getLanguageList();
                             </div>
                         </div>
 
-                        <div class="col-lg-12">
+                        <div class="col-lg-12" style="display:none">
                             <div class="primary_input">
                                 <label class="primary_input_label" for="">{{ __('common.make_Display_in_details_page') }} <span class="text-danger">*</span></label>
                                 <ul id="theme_nav" class="permission_list sms_list ">
@@ -922,11 +949,6 @@ $LanguageList = getLanguageList();
                 function delete_product_row(this_data){
                     let row = this_data.parentNode.parentNode;
                     row.parentNode.removeChild(row);
-                }
-                if ($('#is_physical').is(":checked")){
-                    weightHeightDivShow();
-                }else {
-                    weightHeightDivHide();
                 }
 
                 $(document).on('change', '#tax_type', function(event){
@@ -1242,9 +1264,21 @@ $LanguageList = getLanguageList();
             }
         @endif
 
+        const priceSlider = document.getElementById('price');
+        const priceValue = document.getElementById('price_value');
+        if (priceSlider && priceValue) {
+            priceSlider.addEventListener('input', () => {
+                priceValue.textContent = priceSlider.value;
+            });
+        }
+
         })
 (jQuery);
 
 
 </script>
+@if($sellerMapsEnabled)
+<script src="https://maps.googleapis.com/maps/api/js?key={{ config('app.map_api_key') }}&callback=initSellerProductAddressAutocomplete&libraries=places&v=weekly" defer></script>
+@endif
+@include('seller::products.partials.product_address_scripts', ['sellerMapsEnabled' => $sellerMapsEnabled])
 @endpush

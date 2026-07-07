@@ -57,7 +57,7 @@
                     <div class="white_box_30px mb_30">
                         <div class="tab-content">
                             @if (permissionCheck('seller.product.index'))
-                                <div role="tabpanel" class="tab-pane fade active show" id="product_list">
+                                <div role="tabpanel" class="tab-pane fade @if(auth()->user()->role->type != 'seller') active show @endif" id="product_list">
                                     <div class="box_header common_table_header ">
                                         <div class="main-title d-md-flex">
                                             <h3 class="mb-0 mr-30 mb_xs_15px mb_sm_20px">{{__('Inventory List')}}</h3>
@@ -74,7 +74,7 @@
                                 </div>
                             @endif
                             @if (permissionCheck('seller_own_product') && auth()->user()->role->type != 'superadmin')
-                                <div role="tabpanel" class="tab-pane fade" id="my_product_data">
+                                <div role="tabpanel" class="tab-pane fade @if(auth()->user()->role->type == 'seller') active show @endif" id="my_product_data">
                                     <div class="box_header common_table_header ">
                                         <div class="main-title d-md-flex">
                                             <h3 class="mb-0 mr-30 mb_xs_15px mb_sm_20px">{{ __('product.my_product_list') }}</h3>

@@ -38,17 +38,24 @@ class AdminNotificationController extends Controller
     {
         $productIds = [];
         foreach ($paginator->getCollection() as $n) {
-            if ($n->refrence_id && str_starts_with((string) ($n->slug ?? ''), 'product-resell-request-')) {
+            if ($n->refrence_id && (
+                str_starts_with((string) ($n->slug ?? ''), 'product-resell-request-')
+                || str_starts_with((string) ($n->slug ?? ''), 'seller-product-request-')
+            )) {
                 $productIds[(int) $n->refrence_id] = true;
             }
         }
 
         $resellerByProductId = [];
+        $creatorByProductId = [];
         if ($productIds !== []) {
-            $resellerByProductId = Product::query()
+            $products = Product::query()
                 ->whereIn('id', array_keys($productIds))
-                ->pluck('reseller_id', 'id')
-                ->all();
+                ->get(['id', 'reseller_id', 'created_by']);
+            foreach ($products as $product) {
+                $resellerByProductId[(int) $product->id] = $product->reseller_id;
+                $creatorByProductId[(int) $product->id] = $product->created_by;
+            }
         }
 
         foreach ($paginator->getCollection() as $n) {
@@ -70,6 +77,11 @@ class AdminNotificationController extends Controller
                     $order = Order::query()->find($pid);
                     if ($order && $order->customer_id) {
                         $chatReceiverUserId = (int) $order->customer_id;
+                    }
+                } elseif (str_starts_with((string) ($n->slug ?? ''), 'seller-product-request-')) {
+                    $creator = $creatorByProductId[$pid] ?? null;
+                    if ($creator) {
+                        $chatReceiverUserId = (int) $creator;
                     }
                 } else {
                     $reseller = $resellerByProductId[$pid] ?? null;

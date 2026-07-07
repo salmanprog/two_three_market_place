@@ -1,3 +1,15 @@
+@php
+    use Modules\MultiVendor\Http\Requests\SellerBankAccountRequest;
+
+    $bankAccountNumber = preg_replace('/\D/', '', (string) old(
+        'bank_account_number',
+        $seller->sellerBankAccount->bank_account_number ?? ''
+    ));
+    $routingNumber = preg_replace('/\D/', '', (string) old(
+        'routing_number',
+        $seller->sellerBankAccount->bank_routing_number ?? ''
+    ));
+@endphp
 <div class="row">
     <div class="col-lg-12">
         <div class="main-title">
@@ -57,8 +69,16 @@
                         <div class="col-xl-6">
                             <div class="primary_input mb-25">
                                 <label class="primary_input_label" for="bank_account_number">{{__('common.account_number')}} <span class="text-danger">*</span></label>
-                                <input name="bank_account_number" class="primary_input_field" placeholder="-" type="text"
-                                       value="{{ old('bank_account_number')? old('bank_account_number'):$seller->sellerBankAccount->bank_account_number }}">
+                                <input name="bank_account_number"
+                                       id="bank_account_number"
+                                       class="primary_input_field us-bank-numeric-input"
+                                       placeholder="{{ __('common.us_account_number_placeholder', ['min' => SellerBankAccountRequest::US_ACCOUNT_NUMBER_MIN, 'max' => SellerBankAccountRequest::US_ACCOUNT_NUMBER_MAX]) }}"
+                                       type="text"
+                                       inputmode="numeric"
+                                       pattern="[0-9]{4,17}"
+                                       maxlength="{{ SellerBankAccountRequest::US_ACCOUNT_NUMBER_MAX }}"
+                                       autocomplete="off"
+                                       value="{{ $bankAccountNumber }}">
                                        @error('bank_account_number')
                                        <span class="text-danger">{{$message}}</span>
                                        @enderror
@@ -92,8 +112,16 @@
                         <div class="col-xl-6">
                             <div class="primary_input mb-25">
                                 <label class="primary_input_label" for="routing_number">{{__('common.routing_number')}} <span class="text-danger">*</span></label>
-                                <input name="routing_number" class="primary_input_field" placeholder="-" type="text"
-                                       value="{{ old('routing_number')? old('routing_number'):$seller->sellerBankAccount->bank_routing_number }}">
+                                <input name="routing_number"
+                                       id="routing_number"
+                                       class="primary_input_field us-bank-numeric-input"
+                                       placeholder="{{ __('common.us_routing_number_placeholder', ['digits' => SellerBankAccountRequest::US_ROUTING_NUMBER_LENGTH]) }}"
+                                       type="text"
+                                       inputmode="numeric"
+                                       pattern="[0-9]{9}"
+                                       maxlength="{{ SellerBankAccountRequest::US_ROUTING_NUMBER_LENGTH }}"
+                                       autocomplete="off"
+                                       value="{{ $routingNumber }}">
                                        @error('routing_number')
                                        <span class="text-danger">{{$message}}</span>
                                        @enderror

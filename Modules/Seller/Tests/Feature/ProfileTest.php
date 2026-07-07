@@ -77,10 +77,10 @@ class ProfileTest extends TestCase
         $this->post('/seller/profile/bank-account/update/'.$user->id,[
             "payment" => "2",
             "bank_title" => "test",
-            "bank_account_number" => "test",
+            "bank_account_number" => "1234567890",
             "bank_name" => "test",
             "branch_name" => "test",
-            "routing_number" => "872384889342",
+            "routing_number" => "110000000",
             "ibn" => "234748723874",
             'cheque_copy' => UploadedFile::fake()->image('image.jpg', 1, 1)
 

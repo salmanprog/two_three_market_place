@@ -261,10 +261,6 @@
                                         <td class="first_row_width">{{ __('common.routing_number') }}</td>
                                         <td>: <span class="ml-1"></span>{{ @$user->SellerBankAccount->bank_routing_number }}</td>
                                     </tr>
-                                    <tr>
-                                        <td class="first_row_width">{{ __('common.ibn') }}</td>
-                                        <td>: <span class="ml-1"></span>{{ @$user->SellerBankAccount->bank_ibn }}</td>
-                                    </tr>
                                     <!-- <tr>
                                         <td class="first_row_width">{{ __('common.bank_cheque') }}</td>
                                         <td>: <span class="ml-1"></span>

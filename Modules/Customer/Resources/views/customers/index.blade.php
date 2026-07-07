@@ -46,7 +46,7 @@
                         <div role="tabpanel" class="tab-pane fade active show" id="all_customer">
                             <div class="box_header common_table_header ">
                                 <div class="main-title d-md-flex align-items-center">
-                                    <h3 class="mb-0 mr-30 mb_xs_15px mb_sm_20px">{{__('Active Buyer')}}</h3>
+                                    <h3 class="mb-0 mr-30 mb_xs_15px mb_sm_20px">{{ __('common.all') }} {{ __('Buyer') }}</h3>
                                     @if (permissionCheck('admin.customer.destroy'))
                                     <button type="button" class="primary-btn fix-gr-bg small d-none bulk_delete_buyers" data-table="allCustomerTable">
                                         <i class="ti-trash"></i> {{ __('common.bulk_delete') }}
@@ -135,8 +135,52 @@
                     </div>
                 </div>
             </div>
+    </div>
+</div>
+
+<div class="modal fade admin-query" id="confirm-activate-buyer">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">{{ __('common.activate') }}</h4>
+                <button type="button" class="close" data-dismiss="modal">
+                    <i class="ti-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center">
+                    <h4>{{ __('common.are_you_sure_to_activate') }}</h4>
+                </div>
+                <div class="mt-40 d-flex justify-content-between">
+                    <button type="button" class="primary-btn tr-bg" data-dismiss="modal">{{ __('common.cancel') }}</button>
+                    <button type="button" class="primary-btn fix-gr-bg" id="confirm_activate_buyer">{{ __('common.activate') }}</button>
+                </div>
+            </div>
         </div>
     </div>
+</div>
+
+<div class="modal fade admin-query" id="confirm-deactivate-buyer">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">{{ __('common.inactive') }}</h4>
+                <button type="button" class="close" data-dismiss="modal">
+                    <i class="ti-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center">
+                    <h4>{{ __('common.are_you_sure_to_inactive') }}</h4>
+                </div>
+                <div class="mt-40 d-flex justify-content-between">
+                    <button type="button" class="primary-btn tr-bg" data-dismiss="modal">{{ __('common.cancel') }}</button>
+                    <button type="button" class="primary-btn fix-gr-bg" id="confirm_deactivate_buyer">{{ __('common.inactive') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </section>
 @endsection
 @push('scripts')
@@ -147,6 +191,48 @@
                 $(document).ready(function(){
                     var buyerExportColumns = "{{ permissionCheck('admin.customer.destroy') ? ':not(:first-child):not(:last-child)' : ':not(:last-child)' }}";
                     var bulkDeleteTableId = '';
+                    var pendingBuyerStatus = null;
+
+                    function setBuyerToggleState(id, isActive) {
+                        $('.update_active_status[data-id="' + id + '"]').prop('checked', isActive);
+                    }
+
+                    function submitBuyerStatusUpdate() {
+                        if (!pendingBuyerStatus) {
+                            return;
+                        }
+
+                        var id = pendingBuyerStatus.id;
+                        var status = pendingBuyerStatus.status;
+                        pendingBuyerStatus = null;
+
+                        $('#pre-loader').removeClass('d-none');
+                        $('#confirm-activate-buyer').modal('hide');
+                        $('#confirm-deactivate-buyer').modal('hide');
+
+                        $.post('{{ route('admin.customer.update_status') }}', {
+                            _token: '{{ csrf_token() }}',
+                            id: id,
+                            status: status
+                        }, function(data) {
+                            if (data == 1) {
+                                toastr.success("{{ __('common.updated_successfully') }}", "{{ __('common.success') }}");
+                                reloadBuyerTables();
+                            } else {
+                                toastr.error("{{ __('common.error_message') }}", "{{ __('common.error') }}");
+                                setBuyerToggleState(id, status !== 1);
+                            }
+                            $('#pre-loader').addClass('d-none');
+                        }).fail(function(response) {
+                            if (response.responseJSON && response.responseJSON.error) {
+                                toastr.error(response.responseJSON.error, "{{ __('common.error') }}");
+                            } else {
+                                toastr.error("{{ __('common.error_message') }}", "{{ __('common.error') }}");
+                            }
+                            setBuyerToggleState(id, status !== 1);
+                            $('#pre-loader').addClass('d-none');
+                        });
+                    }
 
                     function buyerTableColumns() {
                         return [
@@ -261,37 +347,35 @@
                     });
 
                     $(document).on('change', '.update_active_status', function(event){
-                        let id = $(this).data('id');
-                        let status = 0;
+                        var $checkbox = $(this);
+                        var id = $checkbox.data('id');
+                        var status = $checkbox.prop('checked') ? 1 : 0;
 
-                        if($(this).prop('checked')){
-                            status = 1;
+                        setBuyerToggleState(id, status !== 1);
+                        pendingBuyerStatus = { id: id, status: status };
+
+                        if (status === 1) {
+                            $('#confirm-activate-buyer').modal('show');
+                        } else {
+                            $('#confirm-deactivate-buyer').modal('show');
                         }
-                        else{
-                            status = 0;
+                    });
+
+                    $('#confirm_activate_buyer').on('click', function() {
+                        submitBuyerStatusUpdate();
+                    });
+
+                    $('#confirm_deactivate_buyer').on('click', function() {
+                        submitBuyerStatusUpdate();
+                    });
+
+                    $('#confirm-activate-buyer, #confirm-deactivate-buyer').on('hidden.bs.modal', function() {
+                        if (!pendingBuyerStatus) {
+                            return;
                         }
-                        $("#pre-loader").removeClass('d-none');
 
-                        $.post('{{ route('customer.update_active_status') }}', {_token:'{{ csrf_token() }}', id:id, status:status}, function(data){
-                            if(data == 1){
-                                toastr.success("{{__('common.updated_successfully')}}","{{__('common.success')}}");
-                                activeCustomerDataTable();
-                                inactiveCustomerDataTable();
-                            }
-                            else{
-                                toastr.error("{{__('common.error_message')}}","{{__('common.error')}}");
-                            }
-                            $("#pre-loader").addClass('d-none');
-                        })
-
-                        .fail(function(response) {
-                                if(response.responseJSON.error){
-                                        toastr.error(response.responseJSON.error ,"{{__('common.error')}}");
-                                        $('#pre-loader').addClass('d-none');
-                                        return false;
-                                    }
-
-                                });
+                        setBuyerToggleState(pendingBuyerStatus.id, pendingBuyerStatus.status !== 1);
+                        pendingBuyerStatus = null;
                     });
 
                     function activeCustomerDataTable(){

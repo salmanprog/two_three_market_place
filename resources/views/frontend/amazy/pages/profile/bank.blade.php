@@ -66,12 +66,8 @@
                                                                    </div>
 
                         </div>
-                        <div class="col-xl-6">
-                            <div class="primary_input mb-25">
-                                <label class="primary_input_label" for="ibn">IBN <span class="text-danger">*</span></label>
-                                <input name="ibn" class="primary_input_field" placeholder="-" type="text" value="MBJ00000122145GD00123884643">
-                                                                   </div>
-
+                        <div class="col-xl-6" style="display: none;" aria-hidden="true">
+                            <input type="hidden" name="ibn" value="-">
                         </div>
 
                         

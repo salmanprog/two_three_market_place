@@ -85,4 +85,37 @@ class CreateProductRequest extends FormRequest
     {
         return true;
     }
+
+    public function withValidator($validator): void
+    {
+        $validator->after(function ($validator) {
+            if ((int) $this->input('stock_manage') !== 1) {
+                return;
+            }
+
+            $minimumOrderQty = (int) ($this->input('minimum_order_qty') ?: 1);
+
+            if ((int) $this->input('product_type') === 1) {
+                $stock = (int) ($this->input('single_stock') ?? 0);
+                if ($minimumOrderQty > $stock) {
+                    $validator->errors()->add(
+                        'minimum_order_qty',
+                        __('Minimum order quantity cannot be greater than product stock.')
+                    );
+                }
+            }
+
+            if ((int) $this->input('product_type') === 2 && is_array($this->input('sku_stock'))) {
+                foreach ($this->input('sku_stock') as $index => $skuStock) {
+                    if ($minimumOrderQty > (int) $skuStock) {
+                        $validator->errors()->add(
+                            'minimum_order_qty',
+                            __('Minimum order quantity cannot be greater than variant stock.')
+                        );
+                        break;
+                    }
+                }
+            }
+        });
+    }
 }
