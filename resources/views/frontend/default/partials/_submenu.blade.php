@@ -3,7 +3,7 @@
         <div class="row align-items-center justify-content-center">
             <div class="col-sm-10 col-md-12 col-lg-4 align-items-center">
                 <div class="left_sub_menu">
-                    
+                    @include('frontend.amazy.partials._announcement_strip')
                     <ul class="left_ul_tupbar">
                         @if($topnavbar_left_menu)
                             @foreach($topnavbar_left_menu->elements->where('has_parent',null) as $element)

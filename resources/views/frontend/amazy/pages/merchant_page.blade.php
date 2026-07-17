@@ -190,7 +190,7 @@
                       @if ($seller->role->type == "superadmin")
                       <img src="{{showImage(app('general_setting')->logo)}}" alt="@if(@$seller->role->type == 'seller') {{@$seller->SellerAccount->seller_shop_display_name}} @else {{app('general_setting')->company_name}} @endif" title="@if(@$seller->role->type == 'seller') {{@$seller->SellerAccount->seller_shop_display_name}} @else {{app('general_setting')->company_name}} @endif">
                       @else
-                      <img src="{{$seller->photo?showImage($seller->photo):showImage('frontend/default/img/avatar.png')}}" alt="@if(@$seller->role->type == 'seller') {{@$seller->SellerAccount->seller_shop_display_name}} @else {{app('general_setting')->company_name}} @endif" title="@if(@$seller->role->type == 'seller') {{@$seller->SellerAccount->seller_shop_display_name}} @else {{app('general_setting')->company_name}} @endif">
+                      <img src="{{ showImage($seller->profile_image ?: 'frontend/default/img/avatar.png') }}" alt="@if(@$seller->role->type == 'seller') {{@$seller->SellerAccount->seller_shop_display_name}} @else {{app('general_setting')->company_name}} @endif" title="@if(@$seller->role->type == 'seller') {{@$seller->SellerAccount->seller_shop_display_name}} @else {{app('general_setting')->company_name}} @endif">
                       @endif
                     </div>
                     <div class="d-block d-md-flex justify-content-between profile_content">
@@ -199,6 +199,11 @@
                                  <h4>@if(@$seller->role->type == 'seller') {{@$seller->SellerAccount->seller_shop_display_name}} @else {{app('general_setting')->company_name}} @endif</h4> <span>|</span>
                                  <p>{{__('defaultTheme.member_since')}} {{date('M, Y',strtotime($seller->created_at))}} </p>
                             </div>
+                            @if(!empty($seller->art_service_labels))
+                            <div class="member_info_details seller_art_services mb_10">
+                                <p class="mb-0 font_14 f_w_500">{{ __('Art Services') }}: {{ implode(' · ', $seller->art_service_labels) }}</p>
+                            </div>
+                            @endif
                             <div class="member_info_details d-flex">
                                 <div class="stars mr_15">
                                     <x-rating :rating="$seller_rating"/>
@@ -251,9 +256,15 @@
                         </div> -->
                     </div>
                 </div>
-                @if(!empty($seller->accolades) || !empty($seller->description) || !empty($seller->video))
+                @if(!empty($seller->accolades) || !empty($seller->description) || !empty($seller->video) || !empty($seller->art_service_labels))
                 <div class="seller_about_panel_wrap seller_profile_bio_video mt_25">
                     <div class="seller_about_panel">
+                        @if(!empty($seller->art_service_labels))
+                        <div class="seller_about_block seller_about_block--text">
+                            <h5 class="seller_about_title">{{ __('Art Services') }}</h5>
+                            <div class="seller_about_body">{{ implode(' · ', $seller->art_service_labels) }}</div>
+                        </div>
+                        @endif
                         @if(!empty($seller->accolades))
                         <div class="seller_about_block seller_about_block--text">
                             <h5 class="seller_about_title">{{ __('Accolades') }}</h5>

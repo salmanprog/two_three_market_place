@@ -102,8 +102,7 @@
                             <div class="col-lg-4">
                                 <div class="primary_input mb-15">
                                     <label class="primary_input_label" for="">{{ __('common.avatar') }}
-                                        ({{ getNumberTranslate(165) }} X
-                                        {{ getNumberTranslate(165) }}){{ __('common.px') }}</label>
+                                        (min {{ getNumberTranslate(\App\Support\ProfileImage::MIN) }}×{{ getNumberTranslate(\App\Support\ProfileImage::MIN) }}){{ __('common.px') }}</label>
                                     <div class="primary_file_uploader">
                                         <input class="primary-input" type="text" id="placeholderFileOneName"
                                             placeholder="{{ __('common.browse_file') }}" readonly="">

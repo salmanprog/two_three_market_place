@@ -47,7 +47,14 @@ class StaffRequest extends FormRequest
             "bank_account_number" => "nullable",
             "date_of_joining" => "required|date|date_format:m/d/Y",
             "leave_applicable_date" => "required|date|date_format:m/d/Y",
-            'photo' => 'nullable|mimes:jpeg,jpg,png',
+            'photo' => 'nullable|mimes:jpeg,jpg,png|dimensions:min_width='.\App\Support\ProfileImage::MIN.',min_height='.\App\Support\ProfileImage::MIN,
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'photo.dimensions' => 'Photo must be at least '.\App\Support\ProfileImage::MIN.'×'.\App\Support\ProfileImage::MIN.' px. Small images look pixelated on the website.',
         ];
     }
 }

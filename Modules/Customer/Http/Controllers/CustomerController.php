@@ -592,12 +592,13 @@ class CustomerController extends Controller
         $request->validate([
             'first_name' => 'required',
             'email' => $email,
-            'avatar' => 'nullable|mimes:jpeg,jpg,png,bmp',
+            'avatar' => 'nullable|mimes:jpeg,jpg,png,bmp|dimensions:min_width='.\App\Support\ProfileImage::MIN.',min_height='.\App\Support\ProfileImage::MIN,
             'video' => 'nullable|file|mimes:mp4,mov,webm,ogg,avi,mkv,mpeg|max:51200',
             'phone' => $phone,
             'accolades' => 'nullable|string',
         ],[
-            "phone.min" => "Minimum ".app('general_setting')->min_digit." digits required on phone number"
+            "phone.min" => "Minimum ".app('general_setting')->min_digit." digits required on phone number",
+            'avatar.dimensions' => 'Avatar must be at least '.\App\Support\ProfileImage::MIN.'×'.\App\Support\ProfileImage::MIN.' px. Small images look pixelated on the website — please upload a larger photo.',
         ]);
         try {
             $user=User::findOrFail(auth()->user()->id);
@@ -612,12 +613,24 @@ class CustomerController extends Controller
                 'accolades' => $request->accolades,
              ];
 
+             if ($user->role && $user->role->type === 'seller') {
+                 $allowedServices = array_keys(User::ART_SERVICE_OPTIONS);
+                 $selectedServices = array_values(array_intersect(
+                     array_map('strval', (array) $request->input('art_services', [])),
+                     $allowedServices
+                 ));
+
+                 $others = is_array($user->others) ? $user->others : [];
+                 $others['art_services'] = $selectedServices;
+                 $data['others'] = $others;
+             }
+
              $file = $request->file('avatar');
              if ($request->hasFile('avatar')) {
                  if ($user->avatar) {
                      $this->deleteImage($user->avatar);
                  }
-                 $data['avatar']=$this->saveImage($file,200,200);
+                 $data['avatar']=$this->saveImage($file, \App\Support\ProfileImage::TARGET, \App\Support\ProfileImage::TARGET);
             }
 
             if ($request->hasFile('video')) {
@@ -638,8 +651,11 @@ class CustomerController extends Controller
             }
 
             $user->update($data);
+            $user->refresh();
             LogActivity::successLog('update info');
-            return response()->json($user);
+            $payload = $user->toArray();
+            $payload['art_services'] = $user->art_services;
+            return response()->json($payload);
         } catch (Exception $e) {
             LogActivity::errorLog($e->getMessage());
             Toastr::error(__('common.error_message'), __('common.error'));

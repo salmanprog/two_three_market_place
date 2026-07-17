@@ -31,7 +31,7 @@ class SubSellerService
     public function create($data)
     {
         if (!empty($data['photo'])) {
-            $photo = $this->saveAvatar($data['photo'], 165, 165);
+            $photo = $this->saveAvatar($data['photo'], \App\Support\ProfileImage::TARGET, \App\Support\ProfileImage::TARGET);
             $data['avatar'] = $photo;
         }
         return $this->subSellerRepository->create($data);
@@ -42,7 +42,7 @@ class SubSellerService
         if (!empty($data['photo'])) {
             $user = User::where('id', $id)->first();
             $this->deleteImage($user->avatar);
-            $photo = $this->saveAvatar($data['photo'], 165, 165);
+            $photo = $this->saveAvatar($data['photo'], \App\Support\ProfileImage::TARGET, \App\Support\ProfileImage::TARGET);
             $data['avatar'] = $photo;
         }
         return $this->subSellerRepository->update($data, $id);

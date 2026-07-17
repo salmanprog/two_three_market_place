@@ -88,7 +88,7 @@ class UserRepository implements  UserRepositoryInterface
         $user->username = $data['phone'];
         $user->role_id = $role[0];
         if (isset($data['photo'])) {
-            $data = Arr::add($data, 'avatar', $this->saveAvatar($data['photo'],165,165));
+            $data = Arr::add($data, 'avatar', $this->saveAvatar($data['photo'], \App\Support\ProfileImage::TARGET, \App\Support\ProfileImage::TARGET));
             $user->avatar = $data['avatar'];
         }
         $user->password = Hash::make($data['password']);
@@ -149,7 +149,7 @@ class UserRepository implements  UserRepositoryInterface
 
         if (isset($data['photo'])) {
             $this->deleteImage($user->avatar);
-            $data = Arr::add($data, 'avatar', $this->saveAvatar($data['photo'],165,165));
+            $data = Arr::add($data, 'avatar', $this->saveAvatar($data['photo'], \App\Support\ProfileImage::TARGET, \App\Support\ProfileImage::TARGET));
             $user->avatar = $data['avatar'];
         }
 
@@ -185,7 +185,7 @@ class UserRepository implements  UserRepositoryInterface
         
         $user = User::findOrFail($id);
         if (isset($data['avatar'])) {
-            $user->avatar = $this->saveAvatar($data['avatar'],60,60);
+            $user->avatar = $this->saveAvatar($data['avatar'], \App\Support\ProfileImage::TARGET, \App\Support\ProfileImage::TARGET);
         }
         $user->name = $data['name'];
         if (array_key_exists('password',$data))
@@ -288,7 +288,7 @@ class UserRepository implements  UserRepositoryInterface
 
         if (isset($data['photo'])) {
             $this->deleteImage($user->avatar);
-            $data = Arr::add($data, 'avatar', $this->saveAvatar($data['photo'],165,165));
+            $data = Arr::add($data, 'avatar', $this->saveAvatar($data['photo'], \App\Support\ProfileImage::TARGET, \App\Support\ProfileImage::TARGET));
             $user->avatar = $data['avatar'];
         }
 

@@ -21,7 +21,7 @@
                         @if ($seller->role->type == "superadmin")
                         <img src="{{showImage(app('general_setting')->logo)}}" alt="@if(@$seller->role->type == 'seller') {{@$seller->SellerAccount->seller_shop_display_name}} @else {{app('general_setting')->company_name}} @endif" title="@if(@$seller->role->type == 'seller') {{@$seller->SellerAccount->seller_shop_display_name}} @else {{app('general_setting')->company_name}} @endif">
                         @else
-                        <img src="{{$seller->photo?showImage($seller->photo):showImage('frontend/default/img/avatar.jpg')}}" alt="@if(@$seller->role->type == 'seller') {{@$seller->SellerAccount->seller_shop_display_name}} @else {{app('general_setting')->company_name}} @endif" title="@if(@$seller->role->type == 'seller') {{@$seller->SellerAccount->seller_shop_display_name}} @else {{app('general_setting')->company_name}} @endif">
+                        <img src="{{ showImage($seller->profile_image ?: 'frontend/default/img/avatar.jpg') }}" alt="@if(@$seller->role->type == 'seller') {{@$seller->SellerAccount->seller_shop_display_name}} @else {{app('general_setting')->company_name}} @endif" title="@if(@$seller->role->type == 'seller') {{@$seller->SellerAccount->seller_shop_display_name}} @else {{app('general_setting')->company_name}} @endif">
                         @endif
                     </div>
                     <div class="d-block d-md-flex justify-content-between profile_content">

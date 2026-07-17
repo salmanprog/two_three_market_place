@@ -121,7 +121,68 @@ class User extends Authenticatable
 
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'others' => 'array',
     ];
+
+    public const ART_SERVICE_OPTIONS = [
+        'live_art' => 'Live Art',
+        'art_shows' => 'Art Shows',
+        'murals' => 'Murals',
+        'commissions' => 'Commissions',
+    ];
+
+    /**
+     * Normalized art service keys offered on the seller profile.
+     *
+     * @return array<int, string>
+     */
+    public function getArtServicesAttribute(): array
+    {
+        $others = $this->others ?? [];
+        if (! is_array($others)) {
+            $others = [];
+        }
+
+        $services = $others['art_services'] ?? [];
+        if (! is_array($services)) {
+            $services = [];
+        }
+
+        return array_values(array_intersect(
+            array_map('strval', $services),
+            array_keys(self::ART_SERVICE_OPTIONS)
+        ));
+    }
+
+    public function offersArtService(string $serviceKey): bool
+    {
+        return in_array($serviceKey, $this->art_services, true);
+    }
+
+    /**
+     * Human-readable art service labels for public profile/cards.
+     *
+     * @return array<int, string>
+     */
+    public function getArtServiceLabelsAttribute(): array
+    {
+        $labels = [];
+        foreach ($this->art_services as $key) {
+            if (isset(self::ART_SERVICE_OPTIONS[$key])) {
+                $labels[] = self::ART_SERVICE_OPTIONS[$key];
+            }
+        }
+
+        return $labels;
+    }
+
+    /**
+     * Public profile image path (avatar preferred, photo fallback).
+     */
+    public function getProfileImageAttribute(): ?string
+    {
+        return $this->avatar ?: $this->photo;
+    }
 
     protected $appends  = [
         'name'

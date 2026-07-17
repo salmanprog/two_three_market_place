@@ -91,7 +91,9 @@ class ProfileController extends Controller
     public function updatePhoto(Request $request){
 
         $request->validate([
-            'avatar' => 'required|mimes:png,jpg,jpeg,bmp'
+            'avatar' => 'required|mimes:png,jpg,jpeg,bmp|dimensions:min_width='.\App\Support\ProfileImage::MIN.',min_height='.\App\Support\ProfileImage::MIN,
+        ], [
+            'avatar.dimensions' => 'Avatar must be at least '.\App\Support\ProfileImage::MIN.'×'.\App\Support\ProfileImage::MIN.' px.',
         ]);
         $user=User::find($request->user()->id);
 
@@ -100,7 +102,7 @@ class ProfileController extends Controller
 
             if ($request->hasFile('avatar')) {
                 $this->deleteImage($user->avatar);
-                $data['avatar']=$this->saveImage($file,150,150);
+                $data['avatar']=$this->saveImage($file, \App\Support\ProfileImage::TARGET, \App\Support\ProfileImage::TARGET);
             }
             $user->update([
                 'avatar' => $data['avatar']

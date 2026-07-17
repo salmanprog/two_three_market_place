@@ -319,5 +319,9 @@ return [
     'auction_confirmation' => 'Confirm Order',
     'auction_cancel' => 'Cancel Order',
     'categories' => 'Categories',
-    "login_to_order" => "Login to Order"
+    "login_to_order" => "Login to Order",
+    'new' => 'New',
+    'contact_us' => 'contact us',
+    'site_announcement' => 'Site announcement',
+    'new_website_announcement' => 'Hello Users! This is our NEW Website Application. We are in the process of refining and testing. In the meantime, please don\'t hesitate to :contact_link below for feedback or mishaps. We are excited to bring LOCAL ART to you!',
 ];

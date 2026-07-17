@@ -306,7 +306,7 @@
                 <div class="love-art-card h-100" data-aos="{{ $loveArtCardAos }}" data-aos-duration="1500" data-aos-delay="{{ $loveArtCardDelay }}" data-aos-easing="ease-out-cubic">
                 <div class="d-flex gap-5 mb-10">
                     <div>
-                    <img src="{{ showImage($seller->avatar != null?$seller->avatar: 'frontend/default/img/avatar.png') }}" alt="" class="" height="335px" width="386px">
+                    <img src="{{ showImage($seller->profile_image ?: 'frontend/default/img/avatar.png') }}" alt="{{ trim(($seller->first_name ?? '').' '.($seller->last_name ?? '')) }}" class="" height="335px" width="386px">
                     </div>
                     <div class="d-flex flex-column gap-4">
                             @if(count($seller->seller_products) > 0)
@@ -317,7 +317,7 @@
                     </div>
                 </div>
                 <h4 class=" secondry-font text-start fs-40 fw-700" style="line-height: 1;">{{ $seller->first_name }} {{ $seller->last_name }}</h4>
-                <p class="primary-font text-start mb-10">Portraits &amp; Wildlife</p>
+                <p class="primary-font text-start mb-10">{{ !empty($seller->art_service_labels) ? implode(' · ', $seller->art_service_labels) : __('Art Services') }}</p>
                 <a href="{{ route('frontend.seller', $seller->slug ?? base64_encode($seller->id)) }}" class="btn btn-secondary">View Profile</a>
                 </div>
             </div>
@@ -517,10 +517,10 @@
                 <div class="position-relative w-100">
                   <select class="compact-select primary-font" name="art_services">
                     <option value="">Select Art Services</option>
-                    <option value="commissions">Commissions</option>
-                    <option value="murals">Murals</option>
-                    <option value="art_classes">Art Classes</option>
-                    <option value="live_art">Live Art for Events</option>
+                    <option value="commissions" @selected(request('art_services') === 'commissions')>Commissions</option>
+                    <option value="murals" @selected(request('art_services') === 'murals')>Murals</option>
+                    <option value="art_shows" @selected(request('art_services') === 'art_shows')>Art Shows</option>
+                    <option value="live_art" @selected(request('art_services') === 'live_art')>Live Art for Events</option>
                   </select>
                   <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-11 text-gray-400 me-3 pe-none"></i>
                 </div>

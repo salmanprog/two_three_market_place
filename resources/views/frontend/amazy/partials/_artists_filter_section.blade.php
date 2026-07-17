@@ -88,13 +88,17 @@ $cities = $selectedStateId
             $artistName = trim(($seller->first_name ?? '') . ' ' . ($seller->last_name ?? ''));
             $thumbProducts = $seller->seller_products ? $seller->seller_products->take(3)->values() : collect();
             $seed = abs((int) crc32((string) ($seller->id ?? $loop->index)));
-            $filterCategory = $artistFilterCategories[$seed % count($artistFilterCategories)];
+            $artServiceLabels = $seller->art_service_labels ?? [];
+            $filterCategory = !empty($artServiceLabels)
+                ? implode(' · ', $artServiceLabels)
+                : ($artistFilterCategories[$seed % count($artistFilterCategories)] ?? '');
             $filterLocation = (string) (data_get($seller, 'SellerBusinessInformation.business_country') ?? data_get($seller, 'SellerBusinessInformation.country') ?? '');
             $filterState = (string) (data_get($seller, 'SellerBusinessInformation.business_state') ?? data_get($seller, 'SellerBusinessInformation.state') ?? '');
             $filterCity = (string) (data_get($seller, 'SellerBusinessInformation.business_city') ?? data_get($seller, 'SellerBusinessInformation.city') ?? '');
             $filterMedium = $artistFilterMediums[($seed >> 10) % count($artistFilterMediums)];
             $focusOptions = ['Commissions', 'Original work', 'Prints', 'Teaching'];
             $filterFocus = $focusOptions[($seed >> 14) % count($focusOptions)];
+            $artistAvatar = $seller->profile_image ?: 'frontend/default/img/avatar.png';
             @endphp
             <div class="col d-flex artists-filter-col">
                 <article
@@ -113,7 +117,7 @@ $cities = $selectedStateId
                     <div class="artists-list-card__media">
                         <div class="artists-list-card__portrait">
                             <img
-                                src="{{ showImage($seller->avatar != null ? $seller->avatar : 'frontend/default/img/avatar.png') }}"
+                                src="{{ showImage($artistAvatar) }}"
                                 alt="{{ $artistName }}"
                                 width="400"
                                 height="520"

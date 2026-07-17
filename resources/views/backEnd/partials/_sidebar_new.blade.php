@@ -210,7 +210,7 @@
                     @if(permissionCheck('media-manager.new-upload') && menuManagerCheck(2,42,'media-manager.new-upload')->status == 1)
                         <li data-position="{{ menuManagerCheck(2,42,'media-manager.new-upload')->position }}">
                             <a href="{{route('media-manager.new-upload')}}" @if (request()->is('new-upload')) class="active"
-                                @endif>{{ __('New Uplaod') }}</a>
+                                @endif>{{ __('New Upload') }}</a>
                         </li>
                     @endif
                 </ul>

@@ -7,6 +7,7 @@ use Intervention\Image\Facades\Image;
 use Carbon\Carbon;
 use File;
 use App\Traits\BunnyCDN;
+use App\Support\ProfileImage;
 use Modules\Product\Entities\Product;
 use Modules\Product\Entities\ProductGalaryImage;
 use Modules\Product\Entities\ProductSku;
@@ -14,6 +15,86 @@ use Modules\Seller\Entities\SellerProduct;
 
 trait ImageStore
 {
+    /**
+     * Ensure an uploaded image meets minimum dimensions for large frontend display.
+     *
+     * @param  \Illuminate\Http\UploadedFile|string  $image
+     * @return array{ok:bool,width:?int,height:?int,message:?string}
+     */
+    public static function validateProfileImageDimensions($image, ?int $minWidth = null, ?int $minHeight = null): array
+    {
+        $minWidth = $minWidth ?? ProfileImage::MIN;
+        $minHeight = $minHeight ?? ProfileImage::MIN;
+
+        try {
+            $size = @getimagesize($image);
+        } catch (\Throwable $e) {
+            $size = false;
+        }
+
+        if (! $size || empty($size[0]) || empty($size[1])) {
+            return [
+                'ok' => false,
+                'width' => null,
+                'height' => null,
+                'message' => 'Could not read image dimensions. Please upload a valid JPG or PNG.',
+            ];
+        }
+
+        $width = (int) $size[0];
+        $height = (int) $size[1];
+
+        if ($width < $minWidth || $height < $minHeight) {
+            return [
+                'ok' => false,
+                'width' => $width,
+                'height' => $height,
+                'message' => "Image is too small ({$width}×{$height}px). Upload at least {$minWidth}×{$minHeight}px so it stays clear on the website.",
+            ];
+        }
+
+        return [
+            'ok' => true,
+            'width' => $width,
+            'height' => $height,
+            'message' => null,
+        ];
+    }
+
+    /**
+     * Downscale to target size; never upscale (upscaling only increases pixelation).
+     */
+    protected static function applyAspectResize($img, $height, $lenght)
+    {
+        if ($height == null || $lenght == null) {
+            return $img;
+        }
+
+        $original_width = $img->width();
+        $original_height = $img->height();
+
+        $resizeCallback = function ($constraint) {
+            $constraint->aspectRatio();
+            $constraint->upsize();
+        };
+
+        if ($original_width > $original_height) {
+            $img->resize($lenght, null, $resizeCallback);
+        } elseif ($original_width < $original_height) {
+            $img->resize(null, $height, $resizeCallback);
+        } else {
+            if ($lenght > $height) {
+                $img->resize(null, $lenght, $resizeCallback);
+            } elseif ($lenght < $height) {
+                $img->resize($height, null, $resizeCallback);
+            } else {
+                $img->resize($height, null, $resizeCallback);
+            }
+        }
+
+        return $img;
+    }
+
 public static function saveImage($image, $height = null ,$lenght = null , $aspectration = true)
 {
 
@@ -27,34 +108,7 @@ public static function saveImage($image, $height = null ,$lenght = null , $aspec
              $img = Image::make($image);
             if($height != null && $lenght != null ){
                 if ($aspectration) {
-                    $img_size = getimagesize($image);
-                    $original_width = $img_size[0];
-                    $original_height = $img_size[1];
-                    if($original_width > $original_height){
-                        // resize the image to a width of 300 and constrain aspect ratio (auto height)
-                        $img->resize($lenght, null, function ($constraint) {
-                            $constraint->aspectRatio();
-                        });
-                    }elseif($original_width < $original_height){
-                        // resize the image to a height of 200 and constrain aspect ratio (auto width)
-                        $img->resize(null, $height, function ($constraint) {
-                            $constraint->aspectRatio();
-                        });
-                    }else{
-                        if($lenght>$height){
-                            $img->resize(null,$lenght, function($constraint){
-                                $constraint->aspectRatio();
-                            });
-                        }elseif($lenght<$height){
-                            $img->resize($height,null, function($constraint){
-                                $constraint->aspectRatio();
-                            });
-                        }else{
-                            $img->resize($height,null, function($constraint){
-                                $constraint->aspectRatio();
-                            });
-                        }
-                    }
+                    self::applyAspectResize($img, $height, $lenght);
                 }else {
                     $img->resize($height,$lenght);
                 }
@@ -128,34 +182,7 @@ public static function saveImage($image, $height = null ,$lenght = null , $aspec
             $img = Image::make($image);
             if($height != null && $lenght != null ){
                 if ($aspectration) {
-                    $img_size = getimagesize($image);
-                    $original_width = $img_size[0];
-                    $original_height = $img_size[1];
-                    if($original_width > $original_height){
-                        // resize the image to a width of 300 and constrain aspect ratio (auto height)
-                        $img->resize($lenght, null, function ($constraint) {
-                            $constraint->aspectRatio();
-                        });
-                    }elseif($original_width < $original_height){
-                        // resize the image to a height of 200 and constrain aspect ratio (auto width)
-                        $img->resize(null, $height, function ($constraint) {
-                            $constraint->aspectRatio();
-                        });
-                    }else{
-                        if($lenght>$height){
-                            $img->resize(null,$lenght, function($constraint){
-                                $constraint->aspectRatio();
-                            });
-                        }elseif($lenght<$height){
-                            $img->resize($height,null, function($constraint){
-                                $constraint->aspectRatio();
-                            });
-                        }else{
-                            $img->resize($height,null, function($constraint){
-                                $constraint->aspectRatio();
-                            });
-                        }
-                    }
+                    self::applyAspectResize($img, $height, $lenght);
                 }else {
                     $img->resize($height,$lenght);
                 }
@@ -356,34 +383,7 @@ public function saveAvatar($image, $height = null ,$lenght = null)
         $image_extention = str_replace('image/','',Image::make($image)->mime());
         $img = Image::make($image);
         if($height != null && $lenght != null ){
-            $img_size = getimagesize($image);
-            $original_width = $img_size[0];
-            $original_height = $img_size[1];
-            if($original_width > $original_height){
-                // resize the image to a width of 300 and constrain aspect ratio (auto height)
-                $img->resize($lenght, null, function ($constraint) {
-                    $constraint->aspectRatio();
-                });
-            }elseif($original_width < $original_height){
-                // resize the image to a height of 200 and constrain aspect ratio (auto width)
-                $img->resize(null, $height, function ($constraint) {
-                    $constraint->aspectRatio();
-                });
-            }else{
-                if($lenght>$height){
-                    $img->resize(null,$lenght, function($constraint){
-                        $constraint->aspectRatio();
-                    });
-                }elseif($lenght<$height){
-                    $img->resize($height,null, function($constraint){
-                        $constraint->aspectRatio();
-                    });
-                }else{
-                    $img->resize($height,null, function($constraint){
-                        $constraint->aspectRatio();
-                    });
-                }
-            }
+            self::applyAspectResize($img, $height, $lenght);
         }
         $img_name = 'uploads/avatar/'.$current_date.'/'.uniqid().'.'.$image_extention;
         $img_save = asset_path($img_name);

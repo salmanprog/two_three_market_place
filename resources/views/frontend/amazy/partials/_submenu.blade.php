@@ -4,7 +4,8 @@
             <div class="col-12">
                 <div class="header__wrapper">
                     <!-- header__left__start  -->
-                    <div class="header__left d-flex align-items-center dynamic_svg">
+                    <div class="header__left d-flex align-items-center dynamic_svg site-announcement-wrap">
+                        @include('frontend.amazy.partials._announcement_strip')
                         @if($topnavbar_left_menu)
                             @foreach($topnavbar_left_menu->elements->where('has_parent',null) as $element)
                                 @if($element->type == 'link')

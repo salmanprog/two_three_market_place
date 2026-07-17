@@ -2,14 +2,23 @@
 @section('styles')
 <link rel="stylesheet" href="{{asset(asset_path('backend/css/backend_page_css/profile.css'))}}" />
 <style>
-    .artist-services-checkboxes .primary_checkbox {
-        align-items: center;
-        min-height: 36px;
-        margin-bottom: 0;
+    .artist-services-checkboxes {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 24px;
+        list-style: none;
+        padding-left: 0;
+        margin: 0;
     }
-    .artist-services-checkboxes .label_name {
-        line-height: 1.3;
-        margin-bottom: 0;
+    .artist-services-checkboxes li {
+        display: flex;
+        align-items: center;
+        min-width: 160px;
+        margin-bottom: 0 !important;
+    }
+    .artist-services-checkboxes li p {
+        margin: 0;
+        line-height: 18px;
     }
 </style>
 @endsection
@@ -127,7 +136,7 @@
                                     <div class="col-lg-3">
                                         <div class="primary_input mb-15">
                                             <label class="primary_input_label" for="">{{ __('common.avatar') }}
-                                                ({{getNumberTranslate(165)}}x{{getNumberTranslate(165)}}) {{__('common.px')}}</label>
+                                                (min {{ getNumberTranslate(\App\Support\ProfileImage::MIN) }}×{{ getNumberTranslate(\App\Support\ProfileImage::MIN) }} {{ __('common.px') }}, recommended {{ getNumberTranslate(\App\Support\ProfileImage::TARGET) }}×{{ getNumberTranslate(\App\Support\ProfileImage::TARGET) }}+)</label>
                                             <div class="primary_file_uploader">
                                                 <input class="primary-input" type="text" id="avatar_placeholder"
                                                     placeholder="{{ __('common.avatar') }}" readonly="">
@@ -135,8 +144,9 @@
                                                     <label class="primary-btn small fix-gr-bg" for="avatar_file">{{
                                                         __('common.avatar') }}</label>
                                                     <input type="file" class="d-none" name="file" id="avatar_file"
-                                                        accept="image/*">
+                                                        accept="image/jpeg,image/jpg,image/png,image/bmp">
                                                 </button>
+                                                <span class="text-muted d-block mt-1" style="font-size:12px;">Small images look blurry on artist cards. Use a clear photo at least {{ \App\Support\ProfileImage::MIN }}×{{ \App\Support\ProfileImage::MIN }} px.</span>
                                                 <span class="text-danger" id="error_avatar"></span>
                                             </div>
                                         </div>
@@ -149,41 +159,31 @@
                                         </div>
                                     </div>
                                     @if(auth()->user()->role->type == 'seller')
-                                    <div class="col-xl-6">
+                                    @php
+                                        $selectedArtServices = old('art_services', $user_info->art_services ?? []);
+                                        if (!is_array($selectedArtServices)) {
+                                            $selectedArtServices = [];
+                                        }
+                                    @endphp
+                                    <div class="col-xl-12">
                                         <div class="primary_input mb-25">
                                             <label class="primary_input_label" for="">{{ __('Art Services') }}</label>
-                                            <div class="artist-services-checkboxes">
-                                                <div class="row">
-                                                    <div class="col-sm-6 mb_15">
-                                                        <label class="primary_checkbox d-flex align-items-center">
-                                                            <input type="checkbox" name="live_art" value="1">
-                                                            <span class="checkmark mr_15"></span>
-                                                            <span class="label_name f_w_400">Live Art</span>
+                                            <ul class="permission_list sms_list artist-services-checkboxes mb-0">
+                                                @foreach(\App\Models\User::ART_SERVICE_OPTIONS as $serviceKey => $serviceLabel)
+                                                    <li class="mb_15">
+                                                        <label class="primary_checkbox d-flex mr-12" for="art_service_{{ $serviceKey }}">
+                                                            <input type="checkbox"
+                                                                   id="art_service_{{ $serviceKey }}"
+                                                                   name="art_services[]"
+                                                                   value="{{ $serviceKey }}"
+                                                                   @if(in_array($serviceKey, $selectedArtServices, true)) checked @endif>
+                                                            <span class="checkmark"></span>
                                                         </label>
-                                                    </div>
-                                                    <div class="col-sm-6 mb_15">
-                                                        <label class="primary_checkbox d-flex align-items-center">
-                                                            <input type="checkbox" name="art_shows" value="1">
-                                                            <span class="checkmark mr_15"></span>
-                                                            <span class="label_name f_w_400">Art Shows</span>
-                                                        </label>
-                                                    </div>
-                                                    <div class="col-sm-6 mb_15">
-                                                        <label class="primary_checkbox d-flex align-items-center">
-                                                            <input type="checkbox" name="murals" value="1">
-                                                            <span class="checkmark mr_15"></span>
-                                                            <span class="label_name f_w_400">Murals</span>
-                                                        </label>
-                                                    </div>
-                                                    <div class="col-sm-6 mb_15">
-                                                        <label class="primary_checkbox d-flex align-items-center">
-                                                            <input type="checkbox" name="commissions" value="1">
-                                                            <span class="checkmark mr_15"></span>
-                                                            <span class="label_name f_w_400">Commissions</span>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                                        <p>{{ $serviceLabel }}</p>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                            <span class="text-danger" id="error_art_services"></span>
                                         </div>
                                     </div>
                                     @endif
@@ -397,6 +397,11 @@
                             $('#phone').val(response.phone);
                             $('#description').val(response.description);
                             $('#accolades').val(response.accolades);
+                            if (Array.isArray(response.art_services)) {
+                                $('input[name="art_services[]"]').each(function () {
+                                    $(this).prop('checked', response.art_services.indexOf($(this).val()) !== -1);
+                                });
+                            }
                             var image_path='{{asset(asset_path(''))}}'+response.avatar;
                             $('.customer_img img').attr('src',image_path);
                             $('#avatar_file').val('');
@@ -879,8 +884,40 @@
                 });
 
                 $(document).on('change', '#avatar_file', function(event){
-                    getFileName($(this).val(),'#avatar_placeholder');
-                    imageChangeWithFile($(this)[0],'#avatar_preview');
+                    var input = this;
+                    var file = input.files && input.files[0] ? input.files[0] : null;
+                    var minSize = {{ (int) \App\Support\ProfileImage::MIN }};
+                    $('#error_avatar').text('');
+
+                    if (!file) {
+                        return;
+                    }
+
+                    if (!file.type || file.type.indexOf('image/') !== 0) {
+                        $('#error_avatar').text('Please select a valid image file (JPG or PNG).');
+                        $(input).val('');
+                        return;
+                    }
+
+                    var objectUrl = URL.createObjectURL(file);
+                    var probe = new Image();
+                    probe.onload = function () {
+                        URL.revokeObjectURL(objectUrl);
+                        if (probe.width < minSize || probe.height < minSize) {
+                            $('#error_avatar').text('Image is too small (' + probe.width + '×' + probe.height + 'px). Upload at least ' + minSize + '×' + minSize + ' px.');
+                            $(input).val('');
+                            $('#avatar_placeholder').attr('placeholder', "{{__('common.avatar')}}");
+                            return;
+                        }
+                        getFileName($(input).val(),'#avatar_placeholder');
+                        imageChangeWithFile(input,'#avatar_preview');
+                    };
+                    probe.onerror = function () {
+                        URL.revokeObjectURL(objectUrl);
+                        $('#error_avatar').text('Could not read this image. Please try another file.');
+                        $(input).val('');
+                    };
+                    probe.src = objectUrl;
                 });
 
                 function showValidateError(formId, errors){

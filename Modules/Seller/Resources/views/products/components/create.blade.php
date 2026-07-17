@@ -1,6 +1,13 @@
 @extends('backEnd.master')
 @php
     $sellerMapsEnabled = config('app.map_api_status') == 'true' && filled(config('app.map_api_key'));
+    // Keep "New Product" tab open after validation failure (request_from is only on that form).
+    $isNewProductForm = in_array(old('request_from'), ['seller_product_form', 'inhouse_product_form'], true)
+        || (session()->has('seller_product_create_state') && (int) session()->get('seller_product_create_state') === 1);
+    $oldProductImages = array_values(array_filter((array) old('images', []), fn ($id) => filled($id)));
+    $oldMetaImage = old('meta_image');
+    $oldPriceSlider = old('price', 5000);
+    $oldPaletteColor = old('palette_color', '#cccccc');
 @endphp
 @section('styles')
 <link rel="stylesheet" href="{{asset(asset_path('modules/seller/css/create.css'))}}" />
@@ -31,10 +38,10 @@ $LanguageList = getLanguageList();
                                 <label class="primary_input_label" for="product_types">{{ __('common.product_type') }}
                                     <span class="text-danger">*</span></label>
                                 <select class="primary_select mb-25" name="product_types" id="product_types" required>
-                                    <option @if(!session()->has('seller_product_create_state') || session()->get('seller_product_create_state') == 2) selected @endif value="2">{{ __('product.existing_product') }}</option>
-                                    <option @if(session()->has('seller_product_create_state') && session()->get('seller_product_create_state') == 1) selected @endif value="1">{{ __('product.new_product') }}</option>
+                                    <option @if(!$isNewProductForm) selected @endif value="2">{{ __('product.existing_product') }}</option>
+                                    <option @if($isNewProductForm) selected @endif value="1">{{ __('product.new_product') }}</option>
                                 </select>
-                                <input type="hidden" id="seller_product_create_state" value="{{ session()->has('seller_product_create_state')?session()->get('seller_product_create_state'):2 }}">
+                                <input type="hidden" id="seller_product_create_state" value="{{ $isNewProductForm ? 1 : (session()->has('seller_product_create_state') ? session()->get('seller_product_create_state') : 2) }}">
                             </div>
 
                         </div>
@@ -433,6 +440,7 @@ $LanguageList = getLanguageList();
                                                         <label class="primary_input_label" for="sku_single">{{__("product.product_sku")}} </label>
                                                         <input class="primary_input_field" name="product_sku" id="sku_single"
                                                             placeholder="{{__("product.product_sku")}}" type="text"
+                                                            value="{{ old('product_sku') }}"
                                                             required="1">
                                                         <span class="text-danger" id="error_single_sku">{{$errors->first('product_sku')}}</span>
                                                     </div>
@@ -537,7 +545,7 @@ $LanguageList = getLanguageList();
                                                             {{__("product.minimum_order_qty")}} <span
                                                                 class="text-danger">*</span></label>
                                                         <input class="primary_input_field" name="minimum_order_qty"
-                                                            id="minimum_order_qty" value="1" type="number" min="1"
+                                                            id="minimum_order_qty" value="{{ old('minimum_order_qty', 1) }}" type="number" min="1"
                                                             step="0" required="1">
                                                         <span
                                                             class="text-danger" id="error_minumum_qty">{{$errors->first('minimum_order_qty')}}</span>
@@ -548,7 +556,7 @@ $LanguageList = getLanguageList();
                                                         <label class="primary_input_label" for="">
                                                             {{__("product.max_order_qty")}} </label>
                                                         <input class="primary_input_field" name="max_order_qty"
-                                                            type="number" min="0">
+                                                            type="number" min="0" value="{{ old('max_order_qty') }}">
                                                         <span
                                                             class="text-danger">{{$errors->first('max_order_qty')}}</span>
                                                     </div>
@@ -599,7 +607,7 @@ $LanguageList = getLanguageList();
                                                     </div>
                                                     <div class="tagInput_field mb_26">
                                                         <input name="tags" class="tag-input" id="tag-input-upload-shots"
-                                                            type="text" value="" data-role="tagsinput" />
+                                                            type="text" value="{{ old('tags') }}" data-role="tagsinput" />
                                                     </div>
                                                     <br>
                                                     <div class="suggeted_tags">
@@ -676,7 +684,7 @@ $LanguageList = getLanguageList();
                                                             <div class="primary_input mb-15">
                                                                 <label class="primary_input_label" for=""> {{ __('product.weight')}} [Gm]</label>
                                                                 <input class="primary_input_field" name="weight" id="weight"
-                                                                       type="number" min="0" step="{{step_decimal()}}">
+                                                                       type="number" min="0" step="{{step_decimal()}}" value="{{ old('weight') }}">
                                                                 <span class="text-danger" id="error_weight">{{ $errors->first('weight') }}</span>
                                                             </div>
                                                         </div>
@@ -685,7 +693,7 @@ $LanguageList = getLanguageList();
                                                             <div class="primary_input mb-15">
                                                                 <label class="primary_input_label" for=""> {{ __('product.length')}} [Cm]</label>
                                                                 <input class="primary_input_field" name="length" id="length"
-                                                                       type="number" min="0" step="{{step_decimal()}}">
+                                                                       type="number" min="0" step="{{step_decimal()}}" value="{{ old('length') }}">
                                                                 <span class="text-danger" id="error_length">{{ $errors->first('length') }}</span>
                                                             </div>
                                                         </div>
@@ -694,7 +702,7 @@ $LanguageList = getLanguageList();
                                                             <div class="primary_input mb-15">
                                                                 <label class="primary_input_label" for=""> {{ __('product.breadth')}} [Cm]</label>
                                                                 <input class="primary_input_field" name="breadth" id="breadth"
-                                                                       type="number" min="0" step="{{step_decimal()}}">
+                                                                       type="number" min="0" step="{{step_decimal()}}" value="{{ old('breadth') }}">
                                                                 <span class="text-danger" id="error_breadth">{{ $errors->first('breadth') }}</span>
                                                             </div>
                                                         </div>
@@ -703,7 +711,7 @@ $LanguageList = getLanguageList();
                                                             <div class="primary_input mb-15">
                                                                 <label class="primary_input_label" for=""> {{ __('product.height')}} [Cm]</label>
                                                                 <input class="primary_input_field" name="height" id="height"
-                                                                       type="number" min="0" step="{{step_decimal()}}">
+                                                                       type="number" min="0" step="{{step_decimal()}}" value="{{ old('height') }}">
                                                                 <span class="text-danger" id="error_height">{{ $errors->first('height') }}</span>
                                                             </div>
                                                         </div>
@@ -759,7 +767,7 @@ $LanguageList = getLanguageList();
                                                         <input class="primary_input_field" name="selling_price"
                                                             id="selling_price"
                                                             placeholder="{{__("product.selling_price")}}" type="number"
-                                                            min="1" step="{{step_decimal()}}" value="" required>
+                                                            min="1" step="{{step_decimal()}}" value="{{ old('selling_price') }}" required>
                                                         <span
                                                             class="text-danger" id="error_selling_price">{{$errors->first('selling_price')}}</span>
                                                     </div>
@@ -770,7 +778,7 @@ $LanguageList = getLanguageList();
                                                             {{__("product.discount")}} </label>
                                                         <input class="primary_input_field" name="discount" id="discount"
                                                             placeholder="{{__("product.discount")}}" type="number"
-                                                            min="0" step="{{step_decimal()}}" value="0">
+                                                            min="0" step="{{step_decimal()}}" value="{{ old('discount', 0) }}">
                                                         <span class="text-danger" id="error_discunt">{{$errors->first('discount')}}</span>
                                                     </div>
                                                 </div>
@@ -780,8 +788,8 @@ $LanguageList = getLanguageList();
                                                             for="">{{ __('product.discount_type') }}</label>
                                                         <select class="primary_select mb-25" name="discount_type"
                                                             id="discount_type">
-                                                            <option value="1">{{ __('product.amount') }}</option>
-                                                            <option value="0">{{ __('product.percentage') }}</option>
+                                                            <option value="1" @if(old('discount_type', '1') == '1') selected @endif>{{ __('product.amount') }}</option>
+                                                            <option value="0" @if(old('discount_type', '1') == '0') selected @endif>{{ __('product.percentage') }}</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -790,8 +798,8 @@ $LanguageList = getLanguageList();
                                                     <div class="primary_input mb-25">
                                                         <label class="primary_input_label" for="stock_manage">{{__('product.stock_manage') }}</label>
                                                         <select class="primary_select mb-25" name="stock_manage" id="stock_manage">
-                                                            <option value="1" @if(old('stock_manage') & old('stock_manage') == '1') selected @endif>{{ __('common.yes') }}</option>
-                                                            <option value="0" @if(old('stock_manage') & old('stock_manage') == '0') selected @endif>{{ __('common.no') }}</option>
+                                                            <option value="1" @if(old('stock_manage', '1') == '1') selected @endif>{{ __('common.yes') }}</option>
+                                                            <option value="0" @if(old('stock_manage', '1') == '0') selected @endif>{{ __('common.no') }}</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -823,7 +831,7 @@ $LanguageList = getLanguageList();
                                                         <select class="primary_select mb-25" name="gst_group" id="tax_type">
                                                             <option value="" selected disabled>{{__('common.select_one')}}</option>
                                                             @foreach($gst_groups as $group)
-                                                                <option value="{{$group->id}}">{{ $group->name }}</option>
+                                                                <option value="{{$group->id}}" @if(old('gst_group') == $group->id) selected @endif>{{ $group->name }}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -832,190 +840,11 @@ $LanguageList = getLanguageList();
                                                 </div>
                                             @endif
                                             @include('seller::products.partials.product_address_fields', ['productForAddress' => null])
-
-                                        <div class="col-lg-3">
-                                            <div class="primary_input mb-25">
-                                                <label class="primary_input_label">Art Services</label>
-
-                                                <select class="primary_select mb-25" name="art_services" id="art_services">
-                                                    <option value="">Select Art Services</option>
-                                                    <option value="Commissions">Commissions</option>
-                                                    <option value="Murals">Murals</option>
-                                                    <option value="Live Art">Live Art</option>
-                                                    <option value="Art Shows">Art Shows</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-3">
-                                            <div class="primary_input mb-25">
-                                                <label class="primary_input_label">Category</label>
-
-                                                <select class="primary_select mb-25" name="category" id="category">
-                                                    <option value="">Select Category</option>
-                                                    <option value="All">All</option>
-                                                    <option value="Paintings">Paintings</option>
-                                                    <option value="Drawing">Drawing</option>
-                                                    <option value="Mixed Media">Mixed Media</option>
-                                                    <option value="Sculpture">Sculpture</option>
-                                                    <option value="Other">Other</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-
-                                        <div class="col-lg-3">
-                                            <div class="primary_input mb-25">
-                                                <label class="primary_input_label">Style</label>
-
-                                                <select class="primary_select mb-25" name="style" id="style">
-                                                    <option value="">Select Style</option>
-
-                                                    <option value="Abstract Art">Abstract Art</option>
-                                                    <option value="Art Deco">Art Deco</option>
-                                                    <option value="Art Nouveau">Art Nouveau</option>
-                                                    <option value="Baroque">Baroque</option>
-                                                    <option value="Bauhaus">Bauhaus</option>
-                                                    <option value="Classicism">Classicism</option>
-                                                    <option value="Contemporary Art">Contemporary Art</option>
-                                                    <option value="Cubism">Cubism</option>
-                                                    <option value="Dadaism">Dadaism</option>
-                                                    <option value="Expressionism">Expressionism</option>
-                                                    <option value="Fauvism">Fauvism</option>
-                                                    <option value="Figurative">Figurative</option>
-                                                    <option value="Harlem Renaissance">Harlem Renaissance</option>
-                                                    <option value="Impressionism">Impressionism</option>
-                                                    <option value="Minimalism">Minimalism</option>
-                                                    <option value="Neoclassicism">Neoclassicism</option>
-                                                    <option value="Neo-Impressionism">Neo-Impressionism</option>
-                                                    <option value="Pop Art">Pop Art</option>
-                                                    <option value="Post-Impressionism">Post-Impressionism</option>
-                                                    <option value="Realism">Realism</option>
-                                                    <option value="Surrealism">Surrealism</option>
-                                                    <option value="Other">Other</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-3">
-                                            <div class="primary_input mb-25">
-                                                <label class="primary_input_label">Subject</label>
-
-                                                <select class="primary_select mb-25" name="subject" id="subject">
-                                                    <option value="">Select Subject</option>
-
-                                                    <option value="Abstract">Abstract</option>
-                                                    <option value="Landscape">Landscape</option>
-                                                    <option value="Pop Culture">Pop Culture</option>
-                                                    <option value="People">People</option>
-                                                    <option value="Animal">Animal</option>
-                                                    <option value="Floral">Floral</option>
-                                                    <option value="Nature">Nature</option>
-                                                    <option value="Seascape">Seascape</option>
-                                                    <option value="Dogs">Dogs</option>
-                                                    <option value="Cats">Cats</option>
-                                                    <option value="Religious">Religious</option>
-                                                    <option value="Love">Love</option>
-                                                    <option value="Nude">Nude</option>
-                                                    <option value="Geometric">Geometric</option>
-                                                    <option value="Music">Music</option>
-                                                    <option value="Food/Drinks">Food/Drinks</option>
-                                                    <option value="Medical">Medical</option>
-                                                    <option value="Sports">Sports</option>
-                                                    <option value="Men">Men</option>
-                                                    <option value="Women">Women</option>
-                                                    <option value="Buildings">Buildings</option>
-                                                    <option value="Cartoon">Cartoon</option>
-                                                    <option value="Other">Other</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-3">
-                                            <div class="primary_input mb-25">
-                                                <label class="primary_input_label">Medium</label>
-
-                                                <select class="primary_select mb-25" name="medium" id="medium">
-                                                    <option value="">Select Medium</option>
-
-                                                    <option value="Acrylic">Acrylic</option>
-                                                    <option value="Oil">Oil</option>
-                                                    <option value="Watercolor">Watercolor</option>
-                                                    <option value="Ink">Ink</option>
-                                                    <option value="Ceramic">Ceramic</option>
-                                                    <option value="Other">Other</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-3">
-                                            <div class="primary_input mb-25">
-                                                <label class="primary_input_label">Material</label>
-
-                                                <select class="primary_select mb-25" name="material" id="material">
-                                                    <option value="">Select Material</option>
-
-                                                    <option value="Canvas">Canvas</option>
-                                                    <option value="Paper">Paper</option>
-                                                    <option value="Wood">Wood</option>
-                                                    <option value="Metal">Metal</option>
-                                                    <option value="Other">Other</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-3">
-                                            <div class="primary_input mb-25">
-                                                <label class="primary_input_label">Price</label>
-
-                                                <input 
-                                                    type="range" 
-                                                    class="primary_range"
-                                                    id="price"
-                                                    name="price"
-                                                    min="0"
-                                                    max="10000"
-                                                    step="50"
-                                                    value="5000"
-                                                >
-
-                                                <div class="mt-10">
-                                                    Up to: <strong>$<span id="price_value">5000</span></strong>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <div class="primary_input mb-25">
-                                                <label class="primary_input_label">Color Palette</label>
-
-                                                <!-- Single color selection -->
-                                                <input 
-                                                    type="color" 
-                                                    class="form-control"
-                                                    name="palette_color"
-                                                    id="palette_color"
-                                                    value="#cccccc"
-                                                >
-
-                                                <small class="text-muted">
-                                                    Select one color from the palette
-                                                </small>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <div class="primary_input mb-25">
-                                                <label class="primary_input_label">Size</label>
-
-                                                <select class="primary_select mb-25" name="size" id="size">
-                                                    <option value="">Select Size</option>
-
-                                                    <option value="Small">Small (&lt; 20in)</option>
-                                                    <option value="Medium">Med (20–38in)</option>
-                                                    <option value="Large">Large (38–60in)</option>
-                                                    <option value="X Large">X Large (&gt; 60in)</option>
-                                                </select>
-                                            </div>
-                                        </div>
+                                            @include('seller::products.partials._seller_art_product_fields', [
+                                                'product' => null,
+                                                'priceSliderValue' => $oldPriceSlider,
+                                                'paletteColor' => $oldPaletteColor,
+                                            ])
                                             @if (isModuleActive('WholeSale'))
                                                 <div class="col-lg-12 whole_sale_info_add" id="whole_sale_info_add">
                                                     <h3 class="mb-2 mr-30">{{ __('wholesale.Wholesale Price') }}</h3>
@@ -1112,7 +941,7 @@ $LanguageList = getLanguageList();
                                                 </div>
                                                 <div class="col-lg-12">
                                                     <div class="primary_input mb-15">
-                                                        <textarea class="summernote" name="description"></textarea>
+                                                        <textarea class="summernote" name="description">{{ old('description') }}</textarea>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-12">
@@ -1122,7 +951,7 @@ $LanguageList = getLanguageList();
                                                 </div>
                                                 <div class="col-lg-12">
                                                     <div class="primary_input mb-15">
-                                                        <textarea class="summernote" id="specification" name="specification"></textarea>
+                                                        <textarea class="summernote" id="specification" name="specification">{{ old('specification') }}</textarea>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-12">
@@ -1140,7 +969,7 @@ $LanguageList = getLanguageList();
                                                 <div class="col-lg-12">
                                                     <div class="primary_input mb-15">
                                                         <label class="primary_input_label" for="meta_description"> {{__("common.meta_description")}}</label>
-                                                        <textarea id="meta_description" class="primary_textarea height_112 meta_description" placeholder="{{ __('common.meta_description') }}" name="meta_description" spellcheck="false"></textarea>
+                                                        <textarea id="meta_description" class="primary_textarea height_112 meta_description" placeholder="{{ __('common.meta_description') }}" name="meta_description" spellcheck="false">{{ old('meta_description') }}</textarea>
                                                         <span class="text-danger">{{$errors->first('meta_description')}}</span>
                                                     </div>
                                                 </div>
@@ -1152,10 +981,14 @@ $LanguageList = getLanguageList();
                                                             <input class="primary-input file_amount" type="text" id="meta_image_file" placeholder="{{__('common.browse_image_file')}}" readonly="">
                                                             <button class="" type="button">
                                                                 <label class="primary-btn small fix-gr-bg" for="meta_image">{{__('product.meta_image') }} </label>
-                                                                <input type="hidden" class="selected_files" value="">
+                                                                <input type="hidden" class="selected_files" value="{{ $oldMetaImage ?: '' }}">
                                                             </button>
                                                         </div>
-                                                        <div class="product_image_all_div"></div>
+                                                        <div class="product_image_all_div">
+                                                            @if(filled($oldMetaImage))
+                                                                <input type="hidden" name="meta_image" class="product_images_hidden" value="{{ $oldMetaImage }}">
+                                                            @endif
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1175,11 +1008,14 @@ $LanguageList = getLanguageList();
                                                             <input class="primary-input file_amount" type="text" id="thumbnail_image_file" placeholder="{{__('common.choose_images') }}" readonly="">
                                                             <button class="" type="button">
                                                                 <label class="primary-btn small fix-gr-bg" for="thumbnail_image">{{__('product.Browse') }} </label>
-                                                                <input type="hidden" class="selected_files image_selected_files" value="">
+                                                                <input type="hidden" class="selected_files image_selected_files" value="{{ implode(',', $oldProductImages) }}">
                                                             </button>
                                                             <span class="text-danger" id="error_thumbnail"></span>
                                                         </div>
                                                         <div class="product_image_all_div artwork-protect-zone">
+                                                            @foreach($oldProductImages as $mediaId)
+                                                                <input type="hidden" name="images[]" class="product_images_hidden" value="{{ $mediaId }}">
+                                                            @endforeach
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1238,14 +1074,14 @@ $LanguageList = getLanguageList();
                                                         <ul id="theme_nav" class="permission_list sms_list ">
                                                             <li>
                                                                 <label data-id="bg_option" class="primary_checkbox d-flex mr-12">
-                                                                    <input name="status" id="status_active" value="1" checked class="active" type="radio">
+                                                                    <input name="status" id="status_active" value="1" @if(old('status', '1') == '1') checked @endif class="active" type="radio">
                                                                     <span class="checkmark"></span>
                                                                 </label>
                                                                 <p>{{ __('common.publish') }}</p>
                                                             </li>
                                                             <li>
                                                                 <label data-id="color_option" class="primary_checkbox d-flex mr-12">
-                                                                    <input name="status" value="0" id="status_inactive"  class="de_active" type="radio">
+                                                                    <input name="status" value="0" id="status_inactive" @if(old('status', '1') == '0') checked @endif class="de_active" type="radio">
                                                                     <span class="checkmark"></span>
                                                                 </label>
                                                                 <p>{{ __('common.pending') }}</p>
@@ -1260,14 +1096,14 @@ $LanguageList = getLanguageList();
                                                         <ul id="theme_nav" class="permission_list sms_list ">
                                                             <li>
                                                                 <label data-id="bg_option" class="primary_checkbox d-flex mr-12">
-                                                                    <input name="display_in_details" id="status_active" value="1" checked class="active" type="radio">
+                                                                    <input name="display_in_details" id="status_active" value="1" @if(old('display_in_details', '1') == '1') checked @endif class="active" type="radio">
                                                                     <span class="checkmark"></span>
                                                                 </label>
                                                                 <p>{{ __('common.up_sale') }}</p>
                                                             </li>
                                                             <li>
                                                                 <label data-id="color_option" class="primary_checkbox d-flex mr-12">
-                                                                    <input name="display_in_details" value="2" id="status_inactive"  class="de_active" type="radio">
+                                                                    <input name="display_in_details" value="2" id="status_inactive" @if(old('display_in_details', '1') == '2') checked @endif class="de_active" type="radio">
                                                                     <span class="checkmark"></span>
                                                                 </label>
                                                                 <p>{{ __('common.cross_sale') }}</p>
@@ -1329,6 +1165,9 @@ $LanguageList = getLanguageList();
             $('.digital_file_upload_div_single').hide();
 
             productTypeChange($('#seller_product_create_state').val());
+            @if($isNewProductForm)
+                $.get("{{ route('seller.product.change-state') }}?type=1");
+            @endif
 
             $(document).on('change', '#product_types', function(){
                 let val = $('#product_types').val();
@@ -2062,9 +1901,11 @@ $LanguageList = getLanguageList();
         const priceSlider = document.getElementById('price');
         const priceValue = document.getElementById('price_value');
 
-        priceSlider.addEventListener('input', () => {
-            priceValue.textContent = priceSlider.value;
-        });
+        if (priceSlider && priceValue) {
+            priceSlider.addEventListener('input', () => {
+                priceValue.textContent = priceSlider.value;
+            });
+        }
     })(jQuery);
 
 </script>

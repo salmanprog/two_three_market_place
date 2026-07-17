@@ -24,6 +24,7 @@ use Modules\GiftCard\Entities\DigitalGiftCard;
 use Modules\GiftCard\Entities\GiftCard;
 use App\Models\SearchTerm;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 
 
@@ -258,13 +259,28 @@ class ShopController extends Controller
             $mainProducts = Product::query(); // or ->all() if you want all results immediately
             
             if ($searchQuery) {
-                $mainProducts->where('product_name', 'LIKE', $searchQuery . '%');
+                $sellerIdsByName = User::query()
+                    ->where(function ($q) use ($searchQuery) {
+                        $q->where('first_name', 'LIKE', '%' . $searchQuery . '%')
+                            ->orWhere('last_name', 'LIKE', '%' . $searchQuery . '%')
+                            ->orWhere('username', 'LIKE', '%' . $searchQuery . '%')
+                            ->orWhere(DB::raw("CONCAT(COALESCE(first_name,''),' ',COALESCE(last_name,''))"), 'LIKE', '%' . $searchQuery . '%');
+                    })
+                    ->pluck('id')
+                    ->toArray();
+
+                $mainProducts->where(function ($q) use ($searchQuery, $sellerIdsByName) {
+                    $q->where('product_name', 'LIKE', '%' . $searchQuery . '%');
+                    if (!empty($sellerIdsByName)) {
+                        $q->orWhereIn('created_by', $sellerIdsByName);
+                    }
+                });
             }
             if ($searchlocationQuery) {
                 $mainProducts->where('location', '=', $searchlocationQuery);
             }
             if ($searchart_servicesQuery) {
-                $mainProducts->where('art_services', '=', $searchart_servicesQuery);
+                $this->applyArtServicesFilter($mainProducts, $searchart_servicesQuery);
             }
             if ($searchcategoryQuery) {
                 $mainProducts->where('category', '=', $searchcategoryQuery);
@@ -454,13 +470,11 @@ class ShopController extends Controller
         // Initialize the base query
         $mainProducts = Product::query()->where('status','1'); // Only active products
 
-        // Array of filterable columns
+        // Array of filterable columns (art_services + search handled separately)
         $filters = [
-            'search' => 'product_name',
             'location' => 'location',
             'state' => 'state',
             'city' => 'city',
-            'art_services' => 'art_services',
             'category' => 'category',
             'style' => 'style',
             'subject' => 'subject',
@@ -473,15 +487,31 @@ class ShopController extends Controller
         foreach ($filters as $key => $column) {
             $queryValue = $request->get($key);
             if ($queryValue) {
-                if ($key === 'search') {
-                    // For search, use LIKE for partial matching
-                    $mainProducts->where($column, 'LIKE', $queryValue . '%');
-                } else {
-                    // For others, use exact match
-                    $mainProducts->where($column, '=', $queryValue);
-                }
+                $mainProducts->where($column, '=', $queryValue);
             }
         }
+
+        $searchQuery = trim((string) $request->get('search', ''));
+        if ($searchQuery !== '') {
+            $sellerIdsByName = User::query()
+                ->where(function ($q) use ($searchQuery) {
+                    $q->where('first_name', 'LIKE', '%' . $searchQuery . '%')
+                        ->orWhere('last_name', 'LIKE', '%' . $searchQuery . '%')
+                        ->orWhere('username', 'LIKE', '%' . $searchQuery . '%')
+                        ->orWhere(DB::raw("CONCAT(COALESCE(first_name,''),' ',COALESCE(last_name,''))"), 'LIKE', '%' . $searchQuery . '%');
+                })
+                ->pluck('id')
+                ->toArray();
+
+            $mainProducts->where(function ($q) use ($searchQuery, $sellerIdsByName) {
+                $q->where('product_name', 'LIKE', '%' . $searchQuery . '%');
+                if (!empty($sellerIdsByName)) {
+                    $q->orWhereIn('created_by', $sellerIdsByName);
+                }
+            });
+        }
+
+        $this->applyArtServicesFilter($mainProducts, $request->get('art_services', ''));
 
         if ($request->filled('material')) {
             $mainProducts->where('material', '=', $request->get('material'));
@@ -894,5 +924,80 @@ class ShopController extends Controller
     {
         // This method can be used for pagination within filtered results
         return $this->filter($request);
+    }
+
+    /**
+     * Filter products by art service: product column OR seller profile (users.others.art_services).
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $mainProducts
+     * @param  mixed  $rawService
+     * @return void
+     */
+    private function applyArtServicesFilter($mainProducts, $rawService): void
+    {
+        if (is_array($rawService)) {
+            $rawService = reset($rawService) ?: '';
+        }
+
+        $rawService = trim((string) $rawService);
+        if ($rawService === '') {
+            return;
+        }
+
+        $serviceKey = strtolower(str_replace([' ', '-'], '_', $rawService));
+
+        // Map UI labels / variants onto canonical profile keys.
+        $canonicalMap = [
+            'live_art_for_events' => 'live_art',
+            'liveart' => 'live_art',
+            'art_classes' => 'art_shows',
+            'art_class' => 'art_shows',
+        ];
+        $serviceKey = $canonicalMap[$serviceKey] ?? $serviceKey;
+
+        $serviceAliases = [
+            'commissions' => ['commissions', 'Commissions'],
+            'murals' => ['murals', 'Murals'],
+            'live_art' => ['live_art', 'Live Art', 'live art', 'Live Art for Events', 'live_art_for_events'],
+            'art_shows' => ['art_shows', 'Art Shows', 'art_classes', 'Art Classes'],
+            'art_classes' => ['art_classes', 'Art Classes', 'art_shows', 'Art Shows'],
+        ];
+        $matchValues = $serviceAliases[$serviceKey] ?? [$rawService];
+        $profileServiceKeys = array_values(array_unique(array_filter([
+            $serviceKey,
+            $serviceKey === 'art_classes' ? 'art_shows' : null,
+            $serviceKey === 'art_shows' ? 'art_classes' : null,
+        ])));
+
+        $sellerIdsByService = User::query()
+            ->where(function ($q) use ($profileServiceKeys) {
+                foreach ($profileServiceKeys as $key) {
+                    $q->orWhereJsonContains('others->art_services', $key)
+                        ->orWhere('others', 'like', '%"' . $key . '"%')
+                        ->orWhere('others', 'like', '%' . $key . '%');
+                }
+            })
+            ->pluck('id')
+            ->toArray();
+
+        $mainProducts->where(function ($q) use ($matchValues, $sellerIdsByService) {
+            $q->where(function ($inner) use ($matchValues) {
+                foreach ($matchValues as $value) {
+                    $inner->orWhere('art_services', $value)
+                        ->orWhereRaw('LOWER(art_services) = ?', [strtolower((string) $value)])
+                        ->orWhere('art_services', 'like', '%' . $value . '%');
+                }
+            });
+
+            if (! empty($sellerIdsByService)) {
+                $q->orWhereIn('created_by', $sellerIdsByService)
+                    ->orWhereIn('id', function ($sub) use ($sellerIdsByService) {
+                        $sub->select('product_id')
+                            ->from('seller_products')
+                            ->whereIn('user_id', $sellerIdsByService)
+                            ->where('status', 1);
+                    });
+            }
+        });
     }
 }

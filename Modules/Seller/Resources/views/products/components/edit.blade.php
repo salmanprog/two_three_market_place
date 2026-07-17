@@ -206,10 +206,14 @@ $LanguageList = getLanguageList();
 
                                             <select class="primary_select mb-25" name="art_services" id="art_services">
                                                 <option value="">Select Art Services</option>
-                                                <option value="Commissions" {{ $product->product->art_services == 'Commissions' ? 'selected' : '' }}>Commissions</option>
-                                                <option value="Murals" {{ $product->product->art_services == 'Murals' ? 'selected' : '' }}>Murals</option>
-                                                <option value="Live Art" {{ $product->product->art_services == 'Live Art' ? 'selected' : '' }}>Live Art</option>
-                                                <option value="Art Shows" {{ $product->product->art_services == 'Art Shows' ? 'selected' : '' }}>Art Shows</option>
+                                                @php
+                                                    $productArtService = (string) ($product->product->art_services ?? '');
+                                                    $isArtService = fn (string $key, array $aliases) => in_array($productArtService, $aliases, true);
+                                                @endphp
+                                                <option value="commissions" {{ $isArtService('commissions', ['commissions', 'Commissions']) ? 'selected' : '' }}>Commissions</option>
+                                                <option value="murals" {{ $isArtService('murals', ['murals', 'Murals']) ? 'selected' : '' }}>Murals</option>
+                                                <option value="live_art" {{ $isArtService('live_art', ['live_art', 'Live Art']) ? 'selected' : '' }}>Live Art</option>
+                                                <option value="art_shows" {{ $isArtService('art_shows', ['art_shows', 'Art Shows']) ? 'selected' : '' }}>Art Shows</option>
                                             </select>
                                         </div>
                                     </div>

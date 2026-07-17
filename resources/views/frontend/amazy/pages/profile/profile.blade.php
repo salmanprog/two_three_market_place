@@ -132,11 +132,8 @@
                                         </button>
                                         <input class="primary-input border-0 p-0 ml-2" type="text" id="linkImageClickId" placeholder="{{__('common.browse_image_file')}}" readonly="">
                                     </div>
-                                    <label class="primary_input_label font_12" for="">({{ getNumberTranslate(200) }} X
-                                        {{ getNumberTranslate(200) }}){{ __('common.px') }}</label>
-                                    @error('filter_category_image')
-                                        <span class="text-danger">{{$message}}</span>
-                                    @enderror
+                                    <label class="primary_input_label font_12" for="">(min {{ getNumberTranslate(\App\Support\ProfileImage::MIN) }}×{{ getNumberTranslate(\App\Support\ProfileImage::MIN) }} {{ __('common.px') }}, recommended {{ getNumberTranslate(\App\Support\ProfileImage::TARGET) }}×{{ getNumberTranslate(\App\Support\ProfileImage::TARGET) }}+)</label>
+                                    <span class="text-danger d-block" id="error_avatar"></span>
                                 </div>
 
                             </div>
@@ -757,11 +754,36 @@
     </script>
     <script>
         $(document).on('change', '.setCustomeImageUploadClass', function(event){
-            let name = $(this).data('name');
-            let view = $(this).data('view');
-            getFileName($(this).val(),name);
-            imageChangeWithFile($(this)[0], view);
-            $('.removeUpImage').removeClass('d-none');
+            let input = this;
+            let name = $(input).data('name');
+            let view = $(input).data('view');
+            let file = input.files && input.files[0] ? input.files[0] : null;
+            let minSize = {{ (int) \App\Support\ProfileImage::MIN }};
+            $('#error_avatar').text('');
+
+            if (!file) {
+                return;
+            }
+
+            let objectUrl = URL.createObjectURL(file);
+            let probe = new Image();
+            probe.onload = function () {
+                URL.revokeObjectURL(objectUrl);
+                if (probe.width < minSize || probe.height < minSize) {
+                    $('#error_avatar').text('Image is too small (' + probe.width + '×' + probe.height + 'px). Upload at least ' + minSize + '×' + minSize + ' px.');
+                    $(input).val('');
+                    return;
+                }
+                getFileName($(input).val(), name);
+                imageChangeWithFile(input, view);
+                $('.removeUpImage').removeClass('d-none');
+            };
+            probe.onerror = function () {
+                URL.revokeObjectURL(objectUrl);
+                $('#error_avatar').text('Could not read this image. Please try another file.');
+                $(input).val('');
+            };
+            probe.src = objectUrl;
         });
 
         $(".removeUpImage").click(function(){

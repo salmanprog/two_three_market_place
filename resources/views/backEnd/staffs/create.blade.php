@@ -148,7 +148,7 @@
                             <div class="col-lg-4">
                                 <div class="primary_input mb-15">
                                     <label class="primary_input_label" for="">{{ __('common.avatar') }}
-                                        (165x165)PX</label>
+                                        (min {{ \App\Support\ProfileImage::MIN }}×{{ \App\Support\ProfileImage::MIN }})PX</label>
                                     <div class="primary_file_uploader">
                                         <input class="primary-input" type="text" id="placeholderFileOneName"
                                             placeholder="{{ __('common.browse_file') }}" readonly="">

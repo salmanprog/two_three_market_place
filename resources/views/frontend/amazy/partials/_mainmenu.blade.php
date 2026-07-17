@@ -206,10 +206,10 @@
                                             <div class="position-relative w-100">
                                                 <select class="compact-select primary-font" name="art_services">
                                                     <option value="">Select Art Services</option>
-                                                    <option value="commissions">Commissions</option>
-                                                    <option value="murals">Murals</option>
-                                                    <option value="art_classes">Art Classes</option>
-                                                    <option value="live_art">Live Art for Events</option>
+                                                    <option value="commissions" @selected(request('art_services') === 'commissions')>Commissions</option>
+                                                    <option value="murals" @selected(request('art_services') === 'murals')>Murals</option>
+                                                    <option value="art_shows" @selected(request('art_services') === 'art_shows')>Art Shows</option>
+                                                    <option value="live_art" @selected(request('art_services') === 'live_art')>Live Art for Events</option>
                                                 </select>
                                                 <i class="fa-solid fa-chevron-down position-absolute end-0 top-50 translate-middle-y fs-11 text-gray-400 me-3 pe-none"></i>
                                             </div>

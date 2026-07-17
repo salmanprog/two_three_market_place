@@ -297,7 +297,7 @@ class ProductController extends Controller
             DB::rollBack();
             LogActivity::errorLog($e->getMessage());
             Toastr::error(__('common.error_message'));
-            return back();
+            return back()->withInput();
         }
     }
 

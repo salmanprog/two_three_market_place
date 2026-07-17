@@ -1,9 +1,21 @@
 @php
-    /** @var \Modules\Product\Entities\Product $product */
-    $artField = fn (string $field) => old($field, $product->{$field} ?? '');
+    /** @var \Modules\Product\Entities\Product|null $product */
+    $product = $product ?? null;
+    $artField = fn (string $field) => (string) old($field, $product?->{$field} ?? '');
     $artSelected = fn (string $field, string $value) => $artField($field) === $value ? 'selected' : '';
+    $artServiceSelected = function (string $value) use ($artField) {
+        $current = $artField('art_services');
+        $aliases = [
+            'commissions' => ['commissions', 'Commissions'],
+            'murals' => ['murals', 'Murals'],
+            'live_art' => ['live_art', 'Live Art'],
+            'art_shows' => ['art_shows', 'Art Shows'],
+        ];
+
+        return in_array($current, $aliases[$value] ?? [$value], true) ? 'selected' : '';
+    };
     $priceSliderValue = $priceSliderValue ?? old('price', 5000);
-    $paletteColor = $paletteColor ?? old('palette_color', $product->palette_color ?? '#cccccc');
+    $paletteColor = $paletteColor ?? old('palette_color', $product?->palette_color ?? '#cccccc');
 @endphp
 
 <div class="col-lg-3">
@@ -11,10 +23,10 @@
         <label class="primary_input_label">Art Services</label>
         <select class="primary_select mb-25" name="art_services" id="art_services">
             <option value="">Select Art Services</option>
-            <option value="Commissions" {{ $artSelected('art_services', 'Commissions') }}>Commissions</option>
-            <option value="Murals" {{ $artSelected('art_services', 'Murals') }}>Murals</option>
-            <option value="Live Art" {{ $artSelected('art_services', 'Live Art') }}>Live Art</option>
-            <option value="Art Shows" {{ $artSelected('art_services', 'Art Shows') }}>Art Shows</option>
+            <option value="commissions" {{ $artServiceSelected('commissions') }}>Commissions</option>
+            <option value="murals" {{ $artServiceSelected('murals') }}>Murals</option>
+            <option value="live_art" {{ $artServiceSelected('live_art') }}>Live Art</option>
+            <option value="art_shows" {{ $artServiceSelected('art_shows') }}>Art Shows</option>
         </select>
     </div>
 </div>

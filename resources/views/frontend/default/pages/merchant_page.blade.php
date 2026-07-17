@@ -40,7 +40,7 @@
                         @if ($seller->role->type == "superadmin")
                         <img src="{{showImage(app('general_setting')->logo)}}" alt="#">
                         @else
-                        <img src="{{$seller->photo?showImage($seller->photo):showImage('frontend/default/img/avatar.jpg')}}" alt="#">
+                        <img src="{{ showImage($seller->profile_image ?: 'frontend/default/img/avatar.jpg') }}" alt="{{ $seller->first_name }}">
                         @endif
                       </div>
                       <div class="member_info_text">
@@ -48,6 +48,11 @@
                                <h4>@if(@$seller->role->type == 'seller') {{@$seller->SellerAccount->seller_shop_display_name}} @else {{app('general_setting')->company_name}} @endif </h4> <span>|</span>
                                <p>{{__('defaultTheme.member_since')}} {{date('M, Y',strtotime($seller->created_at))}} </p>
                           </div>
+                          @if(!empty($seller->art_service_labels))
+                          <div class="member_info_details mb-2">
+                               <p class="mb-0">{{ __('Art Services') }}: {{ implode(' · ', $seller->art_service_labels) }}</p>
+                          </div>
+                          @endif
                           <div class="member_info_details d-flex">
                                <div class="review_star_icon">
                                 @if($seller_rating == 0)
