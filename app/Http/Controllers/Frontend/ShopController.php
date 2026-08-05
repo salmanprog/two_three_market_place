@@ -277,26 +277,23 @@ class ShopController extends Controller
                 });
             }
             if ($searchlocationQuery) {
-                $mainProducts->where('location', '=', $searchlocationQuery);
+                $mainProducts->where(function ($q) use ($searchlocationQuery) {
+                    $q->whereRaw('LOWER(COALESCE(location, \'\')) LIKE ?', ['%' . strtolower($searchlocationQuery) . '%'])
+                        ->orWhereRaw('LOWER(COALESCE(city, \'\')) LIKE ?', ['%' . strtolower($searchlocationQuery) . '%'])
+                        ->orWhereRaw('LOWER(COALESCE(state, \'\')) LIKE ?', ['%' . strtolower($searchlocationQuery) . '%']);
+                });
             }
             if ($searchart_servicesQuery) {
                 $this->applyArtServicesFilter($mainProducts, $searchart_servicesQuery);
             }
-            if ($searchcategoryQuery) {
-                $mainProducts->where('category', '=', $searchcategoryQuery);
-            }
-            if ($searchstyleQuery) {
-                $mainProducts->where('style', '=', $searchstyleQuery);
-            }
-            if ($searchsubjectQuery) {
-                $mainProducts->where('subject', '=', $searchsubjectQuery);
-            }
-            if ($searchmediumQuery) {
-                $mainProducts->where('medium', '=', $searchmediumQuery);
-            }
-            if ($searchsizeQuery) {
-                $mainProducts->where('size', '=', $searchsizeQuery);
-            }
+            $this->applyFlexibleArtAttributeFilters($mainProducts, [
+                'category' => $searchcategoryQuery,
+                'style' => $searchstyleQuery,
+                'subject' => $searchsubjectQuery,
+                'medium' => $searchmediumQuery,
+                'material' => $searchmaterialQuery,
+                'size' => $searchsizeQuery,
+            ]);
             // if ($searchpalette_colorQuery) {
             //     $mainProducts->where('palettes_color', '=', $searchpalette_colorQuery);
             // }
@@ -470,24 +467,11 @@ class ShopController extends Controller
         // Initialize the base query
         $mainProducts = Product::query()->where('status','1'); // Only active products
 
-        // Array of filterable columns (art_services + search handled separately)
-        $filters = [
-            'location' => 'location',
-            'state' => 'state',
-            'city' => 'city',
-            'category' => 'category',
-            'style' => 'style',
-            'subject' => 'subject',
-            'medium' => 'medium',
-            'size' => 'size',
-            //'palette_color' => 'palette_color',
-        ];
-
-        // Loop over the filters and apply them to the query if the parameters are provided
-        foreach ($filters as $key => $column) {
-            $queryValue = $request->get($key);
-            if ($queryValue) {
-                $mainProducts->where($column, '=', $queryValue);
+        // Location stays as AND (narrow by place). Artwork attributes are more flexible below.
+        foreach (['location' => 'location', 'state' => 'state', 'city' => 'city'] as $key => $column) {
+            $queryValue = trim((string) $request->get($key, ''));
+            if ($queryValue !== '') {
+                $mainProducts->whereRaw('LOWER(COALESCE(' . $column . ', \'\')) LIKE ?', ['%' . strtolower($queryValue) . '%']);
             }
         }
 
@@ -513,9 +497,15 @@ class ShopController extends Controller
 
         $this->applyArtServicesFilter($mainProducts, $request->get('art_services', ''));
 
-        if ($request->filled('material')) {
-            $mainProducts->where('material', '=', $request->get('material'));
-        }
+        // Artwork attributes: match ANY selected filter (not every one), case-insensitive.
+        $this->applyFlexibleArtAttributeFilters($mainProducts, [
+            'category' => $request->get('category'),
+            'style' => $request->get('style'),
+            'subject' => $request->get('subject'),
+            'medium' => $request->get('medium'),
+            'material' => $request->get('material'),
+            'size' => $request->get('size'),
+        ]);
 
         $maxPriceLimit = null;
         if ($request->filled('max_price')) {
@@ -924,6 +914,47 @@ class ShopController extends Controller
     {
         // This method can be used for pagination within filtered results
         return $this->filter($request);
+    }
+
+    /**
+     * Apply artwork attribute filters in a forgiving way:
+     * - empty / "All" values are ignored
+     * - matching is case-insensitive
+     * - selected attributes are OR'd so visitors need not match every criterion
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $mainProducts
+     * @param  array<string, mixed>  $filters  column => requested value
+     */
+    private function applyFlexibleArtAttributeFilters($mainProducts, array $filters): void
+    {
+        $active = [];
+
+        foreach ($filters as $column => $rawValue) {
+            if (is_array($rawValue)) {
+                $rawValue = reset($rawValue) ?: '';
+            }
+
+            $value = trim((string) $rawValue);
+            if ($value === '' || strcasecmp($value, 'All') === 0 || strcasecmp($value, 'Select') === 0) {
+                continue;
+            }
+
+            $active[$column] = $value;
+        }
+
+        if ($active === []) {
+            return;
+        }
+
+        $mainProducts->where(function ($q) use ($active) {
+            foreach ($active as $column => $value) {
+                $normalized = strtolower($value);
+                $q->orWhere(function ($inner) use ($column, $normalized) {
+                    $inner->whereRaw('LOWER(COALESCE(' . $column . ', \'\')) = ?', [$normalized])
+                        ->orWhereRaw('LOWER(COALESCE(' . $column . ', \'\')) LIKE ?', ['%' . $normalized . '%']);
+                });
+            }
+        });
     }
 
     /**

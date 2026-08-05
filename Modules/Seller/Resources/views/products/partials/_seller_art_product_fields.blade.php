@@ -3,33 +3,9 @@
     $product = $product ?? null;
     $artField = fn (string $field) => (string) old($field, $product?->{$field} ?? '');
     $artSelected = fn (string $field, string $value) => $artField($field) === $value ? 'selected' : '';
-    $artServiceSelected = function (string $value) use ($artField) {
-        $current = $artField('art_services');
-        $aliases = [
-            'commissions' => ['commissions', 'Commissions'],
-            'murals' => ['murals', 'Murals'],
-            'live_art' => ['live_art', 'Live Art'],
-            'art_shows' => ['art_shows', 'Art Shows'],
-        ];
-
-        return in_array($current, $aliases[$value] ?? [$value], true) ? 'selected' : '';
-    };
-    $priceSliderValue = $priceSliderValue ?? old('price', 5000);
+    $priceSliderValue = $priceSliderValue ?? old('price_range', old('selling_price', old('price', 0)));
     $paletteColor = $paletteColor ?? old('palette_color', $product?->palette_color ?? '#cccccc');
 @endphp
-
-<div class="col-lg-3">
-    <div class="primary_input mb-25">
-        <label class="primary_input_label">Art Services</label>
-        <select class="primary_select mb-25" name="art_services" id="art_services">
-            <option value="">Select Art Services</option>
-            <option value="commissions" {{ $artServiceSelected('commissions') }}>Commissions</option>
-            <option value="murals" {{ $artServiceSelected('murals') }}>Murals</option>
-            <option value="live_art" {{ $artServiceSelected('live_art') }}>Live Art</option>
-            <option value="art_shows" {{ $artServiceSelected('art_shows') }}>Art Shows</option>
-        </select>
-    </div>
-</div>
 
 <div class="col-lg-3">
     <div class="primary_input mb-25">
@@ -140,20 +116,25 @@
 
 <div class="col-lg-3">
     <div class="primary_input mb-25">
-        <label class="primary_input_label">Price</label>
+        <label class="primary_input_label">Selling Price Scale</label>
         <input
             type="range"
             class="primary_range"
             id="price"
-            name="price"
+            name="price_range"
             min="0"
-            max="10000"
+            max="50000"
             step="50"
-            value="{{ $priceSliderValue }}"
+            value="{{ min(50000, max(0, (int) $priceSliderValue)) }}"
+            readonly
+            tabindex="-1"
+            style="pointer-events: none; opacity: 0.85;"
+            title="Updates automatically from Selling Price"
         >
         <div class="mt-10">
-            Up to: <strong>$<span id="price_value">{{ $priceSliderValue }}</span></strong>
+            Up to: <strong>$<span id="price_value">{{ min(50000, max(0, (int) $priceSliderValue)) }}</span></strong>
         </div>
+        <small class="text-muted">Used for search filters — mirrors Selling Price</small>
     </div>
 </div>
 

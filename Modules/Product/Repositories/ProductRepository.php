@@ -202,7 +202,8 @@ class ProductRepository
             }
         }
         if(isset($data['art_services'])){
-            $data['art_services'] = $data['art_services'];
+            // Art Services belongs on the artist profile, not the artwork.
+            unset($data['art_services']);
         }
         if(isset($data['category'])){
             $data['category'] = $data['category'];
@@ -222,6 +223,8 @@ class ProductRepository
         // if(isset($data['price'])){
         //     $data['price_range'] = $data['price_range'];
         // }
+        // Selling Price Scale: always mirror the actual selling price for filter use.
+        $data = $this->syncPriceRangeFromSellingPrice($data);
         if(isset($data['palette_color'])){
             $data['palette_color'] = $data['palette_color'];
         }
@@ -310,11 +313,7 @@ class ProductRepository
 
             $product_sku = new ProductSku;
             $product_sku->product_id = $product->id;
-            if (isModuleActive('FrontendMultiLang')) {
-                $product_sku->sku = $data['product_sku'][auth()->user()->lang_code];
-            }else{
-                $product_sku->sku = $data['product_sku'];
-            }
+            $product_sku->sku = $this->resolveProductSkuValue($data, $product);
             $product_sku->weight = isset($data['weight'])?$data['weight']:0;
             $product_sku->length = isset($data['length'])?$data['length']:0;
             $product_sku->breadth = isset($data['breadth'])?$data['breadth']:0;
@@ -541,6 +540,10 @@ class ProductRepository
         if(isModuleActive('GoldPrice')){
             $data['auto_update'] = $data['auto_update_required']?$data['auto_update_required']:0;
         }
+        // Art Services belongs on the artist profile, not the artwork.
+        unset($data['art_services']);
+        // Selling Price Scale: always mirror the actual selling price for filter use.
+        $data = $this->syncPriceRangeFromSellingPrice($data);
         $product->update($data);
         if (isModuleActive('FrontendMultiLang')) {
             if (!isModuleActive('MultiVendor')) {
@@ -620,11 +623,7 @@ class ProductRepository
         if ($product->product_type == 1) {
             $product_sku = $product->skus->first();
             $product_sku->product_id = $product->id;
-            if (isModuleActive('FrontendMultiLang')) {
-                $product_sku->sku = $data['product_sku'][auth()->user()->lang_code];
-            }else{
-                $product_sku->sku = $data['product_sku'];
-            }
+            $product_sku->sku = $this->resolveProductSkuValue($data, $product, $product_sku->sku ?? null);
             $product_sku->weight = isset($data['weight'])?$data['weight']:0;
             $product_sku->length = isset($data['length'])?$data['length']:0;
             $product_sku->breadth = isset($data['breadth'])?$data['breadth']:0;
@@ -1502,6 +1501,86 @@ class ProductRepository
     public function findSkus($id)
     {
         return SellerProductSKU::with(['products','mainProduct'])->where('status', 1)->find($id);
+    }
+
+    /**
+     * Resolve SKU for single products. Sellers never set SKU manually — system assigns/keeps it.
+     */
+    protected function resolveProductSkuValue(array $data, ?Product $product = null, ?string $existingSku = null): string
+    {
+        $user = Auth::user();
+        $isSeller = $user && $user->role && $user->role->type === 'seller';
+
+        if (isModuleActive('FrontendMultiLang')) {
+            $submitted = $data['product_sku'][auth()->user()->lang_code] ?? null;
+        } else {
+            $submitted = $data['product_sku'] ?? null;
+        }
+
+        $submitted = is_string($submitted) ? trim($submitted) : '';
+
+        // Artists/sellers: never accept manual SKU input.
+        if ($isSeller) {
+            if (! empty($existingSku)) {
+                return $existingSku;
+            }
+
+            return $this->generateUniqueSku($product);
+        }
+
+        if ($submitted !== '') {
+            return $submitted;
+        }
+
+        if (! empty($existingSku)) {
+            return $existingSku;
+        }
+
+        return $this->generateUniqueSku($product);
+    }
+
+    /**
+     * Map selling price onto products.price_range (filter scale) and drop the legacy "price" form key.
+     */
+    protected function syncPriceRangeFromSellingPrice(array $data): array
+    {
+        $sellingPrice = null;
+
+        if (isset($data['product_type']) && (int) $data['product_type'] === 2) {
+            $skuPrices = array_filter(array_map('floatval', (array) ($data['selling_price_sku'] ?? [])));
+            if (! empty($skuPrices)) {
+                $sellingPrice = max($skuPrices);
+            }
+        } elseif (isset($data['selling_price']) && $data['selling_price'] !== '' && $data['selling_price'] !== null) {
+            $sellingPrice = (float) $data['selling_price'];
+        } elseif (isset($data['price_range']) && $data['price_range'] !== '' && $data['price_range'] !== null) {
+            $sellingPrice = (float) $data['price_range'];
+        } elseif (isset($data['price']) && $data['price'] !== '' && $data['price'] !== null) {
+            $sellingPrice = (float) $data['price'];
+        }
+
+        if ($sellingPrice !== null) {
+            $data['price_range'] = (string) max(0, min(50000, (int) round($sellingPrice)));
+        }
+
+        unset($data['price']);
+
+        return $data;
+    }
+
+    protected function generateUniqueSku(?Product $product = null): string
+    {
+        $sellerId = function_exists('getParentSellerId') ? (getParentSellerId() ?: (Auth::id() ?? 0)) : (Auth::id() ?? 0);
+        $productPart = $product && $product->id ? str_pad((string) $product->id, 5, '0', STR_PAD_LEFT) : strtoupper(substr(uniqid(), -5));
+
+        do {
+            $sku = 'ART-' . $sellerId . '-' . $productPart;
+            if (ProductSku::where('sku', $sku)->exists()) {
+                $sku = 'ART-' . $sellerId . '-' . $productPart . '-' . strtoupper(substr(uniqid(), -4));
+            }
+        } while (ProductSku::where('sku', $sku)->exists());
+
+        return $sku;
     }
 
     public function getReportedProduct()

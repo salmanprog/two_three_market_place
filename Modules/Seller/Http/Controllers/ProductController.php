@@ -354,7 +354,6 @@ class ProductController extends Controller
                     'zip_code' => 'zip_code',
                     'latitude' => 'latitude',
                     'longitude' => 'longitude',
-                    'art_services' => 'art_services',
                     'category' => 'category',
                     'style' => 'style',
                     'subject' => 'subject',

@@ -332,6 +332,12 @@ class ProductRepository {
                 'max_sell_price' => $data['selling_price']
             ]);
 
+            if (isset($data['selling_price']) && $data['selling_price'] !== '' && $data['selling_price'] !== null) {
+                $product->product->update([
+                    'price_range' => (string) max(0, min(50000, (int) round((float) $data['selling_price']))),
+                ]);
+            }
+
             if($product->seller->role->type == 'superadmin'){
                 $product->product->skus->first()->update([
                     'product_stock' => ($product->stock_manage == 1) ? $data['product_stock'] : 0

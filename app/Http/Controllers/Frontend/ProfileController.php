@@ -48,7 +48,7 @@ class ProfileController extends Controller
 
     public function index(){
         try{
-            $data['user_info'] = User::find(auth()->user()->id);
+            $data['user_info'] = User::with('SellerBankAccount')->find(auth()->user()->id);
             $data['addressList'] = CustomerAddress::where('customer_id',auth()->user()->id)->where('is_updated',0)->get();
             $data['countries'] = Country::where('status', 1)->orderBy('name')->get();
             $data['states'] = (new StateRepository())->getByCountryId(app('general_setting')->default_country)->where('status', 1);

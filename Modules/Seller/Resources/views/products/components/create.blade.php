@@ -6,7 +6,7 @@
         || (session()->has('seller_product_create_state') && (int) session()->get('seller_product_create_state') === 1);
     $oldProductImages = array_values(array_filter((array) old('images', []), fn ($id) => filled($id)));
     $oldMetaImage = old('meta_image');
-    $oldPriceSlider = old('price', 5000);
+    $oldPriceSlider = old('price_range', old('selling_price', old('price', 0)));
     $oldPaletteColor = old('palette_color', '#cccccc');
 @endphp
 @section('styles')
@@ -403,7 +403,7 @@ $LanguageList = getLanguageList();
                                                                 <div class="col-lg-6 sku_single_div d-none" id="default_lang_{{$language->code}}">
                                                                     <div class="primary_input mb-15">
                                                                         <label class="primary_input_label" for="sku_single"> {{ __('product.product_sku') }}</label>
-                                                                        <input class="primary_input_field" name="product_sku[{{$language->code}}]" id="sku_single_{{$language->code}}" placeholder="{{ __('product.product_sku') }}" type="text" value="{{old('product_sku.'.$language->code)}}">
+                                                                        <input class="primary_input_field" name="product_sku[{{$language->code}}]" id="sku_single_{{$language->code}}" placeholder="{{ __('product.product_sku') }}" type="text" value="{{old('product_sku.'.$language->code)}}" @if(auth()->user()->role->type == 'seller') readonly tabindex="-1" @endif>
                                                                         <span id="error_single_sku_{{$language->code}}" class="text-danger">{{ $errors->first('product_sku') }}</span>
                                                                     </div>
                                                                 </div>
@@ -435,13 +435,14 @@ $LanguageList = getLanguageList();
                                                         <span class="text-danger" id="error_product_new_name">{{$errors->first('product_name')}}</span>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-6 sku_single_div">
+                                                <div class="col-lg-6 sku_single_div @if(auth()->user()->role->type == 'seller') d-none @endif">
                                                     <div class="primary_input mb-15">
                                                         <label class="primary_input_label" for="sku_single">{{__("product.product_sku")}} </label>
                                                         <input class="primary_input_field" name="product_sku" id="sku_single"
                                                             placeholder="{{__("product.product_sku")}}" type="text"
                                                             value="{{ old('product_sku') }}"
-                                                            required="1">
+                                                            @if(auth()->user()->role->type != 'seller') required="1" @endif
+                                                            @if(auth()->user()->role->type == 'seller') readonly tabindex="-1" @endif>
                                                         <span class="text-danger" id="error_single_sku">{{$errors->first('product_sku')}}</span>
                                                     </div>
                                                 </div>
@@ -462,24 +463,13 @@ $LanguageList = getLanguageList();
                                                     </div>
                                                 </div>
                                             @endif
-                                            <div class="col-lg-3 d-none variant_sku_prefix">
+                                            <div class="col-lg-3 d-none variant_sku_prefix @if(auth()->user()->role->type == 'seller') seller-auto-sku @endif">
                                                 <div class="primary_input mb-15">
                                                     <label class="primary_input_label" for="variant_sku_prefix"> {{ __('product.variant_sku_prefix') }} <span class="text-danger">*</span></label>
-                                                    <input class="primary_input_field" name="variant_sku_prefix" id="variant_sku_prefix" placeholder="{{ __('product.variant_sku_prefix') }}" type="text" value="{{old('variant_sku_prefix')}}">
+                                                    <input class="primary_input_field" name="variant_sku_prefix" id="variant_sku_prefix" placeholder="{{ __('product.variant_sku_prefix') }}" type="text" value="{{ auth()->user()->role->type == 'seller' ? ('ART-'.(function_exists('getParentSellerId') ? getParentSellerId() : auth()->id())) : old('variant_sku_prefix') }}" @if(auth()->user()->role->type == 'seller') readonly tabindex="-1" @endif>
                                                     <span id="error_variant_sku_prefix" class="text-danger">{{ $errors->first('variant_sku_prefix') }}</span>
                                                 </div>
                                             </div>
-                                                <div class="col-lg-3">
-                                                    <div class="primary_input mb-15">
-                                                        <label class="primary_input_label" for="model_number">
-                                                            {{__("common.model_number")}}</label>
-                                                        <input class="primary_input_field" name="model_number"
-                                                            placeholder="{{__("common.model_number")}}" type="text"
-                                                            value="{{old('model_number')}}">
-                                                        <span
-                                                            class="text-danger">{{$errors->first('model_number')}}</span>
-                                                    </div>
-                                                </div>
                                                 <div class="col-lg-3" style="display:none">
                                                     <div class="primary_input mb-25">
                                                         <label class="primary_input_label"
@@ -1367,21 +1357,27 @@ $LanguageList = getLanguageList();
             function getActiveFieldAttribute() {
                 $('#is_physical').prop('checked',true);
                 var product_type = $('#product_type').val();
+                var isSeller = @json(auth()->user()->role->type == 'seller');
                 if (product_type == 1) {
                     $('.attribute_div').hide();
                     $('.weight_single_div').show();
                     $('.variant_physical_div').hide();
                     $('.customer_choice_options').hide();
                     $('.sku_combination').hide();
-                    $('.sku_single_div').show();
+                    if (isSeller) {
+                        $('.sku_single_div').hide().addClass('d-none');
+                        $("#sku_single").attr('disabled', true);
+                    } else {
+                        $('.sku_single_div').show().removeClass('d-none');
+                        $("#sku_single").removeAttr("disabled");
+                    }
                     $('.selling_price_div').show();
-                    $("#sku_single").removeAttr("disabled");
                     $("#purchase_price").removeAttr("disabled");
                     $("#selling_price").removeAttr("disabled");
                     $('.variant_sku_prefix').addClass('d-none');
                 } else {
                     $('.attribute_div').show();
-                    $('.sku_single_div').hide();
+                    $('.sku_single_div').hide().addClass('d-none');
                     $('.variant_physical_div').show();
                     $('.sku_combination').show();
                     $('.customer_choice_options').show();
@@ -1391,7 +1387,14 @@ $LanguageList = getLanguageList();
                     $("#purchase_price").attr('disabled', true);
                     $("#selling_price").attr('disabled', true);
                     $("#weight_single").attr('disabled', true);
-                    $('.variant_sku_prefix').removeClass('d-none');
+                    if (isSeller) {
+                        $('.variant_sku_prefix').addClass('d-none');
+                        if ($('#variant_sku_prefix').val() === '') {
+                            $('#variant_sku_prefix').val(@json('ART-'.(function_exists('getParentSellerId') ? getParentSellerId() : auth()->id())));
+                        }
+                    } else {
+                        $('.variant_sku_prefix').removeClass('d-none');
+                    }
                 }
             }
 
@@ -1440,8 +1443,12 @@ $LanguageList = getLanguageList();
             })
 
             function get_combinations(el){
-                if ($('input[name=product_type]:checked').val() === '2') {
-                    if ($('#variant_sku_prefix').val()== '') {
+                var isSeller = @json(auth()->user()->role->type == 'seller');
+                if ($('input[name=product_type]:checked').val() === '2' || $('#product_type').val() == 2) {
+                    if (isSeller && $('#variant_sku_prefix').val() === '') {
+                        $('#variant_sku_prefix').val(@json('ART-'.(function_exists('getParentSellerId') ? getParentSellerId() : auth()->id())));
+                    }
+                    if (!isSeller && $('#variant_sku_prefix').val()== '') {
                         $('#error_variant_sku_prefix').text("{{__('product.please_input_variant_sku_prefix') }}");
                         return false;
                     }
@@ -1898,14 +1905,28 @@ $LanguageList = getLanguageList();
         }
 
 
-        const priceSlider = document.getElementById('price');
-        const priceValue = document.getElementById('price_value');
+        function syncSellingPriceScale() {
+            const priceSlider = document.getElementById('price');
+            const priceValue = document.getElementById('price_value');
+            const sellingPriceInput = document.getElementById('selling_price');
+            if (!priceSlider || !priceValue) {
+                return;
+            }
 
-        if (priceSlider && priceValue) {
-            priceSlider.addEventListener('input', () => {
-                priceValue.textContent = priceSlider.value;
-            });
+            const raw = sellingPriceInput ? sellingPriceInput.value : priceSlider.value;
+            let amount = parseFloat(raw);
+            if (isNaN(amount) || amount < 0) {
+                amount = 0;
+            }
+            const max = parseFloat(priceSlider.max) || 50000;
+            amount = Math.min(max, Math.round(amount));
+
+            priceSlider.value = amount;
+            priceValue.textContent = amount;
         }
+
+        $(document).on('input change keyup', '#selling_price', syncSellingPriceScale);
+        syncSellingPriceScale();
     })(jQuery);
 
 </script>

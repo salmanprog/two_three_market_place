@@ -77,10 +77,6 @@
                                     </div>
                                     @endif
                                     <div class="products_details_single">
-                                        <span>{{__('Art Services')}}</span>
-                                        <span>: {{@$product->product->art_services}}</span>
-                                    </div>
-                                    <div class="products_details_single">
                                         <span>{{__('Category')}}</span>
                                         <span>: {{@$product->product->category}}</span>
                                     </div>

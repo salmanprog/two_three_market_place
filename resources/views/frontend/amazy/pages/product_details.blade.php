@@ -609,7 +609,6 @@
                                         <div class="product_details_dec_body">
                                             <div class="single_desc style2 mb_20">
                                             <p class="f_w_500 m-0">{{ __('Location') }}: {{@$product->product->location}}</p>
-                                            <p class="f_w_500 m-0">{{ __('Art Services') }}: {{@$product->product->art_services}}</p>
                                             <p class="f_w_500 m-0">{{ __('Category') }}: {{@$product->product->category}}</p>
                                             <p class="f_w_500 m-0">{{ __('Style') }}: {{@$product->product->style}}</p>
                                             <p class="f_w_500 m-0">{{ __('Subject') }}: {{@$product->product->subject}}</p>

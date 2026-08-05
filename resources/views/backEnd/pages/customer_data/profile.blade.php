@@ -233,6 +233,68 @@
                                         </div>
                                     </div>
 
+                                    @if(auth()->user()->role->type == 'seller')
+                                        @php
+                                            $bank = $user_info->SellerBankAccount;
+                                            $bankAccountNumber = preg_replace('/\D/', '', (string) old('bank_account_number', $bank->bank_account_number ?? ''));
+                                            $routingNumber = preg_replace('/\D/', '', (string) old('routing_number', $bank->bank_routing_number ?? ''));
+                                        @endphp
+                                        <div class="col-lg-12">
+                                            <div class="main-title d-md-flex mt-10 mb-20">
+                                                <h3 class="mb-0 mr-30">{{ __('common.bank') }} {{ __('common.account') }}</h3>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <div class="primary_input mb-25">
+                                                <label class="primary_input_label" for="bank_title">{{ __('common.account') }} {{ __('common.title') }}</label>
+                                                <input name="bank_title" id="bank_title" class="primary_input_field"
+                                                    placeholder="{{ __('common.account') }} {{ __('common.title') }}" type="text"
+                                                    value="{{ old('bank_title', $bank->bank_title ?? '') }}">
+                                                <span class="text-danger" id="error_bank_title"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <div class="primary_input mb-25">
+                                                <label class="primary_input_label" for="bank_account_number">{{ __('common.account_number') }}</label>
+                                                <input name="bank_account_number" id="bank_account_number"
+                                                    class="primary_input_field us-bank-numeric-input"
+                                                    placeholder="{{ __('common.account_number') }}" type="text"
+                                                    inputmode="numeric" maxlength="17" autocomplete="off"
+                                                    value="{{ $bankAccountNumber }}">
+                                                <span class="text-danger" id="error_bank_account_number"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <div class="primary_input mb-25">
+                                                <label class="primary_input_label" for="bank_name">{{ __('common.bank_name') }}</label>
+                                                <input name="bank_name" id="bank_name" class="primary_input_field"
+                                                    placeholder="{{ __('common.bank_name') }}" type="text"
+                                                    value="{{ old('bank_name', $bank->bank_name ?? '') }}">
+                                                <span class="text-danger" id="error_bank_name"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <div class="primary_input mb-25">
+                                                <label class="primary_input_label" for="branch_name">{{ __('common.branch_name') }}</label>
+                                                <input name="branch_name" id="branch_name" class="primary_input_field"
+                                                    placeholder="{{ __('common.branch_name') }}" type="text"
+                                                    value="{{ old('branch_name', $bank->bank_branch_name ?? '') }}">
+                                                <span class="text-danger" id="error_branch_name"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <div class="primary_input mb-25">
+                                                <label class="primary_input_label" for="routing_number">{{ __('common.routing_number') }}</label>
+                                                <input name="routing_number" id="routing_number"
+                                                    class="primary_input_field us-bank-numeric-input"
+                                                    placeholder="{{ __('common.routing_number') }}" type="text"
+                                                    inputmode="numeric" maxlength="9" autocomplete="off"
+                                                    value="{{ $routingNumber }}">
+                                                <span class="text-danger" id="error_routing_number"></span>
+                                            </div>
+                                        </div>
+                                    @endif
+
                                     <div class="col-lg-12 text-center">
                                         <div class="d-flex justify-content-center pt_20">
                                             <button type="button" id="update_info"
@@ -402,6 +464,21 @@
                                     $(this).prop('checked', response.art_services.indexOf($(this).val()) !== -1);
                                 });
                             }
+                            if (response.bank_title !== undefined) {
+                                $('#bank_title').val(response.bank_title || '');
+                            }
+                            if (response.bank_account_number !== undefined) {
+                                $('#bank_account_number').val(response.bank_account_number || '');
+                            }
+                            if (response.bank_name !== undefined) {
+                                $('#bank_name').val(response.bank_name || '');
+                            }
+                            if (response.branch_name !== undefined) {
+                                $('#branch_name').val(response.branch_name || '');
+                            }
+                            if (response.routing_number !== undefined) {
+                                $('#routing_number').val(response.routing_number || '');
+                            }
                             var image_path='{{asset(asset_path(''))}}'+response.avatar;
                             $('.customer_img img').attr('src',image_path);
                             $('#avatar_file').val('');
@@ -446,6 +523,11 @@
                     $('#error_avatar').text(response.responseJSON.errors.avatar);
                     $('#error_accolades').text(response.responseJSON.errors.accolades);
                     $('#error_video').text(response.responseJSON.errors.video);
+                    $('#error_bank_title').text(response.responseJSON.errors.bank_title);
+                    $('#error_bank_account_number').text(response.responseJSON.errors.bank_account_number);
+                    $('#error_bank_name').text(response.responseJSON.errors.bank_name);
+                    $('#error_branch_name').text(response.responseJSON.errors.branch_name);
+                    $('#error_routing_number').text(response.responseJSON.errors.routing_number);
                 }
 
                 function basic_info_remove_validate_error(){
@@ -456,7 +538,16 @@
                     $('#error_avatar').text('');
                     $('#error_accolades').text('');
                     $('#error_video').text('');
+                    $('#error_bank_title').text('');
+                    $('#error_bank_account_number').text('');
+                    $('#error_bank_name').text('');
+                    $('#error_branch_name').text('');
+                    $('#error_routing_number').text('');
                 }
+
+                $(document).on('input', '.us-bank-numeric-input', function () {
+                    this.value = this.value.replace(/\D/g, '');
+                });
 
                 $(document).on('click','.change_password', function(e){
                     e.preventDefault();

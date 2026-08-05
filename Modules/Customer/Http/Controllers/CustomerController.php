@@ -25,6 +25,8 @@ use Illuminate\Validation\Rule;
 use Modules\UserActivityLog\Traits\LogActivity;
 use Yajra\DataTables\Facades\DataTables;
 use Modules\UserActivityLog\Entities\LogActivity as LogActivityModel;
+use Modules\MultiVendor\Entities\SellerBankAccount;
+use Modules\MultiVendor\Http\Requests\SellerBankAccountRequest;
 class CustomerController extends Controller
 {
     use ImageStore;
@@ -600,8 +602,13 @@ class CustomerController extends Controller
             "phone.min" => "Minimum ".app('general_setting')->min_digit." digits required on phone number",
             'avatar.dimensions' => 'Avatar must be at least '.\App\Support\ProfileImage::MIN.'×'.\App\Support\ProfileImage::MIN.' px. Small images look pixelated on the website — please upload a larger photo.',
         ]);
+
+        $user = User::findOrFail(auth()->user()->id);
+        if ($user->role && $user->role->type === 'seller') {
+            $this->validateSellerBankAccountFromProfile($request);
+        }
+
         try {
-            $user=User::findOrFail(auth()->user()->id);
             $data=[
                 'first_name' => $request->first_name,
                 'last_name'  => $request->last_name,
@@ -652,15 +659,124 @@ class CustomerController extends Controller
 
             $user->update($data);
             $user->refresh();
+
+            if ($user->role && $user->role->type === 'seller') {
+                $this->syncSellerBankAccountFromProfile($request, $user);
+                $user->load('SellerBankAccount');
+            }
+
             LogActivity::successLog('update info');
             $payload = $user->toArray();
             $payload['art_services'] = $user->art_services;
+            if ($user->SellerBankAccount) {
+                $payload['bank_title'] = $user->SellerBankAccount->bank_title;
+                $payload['bank_account_number'] = $user->SellerBankAccount->bank_account_number;
+                $payload['bank_name'] = $user->SellerBankAccount->bank_name;
+                $payload['branch_name'] = $user->SellerBankAccount->bank_branch_name;
+                $payload['routing_number'] = $user->SellerBankAccount->bank_routing_number;
+            }
             return response()->json($payload);
         } catch (Exception $e) {
             LogActivity::errorLog($e->getMessage());
             Toastr::error(__('common.error_message'), __('common.error'));
             return back();
         }
+    }
+
+    /**
+     * Validate bank fields when the artist is adding/updating them on profile.
+     */
+    protected function validateSellerBankAccountFromProfile(Request $request): void
+    {
+        $bankTitle = trim((string) $request->input('bank_title', ''));
+        $accountNumber = preg_replace('/\D/', '', (string) $request->input('bank_account_number', ''));
+        $bankName = trim((string) $request->input('bank_name', ''));
+        $branchName = trim((string) $request->input('branch_name', ''));
+        $routingNumber = preg_replace('/\D/', '', (string) $request->input('routing_number', ''));
+
+        $hasAnyBankInput = $bankTitle !== '' || $accountNumber !== '' || $bankName !== '' || $branchName !== '' || $routingNumber !== '';
+        if (! $hasAnyBankInput) {
+            return;
+        }
+
+        $request->merge([
+            'bank_account_number' => $accountNumber,
+            'routing_number' => $routingNumber,
+            'ibn' => $request->input('ibn') ?: '-',
+        ]);
+
+        $request->validate([
+            'bank_title' => 'required|max:255',
+            'bank_account_number' => 'required|digits_between:'.SellerBankAccountRequest::US_ACCOUNT_NUMBER_MIN.','.SellerBankAccountRequest::US_ACCOUNT_NUMBER_MAX,
+            'bank_name' => 'required|max:255',
+            'branch_name' => 'required|max:255',
+            'routing_number' => 'required|digits:'.SellerBankAccountRequest::US_ROUTING_NUMBER_LENGTH,
+        ], [
+            'bank_account_number.digits_between' => __('common.us_account_number_digits_between', [
+                'min' => SellerBankAccountRequest::US_ACCOUNT_NUMBER_MIN,
+                'max' => SellerBankAccountRequest::US_ACCOUNT_NUMBER_MAX,
+            ]),
+            'routing_number.digits' => __('common.us_routing_number_digits', [
+                'digits' => SellerBankAccountRequest::US_ROUTING_NUMBER_LENGTH,
+            ]),
+        ]);
+
+        if (! $this->isValidUsRoutingNumber($routingNumber)) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'routing_number' => [__('common.invalid_routing_number')],
+            ]);
+        }
+    }
+
+    /**
+     * Create or update artist bank details from the Basic Info profile form.
+     */
+    protected function syncSellerBankAccountFromProfile(Request $request, User $user): void
+    {
+        $bankTitle = trim((string) $request->input('bank_title', ''));
+        $accountNumber = preg_replace('/\D/', '', (string) $request->input('bank_account_number', ''));
+        $bankName = trim((string) $request->input('bank_name', ''));
+        $branchName = trim((string) $request->input('branch_name', ''));
+        $routingNumber = preg_replace('/\D/', '', (string) $request->input('routing_number', ''));
+
+        $hasAnyBankInput = $bankTitle !== '' || $accountNumber !== '' || $bankName !== '' || $branchName !== '' || $routingNumber !== '';
+        $existing = SellerBankAccount::where('user_id', $user->id)->first();
+
+        if (! $hasAnyBankInput && ! $existing) {
+            return;
+        }
+
+        if (! $hasAnyBankInput) {
+            return;
+        }
+
+        SellerBankAccount::updateOrCreate(
+            ['user_id' => $user->id],
+            [
+                'payment' => 2,
+                'bank_title' => $bankTitle,
+                'bank_account_number' => $accountNumber,
+                'bank_name' => $bankName,
+                'bank_branch_name' => $branchName,
+                'bank_routing_number' => $routingNumber,
+                'bank_ibn' => $request->input('ibn') ?: ($existing->bank_ibn ?? '-'),
+            ]
+        );
+    }
+
+    protected function isValidUsRoutingNumber(string $routingNumber): bool
+    {
+        if (! preg_match('/^\d{9}$/', $routingNumber)) {
+            return false;
+        }
+
+        $weights = [3, 7, 1, 3, 7, 1, 3, 7, 1];
+        $sum = 0;
+        for ($index = 0; $index < 9; $index++) {
+            $sum += ((int) $routingNumber[$index]) * $weights[$index];
+        }
+
+        return $sum % 10 === 0;
     }
 
     public function storeAddress(CreateAddressRequest $request)

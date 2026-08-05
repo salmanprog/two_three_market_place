@@ -202,24 +202,6 @@ $LanguageList = getLanguageList();
 
                                     <div class="col-lg-3">
                                         <div class="primary_input mb-25">
-                                            <label class="primary_input_label">Art Services</label>
-
-                                            <select class="primary_select mb-25" name="art_services" id="art_services">
-                                                <option value="">Select Art Services</option>
-                                                @php
-                                                    $productArtService = (string) ($product->product->art_services ?? '');
-                                                    $isArtService = fn (string $key, array $aliases) => in_array($productArtService, $aliases, true);
-                                                @endphp
-                                                <option value="commissions" {{ $isArtService('commissions', ['commissions', 'Commissions']) ? 'selected' : '' }}>Commissions</option>
-                                                <option value="murals" {{ $isArtService('murals', ['murals', 'Murals']) ? 'selected' : '' }}>Murals</option>
-                                                <option value="live_art" {{ $isArtService('live_art', ['live_art', 'Live Art']) ? 'selected' : '' }}>Live Art</option>
-                                                <option value="art_shows" {{ $isArtService('art_shows', ['art_shows', 'Art Shows']) ? 'selected' : '' }}>Art Shows</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-3">
-                                        <div class="primary_input mb-25">
                                             <label class="primary_input_label">Category</label>
 
                                             <select class="primary_select mb-25" name="category" id="category">
@@ -337,22 +319,27 @@ $LanguageList = getLanguageList();
 
                                     <div class="col-lg-3">
                                         <div class="primary_input mb-25">
-                                            <label class="primary_input_label">Price</label>
+                                            <label class="primary_input_label">Selling Price Scale</label>
 
                                             <input 
                                                 type="range" 
                                                 class="primary_range"
                                                 id="price"
-                                                name="price"
+                                                name="price_range"
                                                 min="0"
-                                                max="10000"
+                                                max="50000"
                                                 step="50"
-                                                value="5000"
+                                                value="{{ min(50000, max(0, (int) ($product->skus->first()->selling_price ?? $product->product->price_range ?? 0))) }}"
+                                                readonly
+                                                tabindex="-1"
+                                                style="pointer-events: none; opacity: 0.85;"
+                                                title="Updates automatically from Selling Price"
                                             >
 
                                             <div class="mt-10">
-                                                Up to: <strong>$<span id="price_value">5000</span></strong>
+                                                Up to: <strong>$<span id="price_value">{{ min(50000, max(0, (int) ($product->skus->first()->selling_price ?? $product->product->price_range ?? 0))) }}</span></strong>
                                             </div>
+                                            <small class="text-muted">Used for search filters — mirrors Selling Price</small>
                                         </div>
                                     </div>
                                     <div class="col-lg-3">
@@ -731,12 +718,28 @@ $LanguageList = getLanguageList();
 
 
             });
-            const priceSlider = document.getElementById('price');
-        const priceValue = document.getElementById('price_value');
+            function syncSellingPriceScale() {
+                const priceSlider = document.getElementById('price');
+                const priceValue = document.getElementById('price_value');
+                const sellingPriceInput = document.getElementById('selling_price');
+                if (!priceSlider || !priceValue) {
+                    return;
+                }
 
-        priceSlider.addEventListener('input', () => {
-            priceValue.textContent = priceSlider.value;
-        });
+                const raw = sellingPriceInput ? sellingPriceInput.value : priceSlider.value;
+                let amount = parseFloat(raw);
+                if (isNaN(amount) || amount < 0) {
+                    amount = 0;
+                }
+                const max = parseFloat(priceSlider.max) || 50000;
+                amount = Math.min(max, Math.round(amount));
+
+                priceSlider.value = amount;
+                priceValue.textContent = amount;
+            }
+
+            $(document).on('input change keyup', '#selling_price', syncSellingPriceScale);
+            syncSellingPriceScale();
         })(jQuery);
 
 

@@ -1,7 +1,7 @@
 @extends('backEnd.master')
 @php
     $sellerMapsEnabled = config('app.map_api_status') == 'true' && filled(config('app.map_api_key'));
-    $priceSliderValue = old('price', $product->skus->first()->selling_price ?? 5000);
+    $priceSliderValue = old('price_range', $product->price_range ?: ($product->skus->first()->selling_price ?? 0));
     $paletteColor = old('palette_color', $product->palette_color ?? '#cccccc');
 @endphp
 
@@ -122,12 +122,13 @@ $LanguageList = getLanguageList();
                                 <span class="text-danger" id="error_product_name">{{ $errors->first('product_name') }}</span>
                             </div>
                         </div>
-                        <div class="col-lg-6 sku_single_div">
+                        <div class="col-lg-6 sku_single_div @if(auth()->user()->role->type == 'seller') d-none @endif">
                             <div class="primary_input mb-15">
                                 <label class="primary_input_label" for=""> {{ __('product.product_sku') }}</label>
                                 <input class="primary_input_field" name="product_sku" id="sku_single"
                                     placeholder="{{ __('product.product_sku') }}" type="text"
-                                    value="{{ $product->skus->first()->sku }}">
+                                    value="{{ $product->skus->first()->sku }}"
+                                    @if(auth()->user()->role->type == 'seller') readonly tabindex="-1" @endif>
                                 <span class="text-danger" id="error_single_sku">{{ $errors->first('product_sku') }}</span>
                             </div>
                         </div>
@@ -148,23 +149,13 @@ $LanguageList = getLanguageList();
                             </div>
                         </div>
                     @endif
-                    <div class="col-lg-3 {{$product->product_type == 2 ? '' : 'd-none'}} variant_sku_prefix">
+                    <div class="col-lg-3 {{$product->product_type == 2 && auth()->user()->role->type != 'seller' ? '' : 'd-none'}} variant_sku_prefix">
                         <div class="primary_input mb-15">
                             <label class="primary_input_label" for="variant_sku_prefix"> {{ __('product.variant_sku_prefix') }} <span class="text-danger">*</span></label>
-                            <input class="primary_input_field" name="variant_sku_prefix" id="variant_sku_prefix" placeholder="{{ __('product.variant_sku_prefix') }}" type="text" value="{{ $product->variant_sku_prefix }}">
+                            <input class="primary_input_field" name="variant_sku_prefix" id="variant_sku_prefix" placeholder="{{ __('product.variant_sku_prefix') }}" type="text" value="{{ $product->variant_sku_prefix ?: ('ART-'.(function_exists('getParentSellerId') ? getParentSellerId() : auth()->id())) }}" @if(auth()->user()->role->type == 'seller') readonly tabindex="-1" @endif>
                             <span id="error_variant_sku_prefix" class="text-danger">{{ $errors->first('variant_sku_prefix') }}</span>
                         </div>
                     </div>
-                        <div class="col-lg-3">
-                            <div class="primary_input mb-15">
-                                <label class="primary_input_label" for="model_number">
-                                    {{ __('common.model_number') }}</label>
-                                <input class="primary_input_field" name="model_number"
-                                    placeholder="{{ __('common.model_number') }}" type="text"
-                                    value="{{ old('model_number') ? old('model_number') : $product->model_number }}">
-                                <span class="text-danger">{{ $errors->first('model_number') }}</span>
-                            </div>
-                        </div>
                         <div class="col-lg-3" style="display:none">
                             <div class="primary_input mb-25">
                                 <label class="primary_input_label" for="">{{ __('product.category') }}
@@ -1070,8 +1061,12 @@ $LanguageList = getLanguageList();
                     }
                 }
                 function get_combinations(el) {
+                    var isSeller = @json(auth()->user()->role->type == 'seller');
                     if ($('input[name=product_type]:checked').val() === '2') {
-                        if ($('#variant_sku_prefix').val()== '') {
+                        if (isSeller && $('#variant_sku_prefix').val() === '') {
+                            $('#variant_sku_prefix').val(@json('ART-'.(function_exists('getParentSellerId') ? getParentSellerId() : auth()->id())));
+                        }
+                        if (!isSeller && $('#variant_sku_prefix').val()== '') {
                             $('#error_variant_sku_prefix').text("{{__('product.please_input_variant_sku_prefix') }}");
                             return false;
                         }
@@ -1108,16 +1103,21 @@ $LanguageList = getLanguageList();
                         $('.customer_choice_options').hide();
                         $('.sku_combination').hide();
                         $('.weight_single_div').show();
-                        $('.sku_single_div').show();
+                        @if(auth()->user()->role->type == 'seller')
+                        $('.sku_single_div').hide().addClass('d-none');
+                        $("#sku_single").attr('disabled', true);
+                        @else
+                        $('.sku_single_div').show().removeClass('d-none');
+                        $("#sku_single").removeAttr("disabled");
+                        @endif
                         $('.purchase_price_div').show();
                         $('.selling_price_div').show();
-                        $("#sku_single").removeAttr("disabled");
                         $("#purchase_price").removeAttr("disabled");
                         $("#selling_price").removeAttr("disabled");
                         $('.variant_sku_prefix').addClass('d-none');
                     } else {
                         $('.attribute_div').show();
-                        $('.sku_single_div').hide();
+                        $('.sku_single_div').hide().addClass('d-none');
                         $('.weight_single_div').hide();
                         $('#phisical_shipping_div').hide();
                         $('.variant_physical_div').show();
@@ -1128,7 +1128,14 @@ $LanguageList = getLanguageList();
                         $("#sku_single").attr('disabled', true);
                         $("#purchase_price").attr('disabled', true);
                         $("#selling_price").attr('disabled', true);
+                        @if(auth()->user()->role->type == 'seller')
+                        $('.variant_sku_prefix').addClass('d-none');
+                        if ($('#variant_sku_prefix').val() === '') {
+                            $('#variant_sku_prefix').val(@json('ART-'.(function_exists('getParentSellerId') ? getParentSellerId() : auth()->id())));
+                        }
+                        @else
                         $('.variant_sku_prefix').removeClass('d-none');
+                        @endif
                     }
                 }
 
@@ -1264,13 +1271,28 @@ $LanguageList = getLanguageList();
             }
         @endif
 
-        const priceSlider = document.getElementById('price');
-        const priceValue = document.getElementById('price_value');
-        if (priceSlider && priceValue) {
-            priceSlider.addEventListener('input', () => {
-                priceValue.textContent = priceSlider.value;
-            });
+        function syncSellingPriceScale() {
+            const priceSlider = document.getElementById('price');
+            const priceValue = document.getElementById('price_value');
+            const sellingPriceInput = document.getElementById('selling_price');
+            if (!priceSlider || !priceValue) {
+                return;
+            }
+
+            const raw = sellingPriceInput ? sellingPriceInput.value : priceSlider.value;
+            let amount = parseFloat(raw);
+            if (isNaN(amount) || amount < 0) {
+                amount = 0;
+            }
+            const max = parseFloat(priceSlider.max) || 50000;
+            amount = Math.min(max, Math.round(amount));
+
+            priceSlider.value = amount;
+            priceValue.textContent = amount;
         }
+
+        $(document).on('input change keyup', '#selling_price', syncSellingPriceScale);
+        syncSellingPriceScale();
 
         })
 (jQuery);

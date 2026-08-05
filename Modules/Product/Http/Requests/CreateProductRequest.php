@@ -86,6 +86,22 @@ class CreateProductRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation(): void
+    {
+        $user = auth()->user();
+        if (! $user || ! $user->role || $user->role->type !== 'seller') {
+            return;
+        }
+
+        // Artists cannot enter SKU fields; auto-assign a prefix for variant products.
+        if ((int) $this->input('product_type') === 2 && ! $this->filled('variant_sku_prefix')) {
+            $sellerId = function_exists('getParentSellerId') ? (getParentSellerId() ?: $user->id) : $user->id;
+            $this->merge([
+                'variant_sku_prefix' => 'ART-' . $sellerId,
+            ]);
+        }
+    }
+
     public function withValidator($validator): void
     {
         $validator->after(function ($validator) {
